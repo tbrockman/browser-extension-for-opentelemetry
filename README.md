@@ -1,3 +1,7 @@
+# otel-browser-extension
+
+Turn on the extension and start emitting OpenTelemetry data on user interactions, document loads, and HTTP requests.
+
 This is a [Plasmo extension](https://docs.plasmo.com/) project bootstrapped with [`plasmo init`](https://www.npmjs.com/package/plasmo).
 
 ## Getting Started

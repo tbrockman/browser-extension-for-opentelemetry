@@ -10,7 +10,24 @@
     "test": "plasmo test"
   },
   "dependencies": {
+    "@mantine/core": "^7.4.1",
+    "@mantine/hooks": "^7.4.1",
+    "@opentelemetry/auto-instrumentations-web": "^0.35.0",
+    "@opentelemetry/context-zone": "^1.19.0",
+    "@opentelemetry/exporter-collector": "^0.25.0",
+    "@opentelemetry/exporter-metrics-otlp-http": "^0.46.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.46.0",
+    "@opentelemetry/instrumentation": "^0.46.0",
+    "@opentelemetry/instrumentation-document-load": "^0.34.1",
+    "@opentelemetry/instrumentation-fetch": "^0.46.0",
+    "@opentelemetry/instrumentation-user-interaction": "^0.34.1",
+    "@opentelemetry/instrumentation-xml-http-request": "^0.46.0",
+    "@opentelemetry/propagator-b3": "^1.19.0",
+    "@opentelemetry/sdk-trace-base": "^1.19.0",
+    "@opentelemetry/sdk-trace-web": "^1.19.0",
+    "@vantezzen/plasmo-state": "^2.0.4",
     "plasmo": "0.84.0",
+    "propagator-b3\n": "link:@opentelemetry/sdk-trace-web @opentelemetry/exporter-collector @opentelemetry/sdk-trace-base @opentelemetry/instrumentation @opentelemetry/context-zone @opentelemetry/propagator-b3\n",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
@@ -20,12 +37,23 @@
     "@types/node": "20.9.0",
     "@types/react": "18.2.37",
     "@types/react-dom": "18.2.15",
+    "postcss": "^8.4.33",
+    "postcss-preset-mantine": "^1.12.3",
+    "postcss-simple-vars": "^7.0.1",
     "prettier": "3.0.3",
     "typescript": "5.2.2"
   },
   "manifest": {
     "host_permissions": [
       "https://*/*"
-    ]
+    ],
+    "permissions": [
+      "scripting"
+    ],
+    "browser_specific_settings": {
+      "gecko": {
+        "id": "iam@theo.lol"
+      }
+    }
   }
 }
