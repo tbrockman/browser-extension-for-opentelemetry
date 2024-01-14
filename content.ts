@@ -1,4 +1,3 @@
-import setupState, { ChangeSource, StateEnvironment } from "@vantezzen/plasmo-state"
 import type { PlasmoCSConfig } from "plasmo"
 
 export const config: PlasmoCSConfig = {
@@ -15,31 +14,18 @@ import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { ZoneContextManager } from '@opentelemetry/context-zone';
 import { B3Propagator } from '@opentelemetry/propagator-b3';
 
-export type State = {
-    url: string,
-    headers: Record<string, string>,
-}
-
-const env = StateEnvironment.Content
-
-const initialState: State = {
+const initialState = {
     url: 'http://localhost:4318/v1/traces',
     headers: {},
 }
 
-const state = setupState<State>(env, initialState, {
-    persistent: ["url", "headers"],
-});
-
-state.on("change", (key: string, source: ChangeSource) => {
-    console.log("State changed", key, source)
-})
-
 const collectorOptions = {
-    url: state.current.url, // url is optional and can be omitted - default is http://localhost:4318/v1/traces
-    headers: state.current.headers, // an optional object containing custom headers to be sent with each request
+    url: initialState.url, // url is optional and can be omitted - default is http://localhost:4318/v1/traces
+    headers: initialState.headers, // an optional object containing custom headers to be sent with each request
     concurrencyLimit: 10, // an optional limit on pending requests
 };
+console.log(collectorOptions)
+
 const exporter = new ConsoleSpanExporter();
 // const exporter = new OTLPTraceExporter(collectorOptions);
 
@@ -64,4 +50,11 @@ registerInstrumentations({
             },
         }),
     ],
+});
+
+
+chrome.runtime.onMessage.addListener((request) => {
+    console.log("Message from the background script:");
+    console.log(request);
+    return Promise.resolve({ response: "Hi from content script" });
 });

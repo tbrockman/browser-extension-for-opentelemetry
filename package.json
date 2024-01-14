@@ -25,7 +25,8 @@
     "@opentelemetry/propagator-b3": "^1.19.0",
     "@opentelemetry/sdk-trace-base": "^1.19.0",
     "@opentelemetry/sdk-trace-web": "^1.19.0",
-    "@vantezzen/plasmo-state": "^2.0.4",
+    "@plasmohq/messaging": "^0.6.1",
+    "@plasmohq/storage": "^1.9.0",
     "plasmo": "0.84.0",
     "propagator-b3\n": "link:@opentelemetry/sdk-trace-web @opentelemetry/exporter-collector @opentelemetry/sdk-trace-base @opentelemetry/instrumentation @opentelemetry/context-zone @opentelemetry/propagator-b3\n",
     "react": "18.2.0",
@@ -48,12 +49,20 @@
       "https://*/*"
     ],
     "permissions": [
-      "scripting"
+      "scripting",
+      "storage",
+      "tabs",
+      "activeTab"
     ],
     "browser_specific_settings": {
       "gecko": {
         "id": "iam@theo.lol"
       }
+    },
+    "externally_connectable": {
+      "matches": [
+        "https://*/*"
+      ]
     }
   }
 }

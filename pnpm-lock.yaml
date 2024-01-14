@@ -50,9 +50,12 @@ dependencies:
   '@opentelemetry/sdk-trace-web':
     specifier: ^1.19.0
     version: 1.19.0(@opentelemetry/api@1.7.0)
-  '@vantezzen/plasmo-state':
-    specifier: ^2.0.4
-    version: 2.0.4(react@18.2.0)
+  '@plasmohq/messaging':
+    specifier: ^0.6.1
+    version: 0.6.1(react@18.2.0)
+  '@plasmohq/storage':
+    specifier: ^1.9.0
+    version: 1.9.0(react@18.2.0)
   plasmo:
     specifier: 0.84.0
     version: 0.84.0(postcss@8.4.33)(react-dom@18.2.0)(react@18.2.0)
@@ -2334,6 +2337,18 @@ packages:
     resolution: {integrity: sha512-P75g48dqOGneJ+n0AcqnLE/TYflcaPc3B7h6EopnCBBYUDnCNBMwYmKAkaf5pnhsEB0ybPS6TU1C2DTGfqaW7A==}
     dev: false
 
+  /@plasmohq/messaging@0.6.1(react@18.2.0):
+    resolution: {integrity: sha512-/nn1k8SG5z++o/NnZu+byHWcC9MhPLxfmvj+AP3buqMn7uwfYDcYWURLuMW2Knw08HBg+wku2v1Ltt4evN0nzA==}
+    peerDependencies:
+      react: ^16.8.6 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
+    dependencies:
+      nanoid: 5.0.3
+      react: 18.2.0
+    dev: false
+
   /@plasmohq/parcel-bundler@0.5.5:
     resolution: {integrity: sha512-QCMmmfic514CfdXMJ7JMWUnqDzIHKVKyYeqPpUDsXON6JvA1yTmO5mEQSls8+5u/HpocP9QmTskQOHu3RCNX9A==}
     engines: {node: '>= 16.0.0', parcel: '>= 2.7.0'}
@@ -2675,11 +2690,15 @@ packages:
       - whiskers
     dev: false
 
-  /@plasmohq/storage@0.8.2(react@18.2.0):
-    resolution: {integrity: sha512-6L0rQ21k2si17q4wnd0+JCVKmz2vJL5NnCefi+ksGLTLUuGol8zHc/TGaQbJKthSCXJqFTfjYAntvYVvG1xPkw==}
+  /@plasmohq/storage@1.9.0(react@18.2.0):
+    resolution: {integrity: sha512-mntoJ0EVh7JfYyMKWKnt6yqVlJnwavEkwdXssSOxS1CEeyNX2GPkXQfChvlGhuEJplqcRhLaym6rEc690Ao0fg==}
     peerDependencies:
       react: ^16.8.6 || ^17 || ^18
+    peerDependenciesMeta:
+      react:
+        optional: true
     dependencies:
+      pify: 6.1.0
       react: 18.2.0
     dev: false
 
@@ -3165,24 +3184,6 @@ packages:
 
   /@types/shimmer@1.0.5:
     resolution: {integrity: sha512-9Hp0ObzwwO57DpLFF0InUjUm/II8GmKAvzbefxQTihCb7KI6yc9yzf0nLc4mVdby5N4DRCgQM2wCup9KTieeww==}
-    dev: false
-
-  /@types/webextension-polyfill@0.9.2:
-    resolution: {integrity: sha512-op8YeoK60K6/GIx3snWs3JowBZ+/aeSnZzZuuwynA7VARWfzr3st9aQNk9RWfoBx5xqlNZjAsh2QttPUZnabCw==}
-    dev: false
-
-  /@vantezzen/plasmo-state@2.0.4(react@18.2.0):
-    resolution: {integrity: sha512-h40mm9XJLW4jQ3RDP4BrHwpeHv1HK6FlutQXpbcOyWv7XPy9+dxvVk+LlS3RMyVDitLQzOO+axooPDQGfUXGpQ==}
-    peerDependencies:
-      react: ^16.8.6 || ^17 || ^18
-    dependencies:
-      '@plasmohq/storage': 0.8.2(react@18.2.0)
-      '@types/webextension-polyfill': 0.9.2
-      debug: 4.3.4
-      react: 18.2.0
-      webextension-polyfill: 0.9.0
-    transitivePeerDependencies:
-      - supports-color
     dev: false
 
   /@vue/compiler-core@3.3.4:
@@ -5042,6 +5043,12 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  /nanoid@5.0.3:
+    resolution: {integrity: sha512-I7X2b22cxA4LIHXPSqbBCEQSL+1wv8TuoefejsX4HFWyC6jc5JG7CEaxOltiKjc1M+YCS2YkrZZcj4+dytw9GA==}
+    engines: {node: ^18 || >=20}
+    hasBin: true
+    dev: false
+
   /napi-build-utils@1.0.2:
     resolution: {integrity: sha512-ONmRUqK7zj7DWX0D9ADe03wbwOBZxNAfF20PlGfCWQcD3+/MakShIHrMqx9YwPTfxDdF1zLeL+RGZiR9kGMLdg==}
     dev: false
@@ -5250,6 +5257,11 @@ packages:
     requiresBuild: true
     dev: false
     optional: true
+
+  /pify@6.1.0:
+    resolution: {integrity: sha512-KocF8ve28eFjjuBKKGvzOBGzG8ew2OqOOSxTTZhirkzH7h3BI1vyzqlR0qbfcDBve1Yzo3FVlWUAtCRrbVN8Fw==}
+    engines: {node: '>=14.16'}
+    dev: false
 
   /pirates@4.0.6:
     resolution: {integrity: sha512-saLsH7WeYYPiD25LDuLRRY/i+6HaPYr6G1OUlN39otzkSTxKnubR9RTxS3/Kk50s1g2JTgFwWQDQyplC5/SHZg==}
@@ -6369,10 +6381,6 @@ packages:
 
   /weak-lru-cache@1.2.2:
     resolution: {integrity: sha512-DEAoo25RfSYMuTGc9vPJzZcZullwIqRDSI9LOy+fkCJPi6hykCnfKaXTuPBDuXAUcqHXyOgFtHNp/kB2FjYHbw==}
-    dev: false
-
-  /webextension-polyfill@0.9.0:
-    resolution: {integrity: sha512-LTtHb0yR49xa9irkstDxba4GATDAcDw3ncnFH9RImoFwDlW47U95ME5sn5IiQX2ghfaECaf6xyXM8yvClIBkkw==}
     dev: false
 
   /webidl-conversions@4.0.2:

@@ -1,5 +1,6 @@
 import { useState } from "react"
-import { createTheme, MantineProvider } from '@mantine/core';
+import { Button, createTheme, MantineProvider } from '@mantine/core';
+import { sendToContentScript } from "@plasmohq/messaging";
 
 const theme = createTheme({
   /** Put your mantine theme override here */
@@ -7,12 +8,21 @@ const theme = createTheme({
 
 import '@mantine/core/styles.css';
 
+
 function IndexPopup() {
-  const [data, setData] = useState("")
+
+  const testClick = () => {
+    sendToContentScript({
+      name: "test",
+      body: "test"
+    })
+  }
 
   return (
     <MantineProvider theme={theme}>
-      <div></div>
+      <div>
+        <Button onClick={testClick}>Test</Button>
+      </div>
     </MantineProvider>
   )
 }
