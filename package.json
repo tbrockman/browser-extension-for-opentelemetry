@@ -54,11 +54,6 @@
       "tabs",
       "activeTab"
     ],
-    "browser_specific_settings": {
-      "gecko": {
-        "id": "iam@theo.lol"
-      }
-    },
     "externally_connectable": {
       "matches": [
         "https://*/*"

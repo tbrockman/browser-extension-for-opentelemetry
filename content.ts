@@ -52,9 +52,15 @@ registerInstrumentations({
     ],
 });
 
+let myPort = chrome.runtime.connect('ociiljbefbpdhokjnbjgcdjkhidfkbbg');
 
-chrome.runtime.onMessage.addListener((request) => {
-    console.log("Message from the background script:");
-    console.log(request);
-    return Promise.resolve({ response: "Hi from content script" });
+console.log('port connected', myPort)
+
+myPort.onDisconnect.addListener(obj => {
+    console.log('disconnected port', obj);
+})
+
+myPort.onMessage.addListener((m) => {
+    console.log("In content script, received message from background script: ");
+    console.log(m.greeting);
 });
