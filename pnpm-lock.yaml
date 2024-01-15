@@ -56,6 +56,12 @@ dependencies:
   '@plasmohq/storage':
     specifier: ^1.9.0
     version: 1.9.0(react@18.2.0)
+  '@tabler/core':
+    specifier: 1.0.0-beta20
+    version: 1.0.0-beta20
+  hook:
+    specifier: link:@plasmohq/storage/hook
+    version: link:@plasmohq/storage/hook
   plasmo:
     specifier: 0.84.0
     version: 0.84.0(postcss@8.4.33)(react-dom@18.2.0)(react@18.2.0)
@@ -2723,6 +2729,10 @@ packages:
       config-chain: 1.1.13
     dev: false
 
+  /@popperjs/core@2.11.8:
+    resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
+    dev: false
+
   /@sindresorhus/is@5.6.0:
     resolution: {integrity: sha512-TV7t8GKYaJWsn00tFDqBw8+Uqmr8A0fRU1tvTQhyZzGv0sJCGRQL3JGMI3ucuKo3XIZdUP+Lx7/gh2t3lewy7g==}
     engines: {node: '>=14.16'}
@@ -3115,6 +3125,72 @@ packages:
       defer-to-connect: 2.0.1
     dev: false
 
+  /@tabler/core@1.0.0-beta20:
+    resolution: {integrity: sha512-OzKpur+Ug7e+HMbNJrMcSuWZGUsJTvu7HYboBNRE8qyo1RKIWqvwL5YewKBJ+odW5pDOqBPzbsS4je3EBQQxHw==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@melloware/coloris': ^0.19.1
+      apexcharts: ^3.40.0
+      autosize: ^6.0.1
+      choices.js: ^10.2.0
+      countup.js: ^2.6.2
+      dropzone: ^6.0.0-beta.2
+      flatpickr: ^4.6.13
+      fslightbox: ^3.4.1
+      imask: ^6.6.1
+      jsvectormap: ^1.5.3
+      list.js: ^2.3.1
+      litepicker: ^2.0.12
+      nouislider: ^15.7.0
+      plyr: ^3.7.8
+      star-rating.js: ^4.3.0
+      tinymce: ^6.4.2
+      tom-select: ^2.2.2
+    peerDependenciesMeta:
+      '@melloware/coloris':
+        optional: true
+      apexcharts:
+        optional: true
+      autosize:
+        optional: true
+      choices.js:
+        optional: true
+      countup.js:
+        optional: true
+      dropzone:
+        optional: true
+      flatpickr:
+        optional: true
+      fslightbox:
+        optional: true
+      imask:
+        optional: true
+      jsvectormap:
+        optional: true
+      list.js:
+        optional: true
+      litepicker:
+        optional: true
+      nouislider:
+        optional: true
+      plyr:
+        optional: true
+      star-rating.js:
+        optional: true
+      tinymce:
+        optional: true
+      tom-select:
+        optional: true
+    dependencies:
+      '@popperjs/core': 2.11.8
+      '@tabler/icons': 2.46.0
+      bootstrap: 5.3.1(@popperjs/core@2.11.8)
+    dev: false
+
+  /@tabler/icons@2.46.0:
+    resolution: {integrity: sha512-Q5G8Pj5IO+Uhc6pszpu5/hGYY018JwEzzvmuqr+gKJtfIvAHA3umpwUilMRLEy89p+WCP+YsDhicMhfBCCv1qA==}
+    dev: false
+
   /@trysound/sax@0.2.0:
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
     engines: {node: '>=10.13.0'}
@@ -3399,6 +3475,14 @@ packages:
 
   /boolbase@1.0.0:
     resolution: {integrity: sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==}
+    dev: false
+
+  /bootstrap@5.3.1(@popperjs/core@2.11.8):
+    resolution: {integrity: sha512-jzwza3Yagduci2x0rr9MeFSORjcHpt0lRZukZPZQJT1Dth5qzV7XcgGqYzi39KGAVYR8QEDVoO0ubFKOxzMG+g==}
+    peerDependencies:
+      '@popperjs/core': ^2.11.8
+    dependencies:
+      '@popperjs/core': 2.11.8
     dev: false
 
   /brace-expansion@2.0.1:

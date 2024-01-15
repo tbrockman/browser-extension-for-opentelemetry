@@ -1,8 +1,8 @@
 {
-  "name": "opentelemetry-client",
-  "displayName": "Opentelemetry client",
+  "name": "opentelemetry-browser-extension",
+  "displayName": "OpenTelemetry Browser Extension",
   "version": "0.0.1",
-  "description": "An extension for instrumenting browsers using OpenTelemetry",
+  "description": "An extension for instrumenting webpages using OpenTelemetry",
   "author": "Theodore Brockman",
   "scripts": {
     "dev": "plasmo dev",
@@ -27,6 +27,8 @@
     "@opentelemetry/sdk-trace-web": "^1.19.0",
     "@plasmohq/messaging": "^0.6.1",
     "@plasmohq/storage": "^1.9.0",
+    "@tabler/core": "1.0.0-beta20",
+    "hook": "link:@plasmohq/storage/hook",
     "plasmo": "0.84.0",
     "propagator-b3\n": "link:@opentelemetry/sdk-trace-web @opentelemetry/exporter-collector @opentelemetry/sdk-trace-base @opentelemetry/instrumentation @opentelemetry/context-zone @opentelemetry/propagator-b3\n",
     "react": "18.2.0",

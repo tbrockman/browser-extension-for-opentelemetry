@@ -28,9 +28,9 @@ console.log(collectorOptions)
 
 const exporter = new ConsoleSpanExporter();
 // const exporter = new OTLPTraceExporter(collectorOptions);
-
 const provider = new WebTracerProvider();
-provider.addSpanProcessor(new SimpleSpanProcessor(exporter));
+const processor = new SimpleSpanProcessor(exporter);
+provider.addSpanProcessor(processor);
 provider.register({
     contextManager: new ZoneContextManager(),
     propagator: new B3Propagator(),
@@ -52,7 +52,7 @@ registerInstrumentations({
     ],
 });
 
-let myPort = chrome.runtime.connect('ociiljbefbpdhokjnbjgcdjkhidfkbbg');
+let myPort = chrome.runtime.connect('bldddniapapecnijdhfifheelpnlhodi');
 
 console.log('port connected', myPort)
 
@@ -62,5 +62,5 @@ myPort.onDisconnect.addListener(obj => {
 
 myPort.onMessage.addListener((m) => {
     console.log("In content script, received message from background script: ");
-    console.log(m.greeting);
+    console.log(m);
 });
