@@ -30,6 +30,24 @@ storage.watch({
         Object.keys(ports).forEach((k) => {
             ports[k].postMessage({ url });
         })
+    },
+    'events': (events: any) => {
+        console.log('events changed', events)
+        Object.keys(ports).forEach((k) => {
+            ports[k].postMessage({ events });
+        })
+    },
+    'telemetry': (telemetry: any) => {
+        console.log('telemetry changed', telemetry)
+        Object.keys(ports).forEach((k) => {
+            ports[k].postMessage({ telemetry });
+        })
+    },
+    'headers': (headers: any) => {
+        console.log('headers changed', headers)
+        Object.keys(ports).forEach((k) => {
+            ports[k].postMessage({ headers });
+        })
     }
 })
 
