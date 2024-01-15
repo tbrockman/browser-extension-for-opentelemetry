@@ -1,0 +1,12 @@
+.link-section {
+    padding: 1rem;
+    background-color: var(--mantine-color-dark-7);
+    
+    .link-section-links {
+        .link-section-icon {
+            & > svg {
+                padding: 2px;
+            }
+        }
+    }
+}

@@ -3,55 +3,53 @@ import { Storage } from '@plasmohq/storage'
 let storage = new Storage({ area: 'local' })
 let ports = {}
 
-const connected = (p) => {
+const connected = async (p) => {
     console.debug('connected', p)
 
     ports[p.sender.tab.id] = p;
 
     p.onMessage.addListener((m) => {
-        console.log("In background script, received message from content script");
-        console.log(m.greeting);
+        console.debug("received message from content script", m);
     });
 
     p.onDisconnect.addListener((p) => {
-        console.log('disconnected', p)
+        console.debug('disconnected', p)
         delete ports[p.sender.tab.id];
     })
 
-    setTimeout(() => {
-        p.postMessage({ greeting: "hi there content script!" });
-    }, 2000)
+    const url = await storage.get('url')
+    const events = await storage.get('events')
+    const telemetry = await storage.get('telemetry')
+    const headers = await storage.get('headers')
+
+    p.postMessage({ url, events, telemetry, headers });
 }
 
 storage.watch({
     'url': (url: any) => {
-        console.log('url changed', url)
-
+        console.debug('url changed', url)
         Object.keys(ports).forEach((k) => {
-            ports[k].postMessage({ url });
+            ports[k].postMessage({ url: url.newValue });
         })
     },
     'events': (events: any) => {
-        console.log('events changed', events)
+        console.debug('events changed', events)
         Object.keys(ports).forEach((k) => {
-            ports[k].postMessage({ events });
+            ports[k].postMessage({ events: events.newValue });
         })
     },
     'telemetry': (telemetry: any) => {
-        console.log('telemetry changed', telemetry)
+        console.debug('telemetry changed', telemetry)
         Object.keys(ports).forEach((k) => {
-            ports[k].postMessage({ telemetry });
+            ports[k].postMessage({ telemetry: telemetry.newValue });
         })
     },
     'headers': (headers: any) => {
-        console.log('headers changed', headers)
+        console.debug('headers changed', headers)
         Object.keys(ports).forEach((k) => {
-            ports[k].postMessage({ headers });
+            ports[k].postMessage({ headers: headers.newValue });
         })
     }
 })
 
 chrome.runtime.onConnectExternal.addListener(connected);
-// chrome.storage.onChanged.addListener((changes, namespace) => {
-//     console.log(changes, namespace)
-// })

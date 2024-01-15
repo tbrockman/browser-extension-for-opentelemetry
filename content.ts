@@ -9,7 +9,6 @@ export const config: PlasmoCSConfig = {
 import { WebTracerProvider } from '@opentelemetry/sdk-trace-web';
 import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations-web';
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-proto";
-import { OTLPLogExporter } from "@opentelemetry/exporter-logs-otlp-proto";
 import { BatchSpanProcessor, ConsoleSpanExporter, SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { ZoneContextManager } from '@opentelemetry/context-zone';
@@ -19,28 +18,32 @@ let options = {
     url: 'http://localhost:4318/v1/traces', // url is optional and can be omitted - default is http://localhost:4318/v1/traces
     headers: {}, // an optional object containing custom headers to be sent with each request
     concurrencyLimit: 10, // an optional limit on pending requests
-    eventNames: ['submit', 'click', 'keypress'], // an optional array of event names to be instrumented
-    telemetry: ['metrics', 'logs', 'traces']
+    events: ['submit', 'click', 'keypress', 'scroll'] as (keyof HTMLElementEventMap)[], // an optional array of event names to be instrumented
+    telemetry: ['logs', 'traces']
 };
 let deregisterInstrumentation
 
 const instrument = () => {
 
+    console.debug('instrumenting with options', options)
+
     if (deregisterInstrumentation) {
+        console.debug('deregistering existing instrumentation')
         deregisterInstrumentation()
     }
 
     const exporter = new ConsoleSpanExporter();
     const trace = new OTLPTraceExporter({
         url: options.url,
-        headers: options.headers,
+        headers: {},
         concurrencyLimit: options.concurrencyLimit,
     });
-    const log = new OTLPLogExporter({
-        url: options.url,
-        headers: options.headers,
-        concurrencyLimit: options.concurrencyLimit,
-    });
+    // #TODO: instrument console logs
+    // const log = new OTLPLogExporter({
+    //     url: options.url,
+    //     headers: options.headers,
+    //     concurrencyLimit: options.concurrencyLimit,
+    // });
     const provider = new WebTracerProvider();
     const traceProcessor = new BatchSpanProcessor(trace);
     const processor = new SimpleSpanProcessor(exporter);
@@ -61,24 +64,45 @@ const instrument = () => {
                 '@opentelemetry/instrumentation-document-load': {},
                 '@opentelemetry/instrumentation-fetch': {},
                 '@opentelemetry/instrumentation-user-interaction': {
-                    eventNames: ['submit', 'click', 'keypress'],
+                    eventNames: options.events,
                 },
             }),
         ],
+        tracerProvider: provider,
     });
 }
 
-instrument()
-
 let myPort = chrome.runtime.connect('ekcjelbccmfijnglpcgfgkegjhgngeen');
 
-console.log('port connected', myPort)
-
 myPort.onDisconnect.addListener(obj => {
-    console.log('disconnected port', obj);
+    console.debug('disconnected port', obj);
+
+    if (deregisterInstrumentation) {
+        deregisterInstrumentation()
+    }
 })
 
 myPort.onMessage.addListener((m) => {
-    console.log("In content script, received message from background script: ");
-    console.log(m);
+    console.debug("in content script, received message from background script", m);
+
+    if (m.headers) {
+        const headers = {}
+        m.headers.forEach((str: string) => {
+            const index = str.indexOf(':')
+
+            if (index === -1) {
+                return
+            }
+            const key = str.substring(0, index)
+            const value = str.substring(index + 1)
+            headers[key] = value
+        })
+        m.headers = headers
+    }
+
+    options = {
+        ...options,
+        ...m
+    }
+    instrument()
 });

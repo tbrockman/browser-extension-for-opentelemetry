@@ -1,11 +1,10 @@
-body {
+html, body {
     height: auto;
 }
 
 .popup-container {
     min-width: 528px;
     flex-direction: column;
-    padding: 1rem;
 }
 
 .popup-logo {
