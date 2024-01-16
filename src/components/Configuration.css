@@ -1,4 +1,6 @@
 .configuration-container {
     margin: 1rem;
     margin-bottom: 0;
+    max-height: 400px;
+    overflow-y: auto;
 }

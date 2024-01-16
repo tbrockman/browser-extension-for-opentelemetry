@@ -1,0 +1,12 @@
+html, body {
+    height: auto;
+}
+
+.popup-container {
+    min-width: 52ch;
+    flex-direction: column;
+}
+
+.popup-logo {
+    max-width: 6rem;
+}

@@ -6,7 +6,7 @@ services:
     volumes:
       - ./config/otel-collector.yaml:/etc/otel-collector.yaml
     ports:
-      - "4318:4318"
+      - "4318:4318" # otlp http
 
   # To eventually offload to Tempo...
   tempo:
@@ -16,8 +16,8 @@ services:
       - ./config/tempo.yaml:/etc/tempo.yaml
       - ./tempo-data:/tmp/tempo
     ports:
-      - "3200"   # tempo
-      - "4317"
+      - "3200" # tempo
+      - "4317" # otlp grpc
 
   grafana:
     image: grafana/grafana:10.1.1
@@ -29,4 +29,4 @@ services:
       - GF_AUTH_DISABLE_LOGIN_FORM=true
       - GF_FEATURE_TOGGLES_ENABLE=traceqlEditor
     ports:
-      - "3000:3000"
+      - "3000:3000" # ui
