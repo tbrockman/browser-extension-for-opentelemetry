@@ -7,7 +7,7 @@ A [Plasmo](https://docs.plasmo.com/) browser extension that automatically instru
 
 Download it, refresh your pages, and start sending OTLP traces (to a collector of your choosing) for user interactions, document loads and fetch/XHR requests.
 
-![An example view of the popup UI](./assets/store/popup.png)
+<img src='./assets/store/popup.png' width='524' alt='An example view of the popup UI'/>
 
 ## Getting Started
 
