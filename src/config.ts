@@ -8,12 +8,14 @@ interface Config {
 
 const configs = {
     default: {
-
+        extension: {
+            id: 'kmbocfeebaaljhpkponlmjamhfdeclch'
+        }
     },
     production: {
         chrome: {
             extension: {
-                id: 'kmbocfeebaaljhpkponlmjamhfdeclch'
+                id: 'bgjeoaohfhbfabbfhbafjihbobjgniag'
             }
         }
     },

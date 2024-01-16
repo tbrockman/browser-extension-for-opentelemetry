@@ -55,9 +55,7 @@
     ],
     "permissions": [
       "scripting",
-      "storage",
-      "tabs",
-      "activeTab"
+      "storage"
     ],
     "externally_connectable": {
       "matches": [
