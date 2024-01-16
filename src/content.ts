@@ -24,10 +24,12 @@ let options = {
     headers: {}, // an optional object containing custom headers to be sent with each request
     concurrencyLimit: 10, // an optional limit on pending requests
     events: ['submit', 'click', 'keypress', 'scroll'] as (keyof HTMLElementEventMap)[], // an optional array of event names to be instrumented
-    telemetry: ['logs', 'traces']
+    telemetry: ['logs', 'traces'],
+    propagateTo: [],
+    instrumentations: ['fetch', 'load', 'interaction'],
+    enabled: true,
 };
 let deregisterInstrumentation
-let span
 
 const instrument = () => {
 
@@ -35,8 +37,11 @@ const instrument = () => {
 
     if (deregisterInstrumentation) {
         console.debug('deregistering existing instrumentation')
-        span.end()
         deregisterInstrumentation()
+    }
+
+    if (!options.enabled || options.instrumentations.length === 0) {
+        return
     }
 
     const resource = new Resource({
@@ -47,7 +52,7 @@ const instrument = () => {
         [SemanticResourceAttributes.TELEMETRY_SDK_VERSION]: '1.19.0',
         'browser.language': navigator.language,
         'user_agent.original': navigator.userAgent,
-        'extension.browser': process.env.PLASMO_BROWSER,
+        'extension.target': process.env.PLASMO_TARGET,
     })
     const provider = new WebTracerProvider({
         resource,
@@ -72,40 +77,54 @@ const instrument = () => {
     provider.register({
         contextManager: new ZoneContextManager(),
         propagator: new CompositePropagator({
-            propagators: [
+            propagators: options.propagateTo.length > 0 ? [
                 new B3Propagator(),
                 new W3CTraceContextPropagator(),
-            ],
+            ] : [],
         }),
     });
-
-    const webTracerWithZone = provider.getTracer('default');
-    span = webTracerWithZone.startSpan('main');
+    const propagateTraceHeaderCorsUrls = options.propagateTo.map((url) => new RegExp(url))
+    const clearTimingResources = true
+    const instrumentations = {
+        'load': [
+            ['@opentelemetry/instrumentation-document-load', {}]
+        ],
+        'fetch': [
+            ['@opentelemetry/instrumentation-xml-http-request', {
+                clearTimingResources,
+                propagateTraceHeaderCorsUrls
+            }],
+            ['@opentelemetry/instrumentation-fetch', {
+                clearTimingResources,
+                propagateTraceHeaderCorsUrls
+            }]
+        ],
+        'interaction': [
+            ['@opentelemetry/instrumentation-user-interaction', {
+                eventNames: options.events,
+            }]
+        ],
+    }
+    const instrumentationsToRegister = {}
+    options.instrumentations.forEach((instrumentation) => {
+        instrumentations[instrumentation].forEach((instrumentation) => {
+            instrumentationsToRegister[instrumentation[0]] = instrumentation[1]
+        })
+    })
 
     deregisterInstrumentation = registerInstrumentations({
         instrumentations: [
-            getWebAutoInstrumentations({
-                // load custom configuration for xml-http-request instrumentation
-                '@opentelemetry/instrumentation-xml-http-request': {
-                    clearTimingResources: true,
-                    propagateTraceHeaderCorsUrls: new RegExp('[\s\S]*')
-                },
-                '@opentelemetry/instrumentation-document-load': {},
-                '@opentelemetry/instrumentation-fetch': {
-                    propagateTraceHeaderCorsUrls: new RegExp('[\s\S]*')
-                },
-                '@opentelemetry/instrumentation-user-interaction': {
-                    eventNames: options.events,
-                },
-            }),
+            getWebAutoInstrumentations(instrumentationsToRegister),
         ],
         tracerProvider: provider,
     });
 }
 
-let myPort = chrome.runtime.connect(appConfig.extension.id);
+let port = chrome.runtime.connect(appConfig.extension.id);
 
-myPort.onDisconnect.addListener(obj => {
+console.debug('extension id', appConfig.extension.id)
+
+port.onDisconnect.addListener(obj => {
     console.debug('disconnected port', obj);
 
     if (deregisterInstrumentation) {
@@ -113,7 +132,7 @@ myPort.onDisconnect.addListener(obj => {
     }
 })
 
-myPort.onMessage.addListener((m) => {
+port.onMessage.addListener((m) => {
     console.debug("in content script, received message from background script", m);
 
     if (m.headers) {

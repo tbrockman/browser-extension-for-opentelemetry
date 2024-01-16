@@ -21,10 +21,14 @@ const connected = async (p) => {
     const events = await storage.get('events')
     const telemetry = await storage.get('telemetry')
     const headers = await storage.get('headers')
+    const instrumentations = await storage.get('instrumentations')
+    const propagateTo = await storage.get('propagateTo')
+    const enabled = await storage.get('enabled')
 
-    p.postMessage({ url, events, telemetry, headers });
+    p.postMessage({ url, events, telemetry, headers, instrumentations, propagateTo, enabled });
 }
 
+// #TODO: refactor and type
 storage.watch({
     'url': (url: any) => {
         console.debug('url changed', url)
@@ -48,6 +52,24 @@ storage.watch({
         console.debug('headers changed', headers)
         Object.keys(ports).forEach((k) => {
             ports[k].postMessage({ headers: headers.newValue });
+        })
+    },
+    'enabled': (enabled: any) => {
+        console.debug('enabled changed', enabled)
+        Object.keys(ports).forEach((k) => {
+            ports[k].postMessage({ enabled: enabled.newValue });
+        })
+    },
+    'propagateTo': (propagateTo: any) => {
+        console.debug('propagateTo changed', propagateTo)
+        Object.keys(ports).forEach((k) => {
+            ports[k].postMessage({ propagateTo: propagateTo.newValue });
+        })
+    },
+    'instrumentations': (instrumentations: any) => {
+        console.debug('instrumentations changed', instrumentations)
+        Object.keys(ports).forEach((k) => {
+            ports[k].postMessage({ instrumentations: instrumentations.newValue });
         })
     }
 })

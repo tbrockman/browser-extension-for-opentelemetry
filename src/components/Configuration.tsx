@@ -134,7 +134,7 @@ export default function Configuration() {
                     description={
                         <>
                             URL of a collector receiving Protobuf-encoded OTLP traces over HTTP.{" "}
-                            <Text c='orange.3' component='span' size='xs'>⚠️ Will fail to send if <Anchor href='https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP' size='xs'>blocked by a CSP</Anchor></Text>
+                            <Text c='orange.3' component='span' size='xs'>⚠️ Will fail to send if <Anchor href='https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP' size='xs'>blocked by a CSP</Anchor>.</Text>
                         </>
                     }
                     placeholder="http://localhost:4318/v1/traces"
@@ -173,7 +173,7 @@ export default function Configuration() {
                     comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false }, transitionProps: { transition: 'pop', duration: 200 } }}
                     description={
                         <>
-                            Regular expressions matching URLs which should receive W3C trace context on fetch/XHR. <Text c='orange.3' component='span' size='xs'>⚠️ May cause CORS errors.</Text>
+                            List of regular expressions matching URLs which should receive W3C trace context on fetch/XHR. <Text c='orange.3' component='span' size='xs'>⚠️ May cause CORS errors.</Text>
                         </>
                     }
                     placeholder={propagateTo.length == 0 ? ".*" : ''}
