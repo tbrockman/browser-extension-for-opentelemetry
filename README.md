@@ -1,10 +1,11 @@
 # opentelemetry-browser-extension
 
-> [!WARNING]
+> [!NOTE] 
+> This project is in very early development, and is likely to change *and* be broken. Forgive the lack of documentation.
 
 A [Plasmo](https://docs.plasmo.com/) browser extension that automatically instruments webpages with [OpenTelemetry](https://opentelemetry.io/docs/what-is-opentelemetry/).
 
-Download it, refresh your pages, and start sending OTLP traces (to a collector of your choosing) for user interactions, document loads, HTTP requests, and more.
+Download it, refresh your pages, and start sending OTLP traces (to a collector of your choosing) for user interactions, document loads and fetch/XHR requests.
 
 ![An example view of the popup UI](./assets/store/popup.png)
 
@@ -29,5 +30,3 @@ pnpm build
 # or
 npm run build
 ```
-
-This should create a production bundle for your extension, ready to be zipped and published to the stores.

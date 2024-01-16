@@ -173,7 +173,7 @@ export default function Configuration() {
                     comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false }, transitionProps: { transition: 'pop', duration: 200 } }}
                     description={
                         <>
-                            List of regular expressions matching URLs which should receive W3C trace context on fetch/XHR. <Text c='orange.3' component='span' size='xs'>⚠️ May cause CORS errors.</Text>
+                            List of regular expressions matching URLs which should receive W3C trace context on fetch/XHR. <Text c='orange.3' component='span' size='xs'>⚠️ May cause request CORS failures.</Text>
                         </>
                     }
                     placeholder={propagateTo.length == 0 ? ".*" : ''}
