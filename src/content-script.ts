@@ -106,7 +106,7 @@ const instrument = (options: Options) => {
     });
 }
 
-export default function injectContentScript(extensionId: string, options: Options) {
+function injectContentScript(extensionId: string, options: Options) {
     const port = chrome.runtime.connect(extensionId);
     let deregisterInstrumentation = instrument(options);
 
@@ -125,4 +125,8 @@ export default function injectContentScript(extensionId: string, options: Option
         deregisterInstrumentation && deregisterInstrumentation()
         deregisterInstrumentation = instrument(options)
     });
+}
+
+export {
+    injectContentScript,
 }

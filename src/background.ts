@@ -1,6 +1,6 @@
 import { Storage } from '@plasmohq/storage'
 import { stringHeadersToObject } from './util'
-import { injectContentScript } from 'func:./content-script'
+// import { injectContentScript } from './content-script'
 
 let storage = new Storage({ area: 'local' })
 let ports = {}
@@ -20,51 +20,66 @@ const connected = async (p) => {
     })
 }
 
-// #TODO: refactor and type
-storage.watch({
-    'url': (url: any) => {
-        console.debug('url changed', url)
-        Object.keys(ports).forEach((k) => {
-            ports[k].postMessage({ url: url.newValue });
-        })
-    },
-    'events': (events: any) => {
-        console.debug('events changed', events)
-        Object.keys(ports).forEach((k) => {
-            ports[k].postMessage({ events: events.newValue });
-        })
-    },
-    'telemetry': (telemetry: any) => {
-        console.debug('telemetry changed', telemetry)
-        Object.keys(ports).forEach((k) => {
-            ports[k].postMessage({ telemetry: telemetry.newValue });
-        })
-    },
-    'headers': (headers: any) => {
-        console.debug('headers changed', headers)
-        Object.keys(ports).forEach((k) => {
-            ports[k].postMessage({ headers: headers.newValue });
-        })
-    },
-    'enabled': (enabled: any) => {
-        console.debug('enabled changed', enabled)
-        Object.keys(ports).forEach((k) => {
-            ports[k].postMessage({ enabled: enabled.newValue });
-        })
-    },
-    'propagateTo': (propagateTo: any) => {
-        console.debug('propagateTo changed', propagateTo)
-        Object.keys(ports).forEach((k) => {
-            ports[k].postMessage({ propagateTo: propagateTo.newValue });
-        })
-    },
-    'instrumentations': (instrumentations: any) => {
-        console.debug('instrumentations changed', instrumentations)
-        Object.keys(ports).forEach((k) => {
-            ports[k].postMessage({ instrumentations: instrumentations.newValue });
-        })
-    }
+chrome.storage.onChanged.addListener(({ url, events, telemetry, headers, enabled, propagateTo, instrumentations }, area) => {
+    console.debug('storage changed', url, events, telemetry, headers, enabled, propagateTo, instrumentations, area)
+    Object.keys(ports).forEach((k) => {
+        ports[k].postMessage({
+            url: url?.newValue,
+            events: events?.newValue,
+            telemetry: telemetry?.newValue,
+            headers: headers?.newValue,
+            enabled: enabled?.newValue,
+            propagateTo: propagateTo?.newValue,
+            instrumentations: instrumentations?.newValue,
+        });
+    })
 })
+
+// #TODO: refactor and type
+// storage.watch({
+//     'url': (url: any) => {
+//         console.debug('url changed', url)
+//         Object.keys(ports).forEach((k) => {
+//             ports[k].postMessage({ url: url.newValue });
+//         })
+//     },
+//     'events': (events: any) => {
+//         console.debug('events changed', events)
+//         Object.keys(ports).forEach((k) => {
+//             ports[k].postMessage({ events: events.newValue });
+//         })
+//     },
+//     'telemetry': (telemetry: any) => {
+//         console.debug('telemetry changed', telemetry)
+//         Object.keys(ports).forEach((k) => {
+//             ports[k].postMessage({ telemetry: telemetry.newValue });
+//         })
+//     },
+//     'headers': (headers: any) => {
+//         console.debug('headers changed', headers)
+//         Object.keys(ports).forEach((k) => {
+//             ports[k].postMessage({ headers: headers.newValue });
+//         })
+//     },
+//     'enabled': (enabled: any) => {
+//         console.debug('enabled changed', enabled)
+//         Object.keys(ports).forEach((k) => {
+//             ports[k].postMessage({ enabled: enabled.newValue });
+//         })
+//     },
+//     'propagateTo': (propagateTo: any) => {
+//         console.debug('propagateTo changed', propagateTo)
+//         Object.keys(ports).forEach((k) => {
+//             ports[k].postMessage({ propagateTo: propagateTo.newValue });
+//         })
+//     },
+//     'instrumentations': (instrumentations: any) => {
+//         console.debug('instrumentations changed', instrumentations)
+//         Object.keys(ports).forEach((k) => {
+//             ports[k].postMessage({ instrumentations: instrumentations.newValue });
+//         })
+//     }
+// })
 
 chrome.runtime.onConnectExternal.addListener(connected);
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
@@ -86,7 +101,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 
         chrome.scripting.executeScript({
             target: { tabId, allFrames: true },
-            func: injectContentScript,
+            func: () => { },
             args: [
                 chrome.runtime.id,
                 options,

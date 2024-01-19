@@ -5,21 +5,23 @@ await build({
     entryPoints: ["src/content-script.ts"],
     bundle: true,
     format: 'iife',
+    globalName: '__bundled_content_script',
     outfile: "dist/content-script.js",
     plugins: [
         polyfillNode({
             // Options (optional)
-            path: true
+            path: true,
         })
     ],
-    banner: { js: 'function inject(extensionId, options) {var injectContentScript;' },
-    footer: { js: 'injectContentScript(extensionId, options)};' }
+    target: ['chrome80', 'firefox80'],
+    // banner: { js: 'function inject(extensionId, options) {var injectContentScript;' },
+    footer: { js: 'let injectContentScript = __bundled_content_script.injectContentScript' }
 });
 
-await build({
-    entryPoints: ["src/background.ts"],
-    outfile: "dist/index.js",
-    format: 'esm',
-    bundle: true,
-    plugins: []
-});
+// await build({
+//     entryPoints: ["src/background.ts"],
+//     outfile: "dist/index.js",
+//     format: 'esm',
+//     bundle: true,
+//     plugins: []
+// });

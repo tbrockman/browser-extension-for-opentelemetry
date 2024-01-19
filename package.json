@@ -7,30 +7,9 @@
   "scripts": {
     "dev": "plasmo dev",
     "build": "plasmo build",
-    "test": "plasmo test"
+    "test": "plasmo test",
+    "postinstall": "patch-package"
   },
-  "targets": {
-    "content": {
-      "context": "browser",
-      "source": "src/content-script.ts",
-      "includeNodeModules": true,
-      "optimize": false,
-      "scopeHoist": false,
-      "outputFormat": "global"
-    },
-    "background": {
-      "context": "web-worker",
-      "outputFormat": "esmodule",
-      "source": "src/background.ts",
-      "includeNodeModules": true,
-      "scopeHoist": false
-    }
-  },
-  "browser": {
-    "path": "path-browserify"
-  },
-  "source": "src/background.ts",
-  "module": "dist/module.js",
   "dependencies": {
     "@mantine/core": "^7.4.1",
     "@mantine/hooks": "^7.4.1",
@@ -54,9 +33,7 @@
     "@tabler/icons-react": "^2.46.0",
     "deepmerge-ts": "^5.1.0",
     "esbuild-plugin-polyfill-node": "^0.3.0",
-    "hook": "link:@plasmohq/storage/hook",
     "plasmo": "0.84.0",
-    "propagator-b3\n": "link:@opentelemetry/sdk-trace-web @opentelemetry/exporter-collector @opentelemetry/sdk-trace-base @opentelemetry/instrumentation @opentelemetry/context-zone @opentelemetry/propagator-b3\n",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
@@ -89,6 +66,11 @@
       "matches": [
         "https://*/*"
       ]
+    }
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@protobufjs/inquire@1.1.0": "patches/@protobufjs__inquire@1.1.0.patch"
     }
   }
 }
