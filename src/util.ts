@@ -94,6 +94,22 @@ const events = [
     "wheel"
 ]
 
+const stringHeadersToObject = (headerString: string[]) => {
+    const headers = {}
+    headerString.forEach((str: string) => {
+        const index = str.indexOf(':')
+
+        if (index === -1) {
+            return
+        }
+        const key = str.substring(0, index)
+        const value = str.substring(index + 1)
+        headers[key] = value
+    })
+    return headers
+}
+
 export {
-    events
+    events,
+    stringHeadersToObject
 }

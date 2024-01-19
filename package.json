@@ -9,6 +9,28 @@
     "build": "plasmo build",
     "test": "plasmo test"
   },
+  "targets": {
+    "content": {
+      "context": "browser",
+      "source": "src/content-script.ts",
+      "includeNodeModules": true,
+      "optimize": false,
+      "scopeHoist": false,
+      "outputFormat": "global"
+    },
+    "background": {
+      "context": "web-worker",
+      "outputFormat": "esmodule",
+      "source": "src/background.ts",
+      "includeNodeModules": true,
+      "scopeHoist": false
+    }
+  },
+  "browser": {
+    "path": "path-browserify"
+  },
+  "source": "src/background.ts",
+  "module": "dist/module.js",
   "dependencies": {
     "@mantine/core": "^7.4.1",
     "@mantine/hooks": "^7.4.1",
@@ -31,6 +53,7 @@
     "@plasmohq/storage": "^1.9.0",
     "@tabler/icons-react": "^2.46.0",
     "deepmerge-ts": "^5.1.0",
+    "esbuild-plugin-polyfill-node": "^0.3.0",
     "hook": "link:@plasmohq/storage/hook",
     "plasmo": "0.84.0",
     "propagator-b3\n": "link:@opentelemetry/sdk-trace-web @opentelemetry/exporter-collector @opentelemetry/sdk-trace-base @opentelemetry/instrumentation @opentelemetry/context-zone @opentelemetry/propagator-b3\n",
@@ -39,14 +62,18 @@
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "4.1.1",
+    "@parcel/config-default": "^2.11.0",
     "@types/chrome": "0.0.251",
     "@types/node": "20.9.0",
     "@types/react": "18.2.37",
     "@types/react-dom": "18.2.15",
+    "esbuild": "^0.19.11",
+    "parcel": "^2.11.0",
     "postcss": "^8.4.33",
     "postcss-preset-mantine": "^1.12.3",
     "postcss-simple-vars": "^7.0.1",
     "prettier": "3.0.3",
+    "process": "^0.11.10",
     "typescript": "5.2.2"
   },
   "manifest": {
@@ -55,7 +82,8 @@
     ],
     "permissions": [
       "scripting",
-      "storage"
+      "storage",
+      "activeTab"
     ],
     "externally_connectable": {
       "matches": [

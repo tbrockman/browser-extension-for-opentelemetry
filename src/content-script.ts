@@ -1,11 +1,3 @@
-import type { PlasmoCSConfig } from "plasmo"
-
-export const config: PlasmoCSConfig = {
-    matches: ["<all_urls>"],
-    world: "MAIN",
-    run_at: "document_start"
-}
-
 import { WebTracerProvider } from '@opentelemetry/sdk-trace-web';
 import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations-web';
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-proto";
@@ -19,29 +11,23 @@ import { CompositePropagator, W3CTraceContextPropagator } from '@opentelemetry/c
 
 import { config as appConfig } from "~config";
 
-let options = {
-    url: 'http://localhost:4318/v1/traces', // url is optional and can be omitted - default is http://localhost:4318/v1/traces
-    headers: {}, // an optional object containing custom headers to be sent with each request
-    concurrencyLimit: 10, // an optional limit on pending requests
-    events: ['submit', 'click', 'keypress', 'scroll'] as (keyof HTMLElementEventMap)[], // an optional array of event names to be instrumented
-    telemetry: ['logs', 'traces'],
-    propagateTo: [],
-    instrumentations: ['fetch', 'load', 'interaction'],
-    enabled: true,
-};
-let deregisterInstrumentation
+type Options = {
+    url: string
+    headers: Record<string, string>
+    concurrencyLimit: number
+    events: (keyof HTMLElementEventMap)[]
+    telemetry: ('logs' | 'traces')[],
+    propagateTo: string[],
+    instrumentations: ('fetch' | 'load' | 'interaction')[],
+    enabled: boolean,
+}
 
-const instrument = () => {
+const instrument = (options: Options) => {
 
     console.debug('instrumenting with options', options)
 
-    if (deregisterInstrumentation) {
-        console.debug('deregistering existing instrumentation')
-        deregisterInstrumentation()
-    }
-
     if (!options.enabled || options.instrumentations.length === 0) {
-        return
+        return () => { }
     }
 
     const resource = new Resource({
@@ -86,10 +72,10 @@ const instrument = () => {
     const propagateTraceHeaderCorsUrls = options.propagateTo.map((url) => new RegExp(url))
     const clearTimingResources = true
     const instrumentations = {
-        'load': [
+        load: [
             ['@opentelemetry/instrumentation-document-load', {}]
         ],
-        'fetch': [
+        fetch: [
             ['@opentelemetry/instrumentation-xml-http-request', {
                 clearTimingResources,
                 propagateTraceHeaderCorsUrls
@@ -99,20 +85,20 @@ const instrument = () => {
                 propagateTraceHeaderCorsUrls
             }]
         ],
-        'interaction': [
+        interaction: [
             ['@opentelemetry/instrumentation-user-interaction', {
                 eventNames: options.events,
             }]
         ],
     }
     const instrumentationsToRegister = {}
-    options.instrumentations.forEach((instrumentation) => {
-        instrumentations[instrumentation].forEach((instrumentation) => {
-            instrumentationsToRegister[instrumentation[0]] = instrumentation[1]
+    options.instrumentations.forEach((instrumentation: string) => {
+        instrumentations[instrumentation].forEach((setting) => {
+            instrumentationsToRegister[setting[0]] = setting[1]
         })
     })
 
-    deregisterInstrumentation = registerInstrumentations({
+    return registerInstrumentations({
         instrumentations: [
             getWebAutoInstrumentations(instrumentationsToRegister),
         ],
@@ -120,39 +106,23 @@ const instrument = () => {
     });
 }
 
-let port = chrome.runtime.connect(appConfig.extension.id);
+export default function injectContentScript(extensionId: string, options: Options) {
+    const port = chrome.runtime.connect(extensionId);
+    let deregisterInstrumentation = instrument(options);
 
-console.debug('extension id', appConfig.extension.id)
+    port.onDisconnect.addListener(obj => {
+        console.debug('disconnected port', obj);
+        deregisterInstrumentation && deregisterInstrumentation()
+        port.disconnect()
+    })
 
-port.onDisconnect.addListener(obj => {
-    console.debug('disconnected port', obj);
-
-    if (deregisterInstrumentation) {
-        deregisterInstrumentation()
-    }
-})
-
-port.onMessage.addListener((m) => {
-    console.debug("in content script, received message from background script", m);
-
-    if (m.headers) {
-        const headers = {}
-        m.headers.forEach((str: string) => {
-            const index = str.indexOf(':')
-
-            if (index === -1) {
-                return
-            }
-            const key = str.substring(0, index)
-            const value = str.substring(index + 1)
-            headers[key] = value
-        })
-        m.headers = headers
-    }
-
-    options = {
-        ...options,
-        ...m
-    }
-    instrument()
-});
+    port.onMessage.addListener((m) => {
+        console.debug("in content script, received message from background script", m);
+        options = {
+            ...options,
+            ...m
+        }
+        deregisterInstrumentation && deregisterInstrumentation()
+        deregisterInstrumentation = instrument(options)
+    });
+}

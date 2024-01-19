@@ -1,4 +1,6 @@
 import { Storage } from '@plasmohq/storage'
+import { stringHeadersToObject } from './util'
+import { injectContentScript } from 'func:./content-script'
 
 let storage = new Storage({ area: 'local' })
 let ports = {}
@@ -16,16 +18,6 @@ const connected = async (p) => {
         console.debug('disconnected', p)
         delete ports[p.sender.tab.id];
     })
-
-    const url = await storage.get('url')
-    const events = await storage.get('events')
-    const telemetry = await storage.get('telemetry')
-    const headers = await storage.get('headers')
-    const instrumentations = await storage.get('instrumentations')
-    const propagateTo = await storage.get('propagateTo')
-    const enabled = await storage.get('enabled')
-
-    p.postMessage({ url, events, telemetry, headers, instrumentations, propagateTo, enabled });
 }
 
 // #TODO: refactor and type
@@ -75,3 +67,32 @@ storage.watch({
 })
 
 chrome.runtime.onConnectExternal.addListener(connected);
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+    console.debug("tab updated", tabId, changeInfo, tab, tab.status)
+    if (
+        changeInfo.status === "complete") {
+        console.debug("injecting opentelemetry-browser-extension")
+
+        const options = {
+            url: await storage.get('url'),
+            headers: stringHeadersToObject(await storage.get('headers')),
+            concurrencyLimit: 10,
+            events: await storage.get<(keyof HTMLElementEventMap)[]>('events'),
+            telemetry: await storage.get<('logs' | 'traces')[]>('telemetry'),
+            propagateTo: await storage.get<string[]>('propagateTo'),
+            instrumentations: await storage.get<('fetch' | 'load' | 'interaction')[]>('instrumentations'),
+            enabled: await storage.get<boolean>('enabled'),
+        }
+
+        chrome.scripting.executeScript({
+            target: { tabId, allFrames: true },
+            func: injectContentScript,
+            args: [
+                chrome.runtime.id,
+                options,
+            ],
+            injectImmediately: true,
+            world: "MAIN"
+        })
+    }
+})
