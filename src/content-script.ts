@@ -11,7 +11,7 @@ import { CompositePropagator, W3CTraceContextPropagator } from '@opentelemetry/c
 
 import { config as appConfig } from "~config";
 
-type Options = {
+export type Options = {
     url: string
     headers: Record<string, string>
     concurrencyLimit: number
@@ -127,6 +127,4 @@ function injectContentScript(extensionId: string, options: Options) {
     });
 }
 
-export {
-    injectContentScript,
-}
+export default injectContentScript;
