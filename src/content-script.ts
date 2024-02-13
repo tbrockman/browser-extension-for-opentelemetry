@@ -1,7 +1,7 @@
 import { WebTracerProvider } from '@opentelemetry/sdk-trace-web';
 import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations-web';
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-proto";
-import { BatchSpanProcessor, ConsoleSpanExporter, SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
+import { BatchSpanProcessor, ConsoleSpanExporter, SimpleSpanProcessor, type ReadableSpan } from '@opentelemetry/sdk-trace-base';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { ZoneContextManager } from '@opentelemetry/context-zone';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
@@ -9,7 +9,7 @@ import { Resource } from '@opentelemetry/resources';
 import { B3Propagator } from '@opentelemetry/propagator-b3';
 import { CompositePropagator, W3CTraceContextPropagator } from '@opentelemetry/core';
 
-import { config as appConfig } from "~config";
+import { MessageTypes, type TypedPort } from '~types';
 
 export type Options = {
     url: string
@@ -22,7 +22,7 @@ export type Options = {
     enabled: boolean,
 }
 
-const instrument = (options: Options) => {
+const instrument = (port: TypedPort, options: Options) => {
 
     console.debug('instrumenting with options', options)
 
@@ -50,6 +50,17 @@ const instrument = (options: Options) => {
         headers: options.headers,
         concurrencyLimit: options.concurrencyLimit,
     });
+
+    // Technically we could implement our own TraceExporter that sends to the background service
+    // But I'm lazy and it seems easier just to override the send method
+    // Original implementation: https://github.com/open-telemetry/opentelemetry-js/blob/main/experimental/packages/otlp-exporter-base/src/platform/browser/OTLPExporterBrowserBase.ts#L28
+    traceExporter.send = (items: ReadableSpan[], onSuccess: () => void, onError: (error: Error) => void) => {
+        const serviceRequest = traceExporter.convert(items);
+        const body = JSON.stringify(serviceRequest);
+        const message = { body, headers: traceExporter.headers, url: traceExporter.url, timeout: traceExporter.timeoutMillis, type: MessageTypes.OTLPSendMessage }
+        port.postMessage(message)
+        onSuccess()
+    }
     // #TODO: instrument console logs
     // const log = new OTLPLogExporter({
     //     url: options.url,
@@ -108,7 +119,7 @@ const instrument = (options: Options) => {
 
 function injectContentScript(extensionId: string, options: Options) {
     const port = chrome.runtime.connect(extensionId);
-    let deregisterInstrumentation = instrument(options);
+    let deregisterInstrumentation = instrument(port, options);
 
     port.onDisconnect.addListener(obj => {
         console.debug('disconnected port', obj);
@@ -123,7 +134,7 @@ function injectContentScript(extensionId: string, options: Options) {
             ...m
         }
         deregisterInstrumentation && deregisterInstrumentation()
-        deregisterInstrumentation = instrument(options)
+        deregisterInstrumentation = instrument(port, options)
     });
 }
 

@@ -2,17 +2,43 @@ import { Storage } from '@plasmohq/storage'
 import { stringHeadersToObject } from './util'
 import injectContentScript from 'inlinefunc:./content-script'
 import type { Options } from '~content-script'
+import { MessageTypes, type OTLPSendMessage, type TypedPort } from '~types'
 
 let storage = new Storage({ area: 'local' })
 let ports = {}
 
-const connected = async (p) => {
+const connected = async (p: TypedPort) => {
     console.debug('connected', p)
 
     ports[p.sender.tab.id] = p;
 
-    p.onMessage.addListener((m) => {
-        console.debug("received message from content script", m);
+    p.onMessage.addListener(async (message) => {
+        console.log('received message', message)
+
+        switch (message.type) {
+            case MessageTypes.OTLPSendMessage:
+                let { body, headers, url, timeout } = message as OTLPSendMessage
+                headers = {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    ...headers
+                }
+                console.debug('OTLPSendMessage', body, headers, url, timeout)
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers,
+                        body,
+                    })
+                    const data = await response.json()
+                    console.debug(data)
+                } catch (e) {
+                    console.error('error sending message', e)
+                }
+                break;
+            default:
+                console.error('unknown message', message)
+        }
     });
 
     p.onDisconnect.addListener((p) => {
