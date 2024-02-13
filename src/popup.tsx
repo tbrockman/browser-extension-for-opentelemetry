@@ -6,7 +6,7 @@ import {
 
 
 import "@mantine/core/styles.css"
-import "popup.css"
+import "./popup.css"
 import LinkSection from "~components/LinkSection"
 import Configuration from "~components/Configuration"
 

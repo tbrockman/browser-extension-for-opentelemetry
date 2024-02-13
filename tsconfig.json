@@ -10,8 +10,11 @@
   ],
   "compilerOptions": {
     "paths": {
-      "~*": ["./src/*"]
+      "~*": [
+        "./src/*"
+      ]
     },
-    "baseUrl": "."
+    "baseUrl": ".",
+    "isolatedModules": true
   }
 }

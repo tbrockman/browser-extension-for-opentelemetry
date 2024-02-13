@@ -94,6 +94,44 @@ const events = [
     "wheel"
 ]
 
+const logPrefix = '[opentelemetry-browser-extension]'
+const consoleProxy = new Proxy(console, {
+    get(target, prop, receiver) {
+        if (['log', 'debug', 'info', 'warn', 'error'].includes(prop as string)) {
+            // Wrapping the original console method with a function that adds the prefix
+            return function (...args) {
+                // Adding the prefix as the first argument
+                args.unshift(logPrefix);
+                // Calling the original console method with the modified arguments
+                target[prop].apply(target, args);
+            };
+        } else {
+            // For other console methods, return them as is
+            return Reflect.get(target, prop, receiver);
+        }
+    }
+});
+
+const stringHeadersToObject = (headerString: string[]) => {
+    const headers = {}
+
+    if (headerString) {
+        headerString.forEach((str: string) => {
+            const index = str.indexOf(':')
+
+            if (index === -1) {
+                return
+            }
+            const key = str.substring(0, index)
+            const value = str.substring(index + 1)
+            headers[key] = value
+        })
+    }
+    return headers
+}
+
 export {
-    events
+    events,
+    stringHeadersToObject,
+    consoleProxy
 }
