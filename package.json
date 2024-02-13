@@ -22,6 +22,8 @@
     "@opentelemetry/instrumentation-fetch": "^0.46.0",
     "@opentelemetry/instrumentation-user-interaction": "^0.34.1",
     "@opentelemetry/instrumentation-xml-http-request": "^0.46.0",
+    "@opentelemetry/otlp-exporter-base": "^0.48.0",
+    "@opentelemetry/otlp-proto-exporter-base": "^0.48.0",
     "@opentelemetry/propagator-b3": "^1.20.0",
     "@opentelemetry/resources": "^1.20.0",
     "@opentelemetry/sdk-trace-base": "^1.19.0",

@@ -17,21 +17,25 @@ const connected = async (p: TypedPort) => {
 
         switch (message.type) {
             case MessageTypes.OTLPSendMessage:
-                let { body, headers, url, timeout } = message as OTLPSendMessage
-                headers = {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    ...headers
+                const { bytes, timeout } = message as OTLPSendMessage
+
+                // Even though the content script could send us the headers and url, we don't trust them
+                // So in the worst case scenario we're only sending arbitrary bytes to our chosen server
+                const headers = {
+                    ...stringHeadersToObject(await storage.get('headers')),
+                    'Content-Type': 'application/x-protobuf',
+                    Accept: 'application/x-protobuf'
                 }
+                const url = await storage.get('url') || 'http://localhost:4318/v1/traces'
+                const body = new Blob([new Uint8Array(bytes)], { type: 'application/x-protobuf' });
+
                 console.debug('OTLPSendMessage', body, headers, url, timeout)
                 try {
-                    const response = await fetch(url, {
+                    await fetch(url, {
                         method: 'POST',
                         headers,
                         body,
                     })
-                    const data = await response.json()
-                    console.debug(data)
                 } catch (e) {
                     console.error('error sending message', e)
                 }

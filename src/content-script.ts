@@ -2,6 +2,8 @@ import { WebTracerProvider } from '@opentelemetry/sdk-trace-web';
 import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations-web';
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-proto";
 import { BatchSpanProcessor, ConsoleSpanExporter, SimpleSpanProcessor, type ReadableSpan } from '@opentelemetry/sdk-trace-base';
+import { getExportRequestProto } from '@opentelemetry/otlp-proto-exporter-base';
+import { OTLPExporterError } from '@opentelemetry/otlp-exporter-base';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { ZoneContextManager } from '@opentelemetry/context-zone';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
@@ -54,12 +56,25 @@ const instrument = (port: TypedPort, options: Options) => {
     // Technically we could implement our own TraceExporter that sends to the background service
     // But I'm lazy and it seems easier just to override the send method
     // Original implementation: https://github.com/open-telemetry/opentelemetry-js/blob/main/experimental/packages/otlp-exporter-base/src/platform/browser/OTLPExporterBrowserBase.ts#L28
-    traceExporter.send = (items: ReadableSpan[], onSuccess: () => void, onError: (error: Error) => void) => {
+    traceExporter.send = (items: ReadableSpan[], onSuccess: () => void, onError: (error: OTLPExporterError) => void) => {
+        console.debug(`sending ${items.length} spans to ${traceExporter.url}`)
         const serviceRequest = traceExporter.convert(items);
-        const body = JSON.stringify(serviceRequest);
-        const message = { body, headers: traceExporter.headers, url: traceExporter.url, timeout: traceExporter.timeoutMillis, type: MessageTypes.OTLPSendMessage }
-        port.postMessage(message)
-        onSuccess()
+        const clientType = traceExporter.getServiceClientType()
+        const exportRequestType = getExportRequestProto(clientType)
+        const otlp = exportRequestType.create(serviceRequest);
+
+        if (otlp) {
+            const bytes = exportRequestType.encode(otlp).finish();
+            // Because messages are JSON serialized and deserialized, we can't send a Uint8Array directly
+            // So we send an array of numbers and convert it back to a Uint8Array on the other side
+            const message = { bytes: Array.from(bytes), timeout: traceExporter.timeoutMillis, type: MessageTypes.OTLPSendMessage }
+            console.debug('message to background script to forward to collector', serviceRequest)
+            port.postMessage(message)
+            onSuccess()
+        } else {
+            onError(new OTLPExporterError('failed to create OTLP proto service request message'))
+        }
+
     }
     // #TODO: instrument console logs
     // const log = new OTLPLogExporter({
