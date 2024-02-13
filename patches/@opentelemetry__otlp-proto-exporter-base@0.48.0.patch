@@ -1,0 +1,10 @@
+diff --git a/build/esm/platform/browser/index.js b/build/esm/platform/browser/index.js
+index 10143b03258cbc82a57a333ff6cb9d944cff05de..2d008438710082bfbeedb7743f667f41172527ac 100644
+--- a/build/esm/platform/browser/index.js
++++ b/build/esm/platform/browser/index.js
+@@ -15,4 +15,5 @@
+  */
+ export { OTLPProtoExporterBrowserBase } from './OTLPProtoExporterBrowserBase';
+ export { ServiceClientType } from '../types';
++export { getExportRequestProto } from '../util';
+ //# sourceMappingURL=index.js.map

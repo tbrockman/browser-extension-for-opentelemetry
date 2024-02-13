@@ -75,7 +75,8 @@
   },
   "pnpm": {
     "patchedDependencies": {
-      "@protobufjs/inquire@1.1.0": "patches/@protobufjs__inquire@1.1.0.patch"
+      "@protobufjs/inquire@1.1.0": "patches/@protobufjs__inquire@1.1.0.patch",
+      "@opentelemetry/otlp-proto-exporter-base@0.48.0": "patches/@opentelemetry__otlp-proto-exporter-base@0.48.0.patch"
     }
   },
   "parcel-resolver-inlinefunc": {
