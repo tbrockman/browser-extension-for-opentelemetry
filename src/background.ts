@@ -1,5 +1,5 @@
 import { Storage } from '@plasmohq/storage'
-import { stringHeadersToObject } from './util'
+import { consoleProxy, stringHeadersToObject } from './util'
 import injectContentScript from 'inlinefunc:./content-script'
 import type { Options } from '~content-script'
 import { MessageTypes, type OTLPSendMessage, type TypedPort } from '~types'
@@ -8,15 +8,14 @@ let storage = new Storage({ area: 'local' })
 let ports = {}
 
 const connected = async (p: TypedPort) => {
-    console.debug('connected', p)
-
     ports[p.sender.tab.id] = p;
 
     p.onMessage.addListener(async (message) => {
-        console.log('received message', message)
+        consoleProxy.debug('received message', message)
 
         switch (message.type) {
             case MessageTypes.OTLPSendMessage:
+                // Timeout currently ignored
                 const { bytes, timeout } = message as OTLPSendMessage
 
                 // Even though the content script could send us the headers and url, we don't trust them
@@ -29,30 +28,30 @@ const connected = async (p: TypedPort) => {
                 const url = await storage.get('url') || 'http://localhost:4318/v1/traces'
                 const body = new Blob([new Uint8Array(bytes)], { type: 'application/x-protobuf' });
 
-                console.debug('OTLPSendMessage', body, headers, url, timeout)
                 try {
+                    // TODO: retries and timeouts
                     await fetch(url, {
                         method: 'POST',
                         headers,
                         body,
                     })
                 } catch (e) {
-                    console.error('error sending message', e)
+                    consoleProxy.error('error sending message', e)
                 }
                 break;
             default:
-                console.error('unknown message', message)
+                consoleProxy.error('unhandled message type', message.type)
         }
     });
 
     p.onDisconnect.addListener((p) => {
-        console.debug('disconnected', p)
+        consoleProxy.debug('port disconnected', p)
         delete ports[p.sender.tab.id];
     })
 }
 
 chrome.storage.onChanged.addListener(({ url, events, telemetry, headers, enabled, propagateTo, instrumentations }, area) => {
-    console.debug('storage changed', url, events, telemetry, headers, enabled, propagateTo, instrumentations, area)
+    consoleProxy.debug('storage changed', url, events, telemetry, headers, enabled, propagateTo, instrumentations, area)
     Object.keys(ports).forEach((k) => {
         ports[k].postMessage({
             url: url?.newValue,
@@ -68,10 +67,9 @@ chrome.storage.onChanged.addListener(({ url, events, telemetry, headers, enabled
 
 chrome.runtime.onConnectExternal.addListener(connected);
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-    console.debug("tab updated", tabId, changeInfo, tab, tab.status)
     if (
         changeInfo.status === "complete") {
-        console.debug("injecting opentelemetry-browser-extension", injectContentScript)
+        consoleProxy.debug("injecting content script")
 
         const options: Options = {
             url: await storage.get('url') || 'http://localhost:4318/v1/traces',

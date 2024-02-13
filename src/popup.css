@@ -1,9 +1,10 @@
-html, body {
+html,
+body {
     height: auto;
 }
 
 .popup-container {
-    min-width: 52ch;
+    min-width: 64ch;
     flex-direction: column;
 }
 

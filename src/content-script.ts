@@ -12,6 +12,7 @@ import { B3Propagator } from '@opentelemetry/propagator-b3';
 import { CompositePropagator, W3CTraceContextPropagator } from '@opentelemetry/core';
 
 import { MessageTypes, type TypedPort } from '~types';
+import { consoleProxy } from '~util';
 
 export type Options = {
     url: string
@@ -26,7 +27,7 @@ export type Options = {
 
 const instrument = (port: TypedPort, options: Options) => {
 
-    console.debug('instrumenting with options', options)
+    consoleProxy.debug(`instrumenting with options`, options)
 
     if (!options.enabled || options.instrumentations.length === 0) {
         return () => { }
@@ -68,7 +69,7 @@ const instrument = (port: TypedPort, options: Options) => {
             // Because messages are JSON serialized and deserialized, we can't send a Uint8Array directly
             // So we send an array of numbers and convert it back to a Uint8Array on the other side
             const message = { bytes: Array.from(bytes), timeout: traceExporter.timeoutMillis, type: MessageTypes.OTLPSendMessage }
-            console.debug('message to background script to forward to collector', serviceRequest)
+            consoleProxy.debug(`message to background script to forward to collector`, serviceRequest)
             port.postMessage(message)
             onSuccess()
         } else {
@@ -137,13 +138,13 @@ function injectContentScript(extensionId: string, options: Options) {
     let deregisterInstrumentation = instrument(port, options);
 
     port.onDisconnect.addListener(obj => {
-        console.debug('disconnected port', obj);
+        consoleProxy.debug(`disconnected port`, obj);
         deregisterInstrumentation && deregisterInstrumentation()
         port.disconnect()
     })
 
     port.onMessage.addListener((m) => {
-        console.debug("in content script, received message from background script", m);
+        consoleProxy.debug(`received message from background script`, m);
         options = {
             ...options,
             ...m
