@@ -24,7 +24,7 @@ git submodule update --init --recursive
 Install dependencies:
 
 ```bash
-pnpm install
+pnpm install --shamefully-hoist
 ```
 
 Run the development server:
