@@ -33,6 +33,11 @@ Install dependencies:
 pnpm install --shamefully-hoist
 ```
 
+Start the OpenTelemetry stack (Grafana + Tempo + `opentelemetry-collector-contrib`):<sup> (optional if you have your own)</sup>
+```bash
+docker compose up -d
+```
+
 Run the development server:
 
 ```bash
