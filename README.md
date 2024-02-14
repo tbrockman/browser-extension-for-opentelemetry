@@ -9,6 +9,12 @@ Download it, refresh your pages, and start sending OTLP traces (to a collector o
 
 <img src='./assets/store/popup.png' width='524' alt='An example view of the popup UI'/>
 
+## Features
+
+* Automatically instrument your webpages to collect traces, sent to an OpenTelemetry-compatible collector
+* No content-security policy errors! Works around typical CSP limitations by making `fetch` requests from the background script instead of the webpage
+* Propagate b3 and w3c trace context to websites of your choosing (matched by regular expressions)
+
 ## Browser compatibility
 
 Currently, this extension is only compatible with Chromium-based browsers (Chrome, Edge, etc) which support [manifest v3](https://developer.chrome.com/docs/extensions/develop/migrate/what-is-mv3) and `chrome.scripting.executeScript({ world: 'MAIN' })`.
