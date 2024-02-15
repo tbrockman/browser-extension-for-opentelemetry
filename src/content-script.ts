@@ -27,11 +27,10 @@ export type Options = {
 
 const instrument = (port: TypedPort, options: Options) => {
 
-    consoleProxy.debug(`instrumenting with options`, options)
-
     if (!options.enabled || options.instrumentations.length === 0) {
         return () => { }
     }
+    consoleProxy.debug(`instrumenting with options`, options)
 
     const resource = new Resource({
         [SemanticResourceAttributes.SERVICE_NAME]: 'opentelemetry-browser-extension',

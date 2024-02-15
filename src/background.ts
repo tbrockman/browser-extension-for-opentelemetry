@@ -69,6 +69,7 @@ chrome.runtime.onConnectExternal.addListener(connected);
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     if (
         changeInfo.status === "complete") {
+
         consoleProxy.debug("injecting content script")
 
         const options: Options = {
@@ -82,7 +83,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
             enabled: await storage.get<boolean>('enabled') || true,
         }
 
-        chrome.scripting.executeScript({
+        await chrome.scripting.executeScript({
             target: { tabId, allFrames: true },
             func: injectContentScript,
             args: [
