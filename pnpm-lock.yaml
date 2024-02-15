@@ -14,16 +14,16 @@ patchedDependencies:
 
 dependencies:
   '@mantine/core':
-    specifier: ^7.4.1
+    specifier: ^7.4.2
     version: 7.4.2(@mantine/hooks@7.4.2)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
   '@mantine/hooks':
-    specifier: ^7.4.1
+    specifier: ^7.4.2
     version: 7.4.2(react@18.2.0)
   '@opentelemetry/auto-instrumentations-web':
     specifier: ^0.35.0
     version: 0.35.0(@opentelemetry/api@1.7.0)(zone.js@0.11.4)
   '@opentelemetry/context-zone':
-    specifier: ^1.19.0
+    specifier: ^1.20.0
     version: 1.20.0(@opentelemetry/api@1.7.0)
   '@opentelemetry/core':
     specifier: ^1.20.0
@@ -62,10 +62,10 @@ dependencies:
     specifier: ^1.20.0
     version: 1.20.0(@opentelemetry/api@1.7.0)
   '@opentelemetry/sdk-trace-base':
-    specifier: ^1.19.0
+    specifier: ^1.20.0
     version: 1.20.0(@opentelemetry/api@1.7.0)
   '@opentelemetry/sdk-trace-web':
-    specifier: ^1.19.0
+    specifier: ^1.20.0
     version: 1.20.0(@opentelemetry/api@1.7.0)
   '@opentelemetry/semantic-conventions':
     specifier: ^1.20.0
@@ -4612,7 +4612,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001579
+      caniuse-lite: 1.0.30001587
       electron-to-chromium: 1.4.639
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.22.1)
@@ -4623,7 +4623,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001579
+      caniuse-lite: 1.0.30001587
       electron-to-chromium: 1.4.639
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.22.2)
@@ -4677,8 +4677,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /caniuse-lite@1.0.30001579:
-    resolution: {integrity: sha512-u5AUVkixruKHJjw/pj9wISlcMpgFWzSrczLZbrqBSxukQixmg0SJ5sZTpvaFvxU0HoQKd4yoyAogyrAz9pzJnA==}
+  /caniuse-lite@1.0.30001587:
+    resolution: {integrity: sha512-HMFNotUmLXn71BQxg8cijvqxnIAofforZOwGsxyXJ0qugTdspUF4sPSJ2vhgprHCB996tIDzEq1ubumPDV8ULA==}
     dev: true
 
   /chalk@2.4.2:
