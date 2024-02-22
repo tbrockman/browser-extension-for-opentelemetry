@@ -5,7 +5,7 @@
 
 A [Plasmo](https://docs.plasmo.com/) browser extension that automatically instruments webpages with [OpenTelemetry](https://opentelemetry.io/docs/what-is-opentelemetry/).
 
-Download it, refresh your pages, and start sending OTLP traces (to a collector of your choosing) for user interactions, document loads and fetch/XHR requests.
+[Download it on Chrome](https://chromewebstore.google.com/detail/opentelemetry-browser-ext/bgjeoaohfhbfabbfhbafjihbobjgniag), refresh your browser, and start sending OTLP traces (to a collector of your choosing) for user interactions, document loads and fetch/XHR requests.
 
 <img src='./assets/store/popup.png' width='524' alt='An example view of the popup UI'/>
 
