@@ -133,8 +133,7 @@ export default function Configuration() {
                     label="Collector URL"
                     description={
                         <>
-                            URL of a collector receiving Protobuf-encoded OTLP traces over HTTP.{" "}
-                            <Text c='orange.3' component='span' size='xs'>⚠️ Will fail to send if <Anchor href='https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP' size='xs'>blocked by a CSP</Anchor>.</Text>
+                            URL of a collector receiving Protobuf-encoded OTLP traces over HTTP.
                         </>
                     }
                     placeholder="http://localhost:4318/v1/traces"

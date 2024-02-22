@@ -34,7 +34,7 @@ const instrument = (port: TypedPort, options: Options) => {
 
     const resource = new Resource({
         [SemanticResourceAttributes.SERVICE_NAME]: 'opentelemetry-browser-extension',
-        [SemanticResourceAttributes.SERVICE_VERSION]: '0.0.1',
+        [SemanticResourceAttributes.SERVICE_VERSION]: '0.0.3',
         [SemanticResourceAttributes.TELEMETRY_SDK_LANGUAGE]: 'webjs',
         [SemanticResourceAttributes.TELEMETRY_SDK_NAME]: 'opentelemetry',
         [SemanticResourceAttributes.TELEMETRY_SDK_VERSION]: '1.19.0',
@@ -57,7 +57,7 @@ const instrument = (port: TypedPort, options: Options) => {
     // But I'm lazy and it seems easier just to override the send method
     // Original implementation: https://github.com/open-telemetry/opentelemetry-js/blob/main/experimental/packages/otlp-exporter-base/src/platform/browser/OTLPExporterBrowserBase.ts#L28
     traceExporter.send = (items: ReadableSpan[], onSuccess: () => void, onError: (error: OTLPExporterError) => void) => {
-        console.debug(`sending ${items.length} spans to ${traceExporter.url}`)
+        consoleProxy.debug(`sending ${items.length} spans to ${traceExporter.url}`)
         const serviceRequest = traceExporter.convert(items);
         const clientType = traceExporter.getServiceClientType()
         const exportRequestType = getExportRequestProto(clientType)
@@ -68,13 +68,12 @@ const instrument = (port: TypedPort, options: Options) => {
             // Because messages are JSON serialized and deserialized, we can't send a Uint8Array directly
             // So we send an array of numbers and convert it back to a Uint8Array on the other side
             const message = { bytes: Array.from(bytes), timeout: traceExporter.timeoutMillis, type: MessageTypes.OTLPSendMessage }
-            consoleProxy.debug(`message to background script to forward to collector`, serviceRequest)
+            consoleProxy.debug(`message sent to background script to forward to collector`)
             port.postMessage(message)
             onSuccess()
         } else {
             onError(new OTLPExporterError('failed to create OTLP proto service request message'))
         }
-
     }
     // #TODO: instrument console logs
     // const log = new OTLPLogExporter({

@@ -1,7 +1,7 @@
 {
   "name": "opentelemetry-browser-extension",
   "displayName": "OpenTelemetry Browser Extension",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "An extension for instrumenting webpages using OpenTelemetry",
   "author": "Theodore Brockman",
   "scripts": {
