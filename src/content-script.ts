@@ -140,6 +140,8 @@ function injectContentScript(extensionId: string, options: Options) {
         consoleProxy.debug(`disconnected port`, obj);
         deregisterInstrumentation && deregisterInstrumentation()
         port.disconnect()
+        // try to reconnect if possible
+        injectContentScript(extensionId, options)
     })
 
     port.onMessage.addListener((m) => {

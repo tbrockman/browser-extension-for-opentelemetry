@@ -60,17 +60,16 @@
   "manifest": {
     "host_permissions": [
       "https://*/*",
-      "http://localhost:*/*"
+      "http://localhost/*"
     ],
     "permissions": [
       "scripting",
-      "storage",
-      "activeTab"
+      "storage"
     ],
     "externally_connectable": {
       "matches": [
         "https://*/*",
-        "http://localhost:*/*"
+        "http://localhost/*"
       ]
     }
   },
