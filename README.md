@@ -30,7 +30,7 @@ git submodule update --init --recursive
 Install dependencies:
 
 ```bash
-pnpm install --shamefully-hoist
+pnpm install
 ```
 
 Start the OpenTelemetry stack (Grafana + Tempo + `opentelemetry-collector-contrib`):<sup> (optional if you have your own)</sup>

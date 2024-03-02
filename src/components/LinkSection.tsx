@@ -40,7 +40,7 @@ export default function LinkSection() {
             label: 'Link to sponsor project maintainer',
             href: 'https://github.com/sponsors/tbrockman',
             icon: <IconCoffee />,
-            tooltip: 'sponsor'
+            tooltip: 'sponsorship'
         },
     ]
 

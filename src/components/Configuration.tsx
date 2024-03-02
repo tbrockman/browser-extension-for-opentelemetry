@@ -3,6 +3,7 @@ import {
     Checkbox,
     Fieldset,
     Group,
+    ScrollArea,
     Stack,
     Switch,
     TagsInput,
@@ -20,32 +21,44 @@ import './Configuration.css'
 import { useDebouncedValue } from "@mantine/hooks"
 import { useEffect } from "react"
 import { IconPower } from "@tabler/icons-react"
+import ColorModeSwitch from "./ColorModeSwitch"
 
 const storage = new Storage({ area: "local" })
 
 export default function Configuration() {
-    //   const [telemetry, setTelemetry] = useStorage({
-    //     key: "telemetry",
-    //     instance: storage
-    //   })
-    // position: fixed;
-    // right: 1.5rem;
-    // top: 1.15rem;
-    const [url, , {
+    const [traceCollectorUrl, , {
         setRenderValue: setUrlRenderValue,
         setStoreValue: setUrlStoreValue
     }] = useStorage({
         key: "url",
         instance: storage
     }, (v) => v === undefined ? 'http://localhost:4318/v1/traces' : v)
-    const [debouncedUrl] = useDebouncedValue(url, 200);
+    const [debouncedTraceCollectorUrl] = useDebouncedValue(traceCollectorUrl, 200);
+    const [logsCollectorUrl, , {
+        setRenderValue: setLogsRenderValue,
+        setStoreValue: setLogsStoreValue
+    }] = useStorage({
+        key: "logsUrl",
+        instance: storage
+    }, (v) => v === undefined ? 'http://localhost:4318/v1/logs' : v)
 
     useEffect(() => {
-        setUrlStoreValue(debouncedUrl)
-    }, [debouncedUrl])
+        setUrlStoreValue(debouncedTraceCollectorUrl)
+    }, [debouncedTraceCollectorUrl])
+    useEffect(() => {
+        setLogsStoreValue(logsCollectorUrl)
+    }, [logsCollectorUrl])
 
     const [enabled, setEnabled] = useStorage<boolean>({
         key: "enabled",
+        instance: storage
+    }, (v) => v === undefined ? true : v)
+    const [tracingEnabled, setTracingEnabled] = useStorage<boolean>({
+        key: "tracingEnabled",
+        instance: storage
+    }, (v) => v === undefined ? true : v)
+    const [logsEnabled, setLogsEnabled] = useStorage<boolean>({
+        key: "logsEnabled",
         instance: storage
     }, (v) => v === undefined ? true : v)
     const [instrumentations, setInstrumentations] = useStorage<string[]>({
@@ -69,18 +82,17 @@ export default function Configuration() {
         <Fieldset
             className='configuration-container'
             legend={
-                <Group>
+                <Group gap='xs'>
                     <Text>Configuration</Text>
                     <Switch
+                        // style={{
+                        //     position: 'fixed',
+                        //     right: rem(36),
+                        // }}
                         checked={enabled}
                         disabled={false}
                         onChange={(event) => setEnabled(event.currentTarget.checked)}
-                        color='blue.5'
-                        size="md"
-                        style={{
-                            position: 'fixed',
-                            right: rem(36),
-                        }}
+                        size='md'
                         aria-label='Enable or disable the extension'
                         thumbIcon={
                             enabled ? (
@@ -102,91 +114,139 @@ export default function Configuration() {
             radius="md"
             disabled={!enabled}
             styles={{ legend: { fontSize: 'var(--mantine-font-size-lg)', fontWeight: 'bold' } }}
-            variant="filled">
-            <Stack>
-                {/* <Checkbox.Group
-              label="Enabled telemetry"
-              value={telemetry}
-              onChange={setTelemetry}
-              description="Choose what data is exported by the extension to the collector">
-              <Group mt="xs">
-                <Checkbox value="metrics" label="Metrics" />
-                <Checkbox value="traces" label="Traces" />
-                <Checkbox value="logs" label="Logs" />
-              </Group>
-            </Checkbox.Group> */}
-                <Checkbox.Group
-                    label="Instrumentation"
-                    value={instrumentations}
-                    onChange={setInstrumentations}
-                    description={
-                        <>
-                            Choose which events are automatically instrumented, see {" "}
-                            <Anchor size='xs' href='https://github.com/open-telemetry/opentelemetry-js-contrib/tree/main/metapackages/auto-instrumentations-web#readme'>this README</Anchor>{" "}for more details.</>}>
-                    <Group mt="xs">
-                        <Checkbox value="interaction" label="User interactions" />
-                        <Checkbox value="fetch" label="Fetch/XHR" />
-                        <Checkbox value="load" label="Document load" />
-                    </Group>
-                </Checkbox.Group>
-                <TextInput
-                    label="Collector URL"
-                    description={
-                        <>
-                            URL of a collector receiving Protobuf-encoded OTLP traces over HTTP.
-                        </>
-                    }
-                    placeholder="http://localhost:4318/v1/traces"
-                    value={url}
-                    onChange={(event) => {
-                        setUrlRenderValue(event.currentTarget.value)
-                    }}
-                />
-                <TagsInput
-                    value={events}
-                    onChange={setEvents}
-                    label="Event listeners"
-                    data={EventList}
-                    maxDropdownHeight={200}
-                    comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false }, transitionProps: { transition: 'pop', duration: 200 } }}
-                    description={
-                        <>
-                            Browser events to track, see{" "}
-                            <Anchor
-                                size="xs"
-                                href="https://microsoft.github.io/PowerBI-JavaScript/interfaces/_node_modules_typedoc_node_modules_typescript_lib_lib_dom_d_.htmlelementeventmap.html">
-                                HTMLElementEventMap
-                            </Anchor>{" "}
-                            for a list of valid events.
-                        </>
-                    }
-                    placeholder={events.length == 0 ? "keypress, click, mouseover" : ''}
-                    splitChars={[","]}
-                />
-                <TagsInput
-                    value={propagateTo}
-                    onChange={setPropagateTo}
-                    disabled={instrumentations.indexOf('fetch') == -1}
-                    label="Propagate HTTP trace context"
-                    maxDropdownHeight={200}
-                    comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false }, transitionProps: { transition: 'pop', duration: 200 } }}
-                    description={
-                        <>
-                            List of regular expressions matching URLs which should receive W3C trace context on fetch/XHR. <Text c='orange.3' component='span' size='xs'>⚠️ May cause request CORS failures.</Text>
-                        </>
-                    }
-                    placeholder={propagateTo.length == 0 ? ".*" : ''}
-                    splitChars={[","]}
-                />
-                <TagsInput
-                    value={headers}
-                    onChange={setHeaders}
-                    label="Request headers"
-                    description="Additional headers to be sent to the collector"
-                    placeholder={headers.length == 0 ? 'key:value, key2:value2' : ''}
-                    splitChars={[","]}
-                />
-            </Stack>
+            variant="default">
+            <ScrollArea.Autosize mah={400}>
+
+                <Stack pr='lg' pb='lg' pt='xs'>
+                    <Fieldset aria-label="Traces" legend={
+                        <Group gap='xs'>
+                            <Text>Tracing</Text>
+                            <Checkbox
+                                checked={tracingEnabled}
+                                disabled={false}
+                                onChange={(event) => setTracingEnabled(event.currentTarget.checked)}
+                                size="sm"
+                                variant='outline'
+                                style={{}}
+                                aria-label='Enable or disable exporting traces'
+                            />
+                        </Group>
+                    } disabled={!tracingEnabled}>
+                        <Group>
+                            <Checkbox.Group
+                                label="Instrumentation"
+                                value={instrumentations}
+                                onChange={setInstrumentations}
+                                description={
+                                    <>
+                                        Choose which events are automatically instrumented, see {" "}
+                                        <Anchor size='xs' href='https://github.com/open-telemetry/opentelemetry-js-contrib/tree/main/metapackages/auto-instrumentations-web#readme'>this README</Anchor>{" "}for more details.</>}>
+                                <Group mt="xs">
+                                    <Checkbox value="interaction" label="User interactions" variant="outline" />
+                                    <Checkbox value="fetch" label="Fetch/XHR" variant="outline" />
+                                    <Checkbox value="load" label="Document load" variant="outline" />
+                                </Group>
+                            </Checkbox.Group>
+                            <TextInput
+                                label="Export URL"
+                                description={
+                                    <>
+                                        Choose where to send Protobuf-encoded OTLP traces over HTTP.
+                                    </>
+                                }
+                                placeholder="http://localhost:4318/v1/traces"
+                                value={traceCollectorUrl}
+                                onChange={(event) => {
+                                    setUrlRenderValue(event.currentTarget.value)
+                                }}
+                            />
+                            <TagsInput
+                                value={events}
+                                onChange={setEvents}
+                                label="Event listeners"
+                                data={EventList}
+                                maxDropdownHeight={200}
+                                comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false }, transitionProps: { transition: 'pop', duration: 200 } }}
+                                description={
+                                    <>
+                                        Browser events to track, see{" "}
+                                        <Anchor
+                                            size="xs"
+                                            href="https://microsoft.github.io/PowerBI-JavaScript/interfaces/_node_modules_typedoc_node_modules_typescript_lib_lib_dom_d_.htmlelementeventmap.html">
+                                            HTMLElementEventMap
+                                        </Anchor>{" "}
+                                        for a list of valid events.
+                                    </>
+                                }
+                                placeholder={events.length == 0 ? "keypress, click, mouseover" : ''}
+                                splitChars={[","]}
+                            />
+                        </Group>
+                    </Fieldset>
+
+                    <Fieldset aria-label="Logs" legend={
+                        <Group gap='xs'>
+                            <Text>Logging</Text>
+                            <Checkbox
+                                checked={logsEnabled}
+                                disabled={false}
+                                onChange={(event) => setLogsEnabled(event.currentTarget.checked)}
+                                size="sm"
+                                variant='outline'
+                                style={{}}
+                                aria-label='Enable or disable exporting logs'
+                            />
+                        </Group>
+                    } disabled={!logsEnabled}>
+                        <TextInput
+                            label="Export URL"
+                            description={
+                                <>
+                                    Choose where to send Protobuf-encoded OTLP logs over HTTP.
+                                </>
+                            }
+                            placeholder="http://localhost:4318/v1/logs"
+                            value={logsCollectorUrl}
+                            onChange={(event) => {
+                                setLogsRenderValue(event.currentTarget.value)
+                            }}
+                        />
+                    </Fieldset>
+
+                    <Fieldset legend={
+                        <Group gap='xs'>
+                            <Text>General</Text>
+                            <ColorModeSwitch />
+                        </Group>
+                    } radius="md">
+                        <Group>
+                            <TagsInput
+                                value={propagateTo}
+                                onChange={setPropagateTo}
+                                disabled={instrumentations.indexOf('fetch') == -1}
+                                label="Forward HTTP trace context"
+                                maxDropdownHeight={200}
+                                comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false }, transitionProps: { transition: 'pop', duration: 200 } }}
+                                description={
+                                    <>
+                                        Choose URLs (as regular expressions) which should receive W3C trace context on fetch/XHR. <Text c='orange.3' component='span' size='xs'>⚠️ May cause request CORS failures.</Text>
+                                    </>
+                                }
+                                placeholder={propagateTo.length == 0 ? ".*" : ''}
+                                splitChars={[","]}
+                            />
+                            <TagsInput
+                                value={headers}
+                                onChange={setHeaders}
+                                label="Request headers"
+                                description="Additional headers to be sent to the collector"
+                                placeholder={headers.length == 0 ? 'key:value, key2:value2' : ''}
+                                splitChars={[","]}
+                            />
+                        </Group>
+                    </Fieldset>
+                </Stack>
+            </ScrollArea.Autosize>
         </Fieldset>
     )
 }
