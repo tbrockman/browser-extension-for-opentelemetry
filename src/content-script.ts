@@ -1,9 +1,16 @@
 import { WebTracerProvider } from '@opentelemetry/sdk-trace-web';
 import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations-web';
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-proto";
-import { BatchSpanProcessor, ConsoleSpanExporter, SimpleSpanProcessor, type ReadableSpan } from '@opentelemetry/sdk-trace-base';
-import { getExportRequestProto } from '@opentelemetry/otlp-proto-exporter-base';
-import { OTLPExporterError } from '@opentelemetry/otlp-exporter-base';
+import { SeverityNumber } from '@opentelemetry/api-logs';
+import {
+    LoggerProvider,
+    BatchLogRecordProcessor,
+    type ReadableLogRecord,
+} from '@opentelemetry/sdk-logs';
+import { OTLPLogExporter } from '@opentelemetry/exporter-logs-otlp-proto';
+import { BatchSpanProcessor, type ReadableSpan } from '@opentelemetry/sdk-trace-base';
+import { OTLPProtoExporterBrowserBase, getExportRequestProto } from '@opentelemetry/otlp-proto-exporter-base';
+import { OTLPExporterError, type OTLPExporterConfigBase } from '@opentelemetry/otlp-exporter-base';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { ZoneContextManager } from '@opentelemetry/context-zone';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
@@ -15,7 +22,8 @@ import { MessageTypes, type TypedPort } from '~types';
 import { consoleProxy } from '~util';
 
 export type Options = {
-    url: string
+    traceCollectorUrl: string
+    logCollectorUrl: string
     headers: Record<string, string>
     concurrencyLimit: number
     events: (keyof HTMLElementEventMap)[]
@@ -23,6 +31,64 @@ export type Options = {
     propagateTo: string[],
     instrumentations: ('fetch' | 'load' | 'interaction')[],
     enabled: boolean,
+}
+
+type OTLPBrowserExtensionExporterConfigBase = {
+    port: TypedPort
+} & OTLPExporterConfigBase
+
+export abstract class OTLPBrowserExtensionExporter<ExportItem, ServiceRequest> extends OTLPProtoExporterBrowserBase<ExportItem, ServiceRequest> {
+    port: TypedPort
+
+    constructor({ port, ...config }: OTLPBrowserExtensionExporterConfigBase) {
+        super(config);
+        this.port = port
+    }
+
+    override send(
+        objects: ExportItem[],
+        onSuccess: () => void,
+        onError: (error: OTLPExporterError) => void
+    ) {
+        const serviceRequest = this.convert(objects);
+        const clientType = this.getServiceClientType()
+        const exportRequestType = getExportRequestProto(clientType)
+        const otlp = exportRequestType.create(serviceRequest);
+
+        if (otlp) {
+            const bytes = exportRequestType.encode(otlp).finish();
+            // Because messages are JSON serialized and deserialized, we can't send a Uint8Array directly
+            // So we send an array of numbers and convert it back to a Uint8Array on the other side
+            const message = { bytes: Array.from(bytes), timeout: this.timeoutMillis, type: MessageTypes.OTLPSendMessage }
+            consoleProxy.debug(`message sent to background script to forward to collector`)
+            this.port.postMessage(message)
+            onSuccess()
+        } else {
+            onError(new OTLPExporterError('failed to create OTLP proto service request message'))
+        }
+    }
+}
+
+function createSendOverride<ExportItem, ServiceRequest>(port: TypedPort, exporter: OTLPProtoExporterBrowserBase<ExportItem, ServiceRequest>) {
+
+    return (objects: ExportItem[], onSuccess: () => void, onError: (error: OTLPExporterError) => void) => {
+        const serviceRequest = exporter.convert(objects);
+        const clientType = exporter.getServiceClientType()
+        const exportRequestType = getExportRequestProto(clientType)
+        const otlp = exportRequestType.create(serviceRequest);
+
+        if (otlp) {
+            const bytes = exportRequestType.encode(otlp).finish();
+            // Because messages are JSON serialized and deserialized, we can't send a Uint8Array directly
+            // So we send an array of numbers and convert it back to a Uint8Array on the other side
+            const message = { bytes: Array.from(bytes), timeout: exporter.timeoutMillis, type: MessageTypes.OTLPSendMessage }
+            consoleProxy.debug(`message sent to background script to forward to collector`)
+            port.postMessage(message)
+            onSuccess()
+        } else {
+            onError(new OTLPExporterError('failed to create OTLP proto service request message'))
+        }
+    }
 }
 
 const instrument = (port: TypedPort, options: Options) => {
@@ -48,39 +114,31 @@ const instrument = (port: TypedPort, options: Options) => {
     // #TODO: make console configurable
     // const consoleExporter = new ConsoleSpanExporter();
     const traceExporter = new OTLPTraceExporter({
-        url: options.url,
+        url: options.traceCollectorUrl,
         headers: options.headers,
         concurrencyLimit: options.concurrencyLimit,
     });
+    // @ts-ignore
+    traceExporter.send = createSendOverride(port, traceExporter)
 
-    // Technically we could implement our own TraceExporter that sends to the background service
-    // But I'm lazy and it seems easier just to override the send method
-    // Original implementation: https://github.com/open-telemetry/opentelemetry-js/blob/main/experimental/packages/otlp-exporter-base/src/platform/browser/OTLPExporterBrowserBase.ts#L28
-    traceExporter.send = (items: ReadableSpan[], onSuccess: () => void, onError: (error: OTLPExporterError) => void) => {
-        consoleProxy.debug(`sending ${items.length} spans to ${traceExporter.url}`)
-        const serviceRequest = traceExporter.convert(items);
-        const clientType = traceExporter.getServiceClientType()
-        const exportRequestType = getExportRequestProto(clientType)
-        const otlp = exportRequestType.create(serviceRequest);
+    const logExporter = new OTLPLogExporter({
+        url: options.logCollectorUrl,
+        headers: options.headers,
+        concurrencyLimit: options.concurrencyLimit,
+    });
+    // @ts-ignore
+    logExporter.send = createSendOverride(port, logExporter)
+    const loggerProvider = new LoggerProvider();
+    loggerProvider.addLogRecordProcessor(new BatchLogRecordProcessor(logExporter));
 
-        if (otlp) {
-            const bytes = exportRequestType.encode(otlp).finish();
-            // Because messages are JSON serialized and deserialized, we can't send a Uint8Array directly
-            // So we send an array of numbers and convert it back to a Uint8Array on the other side
-            const message = { bytes: Array.from(bytes), timeout: traceExporter.timeoutMillis, type: MessageTypes.OTLPSendMessage }
-            consoleProxy.debug(`message sent to background script to forward to collector`)
-            port.postMessage(message)
-            onSuccess()
-        } else {
-            onError(new OTLPExporterError('failed to create OTLP proto service request message'))
-        }
-    }
-    // #TODO: instrument console logs
-    // const log = new OTLPLogExporter({
-    //     url: options.url,
-    //     headers: options.headers,
-    //     concurrencyLimit: options.concurrencyLimit,
-    // });
+    const logger = loggerProvider.getLogger('default', '1.0.0');
+    // Emit a log
+    logger.emit({
+        severityNumber: SeverityNumber.INFO,
+        severityText: 'info',
+        body: 'this is a log body',
+        attributes: { 'log.type': 'custom' },
+    });
     const traceProcessor = new BatchSpanProcessor(traceExporter);
     // const consoleProcessor = new SimpleSpanProcessor(consoleExporter);
     // provider.addSpanProcessor(consoleProcessor);

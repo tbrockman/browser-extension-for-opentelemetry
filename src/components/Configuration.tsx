@@ -30,7 +30,7 @@ export default function Configuration() {
         setRenderValue: setUrlRenderValue,
         setStoreValue: setUrlStoreValue
     }] = useStorage({
-        key: "url",
+        key: "traceCollectorUrl",
         instance: storage
     }, (v) => v === undefined ? 'http://localhost:4318/v1/traces' : v)
     const [debouncedTraceCollectorUrl] = useDebouncedValue(traceCollectorUrl, 200);
@@ -38,7 +38,7 @@ export default function Configuration() {
         setRenderValue: setLogsRenderValue,
         setStoreValue: setLogsStoreValue
     }] = useStorage({
-        key: "logsUrl",
+        key: "logCollectorUrl",
         instance: storage
     }, (v) => v === undefined ? 'http://localhost:4318/v1/logs' : v)
 
@@ -140,7 +140,7 @@ export default function Configuration() {
                                 description={
                                     <>
                                         Choose which events are automatically instrumented, see {" "}
-                                        <Anchor size='xs' href='https://github.com/open-telemetry/opentelemetry-js-contrib/tree/main/metapackages/auto-instrumentations-web#readme'>this README</Anchor>{" "}for more details.</>}>
+                                        <Anchor size='xs' href='https://github.com/open-telemetry/opentelemetry-js-contrib/tree/main/metapackages/auto-instrumentations-web#readme'>this README</Anchor>{" "}for details.</>}>
                                 <Group mt="xs">
                                     <Checkbox value="interaction" label="User interactions" variant="outline" />
                                     <Checkbox value="fetch" label="Fetch/XHR" variant="outline" />
