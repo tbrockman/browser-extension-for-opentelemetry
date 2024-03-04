@@ -9,7 +9,7 @@ A [Plasmo](https://docs.plasmo.com/) browser extension that automatically instru
 
 <img src='./assets/store/popup.png' width='524' alt='An example view of the popup UI'/>
 
-## Downloads
+## Download
 
 | Browser | Link |
 |-|-|
@@ -20,6 +20,7 @@ A [Plasmo](https://docs.plasmo.com/) browser extension that automatically instru
 * Automatically instrument your webpages to collect traces and logs, sent to an OTLP-compatible collector
 * No content-security policy errors! Works around typical CSP limitations by making `fetch` requests from the background script instead of the webpage
 * Propagate b3 and w3c trace context to websites of your choosing (matched by regular expressions)
+
 
 ## Browser support
 
