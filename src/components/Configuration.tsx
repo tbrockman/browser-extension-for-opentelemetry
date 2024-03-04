@@ -57,8 +57,8 @@ export default function Configuration() {
         key: "tracingEnabled",
         instance: storage
     }, (v) => v === undefined ? true : v)
-    const [logsEnabled, setLogsEnabled] = useStorage<boolean>({
-        key: "logsEnabled",
+    const [loggingEnabled, setLoggingEnabled] = useStorage<boolean>({
+        key: "loggingEnabled",
         instance: storage
     }, (v) => v === undefined ? true : v)
     const [instrumentations, setInstrumentations] = useStorage<string[]>({
@@ -188,16 +188,16 @@ export default function Configuration() {
                         <Group gap='xs'>
                             <Text>Logging</Text>
                             <Checkbox
-                                checked={logsEnabled}
+                                checked={loggingEnabled}
                                 disabled={false}
-                                onChange={(event) => setLogsEnabled(event.currentTarget.checked)}
+                                onChange={(event) => setLoggingEnabled(event.currentTarget.checked)}
                                 size="sm"
                                 variant='outline'
                                 style={{}}
                                 aria-label='Enable or disable exporting logs'
                             />
                         </Group>
-                    } disabled={!logsEnabled}>
+                    } disabled={!loggingEnabled}>
                         <TextInput
                             label="Export URL"
                             description={

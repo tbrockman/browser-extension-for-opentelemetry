@@ -13,63 +13,16 @@ import { OTLPProtoExporterBrowserBase, getExportRequestProto } from '@openteleme
 import { OTLPExporterError, type OTLPExporterConfigBase } from '@opentelemetry/otlp-exporter-base';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { ZoneContextManager } from '@opentelemetry/context-zone';
-import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
+import { SEMRESATTRS_SERVICE_NAME, SEMRESATTRS_SERVICE_VERSION, SEMRESATTRS_TELEMETRY_SDK_LANGUAGE, SEMRESATTRS_TELEMETRY_SDK_NAME, SEMRESATTRS_TELEMETRY_SDK_VERSION } from '@opentelemetry/semantic-conventions';
 import { Resource } from '@opentelemetry/resources';
 import { B3Propagator } from '@opentelemetry/propagator-b3';
 import { CompositePropagator, W3CTraceContextPropagator } from '@opentelemetry/core';
 
-import { MessageTypes, type TypedPort } from '~types';
+import { MessageTypes, type Options, type PortMessage, type TypedPort } from '~types';
 import { consoleProxy } from '~util';
 
-export type Options = {
-    traceCollectorUrl: string
-    logCollectorUrl: string
-    headers: Record<string, string>
-    concurrencyLimit: number
-    events: (keyof HTMLElementEventMap)[]
-    telemetry: ('logs' | 'traces')[],
-    propagateTo: string[],
-    instrumentations: ('fetch' | 'load' | 'interaction')[],
-    enabled: boolean,
-}
 
-type OTLPBrowserExtensionExporterConfigBase = {
-    port: TypedPort
-} & OTLPExporterConfigBase
-
-export abstract class OTLPBrowserExtensionExporter<ExportItem, ServiceRequest> extends OTLPProtoExporterBrowserBase<ExportItem, ServiceRequest> {
-    port: TypedPort
-
-    constructor({ port, ...config }: OTLPBrowserExtensionExporterConfigBase) {
-        super(config);
-        this.port = port
-    }
-
-    override send(
-        objects: ExportItem[],
-        onSuccess: () => void,
-        onError: (error: OTLPExporterError) => void
-    ) {
-        const serviceRequest = this.convert(objects);
-        const clientType = this.getServiceClientType()
-        const exportRequestType = getExportRequestProto(clientType)
-        const otlp = exportRequestType.create(serviceRequest);
-
-        if (otlp) {
-            const bytes = exportRequestType.encode(otlp).finish();
-            // Because messages are JSON serialized and deserialized, we can't send a Uint8Array directly
-            // So we send an array of numbers and convert it back to a Uint8Array on the other side
-            const message = { bytes: Array.from(bytes), timeout: this.timeoutMillis, type: MessageTypes.OTLPSendMessage }
-            consoleProxy.debug(`message sent to background script to forward to collector`)
-            this.port.postMessage(message)
-            onSuccess()
-        } else {
-            onError(new OTLPExporterError('failed to create OTLP proto service request message'))
-        }
-    }
-}
-
-function createSendOverride<ExportItem, ServiceRequest>(port: TypedPort, exporter: OTLPProtoExporterBrowserBase<ExportItem, ServiceRequest>) {
+function createSendOverride<ExportItem, ServiceRequest>(port: TypedPort<PortMessage, Partial<Options>>, exporter: OTLPProtoExporterBrowserBase<ExportItem, ServiceRequest>) {
 
     return (objects: ExportItem[], onSuccess: () => void, onError: (error: OTLPExporterError) => void) => {
         const serviceRequest = exporter.convert(objects);
@@ -91,7 +44,7 @@ function createSendOverride<ExportItem, ServiceRequest>(port: TypedPort, exporte
     }
 }
 
-const instrument = (port: TypedPort, options: Options) => {
+const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Options) => {
 
     if (!options.enabled || options.instrumentations.length === 0) {
         return () => { }
@@ -99,59 +52,66 @@ const instrument = (port: TypedPort, options: Options) => {
     consoleProxy.debug(`instrumenting with options`, options)
 
     const resource = new Resource({
-        [SemanticResourceAttributes.SERVICE_NAME]: 'opentelemetry-browser-extension',
-        [SemanticResourceAttributes.SERVICE_VERSION]: '0.0.3',
-        [SemanticResourceAttributes.TELEMETRY_SDK_LANGUAGE]: 'webjs',
-        [SemanticResourceAttributes.TELEMETRY_SDK_NAME]: 'opentelemetry',
-        [SemanticResourceAttributes.TELEMETRY_SDK_VERSION]: '1.19.0',
+        [SEMRESATTRS_SERVICE_NAME]: 'opentelemetry-browser-extension',
+        [SEMRESATTRS_SERVICE_VERSION]: '0.0.3',
+        [SEMRESATTRS_TELEMETRY_SDK_LANGUAGE]: 'webjs',
+        [SEMRESATTRS_TELEMETRY_SDK_NAME]: 'opentelemetry',
+        [SEMRESATTRS_TELEMETRY_SDK_VERSION]: '1.19.0',
         'browser.language': navigator.language,
         'user_agent.original': navigator.userAgent,
         'extension.target': process.env.PLASMO_TARGET,
     })
-    const provider = new WebTracerProvider({
-        resource,
-    });
-    // #TODO: make console configurable
-    // const consoleExporter = new ConsoleSpanExporter();
-    const traceExporter = new OTLPTraceExporter({
-        url: options.traceCollectorUrl,
-        headers: options.headers,
-        concurrencyLimit: options.concurrencyLimit,
-    });
-    // @ts-ignore
-    traceExporter.send = createSendOverride(port, traceExporter)
 
-    const logExporter = new OTLPLogExporter({
-        url: options.logCollectorUrl,
-        headers: options.headers,
-        concurrencyLimit: options.concurrencyLimit,
-    });
-    // @ts-ignore
-    logExporter.send = createSendOverride(port, logExporter)
-    const loggerProvider = new LoggerProvider();
-    loggerProvider.addLogRecordProcessor(new BatchLogRecordProcessor(logExporter));
+    let tracerProvider;
 
-    const logger = loggerProvider.getLogger('default', '1.0.0');
-    // Emit a log
-    logger.emit({
-        severityNumber: SeverityNumber.INFO,
-        severityText: 'info',
-        body: 'this is a log body',
-        attributes: { 'log.type': 'custom' },
-    });
-    const traceProcessor = new BatchSpanProcessor(traceExporter);
-    // const consoleProcessor = new SimpleSpanProcessor(consoleExporter);
-    // provider.addSpanProcessor(consoleProcessor);
-    provider.addSpanProcessor(traceProcessor);
-    provider.register({
-        contextManager: new ZoneContextManager(),
-        propagator: new CompositePropagator({
-            propagators: options.propagateTo.length > 0 ? [
-                new B3Propagator(),
-                new W3CTraceContextPropagator(),
-            ] : [],
-        }),
-    });
+    if (options.tracingEnabled) {
+        tracerProvider = new WebTracerProvider({
+            resource,
+        });
+        // #TODO: make console configurable for debugging
+        // const consoleExporter = new ConsoleSpanExporter();
+        // const consoleProcessor = new SimpleSpanProcessor(consoleExporter);
+        // provider.addSpanProcessor(consoleProcessor);
+        const traceExporter = new OTLPTraceExporter({
+            url: options.traceCollectorUrl,
+            headers: options.headers,
+            concurrencyLimit: options.concurrencyLimit,
+        });
+        // @ts-ignore
+        traceExporter.send = createSendOverride(port, traceExporter)
+        const traceProcessor = new BatchSpanProcessor(traceExporter);
+        tracerProvider.addSpanProcessor(traceProcessor);
+        tracerProvider.register({
+            contextManager: new ZoneContextManager(),
+            propagator: new CompositePropagator({
+                propagators: options.propagateTo.length > 0 ? [
+                    new B3Propagator(),
+                    new W3CTraceContextPropagator(),
+                ] : [],
+            }),
+        });
+    }
+
+    let loggerProvider;
+    if (options.loggingEnabled) {
+        const logExporter = new OTLPLogExporter({
+            url: options.logCollectorUrl,
+            headers: options.headers,
+            concurrencyLimit: options.concurrencyLimit,
+        });
+        // @ts-ignore
+        logExporter.send = createSendOverride(port, logExporter)
+        loggerProvider = new LoggerProvider();
+        loggerProvider.addLogRecordProcessor(new BatchLogRecordProcessor(logExporter));
+
+        const logger = loggerProvider.getLogger('default', resource.attributes[SEMRESATTRS_SERVICE_VERSION].toString());
+        logger.emit({
+            severityNumber: SeverityNumber.DEBUG,
+            severityText: 'debug',
+            body: 'open-telemetry-browser-extension log exporter initialized',
+            attributes: {},
+        });
+    }
     const propagateTraceHeaderCorsUrls = options.propagateTo.map((url) => new RegExp(url))
     const clearTimingResources = true
     const instrumentations = {
@@ -185,12 +145,13 @@ const instrument = (port: TypedPort, options: Options) => {
         instrumentations: [
             getWebAutoInstrumentations(instrumentationsToRegister),
         ],
-        tracerProvider: provider,
+        tracerProvider,
+        loggerProvider,
     });
 }
 
 function injectContentScript(extensionId: string, options: Options) {
-    const port = chrome.runtime.connect(extensionId);
+    const port: TypedPort<PortMessage, Partial<Options>> = chrome.runtime.connect(extensionId);
     let deregisterInstrumentation = instrument(port, options);
 
     port.onDisconnect.addListener(obj => {

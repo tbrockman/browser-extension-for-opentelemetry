@@ -9,7 +9,7 @@ server:
 
 common:
   path_prefix: /loki
-  compactor_address: http://loki-backend:3100
+  compactor_address: http://loki:3100
   replication_factor: 3
 
 storage_config:
@@ -26,7 +26,7 @@ memberlist:
   dead_node_reclaim_time: 30s
   gossip_to_dead_nodes_time: 15s
   left_ingesters_timeout: 30s
-  bind_addr: ['0.0.0.0']
+  bind_addr: ['0.0.0.0']h
   bind_port: 7946
   gossip_interval: 2s
 

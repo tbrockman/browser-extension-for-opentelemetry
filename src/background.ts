@@ -1,13 +1,12 @@
 import { Storage } from '@plasmohq/storage'
 import { consoleProxy, stringHeadersToObject } from './util'
 import injectContentScript from 'inlinefunc:./content-script'
-import type { Options } from '~content-script'
-import { MessageTypes, type OTLPSendMessage, type TypedPort } from '~types'
+import { MessageTypes, type OTLPSendMessage, type Options, type PortMessage, type TypedPort } from '~types'
 
 let storage = new Storage({ area: 'local' })
 let ports = {}
 
-const connected = async (p: TypedPort) => {
+const connected = async (p: TypedPort<Partial<Options>, PortMessage>) => {
     ports[p.sender.tab.id] = p;
 
     p.onMessage.addListener(async (message) => {
@@ -19,7 +18,7 @@ const connected = async (p: TypedPort) => {
                 const { bytes, timeout } = message as OTLPSendMessage
 
                 // Even though the content script could send us the headers and url, we don't trust them
-                // So in the worst case scenario we're only sending arbitrary bytes to our chosen server
+                // So in the worst case scenario we're sending arbitrary bytes to our chosen server
                 const headers = {
                     ...stringHeadersToObject(await storage.get('headers')),
                     'Content-Type': 'application/x-protobuf',
@@ -50,11 +49,14 @@ const connected = async (p: TypedPort) => {
     })
 }
 
-chrome.storage.onChanged.addListener(({ url, events, telemetry, headers, enabled, propagateTo, instrumentations }, area) => {
-    consoleProxy.debug('storage changed', url, events, telemetry, headers, enabled, propagateTo, instrumentations, area)
+chrome.storage.onChanged.addListener(({ traceCollectorUrl, logCollectorUrl, events, telemetry, headers, enabled, propagateTo, instrumentations, loggingEnabled, tracingEnabled }: Record<keyof Options, chrome.storage.StorageChange>, area) => {
+    consoleProxy.debug('storage changed', traceCollectorUrl, logCollectorUrl, events, telemetry, headers, enabled, propagateTo, instrumentations, area)
     Object.keys(ports).forEach((k) => {
         ports[k].postMessage({
-            url: url?.newValue,
+            loggingEnabled: loggingEnabled?.newValue,
+            tracingEnabled: tracingEnabled?.newValue,
+            traceCollectorUrl: traceCollectorUrl?.newValue,
+            logCollectorUrl: logCollectorUrl?.newValue,
             events: events?.newValue,
             telemetry: telemetry?.newValue,
             headers: headers?.newValue,
@@ -73,7 +75,8 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
         consoleProxy.debug("injecting content script")
 
         const options: Options = {
-            url: await storage.get('url') || 'http://localhost:4318/v1/traces',
+            traceCollectorUrl: await storage.get('traceCollectorUrl') || 'http://localhost:4318/v1/traces',
+            logCollectorUrl: await storage.get('logsCollectorUrl') || 'http://localhost:4318/v1/logs',
             headers: stringHeadersToObject(await storage.get('headers')),
             concurrencyLimit: 10,
             events: await storage.get<(keyof HTMLElementEventMap)[]>('events') || ['submit', 'click', 'keypress', 'scroll'],
@@ -81,6 +84,8 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
             propagateTo: await storage.get<string[]>('propagateTo') || [],
             instrumentations: await storage.get<('fetch' | 'load' | 'interaction')[]>('instrumentations') || ['fetch', 'load', 'interaction'],
             enabled: await storage.get<boolean>('enabled') || true,
+            tracingEnabled: await storage.get<boolean>('tracingEnabled') || true,
+            loggingEnabled: await storage.get<boolean>('loggingEnabled') || true,
         }
 
         await chrome.scripting.executeScript({
