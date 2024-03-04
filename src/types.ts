@@ -1,24 +1,45 @@
 export enum MessageTypes {
-    OTLPSendMessage,
+    OTLPTraceMessage = 'trace',
+    OTLPLogMessage = 'log'
 }
 
-export type PortMessage = | OTLPSendMessage
+export type PortMessage = OTLPExportTraceMessage | OTLPExportLogMessage
 
 export interface PortMessageBase {
     type: MessageTypes
 }
 
-export interface TypedPort extends chrome.runtime.Port {
-    postMessage: (message: PortMessage) => void
-    onMessage: TypedMessageHandler
+export interface TypedPort<Send, Receive> extends chrome.runtime.Port {
+    postMessage: (message: Send) => void
+    onMessage: TypedMessageHandler<Receive>
 }
 
-export interface TypedMessageHandler extends chrome.runtime.PortMessageEvent {
-    addListener: (callback: (message: PortMessage, port: any) => void) => void
+export interface TypedMessageHandler<T> extends chrome.runtime.PortMessageEvent {
+    addListener: (callback: (message: T, port: any) => void) => void
 }
 
-export interface OTLPSendMessage extends PortMessageBase {
-    type: MessageTypes.OTLPSendMessage
+export interface OTLPExportTraceMessage extends PortMessageBase {
+    type: MessageTypes.OTLPTraceMessage
     bytes: number[],
     timeout: number,
+}
+
+export interface OTLPExportLogMessage extends PortMessageBase {
+    type: MessageTypes.OTLPLogMessage
+    bytes: number[],
+    timeout: number,
+}
+
+export type Options = {
+    traceCollectorUrl: string
+    logCollectorUrl: string
+    headers: Record<string, string>
+    concurrencyLimit: number
+    events: (keyof HTMLElementEventMap)[]
+    telemetry: ('logs' | 'traces')[],
+    propagateTo: string[],
+    instrumentations: ('fetch' | 'load' | 'interaction')[],
+    enabled: boolean,
+    tracingEnabled: boolean,
+    loggingEnabled: boolean,
 }

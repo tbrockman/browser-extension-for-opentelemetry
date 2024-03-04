@@ -1,65 +1,36 @@
 import { WebTracerProvider } from '@opentelemetry/sdk-trace-web';
 import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations-web';
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-proto";
-import { BatchSpanProcessor, ConsoleSpanExporter, SimpleSpanProcessor, type ReadableSpan } from '@opentelemetry/sdk-trace-base';
-import { getExportRequestProto } from '@opentelemetry/otlp-proto-exporter-base';
+import {
+    LoggerProvider,
+    BatchLogRecordProcessor
+} from '@opentelemetry/sdk-logs';
+import { OTLPLogExporter } from '@opentelemetry/exporter-logs-otlp-proto';
+import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base';
+import { OTLPProtoExporterBrowserBase, getExportRequestProto } from '@opentelemetry/otlp-proto-exporter-base';
 import { OTLPExporterError } from '@opentelemetry/otlp-exporter-base';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { ZoneContextManager } from '@opentelemetry/context-zone';
-import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
+import { SEMRESATTRS_SERVICE_NAME, SEMRESATTRS_SERVICE_VERSION, SEMRESATTRS_TELEMETRY_SDK_LANGUAGE, SEMRESATTRS_TELEMETRY_SDK_NAME, SEMRESATTRS_TELEMETRY_SDK_VERSION } from '@opentelemetry/semantic-conventions';
 import { Resource } from '@opentelemetry/resources';
 import { B3Propagator } from '@opentelemetry/propagator-b3';
 import { CompositePropagator, W3CTraceContextPropagator } from '@opentelemetry/core';
 
-import { MessageTypes, type TypedPort } from '~types';
-import { consoleProxy } from '~util';
+import { MessageTypes, type Options, type PortMessage, type TypedPort } from '~types';
+import { consoleProxy, wrapConsoleWithLoggerProvider } from '~util';
 
-export type Options = {
-    url: string
-    headers: Record<string, string>
-    concurrencyLimit: number
-    events: (keyof HTMLElementEventMap)[]
-    telemetry: ('logs' | 'traces')[],
-    propagateTo: string[],
-    instrumentations: ('fetch' | 'load' | 'interaction')[],
-    enabled: boolean,
-}
 
-const instrument = (port: TypedPort, options: Options) => {
+function createSendOverride<ExportItem, ServiceRequest>(port: TypedPort<PortMessage, Partial<Options>>, exporter: OTLPProtoExporterBrowserBase<ExportItem, ServiceRequest>, type: MessageTypes) {
 
-    if (!options.enabled || options.instrumentations.length === 0) {
-        return () => { }
-    }
-    consoleProxy.debug(`instrumenting with options`, options)
+    return (objects: ExportItem[], onSuccess: () => void, onError: (error: OTLPExporterError) => void) => {
 
-    const resource = new Resource({
-        [SemanticResourceAttributes.SERVICE_NAME]: 'opentelemetry-browser-extension',
-        [SemanticResourceAttributes.SERVICE_VERSION]: '0.0.1',
-        [SemanticResourceAttributes.TELEMETRY_SDK_LANGUAGE]: 'webjs',
-        [SemanticResourceAttributes.TELEMETRY_SDK_NAME]: 'opentelemetry',
-        [SemanticResourceAttributes.TELEMETRY_SDK_VERSION]: '1.19.0',
-        'browser.language': navigator.language,
-        'user_agent.original': navigator.userAgent,
-        'extension.target': process.env.PLASMO_TARGET,
-    })
-    const provider = new WebTracerProvider({
-        resource,
-    });
-    // #TODO: make console configurable
-    // const consoleExporter = new ConsoleSpanExporter();
-    const traceExporter = new OTLPTraceExporter({
-        url: options.url,
-        headers: options.headers,
-        concurrencyLimit: options.concurrencyLimit,
-    });
+        if (objects.length === 0) {
+            onSuccess()
+            return
+        }
 
-    // Technically we could implement our own TraceExporter that sends to the background service
-    // But I'm lazy and it seems easier just to override the send method
-    // Original implementation: https://github.com/open-telemetry/opentelemetry-js/blob/main/experimental/packages/otlp-exporter-base/src/platform/browser/OTLPExporterBrowserBase.ts#L28
-    traceExporter.send = (items: ReadableSpan[], onSuccess: () => void, onError: (error: OTLPExporterError) => void) => {
-        console.debug(`sending ${items.length} spans to ${traceExporter.url}`)
-        const serviceRequest = traceExporter.convert(items);
-        const clientType = traceExporter.getServiceClientType()
+        const serviceRequest = exporter.convert(objects);
+        const clientType = exporter.getServiceClientType()
         const exportRequestType = getExportRequestProto(clientType)
         const otlp = exportRequestType.create(serviceRequest);
 
@@ -67,34 +38,76 @@ const instrument = (port: TypedPort, options: Options) => {
             const bytes = exportRequestType.encode(otlp).finish();
             // Because messages are JSON serialized and deserialized, we can't send a Uint8Array directly
             // So we send an array of numbers and convert it back to a Uint8Array on the other side
-            const message = { bytes: Array.from(bytes), timeout: traceExporter.timeoutMillis, type: MessageTypes.OTLPSendMessage }
-            consoleProxy.debug(`message to background script to forward to collector`, serviceRequest)
+            const message = { bytes: Array.from(bytes), timeout: exporter.timeoutMillis, type }
+            consoleProxy.debug(`message sent to background script to forward to collector`)
             port.postMessage(message)
             onSuccess()
         } else {
             onError(new OTLPExporterError('failed to create OTLP proto service request message'))
         }
-
     }
-    // #TODO: instrument console logs
-    // const log = new OTLPLogExporter({
-    //     url: options.url,
-    //     headers: options.headers,
-    //     concurrencyLimit: options.concurrencyLimit,
-    // });
-    const traceProcessor = new BatchSpanProcessor(traceExporter);
-    // const consoleProcessor = new SimpleSpanProcessor(consoleExporter);
-    // provider.addSpanProcessor(consoleProcessor);
-    provider.addSpanProcessor(traceProcessor);
-    provider.register({
-        contextManager: new ZoneContextManager(),
-        propagator: new CompositePropagator({
-            propagators: options.propagateTo.length > 0 ? [
-                new B3Propagator(),
-                new W3CTraceContextPropagator(),
-            ] : [],
-        }),
-    });
+}
+
+const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Options) => {
+    if (!options || !options.enabled || !options.instrumentations || options.instrumentations.length === 0) {
+        return () => { }
+    }
+    consoleProxy.debug(`instrumenting with options`, options)
+
+    const resource = new Resource({
+        [SEMRESATTRS_SERVICE_NAME]: 'opentelemetry-browser-extension',
+        [SEMRESATTRS_SERVICE_VERSION]: '0.0.4', // TODO: replace with package.json version
+        [SEMRESATTRS_TELEMETRY_SDK_LANGUAGE]: 'webjs',
+        [SEMRESATTRS_TELEMETRY_SDK_NAME]: 'opentelemetry',
+        [SEMRESATTRS_TELEMETRY_SDK_VERSION]: '1.22.0', // TODO: replace with resolved version
+        'browser.language': navigator.language,
+        'user_agent.original': navigator.userAgent,
+        'extension.target': process.env.PLASMO_TARGET,
+    })
+
+    let tracerProvider: WebTracerProvider;
+
+    if (options.tracingEnabled) {
+        tracerProvider = new WebTracerProvider({
+            resource,
+        });
+        // #TODO: make console configurable for debugging
+        // const consoleExporter = new ConsoleSpanExporter();
+        // const consoleProcessor = new SimpleSpanProcessor(consoleExporter);
+        // provider.addSpanProcessor(consoleProcessor);
+        const traceExporter = new OTLPTraceExporter({
+            url: options.traceCollectorUrl,
+            headers: options.headers,
+            concurrencyLimit: options.concurrencyLimit,
+        });
+        // @ts-ignore
+        traceExporter.send = createSendOverride(port, traceExporter, MessageTypes.OTLPTraceMessage)
+        const traceProcessor = new BatchSpanProcessor(traceExporter);
+        tracerProvider.addSpanProcessor(traceProcessor);
+        tracerProvider.register({
+            contextManager: new ZoneContextManager(),
+            propagator: new CompositePropagator({
+                propagators: options.propagateTo.length > 0 ? [
+                    new B3Propagator(),
+                    new W3CTraceContextPropagator(),
+                ] : [],
+            }),
+        });
+    }
+
+    let loggerProvider: LoggerProvider;
+    if (options.loggingEnabled) {
+        const logExporter = new OTLPLogExporter({
+            url: options.logCollectorUrl,
+            headers: options.headers,
+            concurrencyLimit: options.concurrencyLimit,
+        });
+        // @ts-ignore
+        logExporter.send = createSendOverride(port, logExporter, MessageTypes.OTLPLogMessage)
+        loggerProvider = new LoggerProvider();
+        loggerProvider.addLogRecordProcessor(new BatchLogRecordProcessor(logExporter));
+        wrapConsoleWithLoggerProvider(loggerProvider);
+    }
     const propagateTraceHeaderCorsUrls = options.propagateTo.map((url) => new RegExp(url))
     const clearTimingResources = true
     const instrumentations = {
@@ -128,29 +141,47 @@ const instrument = (port: TypedPort, options: Options) => {
         instrumentations: [
             getWebAutoInstrumentations(instrumentationsToRegister),
         ],
-        tracerProvider: provider,
+        tracerProvider,
+        loggerProvider,
     });
 }
 
-function injectContentScript(extensionId: string, options: Options) {
-    const port = chrome.runtime.connect(extensionId);
-    let deregisterInstrumentation = instrument(port, options);
+function injectContentScript(extensionId: string, options: Options, retries = 10, backoff = 10) {
+    if (retries <= 0) {
+        return
+    }
 
-    port.onDisconnect.addListener(obj => {
-        consoleProxy.debug(`disconnected port`, obj);
-        deregisterInstrumentation && deregisterInstrumentation()
-        port.disconnect()
-    })
+    try {
+        const port: TypedPort<PortMessage, Partial<Options>> = chrome.runtime.connect(extensionId);
+        let deregisterInstrumentation = instrument(port, options);
 
-    port.onMessage.addListener((m) => {
-        consoleProxy.debug(`received message from background script`, m);
-        options = {
-            ...options,
-            ...m
-        }
-        deregisterInstrumentation && deregisterInstrumentation()
-        deregisterInstrumentation = instrument(port, options)
-    });
+        port.onDisconnect.addListener(obj => {
+            consoleProxy.debug(`disconnected port`, obj);
+            deregisterInstrumentation && deregisterInstrumentation()
+            port.disconnect()
+            // try to reconnect if possible
+            setTimeout(() => {
+                consoleProxy.debug(`attempting to reconnect in ${backoff}ms`)
+                injectContentScript(extensionId, options, retries - 1, backoff * 2)
+            }, backoff)
+        })
+
+        port.onMessage.addListener((m) => {
+            consoleProxy.debug(`received message from background script`, m);
+            options = {
+                ...options,
+                ...m
+            }
+            deregisterInstrumentation && deregisterInstrumentation()
+            deregisterInstrumentation = instrument(port, options)
+        });
+    } catch (e) {
+        consoleProxy.error(`error injecting content script`, e)
+        setTimeout(() => {
+            consoleProxy.debug(`attempting to reconnect in ${backoff}ms`)
+            injectContentScript(extensionId, options, retries - 1, backoff * 2)
+        }, backoff)
+    }
 }
 
 export default injectContentScript;

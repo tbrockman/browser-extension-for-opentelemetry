@@ -1,7 +1,7 @@
 {
   "name": "opentelemetry-browser-extension",
   "displayName": "OpenTelemetry Browser Extension",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "An extension for instrumenting webpages using OpenTelemetry",
   "author": "Theodore Brockman",
   "scripts": {
@@ -11,28 +11,30 @@
     "test": "plasmo test"
   },
   "dependencies": {
-    "@mantine/core": "^7.4.2",
-    "@mantine/hooks": "^7.4.2",
-    "@opentelemetry/auto-instrumentations-web": "^0.35.0",
-    "@opentelemetry/context-zone": "^1.20.0",
-    "@opentelemetry/core": "^1.20.0",
-    "@opentelemetry/exporter-collector": "^0.25.0",
-    "@opentelemetry/exporter-trace-otlp-proto": "^0.46.0",
-    "@opentelemetry/instrumentation": "^0.46.0",
-    "@opentelemetry/instrumentation-document-load": "^0.34.1",
-    "@opentelemetry/instrumentation-fetch": "^0.46.0",
-    "@opentelemetry/instrumentation-user-interaction": "^0.34.1",
-    "@opentelemetry/instrumentation-xml-http-request": "^0.46.0",
-    "@opentelemetry/otlp-exporter-base": "^0.48.0",
-    "@opentelemetry/otlp-proto-exporter-base": "^0.48.0",
-    "@opentelemetry/propagator-b3": "^1.20.0",
-    "@opentelemetry/resources": "^1.20.0",
-    "@opentelemetry/sdk-trace-base": "^1.20.0",
-    "@opentelemetry/sdk-trace-web": "^1.20.0",
-    "@opentelemetry/semantic-conventions": "^1.20.0",
-    "@plasmohq/messaging": "^0.6.1",
-    "@plasmohq/storage": "^1.9.0",
-    "@tabler/icons-react": "^2.46.0",
+    "@mantine/core": "^7.6.1",
+    "@mantine/hooks": "^7.6.1",
+    "@opentelemetry/api-logs": "^0.49.1",
+    "@opentelemetry/auto-instrumentations-web": "^0.36.0",
+    "@opentelemetry/context-zone": "^1.22.0",
+    "@opentelemetry/core": "^1.22.0",
+    "@opentelemetry/exporter-logs-otlp-proto": "^0.49.1",
+    "@opentelemetry/exporter-trace-otlp-proto": "^0.49.1",
+    "@opentelemetry/instrumentation": "^0.49.1",
+    "@opentelemetry/instrumentation-document-load": "^0.35.0",
+    "@opentelemetry/instrumentation-fetch": "^0.49.1",
+    "@opentelemetry/instrumentation-user-interaction": "^0.35.0",
+    "@opentelemetry/instrumentation-xml-http-request": "^0.49.1",
+    "@opentelemetry/otlp-exporter-base": "^0.49.1",
+    "@opentelemetry/otlp-proto-exporter-base": "^0.49.1",
+    "@opentelemetry/propagator-b3": "^1.22.0",
+    "@opentelemetry/resources": "^1.22.0",
+    "@opentelemetry/sdk-logs": "^0.49.1",
+    "@opentelemetry/sdk-trace-base": "^1.22.0",
+    "@opentelemetry/sdk-trace-web": "^1.22.0",
+    "@opentelemetry/semantic-conventions": "^1.22.0",
+    "@plasmohq/messaging": "^0.6.2",
+    "@plasmohq/storage": "^1.9.3",
+    "@tabler/icons-react": "^2.47.0",
     "deepmerge-ts": "^5.1.0",
     "plasmo": "link:vendored\\plasmo\\cli\\plasmo",
     "react": "18.2.0",
@@ -40,44 +42,43 @@
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "4.1.1",
-    "@parcel/config-default": "^2.11.0",
-    "@parcel/packager-ts": "2.9.3",
+    "@parcel/config-default": "^2.12.0",
+    "@parcel/packager-ts": "2.12.0",
     "@plasmohq/parcel-config": "^0.40.2",
-    "@types/chrome": "0.0.251",
-    "@types/node": "20.9.0",
-    "@types/react": "18.2.37",
-    "@types/react-dom": "18.2.15",
-    "esbuild": "^0.19.11",
+    "@types/chrome": "0.0.262",
+    "@types/node": "20.11.24",
+    "@types/react": "18.2.61",
+    "@types/react-dom": "18.2.19",
+    "esbuild": "^0.20.1",
     "esbuild-plugin-polyfill-node": "^0.3.0",
-    "parcel": "^2.11.0",
-    "postcss": "^8.4.33",
-    "postcss-preset-mantine": "^1.12.3",
+    "parcel": "^2.12.0",
+    "postcss": "^8.4.35",
+    "postcss-preset-mantine": "^1.13.0",
     "postcss-simple-vars": "^7.0.1",
-    "prettier": "3.0.3",
+    "prettier": "3.2.5",
     "process": "^0.11.10",
-    "typescript": "5.2.2"
+    "typescript": "5.3.3"
   },
   "manifest": {
     "host_permissions": [
       "https://*/*",
-      "http://localhost:*/*"
+      "http://localhost/*"
     ],
     "permissions": [
       "scripting",
-      "storage",
-      "activeTab"
+      "storage"
     ],
     "externally_connectable": {
       "matches": [
         "https://*/*",
-        "http://localhost:*/*"
+        "http://localhost/*"
       ]
     }
   },
   "pnpm": {
     "patchedDependencies": {
       "@protobufjs/inquire@1.1.0": "patches/@protobufjs__inquire@1.1.0.patch",
-      "@opentelemetry/otlp-proto-exporter-base@0.48.0": "patches/@opentelemetry__otlp-proto-exporter-base@0.48.0.patch"
+      "@opentelemetry/otlp-proto-exporter-base@0.49.1": "patches/@opentelemetry__otlp-proto-exporter-base@0.49.1.patch"
     }
   },
   "parcel-resolver-inlinefunc": {
