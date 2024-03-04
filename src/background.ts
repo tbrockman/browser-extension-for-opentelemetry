@@ -1,7 +1,7 @@
 import { Storage } from '@plasmohq/storage'
 import { consoleProxy, stringHeadersToObject } from './util'
 import injectContentScript from 'inlinefunc:./content-script'
-import { MessageTypes, type OTLPSendMessage, type Options, type PortMessage, type TypedPort } from '~types'
+import { MessageTypes, type OTLPExportTraceMessage, type OTLPExportLogMessage, type Options, type PortMessage, type TypedPort } from '~types'
 
 let storage = new Storage({ area: 'local' })
 let ports = {}
@@ -13,9 +13,10 @@ const connected = async (p: TypedPort<Partial<Options>, PortMessage>) => {
         consoleProxy.debug('received message', message)
 
         switch (message.type) {
-            case MessageTypes.OTLPSendMessage:
+            case MessageTypes.OTLPLogMessage:
+            case MessageTypes.OTLPTraceMessage:
                 // Timeout currently ignored
-                const { bytes, timeout } = message as OTLPSendMessage
+                const { bytes, timeout } = MessageTypes.OTLPLogMessage ? message as OTLPExportLogMessage : message as OTLPExportTraceMessage
 
                 // Even though the content script could send us the headers and url, we don't trust them
                 // So in the worst case scenario we're sending arbitrary bytes to our chosen server
@@ -24,7 +25,13 @@ const connected = async (p: TypedPort<Partial<Options>, PortMessage>) => {
                     'Content-Type': 'application/x-protobuf',
                     Accept: 'application/x-protobuf'
                 }
-                const url = await storage.get('url') || 'http://localhost:4318/v1/traces'
+                let url: string
+
+                if (message.type === MessageTypes.OTLPLogMessage) {
+                    url = await storage.get('logCollectorUrl') || 'http://localhost:4318/v1/logs'
+                } else {
+                    url = await storage.get('traceCollectorUrl') || 'http://localhost:4318/v1/traces'
+                }
                 const body = new Blob([new Uint8Array(bytes)], { type: 'application/x-protobuf' });
 
                 try {
@@ -39,7 +46,7 @@ const connected = async (p: TypedPort<Partial<Options>, PortMessage>) => {
                 }
                 break;
             default:
-                consoleProxy.error('unhandled message type', message.type)
+                consoleProxy.error('unhandled message type', message)
         }
     });
 
@@ -50,7 +57,7 @@ const connected = async (p: TypedPort<Partial<Options>, PortMessage>) => {
 }
 
 chrome.storage.onChanged.addListener(({ traceCollectorUrl, logCollectorUrl, events, telemetry, headers, enabled, propagateTo, instrumentations, loggingEnabled, tracingEnabled }: Record<keyof Options, chrome.storage.StorageChange>, area) => {
-    consoleProxy.debug('storage changed', traceCollectorUrl, logCollectorUrl, events, telemetry, headers, enabled, propagateTo, instrumentations, area)
+    consoleProxy.debug('storage changed', { traceCollectorUrl, logCollectorUrl, events, telemetry, headers, enabled, propagateTo, instrumentations, area, loggingEnabled, tracingEnabled })
     Object.keys(ports).forEach((k) => {
         ports[k].postMessage({
             loggingEnabled: loggingEnabled?.newValue,

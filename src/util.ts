@@ -1,3 +1,6 @@
+import { SeverityNumber } from "@opentelemetry/api-logs";
+import { LogRecord, LoggerProvider } from "@opentelemetry/sdk-logs";
+
 const events = [
     "abort",
     "animationcancel",
@@ -95,7 +98,7 @@ const events = [
 ]
 
 const logPrefix = '[opentelemetry-browser-extension]'
-const consoleProxy = new Proxy(console, {
+const internalConsoleProxy = new Proxy(console, {
     get(target, prop, receiver) {
         if (['log', 'debug', 'info', 'warn', 'error'].includes(prop as string)) {
             // Wrapping the original console method with a function that adds the prefix
@@ -135,8 +138,55 @@ const stringHeadersToObject = (headerString: string[]) => {
     return headers
 }
 
+const wrapConsoleWithLoggerProvider = (provider: LoggerProvider) => {
+    console.debug('wrapping console with logger provider')
+    internalConsoleProxy.debug('wrapping console with logger provider')
+
+    const logger = provider.getLogger(logPrefix);
+    const shutdown = provider.shutdown
+    const original = console
+
+    const targets = {
+        debug: [SeverityNumber.DEBUG, 'debug'],
+        log: [SeverityNumber.INFO, 'info'],
+        info: [SeverityNumber.INFO, 'info'],
+        warn: [SeverityNumber.WARN, 'warn'],
+        error: [SeverityNumber.ERROR, 'error'],
+        trace: [SeverityNumber.TRACE, 'trace'],
+        // console.table + what to do with other console methods?
+    }
+
+    // Wrap console methods with logger
+    const proxy = new Proxy(console, {
+        get: function (target, prop, receiver) {
+            if (prop in targets) {
+
+                return function (...args) {
+                    const [severityNumber, severityText] = targets[prop]
+                    internalConsoleProxy.debug('logger emitting log', severityNumber, severityText, JSON.stringify(args));
+                    logger.emit({ severityNumber, severityText, body: JSON.stringify(args) });
+                    target[prop].apply(target, args);
+                };
+            } else {
+                return Reflect.get(target, prop, receiver);
+            }
+        }
+    });
+
+    // Replace the original console with the proxy
+    window.console = proxy;
+
+    // Clean-up if provider is unregistered
+    provider.shutdown = async () => {
+        window.console = original
+        provider.shutdown = shutdown
+        return await shutdown()
+    }
+}
+
 export {
     events,
     stringHeadersToObject,
-    consoleProxy
+    internalConsoleProxy as consoleProxy,
+    wrapConsoleWithLoggerProvider
 }

@@ -19,14 +19,14 @@ services:
       - "3200" # tempo
       - "4317" # otlp grpc
 
-  loki:
-    image: grafana/loki:latest
-    ports:
-      - "3100:3100"
-    command: -config.file=/etc/loki/local-config.yaml
-    volumes:
-      - ./config/loki-local-config.yaml:/etc/loki/local-config.yaml
-      - ./loki-data:/tmp/loki
+  # loki:
+  #   image: grafana/loki:latest
+  #   ports:
+  #     - "3100:3100"
+  #   command: -config.file=/etc/loki/local-config.yaml
+  #   volumes:
+  #     - ./config/loki-local-config.yaml:/etc/loki/local-config.yaml
+  #     - ./loki-data:/tmp/loki
 
   grafana:
     image: grafana/grafana:latest

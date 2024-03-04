@@ -1,8 +1,9 @@
 export enum MessageTypes {
-    OTLPSendMessage,
+    OTLPTraceMessage = 'trace',
+    OTLPLogMessage = 'log'
 }
 
-export type PortMessage = | OTLPSendMessage
+export type PortMessage = OTLPExportTraceMessage | OTLPExportLogMessage
 
 export interface PortMessageBase {
     type: MessageTypes
@@ -17,8 +18,14 @@ export interface TypedMessageHandler<T> extends chrome.runtime.PortMessageEvent 
     addListener: (callback: (message: T, port: any) => void) => void
 }
 
-export interface OTLPSendMessage extends PortMessageBase {
-    type: MessageTypes.OTLPSendMessage
+export interface OTLPExportTraceMessage extends PortMessageBase {
+    type: MessageTypes.OTLPTraceMessage
+    bytes: number[],
+    timeout: number,
+}
+
+export interface OTLPExportLogMessage extends PortMessageBase {
+    type: MessageTypes.OTLPLogMessage
     bytes: number[],
     timeout: number,
 }
