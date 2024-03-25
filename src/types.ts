@@ -36,7 +36,6 @@ export type Options = {
     headers: Record<string, string>
     concurrencyLimit: number
     events: (keyof HTMLElementEventMap)[]
-    telemetry: ('logs' | 'traces')[],
     propagateTo: string[],
     instrumentations: ('fetch' | 'load' | 'interaction')[],
     enabled: boolean,
