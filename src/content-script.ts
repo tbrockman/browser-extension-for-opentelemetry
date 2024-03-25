@@ -28,7 +28,6 @@ function createSendOverride<ExportItem, ServiceRequest>(port: TypedPort<PortMess
             onSuccess()
             return
         }
-
         const serviceRequest = exporter.convert(objects);
         const clientType = exporter.getServiceClientType()
         const exportRequestType = getExportRequestProto(clientType)
@@ -49,14 +48,16 @@ function createSendOverride<ExportItem, ServiceRequest>(port: TypedPort<PortMess
 }
 
 const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Options) => {
-    if (!options || !options.enabled || !options.instrumentations || options.instrumentations.length === 0) {
+    if (!options || !options.enabled || !options.instrumentations || options.instrumentations.length === 0 || window.__OTEL_BROWSER_EXT_INSTRUMENTED__) {
+        consoleProxy.debug(`not instrumenting`, options, window.__OTEL_BROWSER_EXT_INSTRUMENTED__)
         return () => { }
     }
+    window.__OTEL_BROWSER_EXT_INSTRUMENTED__ = true
     consoleProxy.debug(`instrumenting with options`, options)
 
     const resource = new Resource({
         [SEMRESATTRS_SERVICE_NAME]: 'opentelemetry-browser-extension',
-        [SEMRESATTRS_SERVICE_VERSION]: '0.0.4', // TODO: replace with package.json version
+        [SEMRESATTRS_SERVICE_VERSION]: '0.0.5', // TODO: replace with package.json version
         [SEMRESATTRS_TELEMETRY_SDK_LANGUAGE]: 'webjs',
         [SEMRESATTRS_TELEMETRY_SDK_NAME]: 'opentelemetry',
         [SEMRESATTRS_TELEMETRY_SDK_VERSION]: '1.22.0', // TODO: replace with resolved version
@@ -71,10 +72,6 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
         tracerProvider = new WebTracerProvider({
             resource,
         });
-        // #TODO: make console configurable for debugging
-        // const consoleExporter = new ConsoleSpanExporter();
-        // const consoleProcessor = new SimpleSpanProcessor(consoleExporter);
-        // provider.addSpanProcessor(consoleProcessor);
         const traceExporter = new OTLPTraceExporter({
             url: options.traceCollectorUrl,
             headers: options.headers,
@@ -104,7 +101,9 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
         });
         // @ts-ignore
         logExporter.send = createSendOverride(port, logExporter, MessageTypes.OTLPLogMessage)
-        loggerProvider = new LoggerProvider();
+        loggerProvider = new LoggerProvider({
+            resource
+        });
         loggerProvider.addLogRecordProcessor(new BatchLogRecordProcessor(logExporter));
         wrapConsoleWithLoggerProvider(loggerProvider);
     }
@@ -137,13 +136,20 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
         })
     })
 
-    return registerInstrumentations({
+    const deregister = registerInstrumentations({
         instrumentations: [
             getWebAutoInstrumentations(instrumentationsToRegister),
         ],
         tracerProvider,
         loggerProvider,
     });
+
+    return () => {
+        window.__OTEL_BROWSER_EXT_INSTRUMENTED__ = false
+        tracerProvider.shutdown()
+        loggerProvider.shutdown()
+        return deregister()
+    }
 }
 
 function injectContentScript(extensionId: string, options: Options, retries = 10, backoff = 10) {
@@ -152,6 +158,10 @@ function injectContentScript(extensionId: string, options: Options, retries = 10
     }
 
     try {
+        if (!chrome.runtime) {
+            consoleProxy.debug(`chrome.runtime not available, not injecting content script`)
+            return
+        }
         const port: TypedPort<PortMessage, Partial<Options>> = chrome.runtime.connect(extensionId);
         let deregisterInstrumentation = instrument(port, options);
 

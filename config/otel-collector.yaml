@@ -13,17 +13,17 @@ exporters:
     endpoint: tempo:4317
     tls:
       insecure: true
-  # otlphttp:
-  #   endpoint: http://loki:3100/otlp
-  #   tls:
-  #     insecure: true
+  otlp/quickwit:
+    endpoint: quickwit:7281
+    tls:
+      insecure: true
   debug:
     verbosity: detailed
 service:
   pipelines:
     traces:
       receivers: [otlp]
-      exporters: [otlp, debug]
+      exporters: [otlp, otlp/quickwit]
     logs:
       receivers: [otlp]
-      exporters: [debug]
+      exporters: [otlp/quickwit, debug]

@@ -1,0 +1,53 @@
+diff --git a/build/esm/xhr.js b/build/esm/xhr.js
+index 5b0ba17e205745073430442e11456237f7be37ad..37258a2193861e63d7507e47db03603cf0f47bd2 100644
+--- a/build/esm/xhr.js
++++ b/build/esm/xhr.js
+@@ -295,6 +295,13 @@ var XMLHttpRequestInstrumentation = /** @class */ (function (_super) {
+             }
+             var span = xhrMem.span, spanUrl = xhrMem.spanUrl, sendStartTime = xhrMem.sendStartTime;
+             if (span) {
++
++                if ([EventNames.EVENT_ABORT, EventNames.EVENT_TIMEOUT, EventNames.EVENT_ERROR].includes(eventName)) {
++                    span.setStatus({ code: 2, message: 'we made a custom error baby' })
++                } else {
++                    span.setStatus({ code: 1, message: 'we made a custom ok baby' })
++                }
++
+                 plugin._findResourceAndAddNetworkEvents(xhrMem, span, spanUrl, sendStartTime, performanceEndTime);
+                 span.addEvent(eventName, endTime);
+                 plugin._addFinalSpanAttributes(span, xhrMem, spanUrl);
+diff --git a/build/esnext/xhr.js b/build/esnext/xhr.js
+index 8ceb9005a8c613fa6cc9819e14492c3cdb0dda61..14894c0c8eea0a9fb727106b19490c402277f58b 100644
+--- a/build/esnext/xhr.js
++++ b/build/esnext/xhr.js
+@@ -270,6 +270,13 @@ export class XMLHttpRequestInstrumentation extends InstrumentationBase {
+             }
+             const { span, spanUrl, sendStartTime } = xhrMem;
+             if (span) {
++
++                if ([EventNames.EVENT_ABORT, EventNames.EVENT_TIMEOUT, EventNames.EVENT_ERROR].includes(eventName)) {
++                    span.setStatus({ code: 2, message: 'we made a custom error baby' })
++                } else {
++                    span.setStatus({ code: 1, message: 'we made a custom ok baby' })
++                }
++
+                 plugin._findResourceAndAddNetworkEvents(xhrMem, span, spanUrl, sendStartTime, performanceEndTime);
+                 span.addEvent(eventName, endTime);
+                 plugin._addFinalSpanAttributes(span, xhrMem, spanUrl);
+diff --git a/build/src/xhr.js b/build/src/xhr.js
+index 4566223315f44c3d9cf32a20a8db60d47321cfc3..07d61af4f55d613f3c2d9954e8f73d7918d52ac5 100644
+--- a/build/src/xhr.js
++++ b/build/src/xhr.js
+@@ -273,6 +273,12 @@ class XMLHttpRequestInstrumentation extends instrumentation_1.InstrumentationBas
+             }
+             const { span, spanUrl, sendStartTime } = xhrMem;
+             if (span) {
++                if ([EventNames.EVENT_ABORT, EventNames.EVENT_TIMEOUT, EventNames.EVENT_ERROR].includes(eventName)) {
++                    span.setStatus({ code: 2, message: 'we made a custom error baby' })
++                } else {
++                    span.setStatus({ code: 1, message: 'we made a custom ok baby' })
++                }
++
+                 plugin._findResourceAndAddNetworkEvents(xhrMem, span, spanUrl, sendStartTime, performanceEndTime);
+                 span.addEvent(eventName, endTime);
+                 plugin._addFinalSpanAttributes(span, xhrMem, spanUrl);
