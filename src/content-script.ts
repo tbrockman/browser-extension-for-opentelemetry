@@ -3,10 +3,10 @@ import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-proto";
 import {
     LoggerProvider,
-    BatchLogRecordProcessor
+    SimpleLogRecordProcessor
 } from '@opentelemetry/sdk-logs';
 import { OTLPLogExporter } from '@opentelemetry/exporter-logs-otlp-proto';
-import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base';
+import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
 import { OTLPProtoExporterBrowserBase, getExportRequestProto } from '@opentelemetry/otlp-proto-exporter-base';
 import { OTLPExporterError } from '@opentelemetry/otlp-exporter-base';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
@@ -78,7 +78,8 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
         })
         // @ts-ignore
         traceExporter.send = createSendOverride(port, traceExporter, MessageTypes.OTLPTraceMessage)
-        const traceProcessor = new BatchSpanProcessor(traceExporter);
+        // TODO: make batching configurable, choosing simple for now to avoid losing data on page navigations
+        const traceProcessor = new SimpleSpanProcessor(traceExporter);
         tracerProvider.addSpanProcessor(traceProcessor);
         tracerProvider.register({
             contextManager: new ZoneContextManager(),
@@ -104,7 +105,8 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
         loggerProvider = new LoggerProvider({
             resource
         })
-        loggerProvider.addLogRecordProcessor(new BatchLogRecordProcessor(logExporter))
+        // TODO: make batching configurable, choosing simple for now to avoid losing data on page navigations
+        loggerProvider.addLogRecordProcessor(new SimpleLogRecordProcessor(logExporter))
         wrapConsoleWithLoggerProvider(loggerProvider)
     }
     const propagateTraceHeaderCorsUrls = options.propagateTo.map((url) => new RegExp(url))

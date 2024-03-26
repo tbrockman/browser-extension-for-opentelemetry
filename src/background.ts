@@ -85,7 +85,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
             logCollectorUrl: await storage.get('logsCollectorUrl') || 'http://localhost:4318/v1/logs',
             headers: stringHeadersToObject(await storage.get('headers')),
             concurrencyLimit: 10,
-            events: await storage.get<(keyof HTMLElementEventMap)[]>('events') || ['submit', 'click', 'keypress', 'scroll'],
+            events: await storage.get<(keyof HTMLElementEventMap)[]>('events') || ['submit', 'click', 'keypress', 'scroll', 'resize', 'drag', 'cut', 'copy', 'input', 'mousedown', 'mouseup', 'mouseover'],
             propagateTo: await storage.get<string[]>('propagateTo') || [],
             instrumentations: await storage.get<('fetch' | 'load' | 'interaction')[]>('instrumentations') || ['fetch', 'load', 'interaction'],
             enabled: await storage.get<boolean>('enabled') || true,

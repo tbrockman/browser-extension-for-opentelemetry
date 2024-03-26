@@ -110,12 +110,12 @@
             },
             "id": 6,
             "options": {
-                "displayMode": "gradient",
+                "displayMode": "lcd",
                 "maxVizHeight": 300,
                 "minVizHeight": 16,
                 "minVizWidth": 8,
-                "namePlacement": "auto",
-                "orientation": "auto",
+                "namePlacement": "top",
+                "orientation": "horizontal",
                 "reduceOptions": {
                     "calcs": [],
                     "fields": "/^Sum$/",
@@ -140,17 +140,6 @@
                                 "size": "0"
                             },
                             "type": "terms"
-                        },
-                        {
-                            "field": "span_name",
-                            "id": "3",
-                            "settings": {
-                                "min_doc_count": "1",
-                                "order": "desc",
-                                "orderBy": "_term",
-                                "size": "0"
-                            },
-                            "type": "terms"
                         }
                     ],
                     "datasource": {
@@ -167,12 +156,12 @@
                             "type": "sum"
                         }
                     ],
-                    "query": "(span_name:\"documentFetch\" OR span_name:\"documentLoad\")",
+                    "query": "(span_name:\"documentLoad\")",
                     "refId": "A",
                     "timeField": ""
                 }
             ],
-            "title": "Document load + document fetch times",
+            "title": "Document load times",
             "type": "bargauge"
         },
         {
@@ -180,7 +169,7 @@
                 "type": "quickwit-quickwit-datasource",
                 "uid": "fdgmktkdo5n28f"
             },
-            "description": "Count of clicks/scrolls/keypresses/submits per minute per website",
+            "description": "Counts of tracked interactions per minute by website",
             "fieldConfig": {
                 "defaults": {
                     "color": {
@@ -303,7 +292,7 @@
                             "type": "count"
                         }
                     ],
-                    "query": "span_attributes.event_type:\"click\" OR span_attributes.event_type:\"keypress\" OR span_attributes.event_type:\"scroll\" OR span_attributes.event_type:\"submit\"",
+                    "query": "",
                     "refId": "A",
                     "timeField": ""
                 }
@@ -316,7 +305,7 @@
                 "type": "quickwit-quickwit-datasource",
                 "uid": "fdgmknzi93y0wd"
             },
-            "description": "Console logs captured and re-emitted by the extension",
+            "description": "Console logs captured by the browser extension",
             "gridPos": {
                 "h": 7,
                 "w": 17,
@@ -485,7 +474,7 @@
                     "timeField": ""
                 }
             ],
-            "title": "Average request time (by URL and HTTP method)",
+            "title": "Average fetch/XHR request time",
             "type": "piechart"
         },
         {
@@ -588,7 +577,7 @@
                     "timeField": ""
                 }
             ],
-            "title": "Total request time (by URL and HTTP method)",
+            "title": "Total fetch/XHR request time",
             "type": "piechart"
         },
         {
@@ -642,6 +631,7 @@
                     ],
                     "show": false
                 },
+                "frameIndex": 1,
                 "showHeader": true,
                 "sortBy": [
                     {
@@ -678,7 +668,13 @@
                     "type": "quickwit-quickwit-datasource",
                     "uid": "fdgmknzi93y0wd"
                 },
-                "filters": [],
+                "filters": [
+                    {
+                        "key": "service_name",
+                        "operator": "=",
+                        "value": "opentelemetry-browser-extension"
+                    }
+                ],
                 "hide": 0,
                 "label": "Filter logs",
                 "name": "logFilter",
@@ -706,13 +702,13 @@
         ]
     },
     "time": {
-        "from": "2024-03-24T23:59:02.265Z",
-        "to": "2024-03-25T00:13:16.810Z"
+        "from": "now-3h",
+        "to": "now"
     },
     "timepicker": {},
     "timezone": "browser",
     "title": "OpenTelemetry Browser Extension",
     "uid": "bdgmvsm49b0g0b",
-    "version": 27,
+    "version": 31,
     "weekStart": ""
 }
