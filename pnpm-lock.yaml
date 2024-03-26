@@ -5,8 +5,11 @@ settings:
   excludeLinksFromLockfile: false
 
 patchedDependencies:
+  '@opentelemetry/instrumentation-fetch@0.49.1':
+    hash: 6yilnpdqkngqzfwhj35hpknaue
+    path: patches/@opentelemetry__instrumentation-fetch@0.49.1.patch
   '@opentelemetry/instrumentation-xml-http-request@0.49.1':
-    hash: uiqdvcztvsm4faoyutpyiu5avq
+    hash: yjdrr2nmvcemqupuuxgxvso6fi
     path: patches/@opentelemetry__instrumentation-xml-http-request@0.49.1.patch
   '@opentelemetry/otlp-proto-exporter-base@0.49.1':
     hash: mif3gyfydfs4r7enkb5hkxvfsq
@@ -48,13 +51,13 @@ dependencies:
     version: 0.35.0(@opentelemetry/api@1.8.0)
   '@opentelemetry/instrumentation-fetch':
     specifier: ^0.49.1
-    version: 0.49.1(@opentelemetry/api@1.8.0)
+    version: 0.49.1(patch_hash=6yilnpdqkngqzfwhj35hpknaue)(@opentelemetry/api@1.8.0)
   '@opentelemetry/instrumentation-user-interaction':
     specifier: ^0.35.0
     version: 0.35.0(@opentelemetry/api@1.8.0)(zone.js@0.11.4)
   '@opentelemetry/instrumentation-xml-http-request':
     specifier: ^0.49.1
-    version: 0.49.1(patch_hash=uiqdvcztvsm4faoyutpyiu5avq)(@opentelemetry/api@1.8.0)
+    version: 0.49.1(patch_hash=yjdrr2nmvcemqupuuxgxvso6fi)(@opentelemetry/api@1.8.0)
   '@opentelemetry/otlp-exporter-base':
     specifier: ^0.49.1
     version: 0.49.1(@opentelemetry/api@1.8.0)
@@ -1174,9 +1177,9 @@ packages:
       '@opentelemetry/api': 1.8.0
       '@opentelemetry/instrumentation': 0.49.1(@opentelemetry/api@1.8.0)
       '@opentelemetry/instrumentation-document-load': 0.36.0(@opentelemetry/api@1.8.0)
-      '@opentelemetry/instrumentation-fetch': 0.49.1(@opentelemetry/api@1.8.0)
+      '@opentelemetry/instrumentation-fetch': 0.49.1(patch_hash=6yilnpdqkngqzfwhj35hpknaue)(@opentelemetry/api@1.8.0)
       '@opentelemetry/instrumentation-user-interaction': 0.36.0(@opentelemetry/api@1.8.0)(zone.js@0.11.4)
-      '@opentelemetry/instrumentation-xml-http-request': 0.49.1(patch_hash=uiqdvcztvsm4faoyutpyiu5avq)(@opentelemetry/api@1.8.0)
+      '@opentelemetry/instrumentation-xml-http-request': 0.49.1(patch_hash=yjdrr2nmvcemqupuuxgxvso6fi)(@opentelemetry/api@1.8.0)
       zone.js: 0.11.4
     transitivePeerDependencies:
       - supports-color
@@ -1277,7 +1280,7 @@ packages:
       - supports-color
     dev: false
 
-  /@opentelemetry/instrumentation-fetch@0.49.1(@opentelemetry/api@1.8.0):
+  /@opentelemetry/instrumentation-fetch@0.49.1(patch_hash=6yilnpdqkngqzfwhj35hpknaue)(@opentelemetry/api@1.8.0):
     resolution: {integrity: sha512-hizhULZXlq02y8YC0vPQ4WtUWiXcwxPdEqHBy8p75jzF9rAuP/ldrVr0Oxvz5Xr9qQcdEOFLvEl0ZxbVL76WKw==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -1291,6 +1294,7 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: false
+    patched: true
 
   /@opentelemetry/instrumentation-user-interaction@0.35.0(@opentelemetry/api@1.8.0)(zone.js@0.11.4):
     resolution: {integrity: sha512-d66rqb24onIEnFNxXorCEzj+5tYBJKM/6StRl+SKXfRDXRT+nBj5EGdBUNgk+jiGQ0M/RymZHHHXSguTV2F1fA==}
@@ -1324,7 +1328,7 @@ packages:
       - supports-color
     dev: false
 
-  /@opentelemetry/instrumentation-xml-http-request@0.49.1(patch_hash=uiqdvcztvsm4faoyutpyiu5avq)(@opentelemetry/api@1.8.0):
+  /@opentelemetry/instrumentation-xml-http-request@0.49.1(patch_hash=yjdrr2nmvcemqupuuxgxvso6fi)(@opentelemetry/api@1.8.0):
     resolution: {integrity: sha512-gCPd2o1geRXc1urJoLxWRnMKAF6Akbwlp1nfe+xg2akSUenlt4wopmq1gEIrJva4bXLsNSModVLrEVCTt5/fDA==}
     engines: {node: '>=14'}
     peerDependencies:
