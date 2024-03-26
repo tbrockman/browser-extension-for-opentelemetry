@@ -25,13 +25,12 @@ function createSendOverride<ExportItem, ServiceRequest>(port: TypedPort<PortMess
     return (objects: ExportItem[], onSuccess: () => void, onError: (error: OTLPExporterError) => void) => {
 
         if (objects.length === 0) {
-            onSuccess()
-            return
+            return onSuccess()
         }
-        const serviceRequest = exporter.convert(objects);
+        const serviceRequest = exporter.convert(objects)
         const clientType = exporter.getServiceClientType()
         const exportRequestType = getExportRequestProto(clientType)
-        const otlp = exportRequestType.create(serviceRequest);
+        const otlp = exportRequestType.create(serviceRequest)
 
         if (otlp) {
             const bytes = exportRequestType.encode(otlp).finish();
@@ -49,7 +48,7 @@ function createSendOverride<ExportItem, ServiceRequest>(port: TypedPort<PortMess
 
 const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Options) => {
     if (!options || !options.enabled || !options.instrumentations || options.instrumentations.length === 0 || window.__OTEL_BROWSER_EXT_INSTRUMENTED__) {
-        consoleProxy.debug(`not instrumenting`, options, window.__OTEL_BROWSER_EXT_INSTRUMENTED__)
+        consoleProxy.debug(`not instrumenting as either options missing or already instrumented`, options, window.__OTEL_BROWSER_EXT_INSTRUMENTED__)
         return () => { }
     }
     window.__OTEL_BROWSER_EXT_INSTRUMENTED__ = true
@@ -66,17 +65,17 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
         'extension.target': process.env.PLASMO_TARGET,
     })
 
-    let tracerProvider: WebTracerProvider;
+    let tracerProvider: WebTracerProvider
 
     if (options.tracingEnabled) {
         tracerProvider = new WebTracerProvider({
             resource,
-        });
+        })
         const traceExporter = new OTLPTraceExporter({
             url: options.traceCollectorUrl,
             headers: options.headers,
             concurrencyLimit: options.concurrencyLimit,
-        });
+        })
         // @ts-ignore
         traceExporter.send = createSendOverride(port, traceExporter, MessageTypes.OTLPTraceMessage)
         const traceProcessor = new BatchSpanProcessor(traceExporter);
@@ -89,23 +88,24 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
                     new W3CTraceContextPropagator(),
                 ] : [],
             }),
-        });
+        })
     }
 
-    let loggerProvider: LoggerProvider;
+    let loggerProvider: LoggerProvider
+
     if (options.loggingEnabled) {
         const logExporter = new OTLPLogExporter({
             url: options.logCollectorUrl,
             headers: options.headers,
             concurrencyLimit: options.concurrencyLimit,
-        });
+        })
         // @ts-ignore
         logExporter.send = createSendOverride(port, logExporter, MessageTypes.OTLPLogMessage)
         loggerProvider = new LoggerProvider({
             resource
-        });
-        loggerProvider.addLogRecordProcessor(new BatchLogRecordProcessor(logExporter));
-        wrapConsoleWithLoggerProvider(loggerProvider);
+        })
+        loggerProvider.addLogRecordProcessor(new BatchLogRecordProcessor(logExporter))
+        wrapConsoleWithLoggerProvider(loggerProvider)
     }
     const propagateTraceHeaderCorsUrls = options.propagateTo.map((url) => new RegExp(url))
     const clearTimingResources = true
@@ -135,7 +135,6 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
             instrumentationsToRegister[setting[0]] = setting[1]
         })
     })
-
     const deregister = registerInstrumentations({
         instrumentations: [
             getWebAutoInstrumentations(instrumentationsToRegister),
@@ -146,8 +145,6 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
 
     return () => {
         window.__OTEL_BROWSER_EXT_INSTRUMENTED__ = false
-        tracerProvider.shutdown()
-        loggerProvider.shutdown()
         return deregister()
     }
 }
@@ -184,7 +181,7 @@ function injectContentScript(extensionId: string, options: Options, retries = 10
             }
             deregisterInstrumentation && deregisterInstrumentation()
             deregisterInstrumentation = instrument(port, options)
-        });
+        })
     } catch (e) {
         consoleProxy.error(`error injecting content script`, e)
         setTimeout(() => {

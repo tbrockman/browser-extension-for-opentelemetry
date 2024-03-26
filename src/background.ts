@@ -56,8 +56,8 @@ const connected = async (p: TypedPort<Partial<Options>, PortMessage>) => {
     })
 }
 
-chrome.storage.onChanged.addListener(({ traceCollectorUrl, logCollectorUrl, events, telemetry, headers, enabled, propagateTo, instrumentations, loggingEnabled, tracingEnabled }: Record<keyof Options, chrome.storage.StorageChange>, area) => {
-    consoleProxy.debug('storage changed', { traceCollectorUrl, logCollectorUrl, events, telemetry, headers, enabled, propagateTo, instrumentations, area, loggingEnabled, tracingEnabled })
+chrome.storage.onChanged.addListener(({ traceCollectorUrl, logCollectorUrl, events, headers, enabled, propagateTo, instrumentations, loggingEnabled, tracingEnabled }: Record<keyof Options, chrome.storage.StorageChange>, area) => {
+    consoleProxy.debug('storage changed', { traceCollectorUrl, logCollectorUrl, events, headers, enabled, propagateTo, instrumentations, area, loggingEnabled, tracingEnabled })
     Object.keys(ports).forEach((k) => {
         ports[k].postMessage({
             loggingEnabled: loggingEnabled?.newValue,
@@ -65,7 +65,6 @@ chrome.storage.onChanged.addListener(({ traceCollectorUrl, logCollectorUrl, even
             traceCollectorUrl: traceCollectorUrl?.newValue,
             logCollectorUrl: logCollectorUrl?.newValue,
             events: events?.newValue,
-            telemetry: telemetry?.newValue,
             headers: headers?.newValue,
             enabled: enabled?.newValue,
             propagateTo: propagateTo?.newValue,
@@ -87,7 +86,6 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
             headers: stringHeadersToObject(await storage.get('headers')),
             concurrencyLimit: 10,
             events: await storage.get<(keyof HTMLElementEventMap)[]>('events') || ['submit', 'click', 'keypress', 'scroll'],
-            telemetry: await storage.get<('logs' | 'traces')[]>('telemetry') || ['traces'],
             propagateTo: await storage.get<string[]>('propagateTo') || [],
             instrumentations: await storage.get<('fetch' | 'load' | 'interaction')[]>('instrumentations') || ['fetch', 'load', 'interaction'],
             enabled: await storage.get<boolean>('enabled') || true,

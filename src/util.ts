@@ -105,9 +105,9 @@ const internalConsoleProxy = new Proxy(console, {
             return function (...args) {
                 // No-op our our logs in production
                 // TODO: potentially make this configurable
-                // if (process.env.NODE_ENV === 'production' && ['log', 'debug', 'info'].includes(prop as string)) {
-                //     return
-                // }
+                if (process.env.NODE_ENV === 'production' && ['log', 'debug', 'info'].includes(prop as string)) {
+                    return
+                }
                 // Adding the prefix as the first argument
                 args.unshift(logPrefix);
                 // Calling the original console method with the modified arguments
@@ -175,8 +175,6 @@ const wrapConsoleWithLoggerProvider = (provider: LoggerProvider) => {
 
     // Clean-up if provider is unregistered
     provider.shutdown = async () => {
-        console.log('shutting down log provider??', console, original)
-        console = original
         window.console = original
         provider.shutdown = shutdown
         return await shutdown()

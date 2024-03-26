@@ -1,3 +1,9 @@
+declare global {
+    interface Window {
+        __OTEL_BROWSER_EXT_INSTRUMENTED__: boolean
+    }
+}
+
 export enum MessageTypes {
     OTLPTraceMessage = 'trace',
     OTLPLogMessage = 'log'
