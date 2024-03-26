@@ -25,7 +25,7 @@
         {
             "datasource": {
                 "type": "quickwit-quickwit-datasource",
-                "uid": "fdgmktkdo5n28f"
+                "uid": "quickwit-logs"
             },
             "gridPos": {
                 "h": 17,
@@ -59,7 +59,7 @@
                     ],
                     "datasource": {
                         "type": "quickwit-quickwit-datasource",
-                        "uid": "fdgmktkdo5n28f"
+                        "uid": "quickwit-logs"
                     },
                     "metrics": [
                         {
@@ -666,7 +666,7 @@
             {
                 "datasource": {
                     "type": "quickwit-quickwit-datasource",
-                    "uid": "fdgmknzi93y0wd"
+                    "uid": "quickwit-logs"
                 },
                 "filters": [
                     {
@@ -684,7 +684,7 @@
             {
                 "datasource": {
                     "type": "quickwit-quickwit-datasource",
-                    "uid": "fdgmktkdo5n28f"
+                    "uid": "quickwit-traces"
                 },
                 "filters": [
                     {
@@ -708,7 +708,6 @@
     "timepicker": {},
     "timezone": "browser",
     "title": "OpenTelemetry Browser Extension",
-    "uid": "bdgmvsm49b0g0b",
     "version": 32,
     "weekStart": ""
 }

@@ -38,6 +38,8 @@ services:
     image: grafana/grafana-oss
     volumes:
       - ./config/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+      - ./config/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
+      - ./config/dashboards:/var/lib/grafana/dashboards
     environment:
       - GF_INSTALL_PLUGINS=https://github.com/quickwit-oss/quickwit-datasource/releases/download/v0.4.1/quickwit-quickwit-datasource-0.4.1.zip;quickwit-quickwit-datasource
       - GF_AUTH_ANONYMOUS_ENABLED=true
