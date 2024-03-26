@@ -19,7 +19,7 @@ datasources:
   orgId: 1
   url: http://tempo:3200
   basicAuth: false
-  isDefault: true
+  isDefault: false
   version: 1
   editable: false
   apiVersion: 1
@@ -28,10 +28,20 @@ datasources:
     httpMethod: GET
     serviceMap:
       datasourceUid: prometheus
-# - name: Loki
-#   type: loki
-#   access: proxy
-#   url: http://localhost:3100
-#   jsonData:
-#     timeout: 60
-#     maxLines: 1000
+- name: Quickwit Logs
+  uid: quickwit-logs
+  type: quickwit-quickwit-datasource
+  url: http://quickwit:7280/api/v1
+  editable: false
+  jsonData:
+    index: 'otel-logs-v0_7'
+    logMessageField: body.message
+    logLevelField: severity_text
+- name: Quickwit Traces
+  uid: quickwit-traces
+  type: quickwit-quickwit-datasource
+  url: http://quickwit:7280/api/v1
+  editable: false
+  isDefault: true
+  jsonData:
+    index: 'otel-traces-v0_7'

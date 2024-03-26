@@ -31,4 +31,7 @@ dist/
 
 # typescript
 .tsbuildinfo
+
+# docker compose volumes
 tempo-data
+qwdata

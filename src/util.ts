@@ -1,5 +1,5 @@
 import { SeverityNumber } from "@opentelemetry/api-logs";
-import { LogRecord, LoggerProvider } from "@opentelemetry/sdk-logs";
+import { LoggerProvider } from "@opentelemetry/sdk-logs";
 
 const events = [
     "abort",
@@ -139,9 +139,6 @@ const stringHeadersToObject = (headerString: string[]) => {
 }
 
 const wrapConsoleWithLoggerProvider = (provider: LoggerProvider) => {
-    console.debug('wrapping console with logger provider')
-    internalConsoleProxy.debug('wrapping console with logger provider')
-
     const logger = provider.getLogger(logPrefix);
     const shutdown = provider.shutdown
     const original = console
@@ -159,11 +156,11 @@ const wrapConsoleWithLoggerProvider = (provider: LoggerProvider) => {
     // Wrap console methods with logger
     const proxy = new Proxy(console, {
         get: function (target, prop, receiver) {
+
             if (prop in targets) {
 
                 return function (...args) {
                     const [severityNumber, severityText] = targets[prop]
-                    internalConsoleProxy.debug('logger emitting log', severityNumber, severityText, JSON.stringify(args));
                     logger.emit({ severityNumber, severityText, body: JSON.stringify(args) });
                     target[prop].apply(target, args);
                 };
@@ -174,7 +171,7 @@ const wrapConsoleWithLoggerProvider = (provider: LoggerProvider) => {
     });
 
     // Replace the original console with the proxy
-    window.console = proxy;
+    console = proxy;
 
     // Clean-up if provider is unregistered
     provider.shutdown = async () => {

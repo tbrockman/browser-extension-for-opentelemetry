@@ -81,14 +81,13 @@ export default function Configuration() {
     return (
         <Fieldset
             className='configuration-container'
+            radius="md"
+            disabled={!enabled}
+            styles={{ legend: { fontSize: 'var(--mantine-font-size-lg)', fontWeight: 'bold' } }}
             legend={
                 <Group gap='xs'>
                     <Text>Configuration</Text>
                     <Switch
-                        // style={{
-                        //     position: 'fixed',
-                        //     right: rem(36),
-                        // }}
                         checked={enabled}
                         disabled={false}
                         onChange={(event) => setEnabled(event.currentTarget.checked)}
@@ -111,10 +110,7 @@ export default function Configuration() {
                     />
                 </Group>
             }
-            radius="md"
-            disabled={!enabled}
-            styles={{ legend: { fontSize: 'var(--mantine-font-size-lg)', fontWeight: 'bold' } }}
-            variant="default">
+        >
             <ScrollArea.Autosize mah={400}>
 
                 <Stack pr='lg' pb='lg' pt='xs'>
@@ -213,12 +209,12 @@ export default function Configuration() {
                         />
                     </Fieldset>
 
-                    <Fieldset legend={
+                    <Fieldset radius="md" legend={
                         <Group gap='xs'>
                             <Text>General</Text>
                             <ColorModeSwitch />
                         </Group>
-                    } radius="md">
+                    }>
                         <Group>
                             <TagsInput
                                 value={propagateTo}

@@ -3,10 +3,10 @@ import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-proto";
 import {
     LoggerProvider,
-    BatchLogRecordProcessor
+    SimpleLogRecordProcessor
 } from '@opentelemetry/sdk-logs';
 import { OTLPLogExporter } from '@opentelemetry/exporter-logs-otlp-proto';
-import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base';
+import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
 import { OTLPProtoExporterBrowserBase, getExportRequestProto } from '@opentelemetry/otlp-proto-exporter-base';
 import { OTLPExporterError } from '@opentelemetry/otlp-exporter-base';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
@@ -25,14 +25,12 @@ function createSendOverride<ExportItem, ServiceRequest>(port: TypedPort<PortMess
     return (objects: ExportItem[], onSuccess: () => void, onError: (error: OTLPExporterError) => void) => {
 
         if (objects.length === 0) {
-            onSuccess()
-            return
+            return onSuccess()
         }
-
-        const serviceRequest = exporter.convert(objects);
+        const serviceRequest = exporter.convert(objects)
         const clientType = exporter.getServiceClientType()
         const exportRequestType = getExportRequestProto(clientType)
-        const otlp = exportRequestType.create(serviceRequest);
+        const otlp = exportRequestType.create(serviceRequest)
 
         if (otlp) {
             const bytes = exportRequestType.encode(otlp).finish();
@@ -49,14 +47,16 @@ function createSendOverride<ExportItem, ServiceRequest>(port: TypedPort<PortMess
 }
 
 const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Options) => {
-    if (!options || !options.enabled || !options.instrumentations || options.instrumentations.length === 0) {
+    if (!options || !options.enabled || !options.instrumentations || options.instrumentations.length === 0 || window.__OTEL_BROWSER_EXT_INSTRUMENTED__) {
+        consoleProxy.debug(`not instrumenting as either options missing or already instrumented`, options, window.__OTEL_BROWSER_EXT_INSTRUMENTED__)
         return () => { }
     }
+    window.__OTEL_BROWSER_EXT_INSTRUMENTED__ = true
     consoleProxy.debug(`instrumenting with options`, options)
 
     const resource = new Resource({
         [SEMRESATTRS_SERVICE_NAME]: 'opentelemetry-browser-extension',
-        [SEMRESATTRS_SERVICE_VERSION]: '0.0.4', // TODO: replace with package.json version
+        [SEMRESATTRS_SERVICE_VERSION]: '0.0.5', // TODO: replace with package.json version
         [SEMRESATTRS_TELEMETRY_SDK_LANGUAGE]: 'webjs',
         [SEMRESATTRS_TELEMETRY_SDK_NAME]: 'opentelemetry',
         [SEMRESATTRS_TELEMETRY_SDK_VERSION]: '1.22.0', // TODO: replace with resolved version
@@ -65,24 +65,21 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
         'extension.target': process.env.PLASMO_TARGET,
     })
 
-    let tracerProvider: WebTracerProvider;
+    let tracerProvider: WebTracerProvider
 
     if (options.tracingEnabled) {
         tracerProvider = new WebTracerProvider({
             resource,
-        });
-        // #TODO: make console configurable for debugging
-        // const consoleExporter = new ConsoleSpanExporter();
-        // const consoleProcessor = new SimpleSpanProcessor(consoleExporter);
-        // provider.addSpanProcessor(consoleProcessor);
+        })
         const traceExporter = new OTLPTraceExporter({
             url: options.traceCollectorUrl,
             headers: options.headers,
             concurrencyLimit: options.concurrencyLimit,
-        });
+        })
         // @ts-ignore
         traceExporter.send = createSendOverride(port, traceExporter, MessageTypes.OTLPTraceMessage)
-        const traceProcessor = new BatchSpanProcessor(traceExporter);
+        // TODO: make batching configurable, choosing simple for now to avoid losing data on page navigations
+        const traceProcessor = new SimpleSpanProcessor(traceExporter);
         tracerProvider.addSpanProcessor(traceProcessor);
         tracerProvider.register({
             contextManager: new ZoneContextManager(),
@@ -92,21 +89,25 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
                     new W3CTraceContextPropagator(),
                 ] : [],
             }),
-        });
+        })
     }
 
-    let loggerProvider: LoggerProvider;
+    let loggerProvider: LoggerProvider
+
     if (options.loggingEnabled) {
         const logExporter = new OTLPLogExporter({
             url: options.logCollectorUrl,
             headers: options.headers,
             concurrencyLimit: options.concurrencyLimit,
-        });
+        })
         // @ts-ignore
         logExporter.send = createSendOverride(port, logExporter, MessageTypes.OTLPLogMessage)
-        loggerProvider = new LoggerProvider();
-        loggerProvider.addLogRecordProcessor(new BatchLogRecordProcessor(logExporter));
-        wrapConsoleWithLoggerProvider(loggerProvider);
+        loggerProvider = new LoggerProvider({
+            resource
+        })
+        // TODO: make batching configurable, choosing simple for now to avoid losing data on page navigations
+        loggerProvider.addLogRecordProcessor(new SimpleLogRecordProcessor(logExporter))
+        wrapConsoleWithLoggerProvider(loggerProvider)
     }
     const propagateTraceHeaderCorsUrls = options.propagateTo.map((url) => new RegExp(url))
     const clearTimingResources = true
@@ -136,14 +137,18 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
             instrumentationsToRegister[setting[0]] = setting[1]
         })
     })
-
-    return registerInstrumentations({
+    const deregister = registerInstrumentations({
         instrumentations: [
             getWebAutoInstrumentations(instrumentationsToRegister),
         ],
         tracerProvider,
         loggerProvider,
     });
+
+    return () => {
+        window.__OTEL_BROWSER_EXT_INSTRUMENTED__ = false
+        return deregister()
+    }
 }
 
 function injectContentScript(extensionId: string, options: Options, retries = 10, backoff = 10) {
@@ -152,6 +157,10 @@ function injectContentScript(extensionId: string, options: Options, retries = 10
     }
 
     try {
+        if (!chrome.runtime) {
+            consoleProxy.debug(`chrome.runtime not available, not injecting content script`)
+            return
+        }
         const port: TypedPort<PortMessage, Partial<Options>> = chrome.runtime.connect(extensionId);
         let deregisterInstrumentation = instrument(port, options);
 
@@ -174,7 +183,7 @@ function injectContentScript(extensionId: string, options: Options, retries = 10
             }
             deregisterInstrumentation && deregisterInstrumentation()
             deregisterInstrumentation = instrument(port, options)
-        });
+        })
     } catch (e) {
         consoleProxy.error(`error injecting content script`, e)
         setTimeout(() => {

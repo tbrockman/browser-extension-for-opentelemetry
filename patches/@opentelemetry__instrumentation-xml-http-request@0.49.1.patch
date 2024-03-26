@@ -1,0 +1,78 @@
+diff --git a/build/esm/xhr.js b/build/esm/xhr.js
+index 5b0ba17e205745073430442e11456237f7be37ad..fc0a59558871758d32e331562c1ae79ccd8bfc46 100644
+--- a/build/esm/xhr.js
++++ b/build/esm/xhr.js
+@@ -41,6 +41,11 @@ import { AttributeNames } from './enums/AttributeNames';
+ // hard to say how long it should really wait, seems like 300ms is
+ // safe enough
+ var OBSERVER_WAIT_TIME_MS = 300;
++const MESSAGES = {
++    [EventNames.EVENT_TIMEOUT]: 'xhr request timeout',
++    [EventNames.EVENT_ABORT]: 'xhr request aborted',
++    [EventNames.EVENT_ERROR]: 'xhr request error',
++}
+ /**
+  * This class represents a XMLHttpRequest plugin for auto instrumentation
+  */
+@@ -295,6 +300,9 @@ var XMLHttpRequestInstrumentation = /** @class */ (function (_super) {
+             }
+             var span = xhrMem.span, spanUrl = xhrMem.spanUrl, sendStartTime = xhrMem.sendStartTime;
+             if (span) {
++                if (MESSAGES.hasOwnProperty(eventName)) {
++                    span.setStatus({ code: api.SpanStatusCode.ERROR, message: MESSAGES[eventName] })
++                }
+                 plugin._findResourceAndAddNetworkEvents(xhrMem, span, spanUrl, sendStartTime, performanceEndTime);
+                 span.addEvent(eventName, endTime);
+                 plugin._addFinalSpanAttributes(span, xhrMem, spanUrl);
+diff --git a/build/esnext/xhr.js b/build/esnext/xhr.js
+index 8ceb9005a8c613fa6cc9819e14492c3cdb0dda61..0a023c0344cde0de3012c6f93c167815d79c5c0b 100644
+--- a/build/esnext/xhr.js
++++ b/build/esnext/xhr.js
+@@ -26,6 +26,11 @@ import { AttributeNames } from './enums/AttributeNames';
+ // hard to say how long it should really wait, seems like 300ms is
+ // safe enough
+ const OBSERVER_WAIT_TIME_MS = 300;
++const MESSAGES = {
++    [EventNames.EVENT_TIMEOUT]: 'xhr request timeout',
++    [EventNames.EVENT_ABORT]: 'xhr request aborted',
++    [EventNames.EVENT_ERROR]: 'xhr request error',
++}
+ /**
+  * This class represents a XMLHttpRequest plugin for auto instrumentation
+  */
+@@ -270,6 +275,9 @@ export class XMLHttpRequestInstrumentation extends InstrumentationBase {
+             }
+             const { span, spanUrl, sendStartTime } = xhrMem;
+             if (span) {
++                if (MESSAGES.hasOwnProperty(eventName)) {
++                    span.setStatus({ code: api.SpanStatusCode.ERROR, message: MESSAGES[eventName] })
++                }
+                 plugin._findResourceAndAddNetworkEvents(xhrMem, span, spanUrl, sendStartTime, performanceEndTime);
+                 span.addEvent(eventName, endTime);
+                 plugin._addFinalSpanAttributes(span, xhrMem, spanUrl);
+diff --git a/build/src/xhr.js b/build/src/xhr.js
+index 4566223315f44c3d9cf32a20a8db60d47321cfc3..b63c435cc646ae244dc0f006e9f4761e4a0d33b7 100644
+--- a/build/src/xhr.js
++++ b/build/src/xhr.js
+@@ -29,6 +29,11 @@ const AttributeNames_1 = require("./enums/AttributeNames");
+ // hard to say how long it should really wait, seems like 300ms is
+ // safe enough
+ const OBSERVER_WAIT_TIME_MS = 300;
++const MESSAGES = {
++    [EventNames_1.EVENT_TIMEOUT]: 'xhr request timeout',
++    [EventNames_1.EVENT_ABORT]: 'xhr request aborted',
++    [EventNames_1.EVENT_ERROR]: 'xhr request error',
++}
+ /**
+  * This class represents a XMLHttpRequest plugin for auto instrumentation
+  */
+@@ -273,6 +278,9 @@ class XMLHttpRequestInstrumentation extends instrumentation_1.InstrumentationBas
+             }
+             const { span, spanUrl, sendStartTime } = xhrMem;
+             if (span) {
++                if (MESSAGES.hasOwnProperty(eventName)) {
++                    span.setStatus({ code: api.SpanStatusCode.ERROR, message: MESSAGES[eventName] })
++                }
+                 plugin._findResourceAndAddNetworkEvents(xhrMem, span, spanUrl, sendStartTime, performanceEndTime);
+                 span.addEvent(eventName, endTime);
+                 plugin._addFinalSpanAttributes(span, xhrMem, spanUrl);

@@ -1,0 +1,82 @@
+diff --git a/build/esm/fetch.js b/build/esm/fetch.js
+index 85bcf996de6858076ffff79108e34fead8648abc..55059f843d269d786e077e4b280fa923dd40a345 100644
+--- a/build/esm/fetch.js
++++ b/build/esm/fetch.js
+@@ -208,10 +208,13 @@ var FetchInstrumentation = /** @class */ (function (_super) {
+      * @param spanData
+      * @param response
+      */
+-    FetchInstrumentation.prototype._endSpan = function (span, spanData, response) {
++    FetchInstrumentation.prototype._endSpan = function (span, spanData, response, hasError = false) {
+         var _this = this;
+         var endTime = core.millisToHrTime(Date.now());
+         var performanceEndTime = core.hrTime();
++        if (hasError) {
++            span.setStatus({ code: api.SpanStatusCode.ERROR, message: response.statusText });
++        }
+         this._addFinalSpanAttributes(span, response);
+         setTimeout(function () {
+             var _a;
+@@ -248,7 +251,7 @@ var FetchInstrumentation = /** @class */ (function (_super) {
+                         status: error.status || 0,
+                         statusText: error.message,
+                         url: url,
+-                    });
++                    }, true);
+                 }
+                 function endSpanOnSuccess(span, response) {
+                     plugin._applyAttributesAfterFetch(span, options, response);
+diff --git a/build/esnext/fetch.js b/build/esnext/fetch.js
+index 37c041395a1467c2f8d268a175448bebe7274db5..76242c2664d4020925c68de845ba4651722e9e39 100644
+--- a/build/esnext/fetch.js
++++ b/build/esnext/fetch.js
+@@ -189,9 +189,12 @@ export class FetchInstrumentation extends InstrumentationBase {
+      * @param spanData
+      * @param response
+      */
+-    _endSpan(span, spanData, response) {
++    _endSpan(span, spanData, response, hasError = false) {
+         const endTime = core.millisToHrTime(Date.now());
+         const performanceEndTime = core.hrTime();
++        if (hasError) {
++            span.setStatus({ code: api.SpanStatusCode.ERROR, message: response.statusText });
++        }
+         this._addFinalSpanAttributes(span, response);
+         setTimeout(() => {
+             var _a;
+@@ -223,7 +226,7 @@ export class FetchInstrumentation extends InstrumentationBase {
+                         status: error.status || 0,
+                         statusText: error.message,
+                         url,
+-                    });
++                    }, true);
+                 }
+                 function endSpanOnSuccess(span, response) {
+                     plugin._applyAttributesAfterFetch(span, options, response);
+diff --git a/build/src/fetch.js b/build/src/fetch.js
+index c7d8915db66653b766780cb39feb592d11d3a488..99b3ed161c8216ffbe09b5df97209e71409067ce 100644
+--- a/build/src/fetch.js
++++ b/build/src/fetch.js
+@@ -192,9 +192,12 @@ class FetchInstrumentation extends instrumentation_1.InstrumentationBase {
+      * @param spanData
+      * @param response
+      */
+-    _endSpan(span, spanData, response) {
++    _endSpan(span, spanData, response, hasError = false) {
+         const endTime = core.millisToHrTime(Date.now());
+         const performanceEndTime = core.hrTime();
++        if (hasError) {
++            span.setStatus({ code: api.SpanStatusCode.ERROR, message: response.statusText });
++        }
+         this._addFinalSpanAttributes(span, response);
+         setTimeout(() => {
+             var _a;
+@@ -226,7 +229,7 @@ class FetchInstrumentation extends instrumentation_1.InstrumentationBase {
+                         status: error.status || 0,
+                         statusText: error.message,
+                         url,
+-                    });
++                    }, true);
+                 }
+                 function endSpanOnSuccess(span, response) {
+                     plugin._applyAttributesAfterFetch(span, options, response);

@@ -1,3 +1,9 @@
+declare global {
+    interface Window {
+        __OTEL_BROWSER_EXT_INSTRUMENTED__: boolean
+    }
+}
+
 export enum MessageTypes {
     OTLPTraceMessage = 'trace',
     OTLPLogMessage = 'log'
@@ -36,7 +42,6 @@ export type Options = {
     headers: Record<string, string>
     concurrencyLimit: number
     events: (keyof HTMLElementEventMap)[]
-    telemetry: ('logs' | 'traces')[],
     propagateTo: string[],
     instrumentations: ('fetch' | 'load' | 'interaction')[],
     enabled: boolean,
