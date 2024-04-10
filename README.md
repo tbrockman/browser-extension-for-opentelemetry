@@ -7,6 +7,8 @@ A [Plasmo](https://docs.plasmo.com/) browser extension that automatically instru
 
 [Download it](https://chromewebstore.google.com/detail/opentelemetry-browser-ext/bgjeoaohfhbfabbfhbafjihbobjgniag), refresh your pages, and start sending OTLP logs and traces.
 
+## Preview
+
 <img src='./assets/store/popup.png' width='524' alt='An example view of the popup UI'/>
 
 ## Download

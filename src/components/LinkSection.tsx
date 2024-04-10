@@ -60,9 +60,8 @@ export default function LinkSection() {
             <Group flex={1} gap='xs'>
                 <LinkSectionIcon {...otel} />
                 <Flex>
-                    <Text c='yellow.6' component="span">Open</Text>
-                    <Text c='blue.6' component="span">Telemetry</Text>
-                    <Text fw='bold' c='blue.6' component='span'>&nbsp;Browser Extension</Text>
+                    <Text size='xl' c='yellow.6' component="span">Open</Text>
+                    <Text size='xl' c='blue.6' component="span">Telemetry</Text>
                 </Flex>
             </Group>
             <Group className='link-section-links' gap='lg'>
