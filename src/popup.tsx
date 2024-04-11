@@ -12,6 +12,16 @@ import Configuration from "~components/Configuration"
 
 const theme = createTheme({
   /** Put your mantine theme override here */
+  cursorType: 'pointer',
+  components: {
+    Fieldset: {
+      styles: {
+        legend: {
+          paddingRight: '1rem'
+        }
+      }
+    }
+  }
 })
 
 function IndexPopup() {

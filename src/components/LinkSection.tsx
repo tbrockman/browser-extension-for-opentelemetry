@@ -61,7 +61,7 @@ export default function LinkSection() {
                 <LinkSectionIcon {...otel} />
                 <Flex>
                     <Text size='xl' c='yellow.6' component="span">Open</Text>
-                    <Text size='xl' c='blue.6' component="span">Telemetry</Text>
+                    <Text size='xl' c='blue.6' component="span" style={{ fontWeight: 'bold' }}>Telemetry</Text>
                 </Flex>
             </Group>
             <Group className='link-section-links' gap='lg'>

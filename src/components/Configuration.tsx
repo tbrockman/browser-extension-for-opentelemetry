@@ -2,7 +2,6 @@ import {
     Anchor,
     Box,
     Checkbox,
-    CheckboxProps,
     Fieldset,
     Grid,
     Group,
@@ -14,6 +13,7 @@ import {
     TextInput,
     rem
 } from "@mantine/core"
+import type { CheckboxProps } from "@mantine/core"
 
 import { Storage } from "@plasmohq/storage"
 import { useStorage } from "@plasmohq/storage/hook"
@@ -90,7 +90,7 @@ export default function Configuration() {
 
     return (
         <Box>
-            <Group gap='xs' style={{ padding: '1rem 1.25rem 0 1rem' }} justify="space-between">
+            <Group gap='xs' style={{ padding: '1rem 1.25rem 0' }} justify="space-between">
                 <Group gap='xs'>
                     <IconSettings color='white'></IconSettings>
                     <Text size='xl' c='white'>Options</Text>
@@ -121,26 +121,40 @@ export default function Configuration() {
                 className='configuration-container'
                 radius="md"
                 disabled={!enabled}
-                styles={{ legend: { fontSize: 'var(--mantine-font-size-lg)', fontWeight: 'bold' } }}
+                styles={{
+                    legend: { fontSize: 'var(--mantine-font-size-lg)', fontWeight: 'bold' },
+                    // root: { borderColor: enabled ? 'var(--mantine-color-orange-4)' : 'var(--mantine-color-dark-4)' }
+                }}
             >
                 <ScrollArea.Autosize mah={400}>
 
                     <Stack pr='lg' pb='lg' pt='lg'>
-                        <Fieldset aria-label="Traces" legend={
-                            <Group gap='xs'>
-                                <Checkbox
-                                    checked={tracingEnabled}
-                                    icon={CheckboxIcon}
-                                    disabled={false}
-                                    onChange={(event) => setTracingEnabled(event.currentTarget.checked)}
-                                    size="lg"
-                                    variant='outline'
-                                    style={{}}
-                                    aria-label='Enable or disable exporting traces'
-                                />
-                                <Text>Tracing</Text>
-                            </Group>
-                        } disabled={!tracingEnabled}>
+                        <Fieldset aria-label="Traces"
+                            styles={{
+                                root: {
+                                    borderColor: (tracingEnabled && enabled) ? 'var(--mantine-primary-color-5)' : 'var(--mantine-color-default-border)'
+                                }
+                            }}
+                            legend={
+                                <Group gap='xs'>
+                                    <Checkbox
+                                        checked={tracingEnabled}
+                                        icon={CheckboxIcon}
+                                        label={<Text>Tracing</Text>}
+                                        disabled={false}
+                                        onChange={(event) => setTracingEnabled(event.currentTarget.checked)}
+                                        size="lg"
+                                        variant='outline'
+                                        styles={{
+                                            labelWrapper: {
+                                                justifyContent: 'center'
+                                            }
+                                        }}
+                                        aria-label='Enable or disable exporting traces'
+                                    />
+
+                                </Group>
+                            } disabled={!tracingEnabled}>
                             <Group>
                                 <Checkbox.Group
                                     label="Instrumentation"
@@ -190,47 +204,6 @@ export default function Configuration() {
                                     placeholder={events.length == 0 ? "keypress, click, mouseover" : ''}
                                     splitChars={[","]}
                                 />
-                            </Group>
-                        </Fieldset>
-
-                        <Fieldset aria-label="Logs" legend={
-                            <Group gap='xs'>
-                                <Checkbox
-                                    checked={loggingEnabled}
-                                    disabled={false}
-                                    icon={LogsIcon}
-                                    onChange={(event) => setLoggingEnabled(event.currentTarget.checked)}
-                                    size="lg"
-                                    variant='outline'
-                                    style={{}}
-                                    aria-label='Enable or disable exporting logs'
-                                />
-                                <Text>Logging</Text>
-                            </Group>
-                        } disabled={!loggingEnabled}>
-                            <TextInput
-                                label="Export URL"
-                                description={
-                                    <>
-                                        Choose where to send Protobuf-encoded OTLP logs over HTTP.
-                                    </>
-                                }
-                                placeholder="http://localhost:4318/v1/logs"
-                                value={logsCollectorUrl}
-                                onChange={(event) => {
-                                    setLogsRenderValue(event.currentTarget.value)
-                                }}
-                            />
-                        </Fieldset>
-
-                        <Fieldset radius="md" legend={
-                            <Group gap='xs'>
-                                <ColorModeSwitch />
-
-                                <Text>General</Text>
-                            </Group>
-                        }>
-                            <Group>
                                 <TagsInput
                                     value={propagateTo}
                                     onChange={setPropagateTo}
@@ -246,6 +219,66 @@ export default function Configuration() {
                                     placeholder={propagateTo.length == 0 ? ".*" : ''}
                                     splitChars={[","]}
                                 />
+                            </Group>
+                        </Fieldset>
+
+                        <Fieldset aria-label="Logs"
+                            styles={{
+                                legend: {
+                                    paddingRight: '1rem'
+                                },
+                                root: {
+                                    borderColor: (enabled && loggingEnabled) ? 'var(--mantine-primary-color-5)' : 'var(--mantine-color-default-border)'
+                                }
+                            }}
+                            legend={
+                                <Group gap='xs'>
+                                    <Checkbox
+                                        checked={loggingEnabled}
+                                        disabled={false}
+                                        icon={LogsIcon}
+                                        onChange={(event) => setLoggingEnabled(event.currentTarget.checked)}
+                                        size="lg"
+                                        variant='outline'
+                                        style={{}}
+                                        aria-label='Enable or disable exporting logs'
+                                        styles={{
+                                            labelWrapper: {
+                                                justifyContent: 'center'
+                                            }
+                                        }}
+                                        label={
+                                            <Text>Logging</Text>
+                                        }
+                                    />
+                                </Group>
+                            } disabled={!loggingEnabled}>
+                            <TextInput
+                                label="Export URL"
+                                description={
+                                    <>
+                                        Choose where to send Protobuf-encoded OTLP logs over HTTP.
+                                    </>
+                                }
+                                placeholder="http://localhost:4318/v1/logs"
+                                value={logsCollectorUrl}
+                                onChange={(event) => {
+                                    setLogsRenderValue(event.currentTarget.value)
+                                }}
+                            />
+                        </Fieldset>
+
+                        <Fieldset radius="md"
+                            legend={
+                                <Group gap='xs'>
+                                    <ColorModeSwitch label={"General"} styles={{
+                                        labelWrapper: {
+                                            justifyContent: 'center'
+                                        }
+                                    }} />
+                                </Group>
+                            }>
+                            <Group>
                                 <TagsInput
                                     value={headers}
                                     onChange={setHeaders}
