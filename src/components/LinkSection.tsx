@@ -1,22 +1,26 @@
-import { ActionIcon, Flex, Group, Text, Tooltip } from "@mantine/core";
-import { IconBrandGithubFilled, IconCoffee, IconMoodDollar, IconPalette } from "@tabler/icons-react";
+import { ActionIcon, Anchor, Flex, Group, Text, Tooltip } from "@mantine/core";
+import { IconBrandGithubFilled, IconCoffee, IconPalette } from "@tabler/icons-react";
 
 import './LinkSection.css'
 
 type LinkSectionIconProps = {
     label: string,
     href: string,
-    icon: any
+    icon: JSX.Element
     tooltip: string,
     variant?: string,
+    endElement?: JSX.Element
 }
 
-function LinkSectionIcon({ label, icon, href, tooltip, variant }: LinkSectionIconProps) {
+function LinkSectionIcon({ label, icon, href, tooltip, variant, endElement }: LinkSectionIconProps) {
     return (
         <Tooltip label={tooltip} withArrow color='blue.7'>
-            <ActionIcon autoContrast color='blue.5' component='a' target='_blank' className='link-section-icon' href={href} size='lg' radius='xl' variant={variant ?? 'outline'} aria-label={label}>
-                {icon}
-            </ActionIcon>
+            <Anchor target='_blank' href={href} aria-label={label} display={'flex'}>
+                <ActionIcon autoContrast color='blue.5' component='a' className='link-section-icon' size='lg' radius='xl' variant={variant ?? 'outline'} >
+                    {icon}
+                </ActionIcon>
+                {endElement}
+            </Anchor>
         </Tooltip>
     )
 }
@@ -52,17 +56,17 @@ export default function LinkSection() {
             <path fill="#425cc7" d="M72.297 27.313 54.004 45.605c-1.625 1.625-1.625 4.301 0 5.926L65.3 62.824c7.984-5.746 19.18-5.035 26.363 2.153l9.148-9.149c1.622-1.625 1.622-4.297 0-5.922L78.22 27.313a4.185 4.185 0 0 0-5.922 0ZM60.55 67.585l-6.672-6.672c-1.563-1.562-4.125-1.562-5.684 0l-23.53 23.54a4.036 4.036 0 0 0 0 5.687l13.331 13.332a4.036 4.036 0 0 0 5.688 0l15.132-15.157c-3.199-6.609-2.625-14.593 1.735-20.73Zm0 0" />
         </svg>,
         tooltip: 'opentelemetry.io',
-        variant: 'transparent'
+        variant: 'transparent',
+        endElement: <Flex>
+            <Text size='xl' c='yellow.6' component="span">Open</Text>
+            <Text size='xl' c='blue.6' component="span" style={{ fontWeight: 'bold' }}>Telemetry</Text>
+        </Flex>
     }
 
     return (
         <Group className='link-section'>
             <Group flex={1} gap='xs'>
                 <LinkSectionIcon {...otel} />
-                <Flex>
-                    <Text size='xl' c='yellow.6' component="span">Open</Text>
-                    <Text size='xl' c='blue.6' component="span" style={{ fontWeight: 'bold' }}>Telemetry</Text>
-                </Flex>
             </Group>
             <Group className='link-section-links' gap='lg'>
                 {links.map((link) => <LinkSectionIcon {...link} key={link.tooltip} />)}

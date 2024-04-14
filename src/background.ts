@@ -1,10 +1,25 @@
 import { Storage } from '@plasmohq/storage'
 import { consoleProxy, stringHeadersToObject } from './util'
 import injectContentScript from 'inlinefunc:./content-script'
-import { MessageTypes, type OTLPExportTraceMessage, type OTLPExportLogMessage, type Options, type PortMessage, type TypedPort } from '~types'
+import { MessageTypes, type OTLPExportTraceMessage, type OTLPExportLogMessage, type PortMessage, type TypedPort } from '~types'
+import type { Options } from '~utils/options'
+import { defaultOptions } from '~utils/options'
 
 let storage = new Storage({ area: 'local' })
 let ports = {}
+
+const getDestinationForMessage = async (message: PortMessage) => {
+    switch (message.type) {
+        case MessageTypes.OTLPLogMessage:
+            return await storage.get('logCollectorUrl') || defaultOptions.logCollectorUrl
+        case MessageTypes.OTLPTraceMessage:
+            return await storage.get('traceCollectorUrl') || defaultOptions.traceCollectorUrl
+        case MessageTypes.OTLPMetricMessage:
+            return await storage.get('metricCollectorUrl') || defaultOptions.metricsCollectorUrl
+        default:
+            throw new Error('unknown message type')
+    }
+}
 
 const connected = async (p: TypedPort<Partial<Options>, PortMessage>) => {
     ports[p.sender.tab.id] = p;
@@ -16,7 +31,7 @@ const connected = async (p: TypedPort<Partial<Options>, PortMessage>) => {
             case MessageTypes.OTLPLogMessage:
             case MessageTypes.OTLPTraceMessage:
                 // Timeout currently ignored
-                const { bytes, timeout } = MessageTypes.OTLPLogMessage ? message as OTLPExportLogMessage : message as OTLPExportTraceMessage
+                const { bytes } = MessageTypes.OTLPLogMessage ? message as OTLPExportLogMessage : message as OTLPExportTraceMessage
 
                 // Even though the content script could send us the headers and url, we don't trust them
                 // So in the worst case scenario we're sending arbitrary bytes to our chosen server
@@ -25,13 +40,7 @@ const connected = async (p: TypedPort<Partial<Options>, PortMessage>) => {
                     'Content-Type': 'application/x-protobuf',
                     Accept: 'application/x-protobuf'
                 }
-                let url: string
-
-                if (message.type === MessageTypes.OTLPLogMessage) {
-                    url = await storage.get('logCollectorUrl') || 'http://localhost:4318/v1/logs'
-                } else {
-                    url = await storage.get('traceCollectorUrl') || 'http://localhost:4318/v1/traces'
-                }
+                let url = await getDestinationForMessage(message)
                 const body = new Blob([new Uint8Array(bytes)], { type: 'application/x-protobuf' });
 
                 try {
@@ -80,17 +89,21 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 
         consoleProxy.debug("injecting content script")
 
+        // TODO: refactor, remove usage of @plasmohq/storage (so we don't have to make multiple get requests here) and have options store its own defaults
         const options: Options = {
+            enabledOn: await storage.get<string[]>('enabledOn') || ['https://*/*', 'http://localhost/*'],
             traceCollectorUrl: await storage.get('traceCollectorUrl') || 'http://localhost:4318/v1/traces',
             logCollectorUrl: await storage.get('logsCollectorUrl') || 'http://localhost:4318/v1/logs',
+            metricsCollectorUrl: await storage.get('metricsCollectorUrl') || 'http://localhost:4318/v1/metrics',
             headers: stringHeadersToObject(await storage.get('headers')),
             concurrencyLimit: 10,
-            events: await storage.get<(keyof HTMLElementEventMap)[]>('events') || ['submit', 'click', 'keypress', 'scroll', 'resize', 'drag', 'cut', 'copy', 'input', 'mousedown', 'mouseup', 'mouseover'],
+            events: await storage.get<(keyof HTMLElementEventMap)[]>('events') || ['submit', 'click', 'keypress', 'scroll', 'resize', 'contextmenu', 'drag', 'cut', 'copy', 'input', 'pointerdown', 'pointerenter', 'pointerleave'],
             propagateTo: await storage.get<string[]>('propagateTo') || [],
             instrumentations: await storage.get<('fetch' | 'load' | 'interaction')[]>('instrumentations') || ['fetch', 'load', 'interaction'],
             enabled: await storage.get<boolean>('enabled') || true,
             tracingEnabled: await storage.get<boolean>('tracingEnabled') || true,
             loggingEnabled: await storage.get<boolean>('loggingEnabled') || true,
+            metricsEnabled: await storage.get<boolean>('metricsEnabled') || true,
         }
 
         await chrome.scripting.executeScript({

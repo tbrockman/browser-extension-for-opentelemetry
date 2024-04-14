@@ -16,8 +16,9 @@ import { Resource } from '@opentelemetry/resources';
 import { B3Propagator } from '@opentelemetry/propagator-b3';
 import { CompositePropagator, W3CTraceContextPropagator } from '@opentelemetry/core';
 
-import { MessageTypes, type Options, type PortMessage, type TypedPort } from '~types';
+import { MessageTypes, type PortMessage, type TypedPort } from '~types';
 import { consoleProxy, wrapConsoleWithLoggerProvider } from '~util';
+import type { Options } from '~utils/options';
 
 
 function createSendOverride<ExportItem, ServiceRequest>(port: TypedPort<PortMessage, Partial<Options>>, exporter: OTLPProtoExporterBrowserBase<ExportItem, ServiceRequest>, type: MessageTypes) {
@@ -60,9 +61,6 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
         [SEMRESATTRS_TELEMETRY_SDK_LANGUAGE]: 'webjs',
         [SEMRESATTRS_TELEMETRY_SDK_NAME]: 'opentelemetry',
         [SEMRESATTRS_TELEMETRY_SDK_VERSION]: '1.22.0', // TODO: replace with resolved version
-        'browser.language': navigator.language,
-        'user_agent.original': navigator.userAgent,
-        'extension.target': process.env.PLASMO_TARGET,
     })
 
     let tracerProvider: WebTracerProvider
