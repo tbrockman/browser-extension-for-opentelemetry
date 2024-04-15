@@ -17,7 +17,19 @@ function urlMatchesPattern(url, pattern) {
     }
     const patternRegExp = new RegExp(patternToRegExp(pattern));
 
-    if (!patternRegExp.test(url)) {
+    const urlObj = new URL(url);
+    // Match URL up to fragment identifier, ignoring any port
+    let matchUrl = urlObj.protocol + '//' + urlObj.hostname + urlObj.pathname + urlObj.search;
+
+    // Remove trailing slashes if the URL didn't originally contain them, since new URL() always adds them
+    if (!url.endsWith('/') && matchUrl.endsWith('/')) {
+
+        while (matchUrl.endsWith('/')) {
+            matchUrl = matchUrl.slice(0, -1);
+        }
+    }
+
+    if (!patternRegExp.test(matchUrl)) {
         return false;
     }
     return true;
@@ -31,14 +43,6 @@ function match(url, patterns) {
     }
     return false;
 }
-
-// Example usage
-const url = "https://mozilla.org/path/to/doc?foo=1";
-const patterns = ["*://*.mozilla.org/*", "*://mozilla.org/path*", "*://mozilla.org/*?*"];
-console.log(match(url, patterns)); // Output: true
-
-// <all_urls> example
-console.log(match(url, ["<all_urls>"])); // Output: true
 
 export {
     match
