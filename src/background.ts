@@ -4,6 +4,7 @@ import injectContentScript from 'inlinefunc:./content-script'
 import { MessageTypes, type OTLPExportTraceMessage, type OTLPExportLogMessage, type PortMessage, type TypedPort } from '~types'
 import type { Options, OptionsStorage } from '~utils/options'
 import { defaultOptions } from '~utils/options'
+import { match } from '~utils'
 
 let storage = new Storage({ area: 'local' })
 let ports = {}
@@ -86,6 +87,19 @@ chrome.runtime.onConnectExternal.addListener(connected);
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     if (
         changeInfo.status === "complete") {
+
+        // get user-specified match patterns or defaults
+        const matchPatterns = await storage.get<string[]>('enabledOn') || ['http://localhost/*']
+        // check whether current URL matches any patterns
+        const matches = match(tab.url, matchPatterns)
+        // check whether we have necessary browser permissions, requesting if not
+        const permissions = await chrome.permissions.getAll()
+        console.log(permissions)
+
+        if (!matches) {
+            consoleProxy.debug("no pattern match, not injecting content script")
+            return
+        }
 
         consoleProxy.debug("injecting content script")
 
