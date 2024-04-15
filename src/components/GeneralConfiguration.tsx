@@ -22,7 +22,7 @@ export default function GeneralConfiguration() {
                 <TagsInput
                     value={enabledOn}
                     onChange={setEnabledOn}
-                    label="Instrumented webpages"
+                    label="Allow extension on"
                     description={
                         <>
                             Choose URLs which should be instrumented by the extension, specified as a list of {" "}

@@ -1,4 +1,4 @@
-export type Options = {
+export type OptionsStorage = {
     enabled: boolean
     tracingEnabled: boolean
     loggingEnabled: boolean
@@ -7,7 +7,7 @@ export type Options = {
     traceCollectorUrl: string
     logCollectorUrl: string
     metricsCollectorUrl: string
-    headers: Record<string, string>
+    headers: string[]
     concurrencyLimit: number
     events: (keyof HTMLElementEventMap)[]
     propagateTo: string[]
@@ -17,7 +17,11 @@ export type Options = {
     metricExportErrors?: string[]
 }
 
-export const defaultOptions: Options = {
+export type Options = Omit<OptionsStorage, "headers"> & {
+    headers: Record<string, string>
+}
+
+export const defaultOptions: OptionsStorage = {
     enabled: true,
     tracingEnabled: true,
     loggingEnabled: true,
@@ -26,7 +30,7 @@ export const defaultOptions: Options = {
     traceCollectorUrl: 'http://localhost:4318/v1/traces',
     logCollectorUrl: 'http://localhost:4318/v1/logs',
     metricsCollectorUrl: 'http://localhost:4318/v1/metrics',
-    headers: {},
+    headers: [],
     concurrencyLimit: 10,
     events: ['submit', 'click', 'keypress', 'scroll', 'resize', 'contextmenu', 'drag', 'cut', 'copy', 'input', 'pointerdown', 'pointerenter', 'pointerleave'],
     propagateTo: [],

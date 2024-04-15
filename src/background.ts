@@ -2,7 +2,7 @@ import { Storage } from '@plasmohq/storage'
 import { consoleProxy, stringHeadersToObject } from './util'
 import injectContentScript from 'inlinefunc:./content-script'
 import { MessageTypes, type OTLPExportTraceMessage, type OTLPExportLogMessage, type PortMessage, type TypedPort } from '~types'
-import type { Options } from '~utils/options'
+import type { Options, OptionsStorage } from '~utils/options'
 import { defaultOptions } from '~utils/options'
 
 let storage = new Storage({ area: 'local' })
@@ -65,7 +65,7 @@ const connected = async (p: TypedPort<Partial<Options>, PortMessage>) => {
     })
 }
 
-chrome.storage.onChanged.addListener(({ traceCollectorUrl, logCollectorUrl, events, headers, enabled, propagateTo, instrumentations, loggingEnabled, tracingEnabled }: Record<keyof Options, chrome.storage.StorageChange>, area) => {
+chrome.storage.onChanged.addListener(({ traceCollectorUrl, logCollectorUrl, events, headers, enabled, propagateTo, instrumentations, loggingEnabled, tracingEnabled }: Record<keyof OptionsStorage, chrome.storage.StorageChange>, area) => {
     consoleProxy.debug('storage changed', { traceCollectorUrl, logCollectorUrl, events, headers, enabled, propagateTo, instrumentations, area, loggingEnabled, tracingEnabled })
     Object.keys(ports).forEach((k) => {
         ports[k].postMessage({
@@ -91,7 +91,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 
         // TODO: refactor, remove usage of @plasmohq/storage (so we don't have to make multiple get requests here) and have options store its own defaults
         const options: Options = {
-            enabledOn: await storage.get<string[]>('enabledOn') || ['https://*/*', 'http://localhost/*'],
+            enabledOn: await storage.get<string[]>('enabledOn') || ['http://localhost/*'],
             traceCollectorUrl: await storage.get('traceCollectorUrl') || 'http://localhost:4318/v1/traces',
             logCollectorUrl: await storage.get('logsCollectorUrl') || 'http://localhost:4318/v1/logs',
             metricsCollectorUrl: await storage.get('metricsCollectorUrl') || 'http://localhost:4318/v1/metrics',
