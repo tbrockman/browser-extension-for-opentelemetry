@@ -4,7 +4,7 @@ import assert from 'assert';
 describe("match", () => {
     it("returns true if URL matches any pattern", () => {
         const url = "https://example.com";
-        const patterns = ["https://example.com", "https://*.com"];
+        const patterns = ["https://example.com/", "https://*.com/"];
 
         const result = match(url, patterns);
 
@@ -67,7 +67,7 @@ describe("match", () => {
 
     it("returns false if the pattern specifies a port, even if the URL does (as match patterns ignore ports)", () => {
         const url = "https://example.com:8080/path";
-        const patterns = ["https://example.com:8080"];
+        const patterns = ["https://example.com:8080/"];
 
         const result = match(url, patterns);
 
@@ -76,7 +76,7 @@ describe("match", () => {
 
     it("returns false if URL does not match pattern completely with path", () => {
         const url = "https://example.com/path";
-        const patterns = ["https://example.com"];
+        const patterns = ["https://example.com/"];
 
         const result = match(url, patterns);
 
@@ -94,7 +94,7 @@ describe("match", () => {
 
     it("returns false if URL does not match any pattern", () => {
         const url = "https://example.com";
-        const patterns = ["https://*.org", "http://*.com"];
+        const patterns = ["https://*.org/", "http://*.com/"];
 
         const result = match(url, patterns);
 

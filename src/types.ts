@@ -39,22 +39,3 @@ export interface OTLPMetricMessage extends PortMessageBase {
     type: MessageTypes.OTLPMetricMessage
     bytes: number[],
 }
-
-export type Options = {
-    enabled: boolean
-    tracingEnabled: boolean
-    loggingEnabled: boolean
-    metricsEnabled: boolean
-    enabledOn: string[]
-    traceCollectorUrl: string
-    logCollectorUrl: string
-    metricsCollectorUrl: string
-    headers: Record<string, string>
-    concurrencyLimit: number
-    events: (keyof HTMLElementEventMap)[]
-    propagateTo: string[]
-    instrumentations: ('fetch' | 'load' | 'interaction')[]
-    traceExportErrors?: string[]
-    logExportErrors?: string[]
-    metricExportErrors?: string[]
-}

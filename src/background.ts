@@ -2,9 +2,10 @@ import { Storage } from '@plasmohq/storage'
 import { consoleProxy, stringHeadersToObject } from './util'
 import injectContentScript from 'inlinefunc:./content-script'
 import { MessageTypes, type OTLPExportTraceMessage, type OTLPExportLogMessage, type PortMessage, type TypedPort } from '~types'
-import type { Options, OptionsStorage } from '~utils/options'
+import type { MatchPatternError, Options, StoredOptions } from '~utils/options'
 import { defaultOptions } from '~utils/options'
 import { match } from '~utils'
+import { matchPattern, presets } from 'browser-extension-url-match'
 
 let storage = new Storage({ area: 'local' })
 let ports = {}
@@ -22,7 +23,17 @@ const getDestinationForMessage = async (message: PortMessage) => {
     }
 }
 
-const connected = async (p: TypedPort<Partial<Options>, PortMessage>) => {
+const onConnect = async (p: TypedPort<Partial<Options>, PortMessage>) => {
+
+    consoleProxy.debug('connection attempt on port', p)
+
+    let patterns = await storage.get<string[]>('matchPatterns') || ['http://localhost/*']
+
+    if (!match(p.sender.url, patterns)) {
+        consoleProxy.debug('no pattern match, ignoring connection attempt', p.sender.url, patterns)
+        return
+    }
+
     ports[p.sender.tab.id] = p;
 
     p.onMessage.addListener(async (message) => {
@@ -66,10 +77,12 @@ const connected = async (p: TypedPort<Partial<Options>, PortMessage>) => {
     })
 }
 
-chrome.storage.onChanged.addListener(({ traceCollectorUrl, logCollectorUrl, events, headers, enabled, propagateTo, instrumentations, loggingEnabled, tracingEnabled }: Record<keyof OptionsStorage, chrome.storage.StorageChange>, area) => {
-    consoleProxy.debug('storage changed', { traceCollectorUrl, logCollectorUrl, events, headers, enabled, propagateTo, instrumentations, area, loggingEnabled, tracingEnabled })
+chrome.storage.onChanged.addListener(({ matchPatterns, traceCollectorUrl, logCollectorUrl, events, headers, enabled, propagateTo, instrumentations, loggingEnabled, tracingEnabled }: Record<keyof StoredOptions, chrome.storage.StorageChange>, area) => {
+    consoleProxy.debug('storage changed', { matchPatterns, traceCollectorUrl, logCollectorUrl, events, headers, enabled, propagateTo, instrumentations, area, loggingEnabled, tracingEnabled })
+
     Object.keys(ports).forEach((k) => {
         ports[k].postMessage({
+            matchPatterns: matchPatterns?.newValue, // TODO: use match patterns to deregister instrumentation on existing content scripts, if necessary
             loggingEnabled: loggingEnabled?.newValue,
             tracingEnabled: tracingEnabled?.newValue,
             traceCollectorUrl: traceCollectorUrl?.newValue,
@@ -83,18 +96,15 @@ chrome.storage.onChanged.addListener(({ traceCollectorUrl, logCollectorUrl, even
     })
 })
 
-chrome.runtime.onConnectExternal.addListener(connected);
+chrome.runtime.onConnectExternal.addListener(onConnect);
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     if (
         changeInfo.status === "complete") {
 
         // get user-specified match patterns or defaults
-        const matchPatterns = await storage.get<string[]>('enabledOn') || ['http://localhost/*']
+        const matchPatterns = await storage.get<string[]>('matchPatterns') || ['http://localhost/*']
         // check whether current URL matches any patterns
         const matches = match(tab.url, matchPatterns)
-        // check whether we have necessary browser permissions, requesting if not
-        const permissions = await chrome.permissions.getAll()
-        console.log(permissions)
 
         if (!matches) {
             consoleProxy.debug("no pattern match, not injecting content script")
@@ -105,7 +115,8 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
 
         // TODO: refactor, remove usage of @plasmohq/storage (so we don't have to make multiple get requests here) and have options store its own defaults
         const options: Options = {
-            enabledOn: await storage.get<string[]>('enabledOn') || ['http://localhost/*'],
+            matchPatterns: await storage.get<string[]>('matchPatterns') || ['http://localhost/*'],
+            matchPatternErrors: await storage.get('matchPatternErrors') || [],
             traceCollectorUrl: await storage.get('traceCollectorUrl') || 'http://localhost:4318/v1/traces',
             logCollectorUrl: await storage.get('logsCollectorUrl') || 'http://localhost:4318/v1/logs',
             metricsCollectorUrl: await storage.get('metricsCollectorUrl') || 'http://localhost:4318/v1/metrics',

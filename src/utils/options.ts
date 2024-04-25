@@ -1,9 +1,14 @@
-export type OptionsStorage = {
+export type MatchPatternError = {
+    error: Error
+    pattern: string
+}
+
+export type StoredOptions = {
     enabled: boolean
     tracingEnabled: boolean
     loggingEnabled: boolean
     metricsEnabled: boolean
-    enabledOn: string[]
+    matchPatterns: string[]
     traceCollectorUrl: string
     logCollectorUrl: string
     metricsCollectorUrl: string
@@ -12,21 +17,22 @@ export type OptionsStorage = {
     events: (keyof HTMLElementEventMap)[]
     propagateTo: string[]
     instrumentations: ('fetch' | 'load' | 'interaction')[]
+    matchPatternErrors: MatchPatternError[]
     traceExportErrors?: string[]
     logExportErrors?: string[]
     metricExportErrors?: string[]
 }
 
-export type Options = Omit<OptionsStorage, "headers"> & {
+export type Options = Omit<StoredOptions, "headers"> & {
     headers: Record<string, string>
 }
 
-export const defaultOptions: OptionsStorage = {
+export const defaultOptions: StoredOptions = {
     enabled: true,
     tracingEnabled: true,
     loggingEnabled: true,
     metricsEnabled: true,
-    enabledOn: ['http://localhost/*'],
+    matchPatterns: ['http://localhost/*'],
     traceCollectorUrl: 'http://localhost:4318/v1/traces',
     logCollectorUrl: 'http://localhost:4318/v1/logs',
     metricsCollectorUrl: 'http://localhost:4318/v1/metrics',
@@ -35,4 +41,5 @@ export const defaultOptions: OptionsStorage = {
     events: ['submit', 'click', 'keypress', 'scroll', 'resize', 'contextmenu', 'drag', 'cut', 'copy', 'input', 'pointerdown', 'pointerenter', 'pointerleave'],
     propagateTo: [],
     instrumentations: ['fetch', 'load', 'interaction'],
+    matchPatternErrors: [],
 }

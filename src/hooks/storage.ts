@@ -1,11 +1,11 @@
 import { Storage } from "@plasmohq/storage"
 import { useStorage as usePlasmoStorage } from "@plasmohq/storage/hook"
 
-import type { OptionsStorage } from "~utils/options"
+import type { StoredOptions } from "~utils/options"
 import { defaultOptions } from "~utils/options"
 
-type StorageKey = keyof OptionsStorage
-type StorageType = OptionsStorage[StorageKey]
+type StorageKey = keyof StoredOptions
+type StorageType = StoredOptions[StorageKey]
 
 const localStorage = new Storage({ area: "local" })
 const syncStorage = new Storage({ area: "sync" })

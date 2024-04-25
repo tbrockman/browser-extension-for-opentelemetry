@@ -1,49 +1,94 @@
-// Function to escape regular expression special characters
-function escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
+import { matchPattern, presets } from 'browser-extension-url-match'
+import type { MatchPatternOptions } from 'browser-extension-url-match/dist/types';
+import { consoleProxy } from '~util';
+import type { MatchPatternError } from './options';
 
-// Function to convert match pattern to regular expression
-function patternToRegExp(pattern) {
-    const escapedPattern = escapeRegExp(pattern);
-    const wildcardEscaped = escapedPattern.replace(/\\\*/g, '.*');
-    return new RegExp(`^${wildcardEscaped}$`);
-}
+// TODO: potentially link to testing website somewhere: https://clearlylocal.github.io/browser-extension-url-match/
 
-// Check if a URL matches a pattern
-function urlMatchesPattern(url, pattern) {
-    if (pattern === '<all_urls>') {
-        return true;
+// this function assumes it's possible for us to end up in an inconsistent state,
+// so our best effort is to remove permissions for removed patterns
+// and request permissions for all currently valid patterns
+type MatchPatternsChangedArgs = {
+    prev: string[],
+    next: string[],
+    setErrors: (errors: MatchPatternError[]) => void,
+}
+const matchPatternsChanged = async ({ prev, next, setErrors }: MatchPatternsChangedArgs) => {
+    consoleProxy.debug('match patterns changed', { prev, next })
+
+    const removed = prev.filter((x) => !next.includes(x))
+
+    // remove permissions for removed patterns
+    try {
+        consoleProxy.debug('removed origins', { removed })
+        const result = await chrome.permissions.remove({
+            origins: removed
+        });
+        consoleProxy.debug('removed permissions result', result)
+    } catch (e) {
+        consoleProxy.error('error removing permissions', e)
     }
-    const patternRegExp = new RegExp(patternToRegExp(pattern));
 
-    const urlObj = new URL(url);
-    // Match URL up to fragment identifier, ignoring any port
-    let matchUrl = urlObj.protocol + '//' + urlObj.hostname + urlObj.pathname + urlObj.search;
+    let validPatterns = []
+    let patternErrors: MatchPatternError[] = []
 
-    // Remove trailing slashes if the URL didn't originally contain them, since new URL() always adds them
-    if (!url.endsWith('/') && matchUrl.endsWith('/')) {
+    // verify added patterns are valid
+    for (const pattern of next) {
+        const matcher = matchPattern(pattern, { ...presets.chrome });
 
-        while (matchUrl.endsWith('/')) {
-            matchUrl = matchUrl.slice(0, -1);
+        if (!matcher.valid) {
+            patternErrors.push({
+                pattern,
+                error: matcher.error
+            })
+        } else {
+            validPatterns.push(pattern)
         }
     }
 
-    if (!patternRegExp.test(matchUrl)) {
-        return false;
+    consoleProxy.debug('requesting permissions for patterns', validPatterns)
+
+    try {
+        // add permissions for added patterns
+        const result = await chrome.permissions.request({
+            origins: validPatterns
+        });
+
+        if (!result) {
+            // find which patterns are currently missing permissions
+            const contains = await Promise.all(validPatterns.map(async (pattern) => {
+                let t = await chrome.permissions.contains({
+                    origins: [pattern]
+                })
+                return [t, pattern]
+            }))
+            validPatterns = contains.filter(([t,]) => t).map(([, pat]) => pat)
+            let errors = contains.filter(([t,]) => !t).map(([, pat]) => ({
+                pattern: pat,
+                error: new Error('permission missing')
+            }))
+            patternErrors = patternErrors.concat(errors)
+        }
+    } catch (e) {
+        consoleProxy.error('error requesting or checking permissions', e)
     }
-    return true;
+    setErrors(patternErrors)
 }
 
-function match(url, patterns) {
+function match(url: string, patterns: string[], options?: Partial<MatchPatternOptions>) {
     for (let pattern of patterns) {
-        if (urlMatchesPattern(url, pattern)) {
-            return true;
+        const matcher = matchPattern(pattern, { ...presets.chrome, ...options });
+
+        if (matcher.valid) {
+            if (matcher.match(url)) {
+                return true;
+            }
         }
     }
     return false;
 }
 
 export {
-    match
+    match,
+    matchPatternsChanged
 }

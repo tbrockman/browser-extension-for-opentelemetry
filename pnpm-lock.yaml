@@ -91,6 +91,9 @@ dependencies:
   '@tabler/icons-react':
     specifier: ^2.47.0
     version: 2.47.0(react@18.2.0)
+  browser-extension-url-match:
+    specifier: ^1.2.0
+    version: 1.2.0
   deepmerge-ts:
     specifier: ^5.1.0
     version: 5.1.0
@@ -4812,6 +4815,12 @@ packages:
       fill-range: 7.0.1
     dev: true
 
+  /browser-extension-url-match@1.2.0:
+    resolution: {integrity: sha512-+O/t71m1opNU5KG/bJkeNLvXLp0OxlFekjdR8w6waUOyWhkL6+bnQ6dCDoJxc6YF6ZQM0r64ag/d9K4m05ULsg==}
+    dependencies:
+      fancy-regex: 0.5.4
+    dev: false
+
   /browser-stdout@1.3.1:
     resolution: {integrity: sha512-qhAVI1+Av2X7qelOfAIYwXONood6XlZE/fXaBSmW/T5SzLAmCgzi+eiWE7fUvbHaeNBQH13UftjpXxsfLkMpgw==}
     dev: true
@@ -5439,6 +5448,10 @@ packages:
       jest-message-util: 29.7.0
       jest-util: 29.7.0
     dev: true
+
+  /fancy-regex@0.5.4:
+    resolution: {integrity: sha512-O6qfjtMnrPRs+3XOavCxGQDFaMS9K1vEsQMhPowqx2P/h1fDCvK5RUyeWeyDusMH2FkSHAsRE3IbSBMMg53fmw==}
+    dev: false
 
   /fast-glob@3.3.2:
     resolution: {integrity: sha512-oX2ruAFQwf/Orj8m737Y5adxDQO0LAB7/S5MnxCdTNDd4p6BsyIVsv9JQsATbTSq8KHRpLwIHbVlUNatxd+1Ow==}

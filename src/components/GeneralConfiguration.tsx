@@ -1,11 +1,18 @@
 import { Anchor, Fieldset, Group, TagsInput, Text } from "@mantine/core";
 import ColorModeSwitch from "./ColorModeSwitch";
 import { useLocalStorage } from "~hooks/storage";
-import { defaultOptions } from "~utils/options";
+import { defaultOptions, type MatchPatternError } from "~utils/options";
+import { matchPatternsChanged } from "~utils";
 
 export default function GeneralConfiguration() {
     const [headers, setHeaders] = useLocalStorage<string[]>("headers")
-    const [enabledOn, setEnabledOn] = useLocalStorage<string[]>("enabledOn")
+    const [matchPatterns, setMatchPatterns] = useLocalStorage<string[]>("matchPatterns")
+    const [patternErrors, setPatternErrors] = useLocalStorage<MatchPatternError[]>("matchPatternErrors")
+
+    const onEnabledUrlsChange = async (values: string[]) => {
+        setMatchPatterns(values)
+        matchPatternsChanged({ prev: matchPatterns, next: values, setErrors: setPatternErrors })
+    }
 
     return (
         <Fieldset radius="md"
@@ -20,8 +27,8 @@ export default function GeneralConfiguration() {
             }>
             <Group>
                 <TagsInput
-                    value={enabledOn}
-                    onChange={setEnabledOn}
+                    value={matchPatterns}
+                    onChange={onEnabledUrlsChange}
                     label="Allow extension on"
                     description={
                         <>
@@ -29,12 +36,12 @@ export default function GeneralConfiguration() {
                             <Anchor
                                 target="_blank"
                                 size="xs"
-                                href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns">
+                                href="https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns">
                                 match patterns
                             </Anchor>. <Text c='orange.3' component='span' size='xs'>⚠️ These should be pages you trust.</Text>
                         </>
                     }
-                    placeholder={enabledOn.length == 0 ? defaultOptions.enabledOn.join(', ') : ''}
+                    placeholder={matchPatterns.length == 0 ? defaultOptions.matchPatterns.join(', ') : ''}
                     splitChars={[","]} />
                 <TagsInput
                     value={headers}

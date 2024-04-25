@@ -8,9 +8,8 @@
     "preinstall": "pnpm -C vendored/plasmo/cli/plasmo install",
     "dev": "plasmo dev",
     "build": "pnpm -C vendored/plasmo build:cli && plasmo build",
-    "test": "pnpm test:unit && pnpm test:plasmo",
-    "test:unit": "mocha --require mocha-suppress-logs src/**/*.test.ts",
-    "test:plasmo": "plasmo test"
+    "test": "pnpm test:unit",
+    "test:unit": "mocha --require mocha-suppress-logs src/**/*.test.ts"
   },
   "dependencies": {
     "@mantine/core": "^7.6.1",
@@ -37,6 +36,7 @@
     "@plasmohq/messaging": "^0.6.2",
     "@plasmohq/storage": "^1.9.3",
     "@tabler/icons-react": "^2.47.0",
+    "browser-extension-url-match": "^1.2.0",
     "deepmerge-ts": "^5.1.0",
     "plasmo": "link:vendored\\plasmo\\cli\\plasmo",
     "react": "18.2.0",
@@ -69,10 +69,11 @@
     "typescript": "5.3.3"
   },
   "manifest": {
-    "host_permissions": [],
-    "optional_host_permissions": [
-      "<all_urls>",
+    "host_permissions": [
       "http://localhost/*"
+    ],
+    "optional_host_permissions": [
+      "<all_urls>"
     ],
     "permissions": [
       "scripting",

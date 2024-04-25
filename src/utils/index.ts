@@ -1,1 +1,1 @@
-export { match } from './match-pattern'
+export { match, matchPatternsChanged } from './match-pattern'
