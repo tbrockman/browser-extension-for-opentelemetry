@@ -20,7 +20,16 @@ const theme = createTheme({
           paddingRight: '1rem'
         }
       }
-    }
+    },
+    TagsInput: {
+      styles: {
+        '&:disabled': {
+          pill: {
+            width: '300px !important', // or any other width you desire when the TagsInput is disabled
+          }
+        }
+      }
+    },
   }
 })
 

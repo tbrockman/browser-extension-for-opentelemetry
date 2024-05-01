@@ -12,3 +12,12 @@ body {
 .popup-logo {
     max-width: 6rem;
 }
+
+.mantine-TagsInput-pill[data-disabled] > .mantine-CloseButton-root {
+    min-width: 2em;
+    padding-inline: .1em .3em;
+}
+
+.mantine-TagsInput-pill[data-disabled] > .mantine-CloseButton-root > svg {
+    display: block;
+}

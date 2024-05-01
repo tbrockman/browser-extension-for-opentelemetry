@@ -4,7 +4,11 @@ import { useLocalStorage } from "~hooks/storage";
 import { defaultOptions, type MatchPatternError } from "~utils/options";
 import { matchPatternsChanged } from "~utils";
 
-export default function GeneralConfiguration() {
+type GeneralConfigurationProps = {
+    enabled: boolean
+}
+
+export default function GeneralConfiguration({ enabled }: GeneralConfigurationProps) {
     const [headers, setHeaders] = useLocalStorage<string[]>("headers")
     const [matchPatterns, setMatchPatterns] = useLocalStorage<string[]>("matchPatterns")
     const [patternErrors, setPatternErrors] = useLocalStorage<MatchPatternError[]>("matchPatternErrors")
@@ -16,6 +20,11 @@ export default function GeneralConfiguration() {
 
     return (
         <Fieldset radius="md"
+            styles={{
+                root: {
+                    borderColor: enabled ? 'var(--mantine-primary-color-5)' : 'var(--mantine-color-default-border)'
+                }
+            }}
             legend={
                 <Group gap='xs'>
                     <ColorModeSwitch label={"General"} styles={{
@@ -30,6 +39,7 @@ export default function GeneralConfiguration() {
                     value={matchPatterns}
                     onChange={onEnabledUrlsChange}
                     label="Allow extension on"
+                    disabled={!enabled}
                     description={
                         <>
                             Choose URLs which should be instrumented by the extension, specified as a list of {" "}
@@ -47,6 +57,7 @@ export default function GeneralConfiguration() {
                     value={headers}
                     onChange={setHeaders}
                     label="Request headers"
+                    disabled={!enabled}
                     description="Additional HTTP headers to be sent to your collector(s)."
                     placeholder={headers.length == 0 ? 'key:value, key2:value2' : ''}
                     splitChars={[","]}

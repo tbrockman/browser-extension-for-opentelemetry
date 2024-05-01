@@ -60,7 +60,7 @@ export default function Configuration() {
             >
                 <ScrollArea.Autosize mah={400}>
                     <Stack pr='lg' pb='lg' pt='lg'>
-                        <GeneralConfiguration />
+                        <GeneralConfiguration enabled={enabled} />
                         <TraceConfiguration enabled={enabled} />
                         <LogConfiguration enabled={enabled} />
                     </Stack>

@@ -1,6 +1,6 @@
 import { Anchor, Checkbox, Fieldset, Group, TagsInput, Text, TextInput, type CheckboxProps } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
-import { IconChartDots3 } from "@tabler/icons-react";
+import { IconChartDots3, IconAffiliate } from "@tabler/icons-react";
 import { useEffect } from "react";
 import { useLocalStorage } from "~hooks/storage";
 
@@ -8,7 +8,7 @@ import { events as EventList } from "~util"
 import { defaultOptions } from "~utils/options";
 
 const CheckboxIcon: CheckboxProps['icon'] = ({ ...others }) =>
-    <IconChartDots3 {...others} />;
+    <IconAffiliate {...others} />;
 
 type TraceConfigurationProps = {
     enabled: boolean
@@ -88,6 +88,7 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
                 <TagsInput
                     value={events}
                     onChange={setEvents}
+                    disabled={instrumentations.indexOf('interaction') == -1 || !enabled}
                     label="Event listeners"
                     data={EventList}
                     maxDropdownHeight={200}
@@ -110,7 +111,7 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
                 <TagsInput
                     value={propagateTo}
                     onChange={setPropagateTo}
-                    disabled={instrumentations.indexOf('fetch') == -1}
+                    disabled={instrumentations.indexOf('fetch') == -1 || !enabled}
                     label="Forward trace context to"
                     maxDropdownHeight={200}
                     comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false }, transitionProps: { transition: 'pop', duration: 200 } }}
