@@ -61,6 +61,7 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
         [SEMRESATTRS_TELEMETRY_SDK_LANGUAGE]: 'webjs',
         [SEMRESATTRS_TELEMETRY_SDK_NAME]: 'opentelemetry',
         [SEMRESATTRS_TELEMETRY_SDK_VERSION]: '1.22.0', // TODO: replace with resolved version
+        ...options.attributes
     })
 
     let tracerProvider: WebTracerProvider
