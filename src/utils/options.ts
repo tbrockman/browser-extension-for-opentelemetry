@@ -3,7 +3,7 @@ export type MatchPatternError = {
     pattern: string
 }
 
-export type StoredOptions = {
+export type Options = {
     enabled: boolean
     tracingEnabled: boolean
     loggingEnabled: boolean
@@ -12,7 +12,8 @@ export type StoredOptions = {
     traceCollectorUrl: string
     logCollectorUrl: string
     metricsCollectorUrl: string
-    headers: string[]
+    attributes: Record<string, string>
+    headers: Record<string, string>
     concurrencyLimit: number
     events: (keyof HTMLElementEventMap)[]
     propagateTo: string[]
@@ -23,11 +24,8 @@ export type StoredOptions = {
     metricExportErrors?: string[]
 }
 
-export type Options = Omit<StoredOptions, "headers"> & {
-    headers: Record<string, string>
-}
 
-export const defaultOptions: StoredOptions = {
+export const defaultOptions: Options = {
     enabled: true,
     tracingEnabled: true,
     loggingEnabled: true,
@@ -36,7 +34,12 @@ export const defaultOptions: StoredOptions = {
     traceCollectorUrl: 'http://localhost:4318/v1/traces',
     logCollectorUrl: 'http://localhost:4318/v1/logs',
     metricsCollectorUrl: 'http://localhost:4318/v1/metrics',
-    headers: [],
+    headers: {
+        'x-custom-header': 'test'
+    },
+    attributes: {
+        'example': 'abc'
+    },
     concurrencyLimit: 10,
     events: ['submit', 'click', 'keypress', 'scroll', 'resize', 'contextmenu', 'drag', 'cut', 'copy', 'input', 'pointerdown', 'pointerenter', 'pointerleave'],
     propagateTo: [],
