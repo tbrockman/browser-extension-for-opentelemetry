@@ -1,5 +1,5 @@
 import { Storage } from '@plasmohq/storage'
-import { consoleProxy, stringHeadersToObject } from './util'
+import { consoleProxy } from './util'
 import injectContentScript from 'inlinefunc:./content-script'
 import { MessageTypes, type OTLPExportTraceMessage, type OTLPExportLogMessage, type PortMessage, type TypedPort } from '~types'
 import type { MatchPatternError, Options } from '~utils/options'
@@ -48,7 +48,7 @@ const onConnect = async (p: TypedPort<Partial<Options>, PortMessage>) => {
                 // Even though the content script could send us the headers and url, we don't trust them
                 // So in the worst case scenario we're sending arbitrary bytes to our chosen server
                 const headers = {
-                    ...stringHeadersToObject(await storage.get('headers')),
+                    ...(await storage.get<Record<string, string>>('headers')),
                     'Content-Type': 'application/x-protobuf',
                     Accept: 'application/x-protobuf'
                 }
@@ -77,23 +77,17 @@ const onConnect = async (p: TypedPort<Partial<Options>, PortMessage>) => {
     })
 }
 
-chrome.storage.onChanged.addListener(({ matchPatterns, traceCollectorUrl, logCollectorUrl, events, headers, attributes, enabled, propagateTo, instrumentations, loggingEnabled, tracingEnabled }: Record<keyof Options, chrome.storage.StorageChange>, area) => {
-    consoleProxy.debug('storage changed', { matchPatterns, traceCollectorUrl, logCollectorUrl, events, headers, attributes, enabled, propagateTo, instrumentations, area, loggingEnabled, tracingEnabled })
+chrome.storage.onChanged.addListener((event: Record<keyof Options, chrome.storage.StorageChange>, area) => {
+    consoleProxy.debug('storage changed', { event })
+
+    const parsed = Object.entries(event).reduce((acc, [k, v]) => {
+        return { ...acc, [k]: JSON.parse(v.newValue) }
+    }, {})
+
+    consoleProxy.debug('storage parsed', { parsed })
 
     Object.keys(ports).forEach((k) => {
-        ports[k].postMessage({
-            matchPatterns: matchPatterns?.newValue, // TODO: use match patterns to deregister instrumentation on existing content scripts, if necessary
-            loggingEnabled: loggingEnabled?.newValue,
-            tracingEnabled: tracingEnabled?.newValue,
-            traceCollectorUrl: traceCollectorUrl?.newValue,
-            logCollectorUrl: logCollectorUrl?.newValue,
-            events: events?.newValue,
-            headers: headers?.newValue,
-            attributes: attributes?.newValue,
-            enabled: enabled?.newValue,
-            propagateTo: propagateTo?.newValue,
-            instrumentations: instrumentations?.newValue,
-        });
+        ports[k].postMessage(parsed);
     })
 })
 
@@ -132,6 +126,8 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
             loggingEnabled: await storage.get<boolean>('loggingEnabled') || true,
             metricsEnabled: await storage.get<boolean>('metricsEnabled') || true,
         }
+
+        consoleProxy.debug({ options })
 
         await chrome.scripting.executeScript({
             target: { tabId, allFrames: true },

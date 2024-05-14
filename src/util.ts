@@ -120,24 +120,6 @@ const internalConsoleProxy = new Proxy(console, {
     }
 });
 
-const stringHeadersToObject = (headerString: string[]) => {
-    const headers = {}
-
-    if (headerString) {
-        headerString.forEach((str: string) => {
-            const index = str.indexOf(':')
-
-            if (index === -1) {
-                return
-            }
-            const key = str.substring(0, index)
-            const value = str.substring(index + 1)
-            headers[key] = value
-        })
-    }
-    return headers
-}
-
 const wrapConsoleWithLoggerProvider = (provider: LoggerProvider) => {
     const logger = provider.getLogger(logPrefix);
     const shutdown = provider.shutdown
@@ -183,7 +165,6 @@ const wrapConsoleWithLoggerProvider = (provider: LoggerProvider) => {
 
 export {
     events,
-    stringHeadersToObject,
     internalConsoleProxy as consoleProxy,
     wrapConsoleWithLoggerProvider
 }

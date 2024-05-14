@@ -1,10 +1,9 @@
-import { Anchor, Box, Fieldset, Flex, Group, TagsInput, Text, Tooltip } from "@mantine/core";
+import { Anchor, Fieldset, Group, Text } from "@mantine/core";
+import { TagsInput } from "./TagsInput";
 import ColorModeSwitch from "./ColorModeSwitch";
 import { useLocalStorage } from "~hooks/storage";
 import { defaultOptions, type MatchPatternError } from "~utils/options";
 import { matchPatternsChanged } from "~utils";
-import { useDebouncedValue } from "@mantine/hooks";
-import { useEffect, useState } from "react";
 
 type GeneralConfigurationProps = {
     enabled: boolean
@@ -22,21 +21,8 @@ const mapToColonSeparatedStrings = (map: Record<string, string>): string[] => {
 }
 
 export default function GeneralConfiguration({ enabled }: GeneralConfigurationProps) {
-    const [headerStorage, setHeaderStorage] = useLocalStorage<Record<string, string>>("headers")
-    const [headerRender, setHeaderRender] = useState<string[]>(mapToColonSeparatedStrings(headerStorage))
-    const [debouncedHeaderStorage] = useDebouncedValue(headerRender, 200);
-    useEffect(() => {
-        const map = colonSeparatedStringsToMap(debouncedHeaderStorage)
-        setHeaderStorage(map)
-    }, [debouncedHeaderStorage])
-
-    const [attributeStorage, setAttributeStorage] = useLocalStorage<Record<string, string>>("attributes")
-    const [attributeRender, setAttributeRender] = useState<string[]>(mapToColonSeparatedStrings(attributeStorage))
-    const [debouncedAttributeStorage] = useDebouncedValue(attributeRender, 200);
-    useEffect(() => {
-        const map = colonSeparatedStringsToMap(debouncedAttributeStorage)
-        setAttributeStorage(map)
-    }, [debouncedAttributeStorage])
+    const [headers, setHeaders] = useLocalStorage<Record<string, string>>("headers")
+    const [attributes, setAttributes] = useLocalStorage<Record<string, string>>("attributes")
 
     const [matchPatterns, setMatchPatterns] = useLocalStorage<string[]>("matchPatterns")
     const [patternErrors, setPatternErrors] = useLocalStorage<MatchPatternError[]>("matchPatternErrors")
@@ -44,6 +30,14 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
     const onEnabledUrlsChange = async (values: string[]) => {
         setMatchPatterns(values)
         matchPatternsChanged({ prev: matchPatterns, next: values, setErrors: setPatternErrors })
+    }
+
+    const onHeadersChanged = (newHeaders: string[]) => {
+        setHeaders(colonSeparatedStringsToMap(newHeaders))
+    }
+
+    const onAttributesChanged = (newAttributes: string[]) => {
+        setAttributes(colonSeparatedStringsToMap(newAttributes))
     }
 
     return (
@@ -80,27 +74,28 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                                 size="xs"
                                 href="https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns">
                                 match patterns
-                            </Anchor>. <Text c='orange.3' component='span' size='xs'>⚠️&nbsp;Adding new entries will require a page refresh.</Text>
+                            </Anchor>. <Text c='orange.3' component='span' size='xs'>⚠️&nbsp;Adding new entries will require reloading targeted pages.</Text>
                         </>
                     }
                     placeholder={matchPatterns.length == 0 ? defaultOptions.matchPatterns.join(', ') : ''}
-                    splitChars={[","]} />
-                <TagsInput
-                    value={attributeRender}
-                    onChange={setAttributeRender}
-                    label="Resource attributes"
-                    disabled={!enabled}
-                    description="Attach additional attributes on all exported logs/traces."
-                    placeholder={attributeRender.length == 0 ? 'key:value, key2:value2' : ''}
                     splitChars={[","]}
                 />
                 <TagsInput
-                    value={headerRender}
-                    onChange={setHeaderRender}
+                    value={mapToColonSeparatedStrings(attributes)}
+                    onChange={onAttributesChanged}
+                    label="Resource attributes"
+                    disabled={!enabled}
+                    description="Attach additional attributes on all exported logs/traces."
+                    placeholder={Object.keys(attributes).length == 0 ? 'key:value, key2:value2' : ''}
+                    splitChars={[","]}
+                />
+                <TagsInput
+                    value={mapToColonSeparatedStrings(headers)}
+                    onChange={onHeadersChanged}
                     label="Request headers"
                     disabled={!enabled}
                     description="Include additional HTTP headers on all export requests."
-                    placeholder={headerRender.length == 0 ? 'key:value, key2:value2' : ''}
+                    placeholder={Object.keys(headers).length == 0 ? 'key:value, key2:value2' : ''}
                     splitChars={[","]}
                 />
             </Group>

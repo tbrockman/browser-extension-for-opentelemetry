@@ -20,11 +20,13 @@ const matchPatternsChanged = async ({ prev, next, setErrors }: MatchPatternsChan
 
     // remove permissions for removed patterns
     try {
-        consoleProxy.debug('removed origins', { removed })
-        const result = await chrome.permissions.remove({
-            origins: removed
-        });
-        consoleProxy.debug('removed permissions result', result)
+        if (removed.length > 0) {
+            consoleProxy.debug('removing permissions for origins', { removed })
+            const result = await chrome.permissions.remove({
+                origins: removed
+            });
+            consoleProxy.debug('removed permissions result', result)
+        }
     } catch (e) {
         consoleProxy.error('error removing permissions', e)
     }
@@ -72,6 +74,9 @@ const matchPatternsChanged = async ({ prev, next, setErrors }: MatchPatternsChan
     } catch (e) {
         consoleProxy.error('error requesting or checking permissions', e)
     }
+
+    consoleProxy.debug('match pattern errors', { patternErrors })
+
     setErrors(patternErrors)
 }
 
