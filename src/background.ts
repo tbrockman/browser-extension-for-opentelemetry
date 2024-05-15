@@ -3,7 +3,7 @@ import { consoleProxy } from './util'
 import injectContentScript from 'inlinefunc:./content-script'
 import { MessageTypes, type OTLPExportTraceMessage, type OTLPExportLogMessage, type PortMessage, type TypedPort } from '~types'
 import type { MatchPatternError, Options } from '~utils/options'
-import { defaultOptions } from '~utils/options'
+import { defaultOptions, getOptions } from '~utils/options'
 import { match } from '~utils'
 import { matchPattern, presets } from 'browser-extension-url-match'
 
@@ -109,23 +109,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
         consoleProxy.debug("injecting content script")
 
         // TODO: refactor, remove usage of @plasmohq/storage (so we don't have to make multiple get requests here) and have options store its own defaults
-        const options: Options = {
-            matchPatterns: await storage.get<string[]>('matchPatterns') || ['http://localhost/*'],
-            matchPatternErrors: await storage.get('matchPatternErrors') || [],
-            traceCollectorUrl: await storage.get('traceCollectorUrl') || 'http://localhost:4318/v1/traces',
-            logCollectorUrl: await storage.get('logsCollectorUrl') || 'http://localhost:4318/v1/logs',
-            metricsCollectorUrl: await storage.get('metricsCollectorUrl') || 'http://localhost:4318/v1/metrics',
-            headers: await storage.get<Record<string, string>>('headers') || { 'x-custom-header': 'test' },
-            attributes: await storage.get<Record<string, string>>('attributes') || { 'example': 'abc' },
-            concurrencyLimit: 10,
-            events: await storage.get<(keyof HTMLElementEventMap)[]>('events') || ['submit', 'click', 'keypress', 'scroll', 'resize', 'contextmenu', 'drag', 'cut', 'copy', 'input', 'pointerdown', 'pointerenter', 'pointerleave'],
-            propagateTo: await storage.get<string[]>('propagateTo') || [],
-            instrumentations: await storage.get<('fetch' | 'load' | 'interaction')[]>('instrumentations') || ['fetch', 'load', 'interaction'],
-            enabled: await storage.get<boolean>('enabled') || true,
-            tracingEnabled: await storage.get<boolean>('tracingEnabled') || true,
-            loggingEnabled: await storage.get<boolean>('loggingEnabled') || true,
-            metricsEnabled: await storage.get<boolean>('metricsEnabled') || true,
-        }
+        const options = await getOptions(storage)
 
         consoleProxy.debug({ options })
 

@@ -61,7 +61,7 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
         [SEMRESATTRS_TELEMETRY_SDK_LANGUAGE]: 'webjs',
         [SEMRESATTRS_TELEMETRY_SDK_NAME]: 'opentelemetry',
         [SEMRESATTRS_TELEMETRY_SDK_VERSION]: '1.22.0', // TODO: replace with resolved version
-        ...options.attributes
+        ...Object.fromEntries(options.attributes.entries())
     })
 
     let tracerProvider: WebTracerProvider
@@ -72,7 +72,7 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
         })
         const traceExporter = new OTLPTraceExporter({
             url: options.traceCollectorUrl,
-            headers: options.headers,
+            headers: Object.fromEntries(options.headers.entries()),
             concurrencyLimit: options.concurrencyLimit,
         })
         // @ts-ignore
@@ -96,7 +96,7 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
     if (options.loggingEnabled) {
         const logExporter = new OTLPLogExporter({
             url: options.logCollectorUrl,
-            headers: options.headers,
+            headers: Object.fromEntries(options.headers.entries()),
             concurrencyLimit: options.concurrencyLimit,
         })
         // @ts-ignore
@@ -150,7 +150,7 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
     }
 }
 
-function injectContentScript(extensionId: string, options: Options, retries = 10, backoff = 10) {
+export default function injectContentScript(extensionId: string, options: Options, retries = 10, backoff = 10) {
     if (retries <= 0) {
         return
     }
@@ -191,5 +191,3 @@ function injectContentScript(extensionId: string, options: Options, retries = 10
         }, backoff)
     }
 }
-
-export default injectContentScript;

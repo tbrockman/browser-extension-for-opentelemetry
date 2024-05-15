@@ -33,7 +33,7 @@ const theme = createTheme({
   }
 })
 
-function IndexPopup() {
+export default function IndexPopup() {
 
   return (
     <MantineProvider theme={theme} defaultColorScheme="auto">
@@ -44,5 +44,3 @@ function IndexPopup() {
     </MantineProvider>
   )
 }
-
-export default IndexPopup

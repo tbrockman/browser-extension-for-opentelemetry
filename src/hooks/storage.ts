@@ -4,6 +4,8 @@ import { useStorage as usePlasmoStorage } from "@plasmohq/storage/hook"
 import type { Options } from "~utils/options"
 import { defaultOptions } from "~utils/options"
 
+// technically we could store more than just options, but we don't
+// update default handling if we ever do
 type StorageKey = keyof Options
 type StorageType = Options[StorageKey]
 

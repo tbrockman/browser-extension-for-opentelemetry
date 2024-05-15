@@ -1,6 +1,6 @@
 import { Anchor, Fieldset, Group, Text } from "@mantine/core";
-import { TagsInput } from "./TagsInput";
-import ColorModeSwitch from "./ColorModeSwitch";
+import { TagsInput } from "~components/TagsInput";
+import ColorModeSwitch from "~components/ColorModeSwitch";
 import { useLocalStorage } from "~hooks/storage";
 import { defaultOptions, type MatchPatternError } from "~utils/options";
 import { matchPatternsChanged } from "~utils";
@@ -9,20 +9,30 @@ type GeneralConfigurationProps = {
     enabled: boolean
 }
 
-const colonSeparatedStringsToMap = (strings: string[]): Record<string, string> => {
-    return strings.reduce((acc, curr) => {
-        const [key, value] = curr.split(":")
-        return { ...acc, [key]: value }
-    }, {})
+const colonSeparatedStringsToMap = (strings: string[]): Map<string, string> => {
+    const map = new Map<string, string>()
+    strings.forEach((string) => {
+        const [key, value] = string.split(':')
+        map.set(key, value)
+    })
+    return map
 }
 
-const mapToColonSeparatedStrings = (map: Record<string, string>): string[] => {
-    return Object.entries(map).map(([key, value]) => `${key}:${value}`)
+const mapToColonSeparatedStrings = (map: Map<string, string>): string[] => {
+    const strings = []
+    console.log(map, typeof map)
+    if (map) {
+        map.forEach((value, key) => {
+            strings.push(`${key}:${value}`)
+        })
+    }
+    return strings
 }
 
 export default function GeneralConfiguration({ enabled }: GeneralConfigurationProps) {
-    const [headers, setHeaders] = useLocalStorage<Record<string, string>>("headers")
-    const [attributes, setAttributes] = useLocalStorage<Record<string, string>>("attributes")
+    const [headers, setHeaders] = useLocalStorage<Map<string, string>>("headers")
+    const [attributes, setAttributes] = useLocalStorage<Map<string, string>>("attributes")
+    const attributesStrings = mapToColonSeparatedStrings(attributes)
 
     const [matchPatterns, setMatchPatterns] = useLocalStorage<string[]>("matchPatterns")
     const [patternErrors, setPatternErrors] = useLocalStorage<MatchPatternError[]>("matchPatternErrors")
@@ -34,10 +44,6 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
 
     const onHeadersChanged = (newHeaders: string[]) => {
         setHeaders(colonSeparatedStringsToMap(newHeaders))
-    }
-
-    const onAttributesChanged = (newAttributes: string[]) => {
-        setAttributes(colonSeparatedStringsToMap(newAttributes))
     }
 
     return (
@@ -59,7 +65,6 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
             <Group>
                 <TagsInput
                     value={matchPatterns}
-                    onChange={onEnabledUrlsChange}
                     label={
                         <>
                             Allow extension on {" "}
@@ -78,25 +83,32 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                         </>
                     }
                     placeholder={matchPatterns.length == 0 ? defaultOptions.matchPatterns.join(', ') : ''}
-                    splitChars={[","]}
+                    delimiter={","}
                 />
                 <TagsInput
-                    value={mapToColonSeparatedStrings(attributes)}
-                    onChange={onAttributesChanged}
+                    value={attributesStrings}
+                    onValueRemoved={(index) => {
+                        const newAttributes = [...attributesStrings]
+                        newAttributes.splice(index, 1)
+                        setAttributes(colonSeparatedStringsToMap(newAttributes))
+                    }}
+                    onValueAdded={(value) => {
+                        attributesStrings.push(value)
+                        setAttributes(colonSeparatedStringsToMap(attributesStrings))
+                    }}
                     label="Resource attributes"
                     disabled={!enabled}
                     description="Attach additional attributes on all exported logs/traces."
                     placeholder={Object.keys(attributes).length == 0 ? 'key:value, key2:value2' : ''}
-                    splitChars={[","]}
+                    delimiter={","}
                 />
                 <TagsInput
                     value={mapToColonSeparatedStrings(headers)}
-                    onChange={onHeadersChanged}
                     label="Request headers"
                     disabled={!enabled}
                     description="Include additional HTTP headers on all export requests."
                     placeholder={Object.keys(headers).length == 0 ? 'key:value, key2:value2' : ''}
-                    splitChars={[","]}
+                    delimiter={","}
                 />
             </Group>
         </Fieldset>

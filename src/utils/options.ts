@@ -1,9 +1,11 @@
-export type MatchPatternError = {
+import type { Storage } from "@plasmohq/storage"
+
+type MatchPatternError = {
     error: Error
     pattern: string
 }
 
-export type Options = {
+type Options = {
     enabled: boolean
     tracingEnabled: boolean
     loggingEnabled: boolean
@@ -12,8 +14,8 @@ export type Options = {
     traceCollectorUrl: string
     logCollectorUrl: string
     metricsCollectorUrl: string
-    attributes: Record<string, string>
-    headers: Record<string, string>
+    attributes: Map<string, string>
+    headers: Map<string, string>
     concurrencyLimit: number
     events: (keyof HTMLElementEventMap)[]
     propagateTo: string[]
@@ -24,8 +26,7 @@ export type Options = {
     metricExportErrors?: string[]
 }
 
-
-export const defaultOptions: Options = {
+const defaultOptions: Options = {
     enabled: true,
     tracingEnabled: true,
     loggingEnabled: true,
@@ -34,15 +35,32 @@ export const defaultOptions: Options = {
     traceCollectorUrl: 'http://localhost:4318/v1/traces',
     logCollectorUrl: 'http://localhost:4318/v1/logs',
     metricsCollectorUrl: 'http://localhost:4318/v1/metrics',
-    headers: {
-        'x-custom-header': 'test'
-    },
-    attributes: {
-        'example': 'abc'
-    },
+    headers: new Map([
+        ['x-custom-header', 'test']
+    ]),
+    attributes: new Map([
+        ['example', 'abc']
+    ]),
     concurrencyLimit: 10,
     events: ['submit', 'click', 'keypress', 'scroll', 'resize', 'contextmenu', 'drag', 'cut', 'copy', 'input', 'pointerdown', 'pointerenter', 'pointerleave'],
     propagateTo: [],
     instrumentations: ['fetch', 'load', 'interaction'],
     matchPatternErrors: [],
+}
+
+const getOptions = async (storage: Storage): Promise<Options> => {
+    const result = await Promise.all(Object.keys(defaultOptions).map(async (key) => {
+        return [key, await storage.get(key) || defaultOptions[key]]
+    }))
+    return Object.fromEntries(result)
+}
+
+export {
+    defaultOptions,
+    getOptions,
+}
+
+export type {
+    MatchPatternError,
+    Options
 }

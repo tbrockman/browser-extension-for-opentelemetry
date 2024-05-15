@@ -34,7 +34,7 @@
     "@opentelemetry/sdk-trace-web": "^1.22.0",
     "@opentelemetry/semantic-conventions": "^1.22.0",
     "@plasmohq/messaging": "^0.6.2",
-    "@plasmohq/storage": "^1.9.3",
+    "@plasmohq/storage": "link:vendored/storage",
     "@tabler/icons-react": "^2.47.0",
     "browser-extension-url-match": "^1.2.0",
     "deepmerge-ts": "^5.1.0",
