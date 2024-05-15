@@ -1,6 +1,3 @@
 [submodule "vendored/plasmo"]
 	path = vendored/plasmo
 	url = https://github.com/tbrockman/plasmo
-[submodule "vendored/storage"]
-	path = vendored/storage
-	url = https://github.com/PlasmoHQ/storage
