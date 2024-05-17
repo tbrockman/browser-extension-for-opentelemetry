@@ -8,11 +8,9 @@ receivers:
             - "*"
           allowed_headers:
             - "*"
+      grpc:
+        endpoint: 0.0.0.0:4317
 exporters:
-  otlp:
-    endpoint: tempo:4317
-    tls:
-      insecure: true
   otlp/quickwit:
     endpoint: quickwit:7281
     tls:
@@ -20,10 +18,13 @@ exporters:
   debug:
     verbosity: detailed
 service:
+  telemetry:
+    logs:
+      level: "debug"
   pipelines:
     traces:
       receivers: [otlp]
-      exporters: [otlp, otlp/quickwit]
+      exporters: [otlp/quickwit, debug]
     logs:
       receivers: [otlp]
       exporters: [otlp/quickwit, debug]

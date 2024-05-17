@@ -20,11 +20,14 @@ const theme = createTheme({
           paddingRight: '1rem'
         }
       }
-    }
+    },
+    TagsInput: {
+      styles: {}
+    },
   }
 })
 
-function IndexPopup() {
+export default function IndexPopup() {
 
   return (
     <MantineProvider theme={theme} defaultColorScheme="auto">
@@ -35,5 +38,3 @@ function IndexPopup() {
     </MantineProvider>
   )
 }
-
-export default IndexPopup

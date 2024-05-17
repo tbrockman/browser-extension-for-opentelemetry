@@ -1,10 +1,16 @@
 {
   "extends": "plasmo/templates/tsconfig.base",
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "vendored",
+    "build",
+    "coverage",
+    "assets"
   ],
   "include": [
+    "src",
     ".plasmo/index.d.ts",
+    ".plasmo/**/*",
     "./**/*.ts",
     "./**/*.tsx"
   ],
@@ -14,7 +20,10 @@
         "./src/*"
       ]
     },
+    "module": "ES6",
+    "target": "ES6",
     "baseUrl": ".",
-    "isolatedModules": true
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true
   }
 }

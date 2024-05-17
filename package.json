@@ -1,14 +1,21 @@
 {
   "name": "opentelemetry-browser-extension",
   "displayName": "OpenTelemetry Browser Extension",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "An extension for instrumenting webpages using OpenTelemetry",
   "author": "Theodore Brockman <iam@theo.lol>",
   "scripts": {
-    "preinstall": "pnpm -C vendored/plasmo/cli/plasmo install",
+    "preinstall": "pnpm install:plasmo && pnpm build:run-p",
+    "install:plasmo": "pnpm -C ./vendored/plasmo/ install",
+    "build:run-p": "pnpm -C ./vendored/plasmo/packages/rps build",
     "dev": "plasmo dev",
-    "build": "pnpm -C vendored/plasmo build:cli && plasmo build",
-    "test": "plasmo test"
+    "build": "pnpm build:vendored && plasmo build",
+    "build:vendored": "run-p build:plasmo:cli build:plasmo:storage build:plasmo:messaging",
+    "build:plasmo:cli": "pnpm -C ./vendored/plasmo build:cli",
+    "build:plasmo:storage": "pnpm -C ./vendored/plasmo/api/storage build",
+    "build:plasmo:messaging": "pnpm -C ./vendored/plasmo/api/messaging build",
+    "test": "pnpm test:unit",
+    "test:unit": "mocha --require mocha-suppress-logs src/**/*.test.ts"
   },
   "dependencies": {
     "@mantine/core": "^7.6.1",
@@ -32,11 +39,12 @@
     "@opentelemetry/sdk-trace-base": "^1.22.0",
     "@opentelemetry/sdk-trace-web": "^1.22.0",
     "@opentelemetry/semantic-conventions": "^1.22.0",
-    "@plasmohq/messaging": "^0.6.2",
-    "@plasmohq/storage": "^1.9.3",
+    "@plasmohq/messaging": "workspace:*",
+    "@plasmohq/storage": "workspace:*",
     "@tabler/icons-react": "^2.47.0",
+    "browser-extension-url-match": "^1.2.0",
     "deepmerge-ts": "^5.1.0",
-    "plasmo": "link:vendored\\plasmo\\cli\\plasmo",
+    "plasmo": "workspace:*",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
@@ -44,25 +52,35 @@
     "@ianvs/prettier-plugin-sort-imports": "4.1.1",
     "@parcel/config-default": "^2.12.0",
     "@parcel/packager-ts": "2.12.0",
-    "@plasmohq/parcel-config": "^0.40.2",
+    "@plasmohq/rps": "workspace:*",
+    "@plasmohq/parcel-config": "workspace:*",
     "@types/chrome": "0.0.262",
+    "@types/jest": "^29.5.12",
+    "@types/mocha": "^10.0.6",
     "@types/node": "20.11.24",
     "@types/react": "18.2.61",
     "@types/react-dom": "18.2.19",
+    "cross-env": "^7.0.3",
     "esbuild": "^0.20.1",
     "esbuild-plugin-polyfill-node": "^0.3.0",
+    "mocha": "^10.4.0",
+    "mocha-suppress-logs": "^0.5.1",
     "parcel": "^2.12.0",
     "postcss": "^8.4.35",
     "postcss-preset-mantine": "^1.13.0",
     "postcss-simple-vars": "^7.0.1",
     "prettier": "3.2.5",
     "process": "^0.11.10",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.7.2",
     "typescript": "5.3.3"
   },
   "manifest": {
     "host_permissions": [
-      "https://*/*",
       "http://localhost/*"
+    ],
+    "optional_host_permissions": [
+      "<all_urls>"
     ],
     "permissions": [
       "scripting",

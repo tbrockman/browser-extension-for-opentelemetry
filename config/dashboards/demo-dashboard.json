@@ -19,7 +19,6 @@
     "editable": true,
     "fiscalYearStartMonth": 0,
     "graphTooltip": 1,
-    "id": 1,
     "links": [],
     "panels": [
         {
@@ -40,7 +39,7 @@
                     "showLineNumbers": true,
                     "showMiniMap": false
                 },
-                "content": "<div style=\"font-family:monospace;\">\n    <h1 style=\"font-family:monospace;\">👋 Welcome! / 📚 README</h1>\n    <p>\n        Thanks for taking the time to check out the project. If you feel the urge, please consider contributing to the\n        project or <a href=\"https://github.com/sponsors/tbrockman\">sponsoring the developer</a>.\n    </p>\n    <p>\n        <b>\n            <h3 style=\"font-family:monospace;\">Don't see any data here?</h3>\n        </b> Check out <a href=\"https://github.com/tbrockman/opentelemetry-browser-extension\">the\n            FAQ.</a>\n    </p>\n    <h3 style=\"font-family:monospace;\">Demo</h3>\n    <p> This dashboard is meant to serve as a basic demonstration of the kind of queries and visualizations you can make\n        with some of the data you collect with the extension.</p>\n    <p>\n        It's currently under development, so there might be a bug or missing feature or two.\n    </p>\n    <h3 style=\"font-family:monospace;\">How to query the data</h3>\n    <p>The data in this dashboard primarly leverages <a href=\"https://quickwit.io\">Quickwit</a> (currently stores\n        traces in Tempo as well, but this may change in the near future). Quickwit supports a Lucene-like query\n        language (and Elasticsearch-search compatible API) which\n        you can learn\n        more about <a href=\"https://quickwit.io/docs/reference/query-language\">here</a>.</p>\n\n    <p>At the top of the dashboard you can also filter by log and trace attributes, which will automatically apply to\n        the\n        related dashboard visualizations.</p>\n</div>",
+                "content": "<!-- TODO: embed this file into demo-dashboard.json -->\n<div style=\"font-family:monospace;\">\n    <h1 style=\"font-family:monospace;\">👋 Welcome! / 📚 README</h1>\n    <p>\n        Thanks for taking the time to check out the project. If you feel the urge, please consider contributing to the\n        project or <a href=\"https://github.com/sponsors/tbrockman\">sponsoring the developer</a>.\n    </p>\n    <p>\n        <b>\n            <h3 style=\"font-family:monospace;\">Don't see any data here?</h3>\n        </b> Check out <a href=\"https://github.com/tbrockman/opentelemetry-browser-extension\">the\n            FAQ.</a>\n    </p>\n    <h3 style=\"font-family:monospace;\">Demo</h3>\n    <p> This dashboard is meant to serve as a basic demonstration of the kind of queries and visualizations you can make\n        with some of the data you collect with the extension.</p>\n    <p>\n        It's currently under development, so there might be a bug or missing feature or two.\n    </p>\n    <h3 style=\"font-family:monospace;\">How to query the data</h3>\n    <p>The data in this dashboard primarly leverages <a href=\"https://quickwit.io\">Quickwit</a>. Quickwit supports a\n        Lucene-like query\n        language (and Elasticsearch-search compatible API) which\n        you can learn\n        more about <a href=\"https://quickwit.io/docs/reference/query-language\">here</a>.</p>\n\n    <p>At the top of the dashboard you can also filter by log and trace attributes, which will automatically apply to\n        the\n        related dashboard visualizations.</p>\n</div>",
                 "mode": "html"
             },
             "pluginVersion": "10.4.1",
@@ -303,55 +302,6 @@
         {
             "datasource": {
                 "type": "quickwit-quickwit-datasource",
-                "uid": "quickwit-logs"
-            },
-            "description": "Console logs captured by the browser extension",
-            "gridPos": {
-                "h": 7,
-                "w": 17,
-                "x": 7,
-                "y": 10
-            },
-            "id": 3,
-            "options": {
-                "dedupStrategy": "exact",
-                "enableLogDetails": true,
-                "prettifyLogMessage": false,
-                "showCommonLabels": false,
-                "showLabels": false,
-                "showTime": true,
-                "sortOrder": "Descending",
-                "wrapLogMessage": true
-            },
-            "targets": [
-                {
-                    "alias": "",
-                    "bucketAggs": [],
-                    "datasource": {
-                        "type": "quickwit-quickwit-datasource",
-                        "uid": "quickwit-logs"
-                    },
-                    "metrics": [
-                        {
-                            "id": "1",
-                            "settings": {
-                                "limit": "1000",
-                                "sortDirection": "desc"
-                            },
-                            "type": "logs"
-                        }
-                    ],
-                    "query": "",
-                    "refId": "A",
-                    "timeField": ""
-                }
-            ],
-            "title": "Logs",
-            "type": "logs"
-        },
-        {
-            "datasource": {
-                "type": "quickwit-quickwit-datasource",
                 "uid": "quickwit-traces"
             },
             "fieldConfig": {
@@ -401,7 +351,7 @@
                 "h": 17,
                 "w": 8,
                 "x": 7,
-                "y": 17
+                "y": 10
             },
             "id": 2,
             "options": {
@@ -504,7 +454,7 @@
                 "h": 17,
                 "w": 9,
                 "x": 15,
-                "y": 17
+                "y": 10
             },
             "id": 1,
             "options": {
@@ -582,9 +532,10 @@
         },
         {
             "datasource": {
-                "type": "tempo",
-                "uid": "tempo"
+                "type": "quickwit-quickwit-datasource",
+                "uid": "quickwit-traces"
             },
+            "description": "Traces emitted by the browser extension",
             "fieldConfig": {
                 "defaults": {
                     "color": {
@@ -615,12 +566,12 @@
                 "overrides": []
             },
             "gridPos": {
-                "h": 8,
+                "h": 7,
                 "w": 17,
                 "x": 7,
-                "y": 34
+                "y": 27
             },
-            "id": 4,
+            "id": 8,
             "options": {
                 "cellHeight": "sm",
                 "footer": {
@@ -631,31 +582,83 @@
                     ],
                     "show": false
                 },
-                "frameIndex": 1,
-                "showHeader": true,
-                "sortBy": [
-                    {
-                        "desc": true,
-                        "displayName": "Start time"
-                    }
-                ]
+                "showHeader": true
             },
             "pluginVersion": "10.4.1",
             "targets": [
                 {
+                    "alias": "",
+                    "bucketAggs": [],
                     "datasource": {
-                        "type": "tempo",
-                        "uid": "tempo"
+                        "type": "quickwit-quickwit-datasource",
+                        "uid": "quickwit-traces"
                     },
-                    "limit": 20,
-                    "query": "{}",
-                    "queryType": "traceql",
+                    "metrics": [
+                        {
+                            "id": "1",
+                            "settings": {
+                                "limit": "100",
+                                "sortDirection": "desc"
+                            },
+                            "type": "logs"
+                        }
+                    ],
+                    "query": "",
                     "refId": "A",
-                    "tableType": "traces"
+                    "timeField": ""
                 }
             ],
             "title": "Traces",
             "type": "table"
+        },
+        {
+            "datasource": {
+                "type": "quickwit-quickwit-datasource",
+                "uid": "quickwit-logs"
+            },
+            "description": "Console logs captured by the browser extension",
+            "gridPos": {
+                "h": 7,
+                "w": 17,
+                "x": 7,
+                "y": 34
+            },
+            "id": 3,
+            "options": {
+                "dedupStrategy": "exact",
+                "enableLogDetails": true,
+                "prettifyLogMessage": false,
+                "showCommonLabels": false,
+                "showLabels": false,
+                "showTime": true,
+                "sortOrder": "Descending",
+                "wrapLogMessage": true
+            },
+            "targets": [
+                {
+                    "alias": "",
+                    "bucketAggs": [],
+                    "datasource": {
+                        "type": "quickwit-quickwit-datasource",
+                        "uid": "quickwit-logs"
+                    },
+                    "metrics": [
+                        {
+                            "id": "1",
+                            "settings": {
+                                "limit": "1000",
+                                "sortDirection": "desc"
+                            },
+                            "type": "logs"
+                        }
+                    ],
+                    "query": "",
+                    "refId": "A",
+                    "timeField": ""
+                }
+            ],
+            "title": "Logs",
+            "type": "logs"
         }
     ],
     "refresh": "",
@@ -708,6 +711,7 @@
     "timepicker": {},
     "timezone": "browser",
     "title": "OpenTelemetry Browser Extension",
-    "version": 32,
+    "uid": "cdlzyn1xk8gzke",
+    "version": 1,
     "weekStart": ""
 }

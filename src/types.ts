@@ -6,10 +6,11 @@ declare global {
 
 export enum MessageTypes {
     OTLPTraceMessage = 'trace',
-    OTLPLogMessage = 'log'
+    OTLPLogMessage = 'log',
+    OTLPMetricMessage = 'metric',
 }
 
-export type PortMessage = OTLPExportTraceMessage | OTLPExportLogMessage
+export type PortMessage = OTLPExportTraceMessage | OTLPExportLogMessage | OTLPMetricMessage
 
 export interface PortMessageBase {
     type: MessageTypes
@@ -27,24 +28,14 @@ export interface TypedMessageHandler<T> extends chrome.runtime.PortMessageEvent 
 export interface OTLPExportTraceMessage extends PortMessageBase {
     type: MessageTypes.OTLPTraceMessage
     bytes: number[],
-    timeout: number,
 }
 
 export interface OTLPExportLogMessage extends PortMessageBase {
     type: MessageTypes.OTLPLogMessage
     bytes: number[],
-    timeout: number,
 }
 
-export type Options = {
-    traceCollectorUrl: string
-    logCollectorUrl: string
-    headers: Record<string, string>
-    concurrencyLimit: number
-    events: (keyof HTMLElementEventMap)[]
-    propagateTo: string[],
-    instrumentations: ('fetch' | 'load' | 'interaction')[],
-    enabled: boolean,
-    tracingEnabled: boolean,
-    loggingEnabled: boolean,
+export interface OTLPMetricMessage extends PortMessageBase {
+    type: MessageTypes.OTLPMetricMessage
+    bytes: number[],
 }
