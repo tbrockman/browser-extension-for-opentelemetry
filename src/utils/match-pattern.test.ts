@@ -1,4 +1,4 @@
-import { match } from "./index";
+import { match } from "~utils/match-pattern";
 import assert from 'assert';
 
 describe("match", () => {
