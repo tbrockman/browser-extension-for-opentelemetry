@@ -67,7 +67,7 @@ const matchPatternsChanged = async ({ prev, next, setErrors }: MatchPatternsChan
             validPatterns = contains.filter(([t,]) => t).map(([, pat]) => pat)
             let errors = contains.filter(([t,]) => !t).map(([, pat]) => ({
                 pattern: pat,
-                error: 'permission missing'
+                error: 'Permission missing or not granted'
             }))
             patternErrors = patternErrors.concat(errors)
         }

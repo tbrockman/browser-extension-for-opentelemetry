@@ -54,7 +54,6 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
                         }}
                         aria-label='Enable or disable exporting traces'
                     />
-
                 </Group>
             } disabled={!tracingEnabled}>
             <Group>

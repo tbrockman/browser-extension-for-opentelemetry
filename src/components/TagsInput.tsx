@@ -1,4 +1,4 @@
-import { ActionIcon, Box, Combobox, Flex, FloatingIndicator, Indicator, Input, Pill, PillsInput, Tooltip, useCombobox } from "@mantine/core";
+import { Combobox, Pill, PillsInput, Tooltip, useCombobox } from "@mantine/core";
 import { useClickOutside } from "@mantine/hooks";
 import { IconExclamationCircle } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
@@ -95,8 +95,6 @@ export const TagsInput = ({ delimiter, description, disabled, errors, label, pla
         onTagSelected && onTagSelected(index);
     }
 
-    // outline: 2px solid var(--mantine-primary-color);
-
     useEffect(() => {
         const split = pillInputValue.split(delimiter);
 
@@ -119,8 +117,7 @@ export const TagsInput = ({ delimiter, description, disabled, errors, label, pla
                             value={pillInputValue}
                             placeholder={placeholder}
                             disabled={disabled}
-                            onFocus={(event) => {
-                                console.log('focused', event.target, event.currentTarget)
+                            onFocus={() => {
                                 setSelectedIndex(-1);
                             }}
                             onChange={(event) => {
@@ -143,7 +140,6 @@ export const TagsInput = ({ delimiter, description, disabled, errors, label, pla
                                     }
                                 }
                             }}
-                        // onPaste={handlePaste}
                         />
                     </Combobox.EventsTarget>
                 </Pill.Group>

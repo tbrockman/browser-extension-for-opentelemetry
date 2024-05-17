@@ -13,11 +13,16 @@ body {
     max-width: 6rem;
 }
 
-.mantine-TagsInput-pill[data-disabled] > .mantine-CloseButton-root {
-    min-width: 2em;
-    padding-inline: .1em .3em;
+.mantine-Pill-root:where([data-disabled], :has(button:disabled)) {
+    padding-inline-end: 0 !important;
 }
 
-.mantine-TagsInput-pill[data-disabled] > .mantine-CloseButton-root > svg {
-    display: block;
+.mantine-Pill-root:where([data-disabled], :has(button:disabled))>button.mantine-CloseButton-root {
+    min-width: 2em !important;
+    padding-inline: .1em .3em !important;
+    display: inline-flex !important;
+}
+
+.mantine-Pill-root:where([data-disabled], :has(button:disabled))>button.mantine-CloseButton-root>svg {
+    display: block !important;
 }

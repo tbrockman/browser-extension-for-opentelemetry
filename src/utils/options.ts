@@ -32,15 +32,15 @@ const defaultOptions: Options = {
     tracingEnabled: true,
     loggingEnabled: true,
     metricsEnabled: true,
-    matchPatterns: ['http://localhost/*'],
+    matchPatterns: ['http://localhost/*', 'https://*/*'],
     traceCollectorUrl: 'http://localhost:4318/v1/traces',
     logCollectorUrl: 'http://localhost:4318/v1/logs',
     metricsCollectorUrl: 'http://localhost:4318/v1/metrics',
     headers: new Map([
-        ['x-custom-header', 'test']
+        ['x-example-header', 'value']
     ]),
     attributes: new Map([
-        ['example', 'abc']
+        ['key', 'value']
     ]),
     concurrencyLimit: 10,
     events: ['submit', 'click', 'keypress', 'scroll', 'resize', 'contextmenu', 'drag', 'cut', 'copy', 'input', 'pointerdown', 'pointerenter', 'pointerleave'],

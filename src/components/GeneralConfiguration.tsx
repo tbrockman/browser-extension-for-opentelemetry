@@ -13,7 +13,7 @@ const colonSeparatedStringsToMap = (strings: string[]): Map<string, string> => {
     const map = new Map<string, string>()
     strings.forEach((string) => {
         const [key, value] = string.split(':')
-        map.set(key, value)
+        map.set(key, value ?? '')
     })
     return map
 }
@@ -22,7 +22,7 @@ const mapToColonSeparatedStrings = (map: Map<string, string>): string[] => {
     const strings = []
     if (map) {
         map.forEach((value, key) => {
-            strings.push(`${key}:${value}`)
+            strings.push(`${key}:${value ?? ''}`)
         })
     }
     return strings
