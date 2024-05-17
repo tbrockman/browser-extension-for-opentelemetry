@@ -7,8 +7,8 @@
   "scripts": {
     "preinstall": "pnpm -C ./vendored/plasmo/cli/plasmo install",
     "dev": "plasmo dev",
-    "build": "pnpm build:plasmo && plasmo build",
-    "build:plasmo": "run-p build:plasmo:cli build:plasmo:storage build:plasmo:messaging",
+    "build": "pnpm build:vendored && plasmo build",
+    "build:vendored": "run-p build:plasmo:cli build:plasmo:storage build:plasmo:messaging",
     "build:plasmo:cli": "pnpm -C ./vendored/plasmo build:cli",
     "build:plasmo:storage": "pnpm -C ./vendored/plasmo/api/storage build",
     "build:plasmo:messaging": "pnpm -C ./vendored/plasmo/api/messaging build",
