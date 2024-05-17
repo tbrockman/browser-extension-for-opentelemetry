@@ -4,7 +4,7 @@ import { IconChartDots3, IconAffiliate } from "@tabler/icons-react";
 import { useEffect } from "react";
 import { useLocalStorage } from "~hooks/storage";
 
-import { events as EventList } from "~util"
+import { events as EventList } from "~utils/constants"
 import { defaultOptions } from "~utils/options";
 
 const CheckboxIcon: CheckboxProps['icon'] = ({ ...others }) =>

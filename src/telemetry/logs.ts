@@ -1,6 +1,6 @@
 import { SeverityNumber } from "@opentelemetry/api-logs";
 import { LoggerProvider } from "@opentelemetry/sdk-logs";
-import { logPrefix } from "~util";
+import { logPrefix } from "~utils/constants";
 
 
 export const wrapConsoleWithLoggerProvider = (provider: LoggerProvider) => {
