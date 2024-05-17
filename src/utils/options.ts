@@ -1,7 +1,8 @@
 import type { Storage } from "@plasmohq/storage"
+import { getWithDefaults } from "./storage"
 
 type MatchPatternError = {
-    error: Error
+    error: string
     pattern: string
 }
 
@@ -49,10 +50,7 @@ const defaultOptions: Options = {
 }
 
 const getOptions = async (storage: Storage): Promise<Options> => {
-    const result = await Promise.all(Object.keys(defaultOptions).map(async (key) => {
-        return [key, await storage.get(key) || defaultOptions[key]]
-    }))
-    return Object.fromEntries(result)
+    return await getWithDefaults(storage, defaultOptions)
 }
 
 export {

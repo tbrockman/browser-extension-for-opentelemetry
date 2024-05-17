@@ -20,7 +20,6 @@ const colonSeparatedStringsToMap = (strings: string[]): Map<string, string> => {
 
 const mapToColonSeparatedStrings = (map: Map<string, string>): string[] => {
     const strings = []
-    console.log(map, typeof map)
     if (map) {
         map.forEach((value, key) => {
             strings.push(`${key}:${value}`)
@@ -29,21 +28,30 @@ const mapToColonSeparatedStrings = (map: Map<string, string>): string[] => {
     return strings
 }
 
+const patternErrorsToPills = (patterns: string[], errors: MatchPatternError[]): Map<number, string> => {
+    const map = new Map<number, string>()
+    errors.forEach((error) => {
+        const index = patterns.indexOf(error.pattern)
+        if (index !== -1) {
+            map.set(index, error.error)
+        }
+    })
+    return map
+}
+
 export default function GeneralConfiguration({ enabled }: GeneralConfigurationProps) {
     const [headers, setHeaders] = useLocalStorage<Map<string, string>>("headers")
+    const headersStrings = mapToColonSeparatedStrings(headers)
     const [attributes, setAttributes] = useLocalStorage<Map<string, string>>("attributes")
     const attributesStrings = mapToColonSeparatedStrings(attributes)
 
     const [matchPatterns, setMatchPatterns] = useLocalStorage<string[]>("matchPatterns")
     const [patternErrors, setPatternErrors] = useLocalStorage<MatchPatternError[]>("matchPatternErrors")
+    const pillErrors = patternErrorsToPills(matchPatterns, patternErrors)
 
     const onEnabledUrlsChange = async (values: string[]) => {
         setMatchPatterns(values)
         matchPatternsChanged({ prev: matchPatterns, next: values, setErrors: setPatternErrors })
-    }
-
-    const onHeadersChanged = (newHeaders: string[]) => {
-        setHeaders(colonSeparatedStringsToMap(newHeaders))
     }
 
     return (
@@ -65,6 +73,16 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
             <Group>
                 <TagsInput
                     value={matchPatterns}
+                    errors={pillErrors}
+                    onValueRemoved={(index) => {
+                        const newPatterns = [...matchPatterns]
+                        newPatterns.splice(index, 1)
+                        onEnabledUrlsChange(newPatterns)
+                    }}
+                    onValueAdded={(value) => {
+                        matchPatterns.push(value)
+                        onEnabledUrlsChange(matchPatterns)
+                    }}
                     label={
                         <>
                             Allow extension on {" "}
@@ -99,15 +117,24 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                     label="Resource attributes"
                     disabled={!enabled}
                     description="Attach additional attributes on all exported logs/traces."
-                    placeholder={Object.keys(attributes).length == 0 ? 'key:value, key2:value2' : ''}
+                    placeholder={attributesStrings.length == 0 ? 'key:value, key2:value2' : ''}
                     delimiter={","}
                 />
                 <TagsInput
                     value={mapToColonSeparatedStrings(headers)}
+                    onValueRemoved={(index) => {
+                        const newState = [...headersStrings]
+                        newState.splice(index, 1)
+                        setHeaders(colonSeparatedStringsToMap(newState))
+                    }}
+                    onValueAdded={(value) => {
+                        headersStrings.push(value)
+                        setHeaders(colonSeparatedStringsToMap(headersStrings))
+                    }}
                     label="Request headers"
                     disabled={!enabled}
                     description="Include additional HTTP headers on all export requests."
-                    placeholder={Object.keys(headers).length == 0 ? 'key:value, key2:value2' : ''}
+                    placeholder={headersStrings.length == 0 ? 'key:value, key2:value2' : ''}
                     delimiter={","}
                 />
             </Group>

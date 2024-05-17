@@ -41,7 +41,7 @@ const matchPatternsChanged = async ({ prev, next, setErrors }: MatchPatternsChan
         if (!matcher.valid) {
             patternErrors.push({
                 pattern,
-                error: matcher.error
+                error: matcher.error.message
             })
         } else {
             validPatterns.push(pattern)
@@ -67,7 +67,7 @@ const matchPatternsChanged = async ({ prev, next, setErrors }: MatchPatternsChan
             validPatterns = contains.filter(([t,]) => t).map(([, pat]) => pat)
             let errors = contains.filter(([t,]) => !t).map(([, pat]) => ({
                 pattern: pat,
-                error: new Error('permission missing')
+                error: 'permission missing'
             }))
             patternErrors = patternErrors.concat(errors)
         }
