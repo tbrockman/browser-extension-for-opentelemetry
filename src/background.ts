@@ -1,13 +1,13 @@
 import { Storage } from '@plasmohq/storage'
-import { consoleProxy } from './util'
+import { consoleProxy } from '~utils/logging'
 import injectContentScript from 'inlinefunc:./content-script'
 import { MessageTypes, type OTLPExportTraceMessage, type OTLPExportLogMessage, type PortMessage, type TypedPort } from '~types'
-import type { MatchPatternError, Options } from '~utils/options'
+import type { Options } from '~utils/options'
 import { defaultOptions, getOptions } from '~utils/options'
-import { match } from '~utils'
-import { matchPattern, presets } from 'browser-extension-url-match'
+import { match } from '~utils/match-pattern'
+import { serializer, deserializer } from '~utils/serde'
 
-let storage = new Storage({ area: 'local' })
+let storage = new Storage({ area: 'local', serde: { serializer, deserializer } })
 let ports = {}
 
 const getDestinationForMessage = async (message: PortMessage) => {
@@ -25,7 +25,7 @@ const getDestinationForMessage = async (message: PortMessage) => {
 
 const onConnect = async (p: TypedPort<Partial<Options>, PortMessage>) => {
 
-    consoleProxy.debug('connection attempt on port', p)
+    consoleProxy.debug('connection attempt on port:', p)
 
     let patterns = await storage.get<string[]>('matchPatterns') || ['http://localhost/*']
 
@@ -47,8 +47,9 @@ const onConnect = async (p: TypedPort<Partial<Options>, PortMessage>) => {
 
                 // Even though the content script could send us the headers and url, we don't trust them
                 // So in the worst case scenario we're sending arbitrary bytes to our chosen server
+                const stored = await storage.get<Map<string, string>>('headers')
                 const headers = {
-                    ...(await storage.get<Record<string, string>>('headers')),
+                    ...(Object.fromEntries(stored.entries())),
                     'Content-Type': 'application/x-protobuf',
                     Accept: 'application/x-protobuf'
                 }
@@ -111,15 +112,15 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
         // TODO: refactor, remove usage of @plasmohq/storage (so we don't have to make multiple get requests here) and have options store its own defaults
         const options = await getOptions(storage)
 
-        consoleProxy.debug({ options })
+        consoleProxy.debug("loaded options:", { options })
 
         await chrome.scripting.executeScript({
             target: { tabId, allFrames: true },
             func: injectContentScript,
-            args: [
-                chrome.runtime.id,
-                options,
-            ],
+            args: [{
+                extensionId: chrome.runtime.id,
+                options: serializer(options),
+            }],
             injectImmediately: true,
             world: "MAIN"
         })

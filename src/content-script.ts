@@ -17,8 +17,10 @@ import { B3Propagator } from '@opentelemetry/propagator-b3';
 import { CompositePropagator, W3CTraceContextPropagator } from '@opentelemetry/core';
 
 import { MessageTypes, type PortMessage, type TypedPort } from '~types';
-import { consoleProxy, wrapConsoleWithLoggerProvider } from '~util';
+import { consoleProxy } from '~utils/logging';
+import { wrapConsoleWithLoggerProvider } from '~telemetry/logs';
 import type { Options } from '~utils/options';
+import { deserializer } from '~utils/serde';
 
 
 function createSendOverride<ExportItem, ServiceRequest>(port: TypedPort<PortMessage, Partial<Options>>, exporter: OTLPProtoExporterBrowserBase<ExportItem, ServiceRequest>, type: MessageTypes) {
@@ -48,6 +50,7 @@ function createSendOverride<ExportItem, ServiceRequest>(port: TypedPort<PortMess
 }
 
 const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Options) => {
+
     if (!options || !options.enabled || !options.instrumentations || options.instrumentations.length === 0 || window.__OTEL_BROWSER_EXT_INSTRUMENTED__) {
         consoleProxy.debug(`not instrumenting as either options missing or already instrumented`, options, window.__OTEL_BROWSER_EXT_INSTRUMENTED__)
         return () => { }
@@ -57,7 +60,7 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
 
     const resource = new Resource({
         [SEMRESATTRS_SERVICE_NAME]: 'opentelemetry-browser-extension',
-        [SEMRESATTRS_SERVICE_VERSION]: '0.0.5', // TODO: replace with package.json version
+        [SEMRESATTRS_SERVICE_VERSION]: '0.0.6', // TODO: replace with package.json version
         [SEMRESATTRS_TELEMETRY_SDK_LANGUAGE]: 'webjs',
         [SEMRESATTRS_TELEMETRY_SDK_NAME]: 'opentelemetry',
         [SEMRESATTRS_TELEMETRY_SDK_VERSION]: '1.22.0', // TODO: replace with resolved version
@@ -150,7 +153,14 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
     }
 }
 
-export default function injectContentScript(extensionId: string, options: Options, retries = 10, backoff = 10) {
+export type InjectContentScriptArgs = {
+    extensionId: string,
+    options: Options | string,
+    retries?: number,
+    backoff?: number,
+}
+
+export default function injectContentScript({ extensionId, options, retries = 10, backoff = 10 }: InjectContentScriptArgs) {
     if (retries <= 0) {
         return
     }
@@ -159,6 +169,10 @@ export default function injectContentScript(extensionId: string, options: Option
         if (!chrome.runtime) {
             consoleProxy.debug(`chrome.runtime not available, not injecting content script`)
             return
+        }
+
+        if (typeof options === 'string') {
+            options = deserializer<Options>(options)
         }
         const port: TypedPort<PortMessage, Partial<Options>> = chrome.runtime.connect(extensionId);
         let deregisterInstrumentation = instrument(port, options);
@@ -170,24 +184,24 @@ export default function injectContentScript(extensionId: string, options: Option
             // try to reconnect if possible
             setTimeout(() => {
                 consoleProxy.debug(`attempting to reconnect in ${backoff}ms`)
-                injectContentScript(extensionId, options, retries - 1, backoff * 2)
+                injectContentScript({ extensionId, options, retries: retries - 1, backoff: backoff * 2 })
             }, backoff)
         })
 
         port.onMessage.addListener((m) => {
             consoleProxy.debug(`received message from background script`, m);
             options = {
-                ...options,
+                ...options as Options,
                 ...m
             }
             deregisterInstrumentation && deregisterInstrumentation()
             deregisterInstrumentation = instrument(port, options)
         })
     } catch (e) {
-        consoleProxy.error(`error injecting content script`, e)
+        consoleProxy.error(`error injecting content script`, e, options)
         setTimeout(() => {
             consoleProxy.debug(`attempting to reconnect in ${backoff}ms`)
-            injectContentScript(extensionId, options, retries - 1, backoff * 2)
+            injectContentScript({ extensionId, options, retries: retries - 1, backoff: backoff * 2 })
         }, backoff)
     }
 }

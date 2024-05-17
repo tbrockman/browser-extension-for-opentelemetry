@@ -32,7 +32,7 @@ const defaultOptions: Options = {
     tracingEnabled: true,
     loggingEnabled: true,
     metricsEnabled: true,
-    matchPatterns: ['http://localhost/*', 'https://*/*'],
+    matchPatterns: ['http://localhost/*'],
     traceCollectorUrl: 'http://localhost:4318/v1/traces',
     logCollectorUrl: 'http://localhost:4318/v1/logs',
     metricsCollectorUrl: 'http://localhost:4318/v1/metrics',

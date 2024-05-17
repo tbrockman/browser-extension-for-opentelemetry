@@ -3,14 +3,15 @@ import { useStorage as usePlasmoStorage } from "@plasmohq/storage/hook"
 
 import type { Options } from "~utils/options"
 import { defaultOptions } from "~utils/options"
+import { serializer, deserializer } from "~utils/serde"
 
-// technically we could store more than just options, but we don't
+// technically we could store more than just options, but we don't currently
 // update default handling if we ever do
 type StorageKey = keyof Options
 type StorageType = Options[StorageKey]
 
-const localStorage = new Storage({ area: "local" })
-const syncStorage = new Storage({ area: "sync" })
+const localStorage = new Storage({ area: "local", serde: { serializer, deserializer } })
+const syncStorage = new Storage({ area: "sync", serde: { serializer, deserializer } })
 
 function useStorageSingleton(area: "local" | "sync" = "local") {
     if (area === "local") {

@@ -33,5 +33,4 @@ dist/
 .tsbuildinfo
 
 # docker compose volumes
-tempo-data
 qwdata

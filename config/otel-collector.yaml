@@ -11,10 +11,6 @@ receivers:
       grpc:
         endpoint: 0.0.0.0:4317
 exporters:
-  otlp:
-    endpoint: tempo:5317
-    tls:
-      insecure: true
   otlp/quickwit:
     endpoint: quickwit:7281
     tls:
@@ -28,7 +24,7 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      exporters: [otlp, otlp/quickwit, debug]
+      exporters: [otlp/quickwit, debug]
     logs:
       receivers: [otlp]
       exporters: [otlp/quickwit, debug]

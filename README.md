@@ -42,7 +42,7 @@ Install dependencies:
 pnpm install
 ```
 
-Start the OpenTelemetry stack (Grafana + Tempo + `opentelemetry-collector-contrib`):<sup> (optional if you have your own)</sup>
+Start the OpenTelemetry stack (Grafana + Quickwit + `opentelemetry-collector-contrib`):<sup> (optional if you have your own)</sup>
 ```bash
 docker compose up -d
 ```

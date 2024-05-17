@@ -1,1 +1,0 @@
-export { match, matchPatternsChanged } from './match-pattern'

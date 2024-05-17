@@ -3,7 +3,7 @@ import { TagsInput } from "~components/TagsInput";
 import ColorModeSwitch from "~components/ColorModeSwitch";
 import { useLocalStorage } from "~hooks/storage";
 import { defaultOptions, type MatchPatternError } from "~utils/options";
-import { matchPatternsChanged } from "~utils";
+import { matchPatternsChanged } from "~utils/match-pattern";
 
 type GeneralConfigurationProps = {
     enabled: boolean
