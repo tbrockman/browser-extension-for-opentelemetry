@@ -5,7 +5,7 @@
 
 A [Plasmo](https://docs.plasmo.com/) browser extension that automatically instruments webpages with [OpenTelemetry](https://opentelemetry.io/docs/what-is-opentelemetry/).
 
-[Download it](https://chromewebstore.google.com/detail/opentelemetry-browser-ext/bgjeoaohfhbfabbfhbafjihbobjgniag), refresh your pages, and start sending OTLP logs and traces.
+[Download it](https://chromewebstore.google.com/detail/opentelemetry-browser-ext/bgjeoaohfhbfabbfhbafjihbobjgniag), refresh your pages, and start recording OTLP logs and traces in your browser.
 
 ## Preview
 
