@@ -1,11 +1,13 @@
 import { Storage } from '@plasmohq/storage'
 import { consoleProxy } from '~utils/logging'
 import injectContentScript from 'inlinefunc:./content-script'
+import injectRelay from 'inlinefunc:./message-relay'
 import { MessageTypes, type OTLPExportTraceMessage, type OTLPExportLogMessage, type PortMessage, type TypedPort } from '~types'
 import type { Options } from '~utils/options'
 import { defaultOptions, getOptions } from '~utils/options'
 import { match } from '~utils/match-pattern'
 import { serializer, deserializer } from '~utils/serde'
+import { uuidv7 } from 'uuidv7';
 
 let storage = new Storage({ area: 'local', serde: { serializer, deserializer } })
 let ports = {}
@@ -92,7 +94,7 @@ chrome.storage.onChanged.addListener((event: Record<keyof Options, chrome.storag
     })
 })
 
-chrome.runtime.onConnectExternal.addListener(onConnect);
+chrome.runtime.onConnect.addListener(onConnect);
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     if (
         changeInfo.status === "complete") {
@@ -112,13 +114,25 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
         // TODO: refactor, remove usage of @plasmohq/storage (so we don't have to make multiple get requests here) and have options store its own defaults
         const options = await getOptions(storage)
 
-        consoleProxy.debug("loaded options:", { options })
+        consoleProxy.debug("loaded options", options)
+        const sessionId = uuidv7()
+
+        await chrome.scripting.executeScript({
+            target: { tabId, allFrames: true },
+            func: injectRelay,
+            args: [{
+                sessionId,
+                // options: serializer(options),
+            }],
+            injectImmediately: true,
+            world: "ISOLATED"
+        })
 
         await chrome.scripting.executeScript({
             target: { tabId, allFrames: true },
             func: injectContentScript,
             args: [{
-                extensionId: chrome.runtime.id,
+                sessionId,
                 options: serializer(options),
             }],
             injectImmediately: true,

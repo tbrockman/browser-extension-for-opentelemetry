@@ -109,6 +109,9 @@ importers:
       react-dom:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
+      uuidv7:
+        specifier: ^1.0.0
+        version: 1.0.0
     devDependencies:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: 4.1.1
@@ -12186,6 +12189,11 @@ packages:
 
   /uuid@9.0.1:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
+    hasBin: true
+    dev: false
+
+  /uuidv7@1.0.0:
+    resolution: {integrity: sha512-XkvPwTtSmYwxIE1FSYQTYg79zHL1ZWV5vM/Qyl9ahXCU8enOPPA4bTjzvafvYUB7l2+miv4EqK/qEe75cOXIdA==}
     hasBin: true
     dev: false
 
