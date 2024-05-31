@@ -67,7 +67,7 @@ const instrument = (sessionId: string, options: Options) => {
         [SEMRESATTRS_TELEMETRY_SDK_LANGUAGE]: 'webjs',
         [SEMRESATTRS_TELEMETRY_SDK_NAME]: 'opentelemetry',
         [SEMRESATTRS_TELEMETRY_SDK_VERSION]: '1.22.0', // TODO: replace with resolved version
-        'browser.name': process.env.PLASMO_BROWSER,
+        // 'browser.name': process.env.PLASMO_BROWSER, // TODO: fix why this is undefined
         'extension.session.id': sessionId,
         ...Object.fromEntries(options.attributes.entries())
     })
