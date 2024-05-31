@@ -21,7 +21,9 @@
     "build:vendored": "run-p build:plasmo:cli build:plasmo:storage build:plasmo:messaging",
     "build:plasmo:cli": "pnpm -C ./vendored/plasmo build:cli",
     "build:plasmo:storage": "pnpm -C ./vendored/plasmo/api/storage build",
-    "build:plasmo:messaging": "pnpm -C ./vendored/plasmo/api/messaging build"
+    "build:plasmo:messaging": "pnpm -C ./vendored/plasmo/api/messaging build",
+    "test": "pnpm test:unit",
+    "test:unit": "mocha --require mocha-suppress-logs src/**/*.test.ts"
   },
   "dependencies": {
     "@mantine/core": "^7.6.1",
