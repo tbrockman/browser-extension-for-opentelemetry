@@ -4,6 +4,7 @@
   "version": "0.0.7",
   "description": "An extension for instrumenting webpages using OpenTelemetry",
   "author": "Theodore Brockman <iam@theo.lol>",
+  "packageManager": "pnpm@8.14.0",
   "scripts": {
     "preinstall": "pnpm install:plasmo && pnpm build:run-p && pnpm build:vendored",
     "install:plasmo": "pnpm -C ./vendored/plasmo/ install",
