@@ -16,14 +16,14 @@ import { Resource } from '@opentelemetry/resources';
 import { B3Propagator } from '@opentelemetry/propagator-b3';
 import { CompositePropagator, W3CTraceContextPropagator } from '@opentelemetry/core';
 
-import { MessageTypes, type PortMessage, type TypedPort } from '~types';
+import { MessageTypes } from '~types';
 import { consoleProxy } from '~utils/logging';
 import { wrapConsoleWithLoggerProvider } from '~telemetry/logs';
 import type { Options } from '~utils/options';
 import { deserializer } from '~utils/serde';
 
 
-function createSendOverride<ExportItem, ServiceRequest>(port: TypedPort<PortMessage, Partial<Options>>, exporter: OTLPProtoExporterBrowserBase<ExportItem, ServiceRequest>, type: MessageTypes) {
+function createSendOverride<ExportItem, ServiceRequest>(sessionId: string, exporter: OTLPProtoExporterBrowserBase<ExportItem, ServiceRequest>, type: MessageTypes) {
 
     return (objects: ExportItem[], onSuccess: () => void, onError: (error: OTLPExporterError) => void) => {
 
@@ -40,8 +40,11 @@ function createSendOverride<ExportItem, ServiceRequest>(port: TypedPort<PortMess
             // Because messages are JSON serialized and deserialized, we can't send a Uint8Array directly
             // So we send an array of numbers and convert it back to a Uint8Array on the other side
             const message = { bytes: Array.from(bytes), timeout: exporter.timeoutMillis, type }
-            consoleProxy.debug(`message sent to background script to forward to collector`)
-            port.postMessage(message)
+            const key = `${sessionId}:relay-to-background`
+            const event = new CustomEvent(key, { detail: message })
+            // Our `ISOLATED` content script will forward this event to the background script
+            window.dispatchEvent(event)
+            consoleProxy.debug(`message sent to relay using session id: ${sessionId}`, message)
             onSuccess()
         } else {
             onError(new OTLPExporterError('failed to create OTLP proto service request message'))
@@ -49,21 +52,23 @@ function createSendOverride<ExportItem, ServiceRequest>(port: TypedPort<PortMess
     }
 }
 
-const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Options) => {
+const instrument = (sessionId: string, options: Options) => {
 
     if (!options || !options.enabled || !options.instrumentations || options.instrumentations.length === 0 || window.__OTEL_BROWSER_EXT_INSTRUMENTED__) {
         consoleProxy.debug(`not instrumenting as either options missing or already instrumented`, options, window.__OTEL_BROWSER_EXT_INSTRUMENTED__)
         return () => { }
     }
     window.__OTEL_BROWSER_EXT_INSTRUMENTED__ = true
-    consoleProxy.debug(`instrumenting with options`, options)
+    consoleProxy.debug(`instrumenting`, { sessionId, options })
 
     const resource = new Resource({
         [SEMRESATTRS_SERVICE_NAME]: 'opentelemetry-browser-extension',
-        [SEMRESATTRS_SERVICE_VERSION]: '0.0.6', // TODO: replace with package.json version
+        [SEMRESATTRS_SERVICE_VERSION]: '0.0.7', // TODO: replace with package.json version
         [SEMRESATTRS_TELEMETRY_SDK_LANGUAGE]: 'webjs',
         [SEMRESATTRS_TELEMETRY_SDK_NAME]: 'opentelemetry',
         [SEMRESATTRS_TELEMETRY_SDK_VERSION]: '1.22.0', // TODO: replace with resolved version
+        // 'browser.name': process.env.PLASMO_BROWSER, // TODO: fix why this is undefined
+        'extension.session.id': sessionId,
         ...Object.fromEntries(options.attributes.entries())
     })
 
@@ -79,7 +84,7 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
             concurrencyLimit: options.concurrencyLimit,
         })
         // @ts-ignore
-        traceExporter.send = createSendOverride(port, traceExporter, MessageTypes.OTLPTraceMessage)
+        traceExporter.send = createSendOverride(sessionId, traceExporter, MessageTypes.OTLPTraceMessage)
         // TODO: make batching configurable, choosing simple for now to avoid losing data on page navigations
         const traceProcessor = new SimpleSpanProcessor(traceExporter);
         tracerProvider.addSpanProcessor(traceProcessor);
@@ -103,7 +108,7 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
             concurrencyLimit: options.concurrencyLimit,
         })
         // @ts-ignore
-        logExporter.send = createSendOverride(port, logExporter, MessageTypes.OTLPLogMessage)
+        logExporter.send = createSendOverride(sessionId, logExporter, MessageTypes.OTLPLogMessage)
         loggerProvider = new LoggerProvider({
             resource
         })
@@ -139,6 +144,7 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
             instrumentationsToRegister[setting[0]] = setting[1]
         })
     })
+    consoleProxy.debug(`registering instrumentations`, instrumentationsToRegister)
     const deregister = registerInstrumentations({
         instrumentations: [
             getWebAutoInstrumentations(instrumentationsToRegister),
@@ -148,60 +154,54 @@ const instrument = (port: TypedPort<PortMessage, Partial<Options>>, options: Opt
     });
 
     return () => {
+        consoleProxy.log(`deregistering instrumentations`)
         window.__OTEL_BROWSER_EXT_INSTRUMENTED__ = false
         return deregister()
     }
 }
 
 export type InjectContentScriptArgs = {
-    extensionId: string,
+    sessionId: string,
     options: Options | string,
     retries?: number,
     backoff?: number,
 }
 
-export default function injectContentScript({ extensionId, options, retries = 10, backoff = 10 }: InjectContentScriptArgs) {
+export default function injectContentScript({ sessionId, options, retries = 10, backoff = 10 }: InjectContentScriptArgs) {
     if (retries <= 0) {
         return
     }
 
     try {
-        if (!chrome.runtime) {
-            consoleProxy.debug(`chrome.runtime not available, not injecting content script`)
-            return
-        }
-
         if (typeof options === 'string') {
             options = deserializer<Options>(options)
         }
-        const port: TypedPort<PortMessage, Partial<Options>> = chrome.runtime.connect(extensionId);
-        let deregisterInstrumentation = instrument(port, options);
+        let deregisterInstrumentation = instrument(sessionId, options);
 
-        port.onDisconnect.addListener(obj => {
-            consoleProxy.debug(`disconnected port`, obj);
-            deregisterInstrumentation && deregisterInstrumentation()
-            port.disconnect()
-            // try to reconnect if possible
-            setTimeout(() => {
-                consoleProxy.debug(`attempting to reconnect in ${backoff}ms`)
-                injectContentScript({ extensionId, options, retries: retries - 1, backoff: backoff * 2 })
-            }, backoff)
-        })
-
-        port.onMessage.addListener((m) => {
-            consoleProxy.debug(`received message from background script`, m);
-            options = {
-                ...options as Options,
-                ...m
+        const key = `${sessionId}:relay-from-background`
+        const listener = (event: CustomEvent) => {
+            if (event.detail.type === 'disconnect') {
+                consoleProxy.debug(`received disconnect message from relay`, event.detail)
+                deregisterInstrumentation && deregisterInstrumentation()
+                window.removeEventListener(key, listener)
+            } else if (event.detail.type === 'storageChanged') {
+                consoleProxy.debug(`received storage changed message from relay`, event.detail)
+                options = {
+                    ...options as Options,
+                    ...event.detail.data as Partial<Options>
+                }
+                deregisterInstrumentation && deregisterInstrumentation()
+                deregisterInstrumentation = instrument(sessionId, options)
             }
-            deregisterInstrumentation && deregisterInstrumentation()
-            deregisterInstrumentation = instrument(port, options)
-        })
+        }
+
+        // listen for messages from the relay
+        window.addEventListener(key, listener)
     } catch (e) {
         consoleProxy.error(`error injecting content script`, e, options)
         setTimeout(() => {
-            consoleProxy.debug(`attempting to reconnect in ${backoff}ms`)
-            injectContentScript({ extensionId, options, retries: retries - 1, backoff: backoff * 2 })
+            consoleProxy.debug(`attempting to reconnect in ${backoff} ms`)
+            injectContentScript({ sessionId, options, retries: retries - 1, backoff: backoff * 2 })
         }, backoff)
     }
 }

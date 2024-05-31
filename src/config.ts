@@ -8,7 +8,7 @@ const configs = {
     development: {}
 }
 
-const config: Config = deepmerge(configs.default, configs[process.env.NODE_ENV ?? 'development'][process.env.BROWSER ?? 'chrome'])
+const config: Config = deepmerge(configs.default, configs[process.env.NODE_ENV ?? 'development'][process.env.PLASMO_BROWSER ?? 'chrome'])
 
 export {
     config
