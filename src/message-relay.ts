@@ -24,7 +24,6 @@ export default function injectRelay({ sessionId }: InjectRelayArgs) {
     })
 
     // Relay messages/events from the background script to the content script
-
     port.onDisconnect.addListener(obj => {
         consoleProxy.debug(`background script disconnected port`, obj);
         port.disconnect()

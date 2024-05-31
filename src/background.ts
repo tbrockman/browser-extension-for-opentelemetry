@@ -48,7 +48,7 @@ const onConnect = async (p: TypedPort<Partial<Options>, PortMessage>) => {
                 const { bytes } = MessageTypes.OTLPLogMessage ? message as OTLPExportLogMessage : message as OTLPExportTraceMessage
 
                 // Even though the content script could send us the headers and url, we don't trust them
-                // So in the worst case scenario we're sending arbitrary bytes to our chosen server
+                // So in the absolute worst case adversarial scenario we're still just sending arbitrary bytes to our chosen server
                 const stored = await storage.get<Map<string, string>>('headers')
                 const headers = {
                     ...(Object.fromEntries(stored.entries())),
@@ -121,8 +121,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
             target: { tabId, allFrames: true },
             func: injectRelay,
             args: [{
-                sessionId,
-                // options: serializer(options),
+                sessionId
             }],
             injectImmediately: true,
             world: "ISOLATED"
