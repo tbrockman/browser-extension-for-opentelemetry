@@ -63,10 +63,11 @@ const instrument = (sessionId: string, options: Options) => {
 
     const resource = new Resource({
         [SEMRESATTRS_SERVICE_NAME]: 'opentelemetry-browser-extension',
-        [SEMRESATTRS_SERVICE_VERSION]: '0.0.6', // TODO: replace with package.json version
+        [SEMRESATTRS_SERVICE_VERSION]: '0.0.7', // TODO: replace with package.json version
         [SEMRESATTRS_TELEMETRY_SDK_LANGUAGE]: 'webjs',
         [SEMRESATTRS_TELEMETRY_SDK_NAME]: 'opentelemetry',
         [SEMRESATTRS_TELEMETRY_SDK_VERSION]: '1.22.0', // TODO: replace with resolved version
+        'browser.name': process.env.PLASMO_BROWSER,
         'extension.session.id': sessionId,
         ...Object.fromEntries(options.attributes.entries())
     })
@@ -113,7 +114,7 @@ const instrument = (sessionId: string, options: Options) => {
         })
         // TODO: make batching configurable, choosing simple for now to avoid losing data on page navigations
         loggerProvider.addLogRecordProcessor(new SimpleLogRecordProcessor(logExporter))
-        wrapConsoleWithLoggerProvider(loggerProvider)
+        // wrapConsoleWithLoggerProvider(loggerProvider)
     }
     const propagateTraceHeaderCorsUrls = options.propagateTo.map((url) => new RegExp(url))
     const clearTimingResources = true
@@ -143,6 +144,7 @@ const instrument = (sessionId: string, options: Options) => {
             instrumentationsToRegister[setting[0]] = setting[1]
         })
     })
+    consoleProxy.debug(`registering instrumentations`, instrumentationsToRegister)
     const deregister = registerInstrumentations({
         instrumentations: [
             getWebAutoInstrumentations(instrumentationsToRegister),
@@ -152,6 +154,7 @@ const instrument = (sessionId: string, options: Options) => {
     });
 
     return () => {
+        consoleProxy.log(`deregistering instrumentations`)
         window.__OTEL_BROWSER_EXT_INSTRUMENTED__ = false
         return deregister()
     }

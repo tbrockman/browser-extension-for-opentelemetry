@@ -9,7 +9,7 @@ services:
     ports:
       - 7280:7280
     command: ["run"]
-    # attach: false
+    attach: false # comment this line if you'd like to view quickwit log output
 
   otel-collector:
     image: otel/opentelemetry-collector:latest

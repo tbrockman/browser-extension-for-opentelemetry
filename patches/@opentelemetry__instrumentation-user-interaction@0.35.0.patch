@@ -1,0 +1,20 @@
+diff --git a/build/esm/instrumentation.js b/build/esm/instrumentation.js
+index 928b559ffdafaea1832ec9b6a119656f8f091558..511a277175d888445b8e39e419027fc2f1a19158 100644
+--- a/build/esm/instrumentation.js
++++ b/build/esm/instrumentation.js
+@@ -63,9 +63,14 @@ var UserInteractionInstrumentation = /** @class */ (function (_super) {
+             typeof (config === null || config === void 0 ? void 0 : config.shouldPreventSpanCreation) === 'function'
+                 ? config.shouldPreventSpanCreation
+                 : defaultShouldPreventSpanCreation;
++        _this.init();
+         return _this;
+     }
+-    UserInteractionInstrumentation.prototype.init = function () { };
++    UserInteractionInstrumentation.prototype.init = function () {
++        this._eventNames.forEach(event => {
++            window.addEventListener(event, () => { });
++        });
++    };
+     /**
+      * This will check if last task was timeout and will save the time to
+      * fix the user interaction when nothing happens

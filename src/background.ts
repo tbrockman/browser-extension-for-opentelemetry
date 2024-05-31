@@ -105,7 +105,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
         const matches = match(tab.url, matchPatterns)
 
         if (!matches) {
-            consoleProxy.debug("no pattern match, not injecting content script")
+            consoleProxy.debug("no pattern match, not injecting content script", tab.url, matchPatterns)
             return
         }
 

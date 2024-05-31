@@ -27,7 +27,7 @@
     "@mantine/core": "^7.6.1",
     "@mantine/hooks": "^7.6.1",
     "@opentelemetry/api-logs": "^0.49.1",
-    "@opentelemetry/auto-instrumentations-web": "^0.37.0",
+    "@opentelemetry/auto-instrumentations-web": "^0.36.0",
     "@opentelemetry/context-zone": "^1.22.0",
     "@opentelemetry/core": "^1.22.0",
     "@opentelemetry/exporter-logs-otlp-proto": "^0.49.1",
@@ -105,7 +105,8 @@
       "@protobufjs/inquire@1.1.0": "patches/@protobufjs__inquire@1.1.0.patch",
       "@opentelemetry/otlp-proto-exporter-base@0.49.1": "patches/@opentelemetry__otlp-proto-exporter-base@0.49.1.patch",
       "@opentelemetry/instrumentation-xml-http-request@0.49.1": "patches/@opentelemetry__instrumentation-xml-http-request@0.49.1.patch",
-      "@opentelemetry/instrumentation-fetch@0.49.1": "patches/@opentelemetry__instrumentation-fetch@0.49.1.patch"
+      "@opentelemetry/instrumentation-fetch@0.49.1": "patches/@opentelemetry__instrumentation-fetch@0.49.1.patch",
+      "@opentelemetry/instrumentation-user-interaction@0.35.0": "patches/@opentelemetry__instrumentation-user-interaction@0.35.0.patch"
     }
   },
   "parcel-resolver-inlinefunc": {

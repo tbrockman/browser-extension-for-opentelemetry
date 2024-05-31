@@ -42,7 +42,7 @@ const defaultOptions: Options = {
     attributes: new Map([
         ['key', 'value']
     ]),
-    concurrencyLimit: 10,
+    concurrencyLimit: 50,
     events: ['submit', 'click', 'keypress', 'scroll', 'resize', 'contextmenu', 'drag', 'cut', 'copy', 'input', 'pointerdown', 'pointerenter', 'pointerleave'],
     propagateTo: [],
     instrumentations: ['fetch', 'load', 'interaction'],
