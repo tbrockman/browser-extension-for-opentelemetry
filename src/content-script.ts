@@ -114,7 +114,7 @@ const instrument = (sessionId: string, options: Options) => {
         })
         // TODO: make batching configurable, choosing simple for now to avoid losing data on page navigations
         loggerProvider.addLogRecordProcessor(new SimpleLogRecordProcessor(logExporter))
-        // wrapConsoleWithLoggerProvider(loggerProvider)
+        wrapConsoleWithLoggerProvider(loggerProvider)
     }
     const propagateTraceHeaderCorsUrls = options.propagateTo.map((url) => new RegExp(url))
     const clearTimingResources = true
