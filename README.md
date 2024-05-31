@@ -1,7 +1,7 @@
 <div align="center">
-    <h1 style="font-size:2rem">Open<span style="font-weight:bold">Telemetry</span> Browser Extension</h1>
+    <p style="font-size:2rem">Open<span style="font-weight:bold">Telemetry</span> Browser Extension</p>
     <p>available on:</p>
-    <a href="https://chromewebstore.google.com/detail/opentelemetry-browser-ext/bgjeoaohfhbfabbfhbafjihbobjgniag"><img src='./assets/chrome.svg' height=50 alt='chrome download'></img></a>
+    <a href=""><img src='./assets/chrome.svg' height=50 alt='chrome download'></img></a>
     *
     <a href=""><img src='./assets/safari.svg' height=50 alt='safari download'></img></a>
     *
@@ -46,6 +46,8 @@ Install dependencies:
 
 ```bash
 pnpm install
+# ... and then for some reason I haven't been able to dig into yet...
+pnpm install @plasmohq/storage
 ```
 
 Start the OpenTelemetry stack (Grafana + Quickwit + `opentelemetry-collector-contrib`):<sup> (optional if you have your own)</sup>
