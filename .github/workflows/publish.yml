@@ -1,0 +1,34 @@
+on: 
+  workflow_dispatch:
+      inputs:
+        version:
+          description: 'Version to publish'
+          required: true
+        verbose:
+          description: 'Verbose mode'
+          required: false
+          default: 'false'
+
+jobs:
+  run-bpp:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: main
+          event: push
+          name: build
+          path: build
+      - name: Browser Platform Publish
+        uses: PlasmoHQ/bpp@v3
+        with:
+          keys: ${{ secrets.SUBMIT_KEYS }}
+          chrome-file: 'build/chrome-mv3-prod.zip'
+          firefox-file: 'build/firefox-mv3-prod.zip'
+          edge-file: 'build/edge-mv3-prod.zip'
+          edge-notes: "Publishing latest extension version (${{ inputs.version }}) to the Edge Store."
+          # opera-file: 'build/opera-mv3-prod.zip'
+          verbose: ${{ inputs.verbose }}
