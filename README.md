@@ -1,10 +1,10 @@
 <div align="center">
-    <p style="font-size:2rem">Open<span style="font-weight:bold">Telemetry</span> Browser Extension</p>
+    <h1>OpenTelemetry Browser Extension</h1>
     <p>available on:</p>
     <a href=""><img src='./assets/chrome.svg' height=50 alt='chrome download'></img></a>
-    *
+    /
     <a href=""><img src='./assets/safari.svg' height=50 alt='safari download'></img></a>
-    *
+    /
     <a href=""><img src='./assets/edge.svg' height=50 alt='edge download'></img></a>
     <p>...or <a href='#making-a-production-build'>build it yourself!</a></p>
 </div>
@@ -17,7 +17,7 @@
 
 A [Plasmo](https://docs.plasmo.com/)-based browser extension that automatically instruments webpages with [OpenTelemetry](https://opentelemetry.io/docs/what-is-opentelemetry/).
 
-[Download it](https://chromewebstore.google.com/detail/opentelemetry-browser-ext/bgjeoaohfhbfabbfhbafjihbobjgniag), refresh your pages, and automatically start emitting OTLP logs and traces from webpages of your choosing.
+[Download it](https://chromewebstore.google.com/detail/opentelemetry-browser-ext/bgjeoaohfhbfabbfhbafjihbobjgniag), refresh your pages, and automatically start emitting OTLP logs and traces.
 
 ## Preview
 

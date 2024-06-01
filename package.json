@@ -6,11 +6,10 @@
   "author": "Theodore Brockman <iam@theo.lol>",
   "packageManager": "pnpm@8.14.0",
   "scripts": {
-    "preinstall": "pnpm install:plasmo && pnpm build:run-p && pnpm build:vendored",
+    "preinstall": "pnpm submodule:update && pnpm install:plasmo && pnpm build:run-p && pnpm build:vendored",
+    "submodule:update": "git submodule update --init --recursive",
     "install:plasmo": "pnpm -C ./vendored/plasmo/ install",
     "build:run-p": "pnpm -C ./vendored/plasmo/packages/rps build",
-    "dev": "plasmo dev",
-    "clean": "rm -fr build",
     "build": "npm-run-all build:safari build:windows",
     "build:windows": "npm-run-all build:chrome build:edge build:opera",
     "build:chrome": "plasmo build --target=chrome-mv3 --zip --hoist",
@@ -23,6 +22,8 @@
     "build:plasmo:cli": "pnpm -C ./vendored/plasmo build:cli",
     "build:plasmo:storage": "pnpm -C ./vendored/plasmo/api/storage build",
     "build:plasmo:messaging": "pnpm -C ./vendored/plasmo/api/messaging build",
+    "dev": "plasmo dev",
+    "clean": "rm -fr build",
     "test": "pnpm test:unit",
     "test:unit": "mocha --require mocha-suppress-logs src/**/*.test.ts"
   },
