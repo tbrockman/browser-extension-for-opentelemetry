@@ -40,13 +40,16 @@ export default function LinkSection() {
             icon: <IconPalette />,
             tooltip: 'creator'
         },
-        {
+    ]
+
+    if (process.env.PLASMO_BROWSER !== 'safari') {
+        links.push({
             label: 'Link to sponsor project maintainer',
             href: 'https://github.com/sponsors/tbrockman',
             icon: <IconCoffee />,
             tooltip: 'sponsorship'
-        },
-    ]
+        })
+    }
 
     const otel = {
         label: 'Link to OpenTelemetry website',

@@ -1,0 +1,616 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6609A2022C0C9E59001FBE71 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6609A2012C0C9E59001FBE71 /* AppDelegate.swift */; };
+		6609A2062C0C9E59001FBE71 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2052C0C9E59001FBE71 /* Base */; };
+		6609A2082C0C9E59001FBE71 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2072C0C9E59001FBE71 /* Icon.png */; };
+		6609A20A2C0C9E5A001FBE71 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2092C0C9E59001FBE71 /* Style.css */; };
+		6609A20C2C0C9E5A001FBE71 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = 6609A20B2C0C9E5A001FBE71 /* Script.js */; };
+		6609A20E2C0C9E5A001FBE71 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6609A20D2C0C9E5A001FBE71 /* ViewController.swift */; };
+		6609A2112C0C9E5A001FBE71 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2102C0C9E5A001FBE71 /* Base */; };
+		6609A2132C0C9E5A001FBE71 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2122C0C9E5A001FBE71 /* Assets.xcassets */; };
+		6609A21C2C0C9E5B001FBE71 /* OpenTelemetry Browser Ext Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6609A21B2C0C9E5B001FBE71 /* OpenTelemetry Browser Ext Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		6609A2212C0C9E5B001FBE71 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6609A2202C0C9E5B001FBE71 /* SafariWebExtensionHandler.swift */; };
+		6609A2382C0C9E5B001FBE71 /* tabs in Resources */ = {isa = PBXBuildFile; fileRef = 6609A22E2C0C9E5B001FBE71 /* tabs */; };
+		6609A2392C0C9E5B001FBE71 /* icon32.plasmo.cc527bf5.png in Resources */ = {isa = PBXBuildFile; fileRef = 6609A22F2C0C9E5B001FBE71 /* icon32.plasmo.cc527bf5.png */; };
+		6609A23A2C0C9E5B001FBE71 /* icon64.plasmo.ec092b5f.png in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2302C0C9E5B001FBE71 /* icon64.plasmo.ec092b5f.png */; };
+		6609A23B2C0C9E5B001FBE71 /* popup.ffefc81b.js in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2312C0C9E5B001FBE71 /* popup.ffefc81b.js */; };
+		6609A23C2C0C9E5B001FBE71 /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2322C0C9E5B001FBE71 /* popup.html */; };
+		6609A23D2C0C9E5B001FBE71 /* icon128.plasmo.8ab6c1f7.png in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2332C0C9E5B001FBE71 /* icon128.plasmo.8ab6c1f7.png */; };
+		6609A23E2C0C9E5B001FBE71 /* static in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2342C0C9E5B001FBE71 /* static */; };
+		6609A23F2C0C9E5B001FBE71 /* icon16.plasmo.104a31dc.png in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2352C0C9E5B001FBE71 /* icon16.plasmo.104a31dc.png */; };
+		6609A2402C0C9E5B001FBE71 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2362C0C9E5B001FBE71 /* manifest.json */; };
+		6609A2412C0C9E5B001FBE71 /* icon48.plasmo.a904eb76.png in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2372C0C9E5B001FBE71 /* icon48.plasmo.a904eb76.png */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6609A21D2C0C9E5B001FBE71 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6609A1F62C0C9E59001FBE71 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6609A21A2C0C9E5B001FBE71;
+			remoteInfo = "OpenTelemetry Browser Ext Extension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		6609A2292C0C9E5B001FBE71 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				6609A21C2C0C9E5B001FBE71 /* OpenTelemetry Browser Ext Extension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		6609A1FE2C0C9E59001FBE71 /* OpenTelemetry Browser Ext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OpenTelemetry Browser Ext.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6609A2012C0C9E59001FBE71 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		6609A2052C0C9E59001FBE71 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = ../Base.lproj/Main.html; sourceTree = "<group>"; };
+		6609A2072C0C9E59001FBE71 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		6609A2092C0C9E59001FBE71 /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
+		6609A20B2C0C9E5A001FBE71 /* Script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Script.js; sourceTree = "<group>"; };
+		6609A20D2C0C9E5A001FBE71 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		6609A2102C0C9E5A001FBE71 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		6609A2122C0C9E5A001FBE71 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6609A2142C0C9E5A001FBE71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6609A2152C0C9E5A001FBE71 /* OpenTelemetry_Browser_Ext.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OpenTelemetry_Browser_Ext.entitlements; sourceTree = "<group>"; };
+		6609A2162C0C9E5A001FBE71 /* OpenTelemetry Browser Ext.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "OpenTelemetry Browser Ext.entitlements"; sourceTree = "<group>"; };
+		6609A21B2C0C9E5B001FBE71 /* OpenTelemetry Browser Ext Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "OpenTelemetry Browser Ext Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6609A2202C0C9E5B001FBE71 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
+		6609A2222C0C9E5B001FBE71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6609A2232C0C9E5B001FBE71 /* OpenTelemetry_Browser_Ext_Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OpenTelemetry_Browser_Ext_Extension.entitlements; sourceTree = "<group>"; };
+		6609A22E2C0C9E5B001FBE71 /* tabs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tabs; path = "../../../../build/safari-mv3-prod/tabs"; sourceTree = "<group>"; };
+		6609A22F2C0C9E5B001FBE71 /* icon32.plasmo.cc527bf5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon32.plasmo.cc527bf5.png; path = "../../../../build/safari-mv3-prod/icon32.plasmo.cc527bf5.png"; sourceTree = "<group>"; };
+		6609A2302C0C9E5B001FBE71 /* icon64.plasmo.ec092b5f.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon64.plasmo.ec092b5f.png; path = "../../../../build/safari-mv3-prod/icon64.plasmo.ec092b5f.png"; sourceTree = "<group>"; };
+		6609A2312C0C9E5B001FBE71 /* popup.ffefc81b.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = popup.ffefc81b.js; path = "../../../../build/safari-mv3-prod/popup.ffefc81b.js"; sourceTree = "<group>"; };
+		6609A2322C0C9E5B001FBE71 /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = popup.html; path = "../../../../build/safari-mv3-prod/popup.html"; sourceTree = "<group>"; };
+		6609A2332C0C9E5B001FBE71 /* icon128.plasmo.8ab6c1f7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon128.plasmo.8ab6c1f7.png; path = "../../../../build/safari-mv3-prod/icon128.plasmo.8ab6c1f7.png"; sourceTree = "<group>"; };
+		6609A2342C0C9E5B001FBE71 /* static */ = {isa = PBXFileReference; lastKnownFileType = folder; name = static; path = "../../../../build/safari-mv3-prod/static"; sourceTree = "<group>"; };
+		6609A2352C0C9E5B001FBE71 /* icon16.plasmo.104a31dc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon16.plasmo.104a31dc.png; path = "../../../../build/safari-mv3-prod/icon16.plasmo.104a31dc.png"; sourceTree = "<group>"; };
+		6609A2362C0C9E5B001FBE71 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = "../../../../build/safari-mv3-prod/manifest.json"; sourceTree = "<group>"; };
+		6609A2372C0C9E5B001FBE71 /* icon48.plasmo.a904eb76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon48.plasmo.a904eb76.png; path = "../../../../build/safari-mv3-prod/icon48.plasmo.a904eb76.png"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6609A1FB2C0C9E59001FBE71 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6609A2182C0C9E5B001FBE71 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6609A1F52C0C9E59001FBE71 = {
+			isa = PBXGroup;
+			children = (
+				6609A2002C0C9E59001FBE71 /* OpenTelemetry Browser Ext */,
+				6609A21F2C0C9E5B001FBE71 /* OpenTelemetry Browser Ext Extension */,
+				6609A1FF2C0C9E59001FBE71 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6609A1FF2C0C9E59001FBE71 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6609A1FE2C0C9E59001FBE71 /* OpenTelemetry Browser Ext.app */,
+				6609A21B2C0C9E5B001FBE71 /* OpenTelemetry Browser Ext Extension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6609A2002C0C9E59001FBE71 /* OpenTelemetry Browser Ext */ = {
+			isa = PBXGroup;
+			children = (
+				6609A2012C0C9E59001FBE71 /* AppDelegate.swift */,
+				6609A20D2C0C9E5A001FBE71 /* ViewController.swift */,
+				6609A20F2C0C9E5A001FBE71 /* Main.storyboard */,
+				6609A2122C0C9E5A001FBE71 /* Assets.xcassets */,
+				6609A2142C0C9E5A001FBE71 /* Info.plist */,
+				6609A2152C0C9E5A001FBE71 /* OpenTelemetry_Browser_Ext.entitlements */,
+				6609A2162C0C9E5A001FBE71 /* OpenTelemetry Browser Ext.entitlements */,
+				6609A2032C0C9E59001FBE71 /* Resources */,
+			);
+			path = "OpenTelemetry Browser Ext";
+			sourceTree = "<group>";
+		};
+		6609A2032C0C9E59001FBE71 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				6609A2042C0C9E59001FBE71 /* Main.html */,
+				6609A2072C0C9E59001FBE71 /* Icon.png */,
+				6609A2092C0C9E59001FBE71 /* Style.css */,
+				6609A20B2C0C9E5A001FBE71 /* Script.js */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		6609A21F2C0C9E5B001FBE71 /* OpenTelemetry Browser Ext Extension */ = {
+			isa = PBXGroup;
+			children = (
+				6609A22D2C0C9E5B001FBE71 /* Resources */,
+				6609A2202C0C9E5B001FBE71 /* SafariWebExtensionHandler.swift */,
+				6609A2222C0C9E5B001FBE71 /* Info.plist */,
+				6609A2232C0C9E5B001FBE71 /* OpenTelemetry_Browser_Ext_Extension.entitlements */,
+			);
+			path = "OpenTelemetry Browser Ext Extension";
+			sourceTree = "<group>";
+		};
+		6609A22D2C0C9E5B001FBE71 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				6609A22E2C0C9E5B001FBE71 /* tabs */,
+				6609A22F2C0C9E5B001FBE71 /* icon32.plasmo.cc527bf5.png */,
+				6609A2302C0C9E5B001FBE71 /* icon64.plasmo.ec092b5f.png */,
+				6609A2312C0C9E5B001FBE71 /* popup.ffefc81b.js */,
+				6609A2322C0C9E5B001FBE71 /* popup.html */,
+				6609A2332C0C9E5B001FBE71 /* icon128.plasmo.8ab6c1f7.png */,
+				6609A2342C0C9E5B001FBE71 /* static */,
+				6609A2352C0C9E5B001FBE71 /* icon16.plasmo.104a31dc.png */,
+				6609A2362C0C9E5B001FBE71 /* manifest.json */,
+				6609A2372C0C9E5B001FBE71 /* icon48.plasmo.a904eb76.png */,
+			);
+			name = Resources;
+			path = "OpenTelemetry Browser Ext Extension";
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6609A1FD2C0C9E59001FBE71 /* OpenTelemetry Browser Ext */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6609A22A2C0C9E5B001FBE71 /* Build configuration list for PBXNativeTarget "OpenTelemetry Browser Ext" */;
+			buildPhases = (
+				6609A1FA2C0C9E59001FBE71 /* Sources */,
+				6609A1FB2C0C9E59001FBE71 /* Frameworks */,
+				6609A1FC2C0C9E59001FBE71 /* Resources */,
+				6609A2292C0C9E5B001FBE71 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6609A21E2C0C9E5B001FBE71 /* PBXTargetDependency */,
+			);
+			name = "OpenTelemetry Browser Ext";
+			productName = "OpenTelemetry Browser Ext";
+			productReference = 6609A1FE2C0C9E59001FBE71 /* OpenTelemetry Browser Ext.app */;
+			productType = "com.apple.product-type.application";
+		};
+		6609A21A2C0C9E5B001FBE71 /* OpenTelemetry Browser Ext Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6609A2262C0C9E5B001FBE71 /* Build configuration list for PBXNativeTarget "OpenTelemetry Browser Ext Extension" */;
+			buildPhases = (
+				6609A2172C0C9E5B001FBE71 /* Sources */,
+				6609A2182C0C9E5B001FBE71 /* Frameworks */,
+				6609A2192C0C9E5B001FBE71 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "OpenTelemetry Browser Ext Extension";
+			productName = "OpenTelemetry Browser Ext Extension";
+			productReference = 6609A21B2C0C9E5B001FBE71 /* OpenTelemetry Browser Ext Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6609A1F62C0C9E59001FBE71 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1540;
+				TargetAttributes = {
+					6609A1FD2C0C9E59001FBE71 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+					6609A21A2C0C9E5B001FBE71 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+				};
+			};
+			buildConfigurationList = 6609A1F92C0C9E59001FBE71 /* Build configuration list for PBXProject "OpenTelemetry Browser Ext" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6609A1F52C0C9E59001FBE71;
+			productRefGroup = 6609A1FF2C0C9E59001FBE71 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6609A1FD2C0C9E59001FBE71 /* OpenTelemetry Browser Ext */,
+				6609A21A2C0C9E5B001FBE71 /* OpenTelemetry Browser Ext Extension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6609A1FC2C0C9E59001FBE71 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6609A2082C0C9E59001FBE71 /* Icon.png in Resources */,
+				6609A20C2C0C9E5A001FBE71 /* Script.js in Resources */,
+				6609A2062C0C9E59001FBE71 /* Base in Resources */,
+				6609A20A2C0C9E5A001FBE71 /* Style.css in Resources */,
+				6609A2132C0C9E5A001FBE71 /* Assets.xcassets in Resources */,
+				6609A2112C0C9E5A001FBE71 /* Base in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6609A2192C0C9E5B001FBE71 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6609A23A2C0C9E5B001FBE71 /* icon64.plasmo.ec092b5f.png in Resources */,
+				6609A23C2C0C9E5B001FBE71 /* popup.html in Resources */,
+				6609A23E2C0C9E5B001FBE71 /* static in Resources */,
+				6609A23D2C0C9E5B001FBE71 /* icon128.plasmo.8ab6c1f7.png in Resources */,
+				6609A2402C0C9E5B001FBE71 /* manifest.json in Resources */,
+				6609A2392C0C9E5B001FBE71 /* icon32.plasmo.cc527bf5.png in Resources */,
+				6609A2412C0C9E5B001FBE71 /* icon48.plasmo.a904eb76.png in Resources */,
+				6609A2382C0C9E5B001FBE71 /* tabs in Resources */,
+				6609A23F2C0C9E5B001FBE71 /* icon16.plasmo.104a31dc.png in Resources */,
+				6609A23B2C0C9E5B001FBE71 /* popup.ffefc81b.js in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6609A1FA2C0C9E59001FBE71 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6609A20E2C0C9E5A001FBE71 /* ViewController.swift in Sources */,
+				6609A2022C0C9E59001FBE71 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6609A2172C0C9E5B001FBE71 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6609A2212C0C9E5B001FBE71 /* SafariWebExtensionHandler.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6609A21E2C0C9E5B001FBE71 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6609A21A2C0C9E5B001FBE71 /* OpenTelemetry Browser Ext Extension */;
+			targetProxy = 6609A21D2C0C9E5B001FBE71 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		6609A2042C0C9E59001FBE71 /* Main.html */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6609A2052C0C9E59001FBE71 /* Base */,
+			);
+			name = Main.html;
+			sourceTree = "<group>";
+		};
+		6609A20F2C0C9E5A001FBE71 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6609A2102C0C9E5A001FBE71 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		6609A2242C0C9E5B001FBE71 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		6609A2252C0C9E5B001FBE71 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		6609A2272C0C9E5B001FBE71 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "OpenTelemetry Browser Ext Extension/OpenTelemetry_Browser_Ext_Extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "OpenTelemetry Browser Ext Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "OpenTelemetry Browser Ext Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.theo.OpenTelemetry-Browser-Ext.Extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		6609A2282C0C9E5B001FBE71 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "OpenTelemetry Browser Ext Extension/OpenTelemetry_Browser_Ext_Extension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "OpenTelemetry Browser Ext Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "OpenTelemetry Browser Ext Extension";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.theo.OpenTelemetry-Browser-Ext.Extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		6609A22B2C0C9E5B001FBE71 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "OpenTelemetry Browser Ext/OpenTelemetry Browser Ext.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "OpenTelemetry Browser Ext/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "OpenTelemetry Browser Ext";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.theo.OpenTelemetry-Browser-Ext";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		6609A22C2C0C9E5B001FBE71 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "OpenTelemetry Browser Ext/OpenTelemetry Browser Ext.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "OpenTelemetry Browser Ext/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "OpenTelemetry Browser Ext";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSMainStoryboardFile = Main;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = (
+					"-framework",
+					SafariServices,
+					"-framework",
+					WebKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.theo.OpenTelemetry-Browser-Ext";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6609A1F92C0C9E59001FBE71 /* Build configuration list for PBXProject "OpenTelemetry Browser Ext" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6609A2242C0C9E5B001FBE71 /* Debug */,
+				6609A2252C0C9E5B001FBE71 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6609A2262C0C9E5B001FBE71 /* Build configuration list for PBXNativeTarget "OpenTelemetry Browser Ext Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6609A2272C0C9E5B001FBE71 /* Debug */,
+				6609A2282C0C9E5B001FBE71 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6609A22A2C0C9E5B001FBE71 /* Build configuration list for PBXNativeTarget "OpenTelemetry Browser Ext" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6609A22B2C0C9E5B001FBE71 /* Debug */,
+				6609A22C2C0C9E5B001FBE71 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6609A1F62C0C9E59001FBE71 /* Project object */;
+}
