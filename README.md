@@ -84,10 +84,11 @@ Then, follow the same steps as with running the development server, but load the
 
 ### Safari
 
-Safari requires a bit of extra work. After building the extension, run the following command to convert the extension to a an XCode project:
+Safari requires a bit of extra work. After building the extension, run the following commands to convert the extension to a an XCode project and apply necessary patches:
 
 ```bash
-cd build && xcrun safari-web-extension-converter safari-mv3-prod
+pnpm convert:safari
+pnpm patch:safari
 ```
 
 Then, build the extension in XCode (using the MacOS target), and enable it in Safari
