@@ -7,46 +7,46 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6609A2022C0C9E59001FBE71 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6609A2012C0C9E59001FBE71 /* AppDelegate.swift */; };
-		6609A2062C0C9E59001FBE71 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2052C0C9E59001FBE71 /* Base */; };
-		6609A2082C0C9E59001FBE71 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2072C0C9E59001FBE71 /* Icon.png */; };
-		6609A20A2C0C9E5A001FBE71 /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2092C0C9E59001FBE71 /* Style.css */; };
-		6609A20C2C0C9E5A001FBE71 /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = 6609A20B2C0C9E5A001FBE71 /* Script.js */; };
-		6609A20E2C0C9E5A001FBE71 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6609A20D2C0C9E5A001FBE71 /* ViewController.swift */; };
-		6609A2112C0C9E5A001FBE71 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2102C0C9E5A001FBE71 /* Base */; };
-		6609A2132C0C9E5A001FBE71 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2122C0C9E5A001FBE71 /* Assets.xcassets */; };
-		6609A21C2C0C9E5B001FBE71 /* OpenTelemetry Browser Ext Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6609A21B2C0C9E5B001FBE71 /* OpenTelemetry Browser Ext Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		6609A2212C0C9E5B001FBE71 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6609A2202C0C9E5B001FBE71 /* SafariWebExtensionHandler.swift */; };
-		6609A2382C0C9E5B001FBE71 /* tabs in Resources */ = {isa = PBXBuildFile; fileRef = 6609A22E2C0C9E5B001FBE71 /* tabs */; };
-		6609A2392C0C9E5B001FBE71 /* icon32.plasmo.cc527bf5.png in Resources */ = {isa = PBXBuildFile; fileRef = 6609A22F2C0C9E5B001FBE71 /* icon32.plasmo.cc527bf5.png */; };
-		6609A23A2C0C9E5B001FBE71 /* icon64.plasmo.ec092b5f.png in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2302C0C9E5B001FBE71 /* icon64.plasmo.ec092b5f.png */; };
-		6609A23B2C0C9E5B001FBE71 /* popup.ffefc81b.js in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2312C0C9E5B001FBE71 /* popup.ffefc81b.js */; };
-		6609A23C2C0C9E5B001FBE71 /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2322C0C9E5B001FBE71 /* popup.html */; };
-		6609A23D2C0C9E5B001FBE71 /* icon128.plasmo.8ab6c1f7.png in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2332C0C9E5B001FBE71 /* icon128.plasmo.8ab6c1f7.png */; };
-		6609A23E2C0C9E5B001FBE71 /* static in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2342C0C9E5B001FBE71 /* static */; };
-		6609A23F2C0C9E5B001FBE71 /* icon16.plasmo.104a31dc.png in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2352C0C9E5B001FBE71 /* icon16.plasmo.104a31dc.png */; };
-		6609A2402C0C9E5B001FBE71 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2362C0C9E5B001FBE71 /* manifest.json */; };
-		6609A2412C0C9E5B001FBE71 /* icon48.plasmo.a904eb76.png in Resources */ = {isa = PBXBuildFile; fileRef = 6609A2372C0C9E5B001FBE71 /* icon48.plasmo.a904eb76.png */; };
+		66F9FA982C0CA2BB001B526A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F9FA972C0CA2BB001B526A /* AppDelegate.swift */; };
+		66F9FA9C2C0CA2BB001B526A /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 66F9FA9B2C0CA2BB001B526A /* Base */; };
+		66F9FA9E2C0CA2BB001B526A /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 66F9FA9D2C0CA2BB001B526A /* Icon.png */; };
+		66F9FAA02C0CA2BB001B526A /* Style.css in Resources */ = {isa = PBXBuildFile; fileRef = 66F9FA9F2C0CA2BB001B526A /* Style.css */; };
+		66F9FAA22C0CA2BB001B526A /* Script.js in Resources */ = {isa = PBXBuildFile; fileRef = 66F9FAA12C0CA2BB001B526A /* Script.js */; };
+		66F9FAA42C0CA2BB001B526A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F9FAA32C0CA2BB001B526A /* ViewController.swift */; };
+		66F9FAA72C0CA2BB001B526A /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 66F9FAA62C0CA2BB001B526A /* Base */; };
+		66F9FAA92C0CA2BC001B526A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 66F9FAA82C0CA2BC001B526A /* Assets.xcassets */; };
+		66F9FAB22C0CA2BC001B526A /* OpenTelemetry Browser Ext Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 66F9FAB12C0CA2BC001B526A /* OpenTelemetry Browser Ext Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		66F9FAB72C0CA2BC001B526A /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F9FAB62C0CA2BC001B526A /* SafariWebExtensionHandler.swift */; };
+		66F9FACE2C0CA2BD001B526A /* tabs in Resources */ = {isa = PBXBuildFile; fileRef = 66F9FAC42C0CA2BD001B526A /* tabs */; };
+		66F9FACF2C0CA2BD001B526A /* icon32.plasmo.cc527bf5.png in Resources */ = {isa = PBXBuildFile; fileRef = 66F9FAC52C0CA2BD001B526A /* icon32.plasmo.cc527bf5.png */; };
+		66F9FAD02C0CA2BD001B526A /* icon64.plasmo.ec092b5f.png in Resources */ = {isa = PBXBuildFile; fileRef = 66F9FAC62C0CA2BD001B526A /* icon64.plasmo.ec092b5f.png */; };
+		66F9FAD12C0CA2BD001B526A /* popup.ffefc81b.js in Resources */ = {isa = PBXBuildFile; fileRef = 66F9FAC72C0CA2BD001B526A /* popup.ffefc81b.js */; };
+		66F9FAD22C0CA2BD001B526A /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = 66F9FAC82C0CA2BD001B526A /* popup.html */; };
+		66F9FAD32C0CA2BD001B526A /* icon128.plasmo.8ab6c1f7.png in Resources */ = {isa = PBXBuildFile; fileRef = 66F9FAC92C0CA2BD001B526A /* icon128.plasmo.8ab6c1f7.png */; };
+		66F9FAD42C0CA2BD001B526A /* static in Resources */ = {isa = PBXBuildFile; fileRef = 66F9FACA2C0CA2BD001B526A /* static */; };
+		66F9FAD52C0CA2BD001B526A /* icon16.plasmo.104a31dc.png in Resources */ = {isa = PBXBuildFile; fileRef = 66F9FACB2C0CA2BD001B526A /* icon16.plasmo.104a31dc.png */; };
+		66F9FAD62C0CA2BD001B526A /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 66F9FACC2C0CA2BD001B526A /* manifest.json */; };
+		66F9FAD72C0CA2BD001B526A /* icon48.plasmo.a904eb76.png in Resources */ = {isa = PBXBuildFile; fileRef = 66F9FACD2C0CA2BD001B526A /* icon48.plasmo.a904eb76.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		6609A21D2C0C9E5B001FBE71 /* PBXContainerItemProxy */ = {
+		66F9FAB32C0CA2BC001B526A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 6609A1F62C0C9E59001FBE71 /* Project object */;
+			containerPortal = 66F9FA8C2C0CA2BB001B526A /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 6609A21A2C0C9E5B001FBE71;
+			remoteGlobalIDString = 66F9FAB02C0CA2BC001B526A;
 			remoteInfo = "OpenTelemetry Browser Ext Extension";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		6609A2292C0C9E5B001FBE71 /* Embed Foundation Extensions */ = {
+		66F9FABF2C0CA2BC001B526A /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				6609A21C2C0C9E5B001FBE71 /* OpenTelemetry Browser Ext Extension.appex in Embed Foundation Extensions */,
+				66F9FAB22C0CA2BC001B526A /* OpenTelemetry Browser Ext Extension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -54,43 +54,43 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		6609A1FE2C0C9E59001FBE71 /* OpenTelemetry Browser Ext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OpenTelemetry Browser Ext.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6609A2012C0C9E59001FBE71 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		6609A2052C0C9E59001FBE71 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = ../Base.lproj/Main.html; sourceTree = "<group>"; };
-		6609A2072C0C9E59001FBE71 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
-		6609A2092C0C9E59001FBE71 /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
-		6609A20B2C0C9E5A001FBE71 /* Script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Script.js; sourceTree = "<group>"; };
-		6609A20D2C0C9E5A001FBE71 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		6609A2102C0C9E5A001FBE71 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		6609A2122C0C9E5A001FBE71 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		6609A2142C0C9E5A001FBE71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6609A2152C0C9E5A001FBE71 /* OpenTelemetry_Browser_Ext.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OpenTelemetry_Browser_Ext.entitlements; sourceTree = "<group>"; };
-		6609A2162C0C9E5A001FBE71 /* OpenTelemetry Browser Ext.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "OpenTelemetry Browser Ext.entitlements"; sourceTree = "<group>"; };
-		6609A21B2C0C9E5B001FBE71 /* OpenTelemetry Browser Ext Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "OpenTelemetry Browser Ext Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6609A2202C0C9E5B001FBE71 /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
-		6609A2222C0C9E5B001FBE71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6609A2232C0C9E5B001FBE71 /* OpenTelemetry_Browser_Ext_Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OpenTelemetry_Browser_Ext_Extension.entitlements; sourceTree = "<group>"; };
-		6609A22E2C0C9E5B001FBE71 /* tabs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tabs; path = "../../../../build/safari-mv3-prod/tabs"; sourceTree = "<group>"; };
-		6609A22F2C0C9E5B001FBE71 /* icon32.plasmo.cc527bf5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon32.plasmo.cc527bf5.png; path = "../../../../build/safari-mv3-prod/icon32.plasmo.cc527bf5.png"; sourceTree = "<group>"; };
-		6609A2302C0C9E5B001FBE71 /* icon64.plasmo.ec092b5f.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon64.plasmo.ec092b5f.png; path = "../../../../build/safari-mv3-prod/icon64.plasmo.ec092b5f.png"; sourceTree = "<group>"; };
-		6609A2312C0C9E5B001FBE71 /* popup.ffefc81b.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = popup.ffefc81b.js; path = "../../../../build/safari-mv3-prod/popup.ffefc81b.js"; sourceTree = "<group>"; };
-		6609A2322C0C9E5B001FBE71 /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = popup.html; path = "../../../../build/safari-mv3-prod/popup.html"; sourceTree = "<group>"; };
-		6609A2332C0C9E5B001FBE71 /* icon128.plasmo.8ab6c1f7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon128.plasmo.8ab6c1f7.png; path = "../../../../build/safari-mv3-prod/icon128.plasmo.8ab6c1f7.png"; sourceTree = "<group>"; };
-		6609A2342C0C9E5B001FBE71 /* static */ = {isa = PBXFileReference; lastKnownFileType = folder; name = static; path = "../../../../build/safari-mv3-prod/static"; sourceTree = "<group>"; };
-		6609A2352C0C9E5B001FBE71 /* icon16.plasmo.104a31dc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon16.plasmo.104a31dc.png; path = "../../../../build/safari-mv3-prod/icon16.plasmo.104a31dc.png"; sourceTree = "<group>"; };
-		6609A2362C0C9E5B001FBE71 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = "../../../../build/safari-mv3-prod/manifest.json"; sourceTree = "<group>"; };
-		6609A2372C0C9E5B001FBE71 /* icon48.plasmo.a904eb76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon48.plasmo.a904eb76.png; path = "../../../../build/safari-mv3-prod/icon48.plasmo.a904eb76.png"; sourceTree = "<group>"; };
+		66F9FA942C0CA2BB001B526A /* OpenTelemetry Browser Ext.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OpenTelemetry Browser Ext.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		66F9FA972C0CA2BB001B526A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		66F9FA9B2C0CA2BB001B526A /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = Base; path = ../Base.lproj/Main.html; sourceTree = "<group>"; };
+		66F9FA9D2C0CA2BB001B526A /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		66F9FA9F2C0CA2BB001B526A /* Style.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = Style.css; sourceTree = "<group>"; };
+		66F9FAA12C0CA2BB001B526A /* Script.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Script.js; sourceTree = "<group>"; };
+		66F9FAA32C0CA2BB001B526A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		66F9FAA62C0CA2BB001B526A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		66F9FAA82C0CA2BC001B526A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		66F9FAAA2C0CA2BC001B526A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		66F9FAAB2C0CA2BC001B526A /* OpenTelemetry_Browser_Ext.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OpenTelemetry_Browser_Ext.entitlements; sourceTree = "<group>"; };
+		66F9FAAC2C0CA2BC001B526A /* OpenTelemetry Browser Ext.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "OpenTelemetry Browser Ext.entitlements"; sourceTree = "<group>"; };
+		66F9FAB12C0CA2BC001B526A /* OpenTelemetry Browser Ext Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "OpenTelemetry Browser Ext Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		66F9FAB62C0CA2BC001B526A /* SafariWebExtensionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariWebExtensionHandler.swift; sourceTree = "<group>"; };
+		66F9FAB82C0CA2BC001B526A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		66F9FAB92C0CA2BC001B526A /* OpenTelemetry_Browser_Ext_Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OpenTelemetry_Browser_Ext_Extension.entitlements; sourceTree = "<group>"; };
+		66F9FAC42C0CA2BD001B526A /* tabs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = tabs; path = "../../../../build/safari-mv3-prod/tabs"; sourceTree = "<group>"; };
+		66F9FAC52C0CA2BD001B526A /* icon32.plasmo.cc527bf5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon32.plasmo.cc527bf5.png; path = "../../../../build/safari-mv3-prod/icon32.plasmo.cc527bf5.png"; sourceTree = "<group>"; };
+		66F9FAC62C0CA2BD001B526A /* icon64.plasmo.ec092b5f.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon64.plasmo.ec092b5f.png; path = "../../../../build/safari-mv3-prod/icon64.plasmo.ec092b5f.png"; sourceTree = "<group>"; };
+		66F9FAC72C0CA2BD001B526A /* popup.ffefc81b.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = popup.ffefc81b.js; path = "../../../../build/safari-mv3-prod/popup.ffefc81b.js"; sourceTree = "<group>"; };
+		66F9FAC82C0CA2BD001B526A /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = popup.html; path = "../../../../build/safari-mv3-prod/popup.html"; sourceTree = "<group>"; };
+		66F9FAC92C0CA2BD001B526A /* icon128.plasmo.8ab6c1f7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon128.plasmo.8ab6c1f7.png; path = "../../../../build/safari-mv3-prod/icon128.plasmo.8ab6c1f7.png"; sourceTree = "<group>"; };
+		66F9FACA2C0CA2BD001B526A /* static */ = {isa = PBXFileReference; lastKnownFileType = folder; name = static; path = "../../../../build/safari-mv3-prod/static"; sourceTree = "<group>"; };
+		66F9FACB2C0CA2BD001B526A /* icon16.plasmo.104a31dc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon16.plasmo.104a31dc.png; path = "../../../../build/safari-mv3-prod/icon16.plasmo.104a31dc.png"; sourceTree = "<group>"; };
+		66F9FACC2C0CA2BD001B526A /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = "../../../../build/safari-mv3-prod/manifest.json"; sourceTree = "<group>"; };
+		66F9FACD2C0CA2BD001B526A /* icon48.plasmo.a904eb76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon48.plasmo.a904eb76.png; path = "../../../../build/safari-mv3-prod/icon48.plasmo.a904eb76.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		6609A1FB2C0C9E59001FBE71 /* Frameworks */ = {
+		66F9FA912C0CA2BB001B526A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6609A2182C0C9E5B001FBE71 /* Frameworks */ = {
+		66F9FAAE2C0CA2BC001B526A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -100,74 +100,74 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6609A1F52C0C9E59001FBE71 = {
+		66F9FA8B2C0CA2BB001B526A = {
 			isa = PBXGroup;
 			children = (
-				6609A2002C0C9E59001FBE71 /* OpenTelemetry Browser Ext */,
-				6609A21F2C0C9E5B001FBE71 /* OpenTelemetry Browser Ext Extension */,
-				6609A1FF2C0C9E59001FBE71 /* Products */,
+				66F9FA962C0CA2BB001B526A /* OpenTelemetry Browser Ext */,
+				66F9FAB52C0CA2BC001B526A /* OpenTelemetry Browser Ext Extension */,
+				66F9FA952C0CA2BB001B526A /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		6609A1FF2C0C9E59001FBE71 /* Products */ = {
+		66F9FA952C0CA2BB001B526A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6609A1FE2C0C9E59001FBE71 /* OpenTelemetry Browser Ext.app */,
-				6609A21B2C0C9E5B001FBE71 /* OpenTelemetry Browser Ext Extension.appex */,
+				66F9FA942C0CA2BB001B526A /* OpenTelemetry Browser Ext.app */,
+				66F9FAB12C0CA2BC001B526A /* OpenTelemetry Browser Ext Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		6609A2002C0C9E59001FBE71 /* OpenTelemetry Browser Ext */ = {
+		66F9FA962C0CA2BB001B526A /* OpenTelemetry Browser Ext */ = {
 			isa = PBXGroup;
 			children = (
-				6609A2012C0C9E59001FBE71 /* AppDelegate.swift */,
-				6609A20D2C0C9E5A001FBE71 /* ViewController.swift */,
-				6609A20F2C0C9E5A001FBE71 /* Main.storyboard */,
-				6609A2122C0C9E5A001FBE71 /* Assets.xcassets */,
-				6609A2142C0C9E5A001FBE71 /* Info.plist */,
-				6609A2152C0C9E5A001FBE71 /* OpenTelemetry_Browser_Ext.entitlements */,
-				6609A2162C0C9E5A001FBE71 /* OpenTelemetry Browser Ext.entitlements */,
-				6609A2032C0C9E59001FBE71 /* Resources */,
+				66F9FA972C0CA2BB001B526A /* AppDelegate.swift */,
+				66F9FAA32C0CA2BB001B526A /* ViewController.swift */,
+				66F9FAA52C0CA2BB001B526A /* Main.storyboard */,
+				66F9FAA82C0CA2BC001B526A /* Assets.xcassets */,
+				66F9FAAA2C0CA2BC001B526A /* Info.plist */,
+				66F9FAAB2C0CA2BC001B526A /* OpenTelemetry_Browser_Ext.entitlements */,
+				66F9FAAC2C0CA2BC001B526A /* OpenTelemetry Browser Ext.entitlements */,
+				66F9FA992C0CA2BB001B526A /* Resources */,
 			);
 			path = "OpenTelemetry Browser Ext";
 			sourceTree = "<group>";
 		};
-		6609A2032C0C9E59001FBE71 /* Resources */ = {
+		66F9FA992C0CA2BB001B526A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				6609A2042C0C9E59001FBE71 /* Main.html */,
-				6609A2072C0C9E59001FBE71 /* Icon.png */,
-				6609A2092C0C9E59001FBE71 /* Style.css */,
-				6609A20B2C0C9E5A001FBE71 /* Script.js */,
+				66F9FA9A2C0CA2BB001B526A /* Main.html */,
+				66F9FA9D2C0CA2BB001B526A /* Icon.png */,
+				66F9FA9F2C0CA2BB001B526A /* Style.css */,
+				66F9FAA12C0CA2BB001B526A /* Script.js */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		6609A21F2C0C9E5B001FBE71 /* OpenTelemetry Browser Ext Extension */ = {
+		66F9FAB52C0CA2BC001B526A /* OpenTelemetry Browser Ext Extension */ = {
 			isa = PBXGroup;
 			children = (
-				6609A22D2C0C9E5B001FBE71 /* Resources */,
-				6609A2202C0C9E5B001FBE71 /* SafariWebExtensionHandler.swift */,
-				6609A2222C0C9E5B001FBE71 /* Info.plist */,
-				6609A2232C0C9E5B001FBE71 /* OpenTelemetry_Browser_Ext_Extension.entitlements */,
+				66F9FAC32C0CA2BD001B526A /* Resources */,
+				66F9FAB62C0CA2BC001B526A /* SafariWebExtensionHandler.swift */,
+				66F9FAB82C0CA2BC001B526A /* Info.plist */,
+				66F9FAB92C0CA2BC001B526A /* OpenTelemetry_Browser_Ext_Extension.entitlements */,
 			);
 			path = "OpenTelemetry Browser Ext Extension";
 			sourceTree = "<group>";
 		};
-		6609A22D2C0C9E5B001FBE71 /* Resources */ = {
+		66F9FAC32C0CA2BD001B526A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				6609A22E2C0C9E5B001FBE71 /* tabs */,
-				6609A22F2C0C9E5B001FBE71 /* icon32.plasmo.cc527bf5.png */,
-				6609A2302C0C9E5B001FBE71 /* icon64.plasmo.ec092b5f.png */,
-				6609A2312C0C9E5B001FBE71 /* popup.ffefc81b.js */,
-				6609A2322C0C9E5B001FBE71 /* popup.html */,
-				6609A2332C0C9E5B001FBE71 /* icon128.plasmo.8ab6c1f7.png */,
-				6609A2342C0C9E5B001FBE71 /* static */,
-				6609A2352C0C9E5B001FBE71 /* icon16.plasmo.104a31dc.png */,
-				6609A2362C0C9E5B001FBE71 /* manifest.json */,
-				6609A2372C0C9E5B001FBE71 /* icon48.plasmo.a904eb76.png */,
+				66F9FAC42C0CA2BD001B526A /* tabs */,
+				66F9FAC52C0CA2BD001B526A /* icon32.plasmo.cc527bf5.png */,
+				66F9FAC62C0CA2BD001B526A /* icon64.plasmo.ec092b5f.png */,
+				66F9FAC72C0CA2BD001B526A /* popup.ffefc81b.js */,
+				66F9FAC82C0CA2BD001B526A /* popup.html */,
+				66F9FAC92C0CA2BD001B526A /* icon128.plasmo.8ab6c1f7.png */,
+				66F9FACA2C0CA2BD001B526A /* static */,
+				66F9FACB2C0CA2BD001B526A /* icon16.plasmo.104a31dc.png */,
+				66F9FACC2C0CA2BD001B526A /* manifest.json */,
+				66F9FACD2C0CA2BD001B526A /* icon48.plasmo.a904eb76.png */,
 			);
 			name = Resources;
 			path = "OpenTelemetry Browser Ext Extension";
@@ -176,32 +176,32 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		6609A1FD2C0C9E59001FBE71 /* OpenTelemetry Browser Ext */ = {
+		66F9FA932C0CA2BB001B526A /* OpenTelemetry Browser Ext */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6609A22A2C0C9E5B001FBE71 /* Build configuration list for PBXNativeTarget "OpenTelemetry Browser Ext" */;
+			buildConfigurationList = 66F9FAC02C0CA2BC001B526A /* Build configuration list for PBXNativeTarget "OpenTelemetry Browser Ext" */;
 			buildPhases = (
-				6609A1FA2C0C9E59001FBE71 /* Sources */,
-				6609A1FB2C0C9E59001FBE71 /* Frameworks */,
-				6609A1FC2C0C9E59001FBE71 /* Resources */,
-				6609A2292C0C9E5B001FBE71 /* Embed Foundation Extensions */,
+				66F9FA902C0CA2BB001B526A /* Sources */,
+				66F9FA912C0CA2BB001B526A /* Frameworks */,
+				66F9FA922C0CA2BB001B526A /* Resources */,
+				66F9FABF2C0CA2BC001B526A /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				6609A21E2C0C9E5B001FBE71 /* PBXTargetDependency */,
+				66F9FAB42C0CA2BC001B526A /* PBXTargetDependency */,
 			);
 			name = "OpenTelemetry Browser Ext";
 			productName = "OpenTelemetry Browser Ext";
-			productReference = 6609A1FE2C0C9E59001FBE71 /* OpenTelemetry Browser Ext.app */;
+			productReference = 66F9FA942C0CA2BB001B526A /* OpenTelemetry Browser Ext.app */;
 			productType = "com.apple.product-type.application";
 		};
-		6609A21A2C0C9E5B001FBE71 /* OpenTelemetry Browser Ext Extension */ = {
+		66F9FAB02C0CA2BC001B526A /* OpenTelemetry Browser Ext Extension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6609A2262C0C9E5B001FBE71 /* Build configuration list for PBXNativeTarget "OpenTelemetry Browser Ext Extension" */;
+			buildConfigurationList = 66F9FABC2C0CA2BC001B526A /* Build configuration list for PBXNativeTarget "OpenTelemetry Browser Ext Extension" */;
 			buildPhases = (
-				6609A2172C0C9E5B001FBE71 /* Sources */,
-				6609A2182C0C9E5B001FBE71 /* Frameworks */,
-				6609A2192C0C9E5B001FBE71 /* Resources */,
+				66F9FAAD2C0CA2BC001B526A /* Sources */,
+				66F9FAAE2C0CA2BC001B526A /* Frameworks */,
+				66F9FAAF2C0CA2BC001B526A /* Resources */,
 			);
 			buildRules = (
 			);
@@ -209,28 +209,28 @@
 			);
 			name = "OpenTelemetry Browser Ext Extension";
 			productName = "OpenTelemetry Browser Ext Extension";
-			productReference = 6609A21B2C0C9E5B001FBE71 /* OpenTelemetry Browser Ext Extension.appex */;
+			productReference = 66F9FAB12C0CA2BC001B526A /* OpenTelemetry Browser Ext Extension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		6609A1F62C0C9E59001FBE71 /* Project object */ = {
+		66F9FA8C2C0CA2BB001B526A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1540;
 				LastUpgradeCheck = 1540;
 				TargetAttributes = {
-					6609A1FD2C0C9E59001FBE71 = {
+					66F9FA932C0CA2BB001B526A = {
 						CreatedOnToolsVersion = 15.4;
 					};
-					6609A21A2C0C9E5B001FBE71 = {
+					66F9FAB02C0CA2BC001B526A = {
 						CreatedOnToolsVersion = 15.4;
 					};
 				};
 			};
-			buildConfigurationList = 6609A1F92C0C9E59001FBE71 /* Build configuration list for PBXProject "OpenTelemetry Browser Ext" */;
+			buildConfigurationList = 66F9FA8F2C0CA2BB001B526A /* Build configuration list for PBXProject "OpenTelemetry Browser Ext" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -238,91 +238,91 @@
 				en,
 				Base,
 			);
-			mainGroup = 6609A1F52C0C9E59001FBE71;
-			productRefGroup = 6609A1FF2C0C9E59001FBE71 /* Products */;
+			mainGroup = 66F9FA8B2C0CA2BB001B526A;
+			productRefGroup = 66F9FA952C0CA2BB001B526A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6609A1FD2C0C9E59001FBE71 /* OpenTelemetry Browser Ext */,
-				6609A21A2C0C9E5B001FBE71 /* OpenTelemetry Browser Ext Extension */,
+				66F9FA932C0CA2BB001B526A /* OpenTelemetry Browser Ext */,
+				66F9FAB02C0CA2BC001B526A /* OpenTelemetry Browser Ext Extension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		6609A1FC2C0C9E59001FBE71 /* Resources */ = {
+		66F9FA922C0CA2BB001B526A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6609A2082C0C9E59001FBE71 /* Icon.png in Resources */,
-				6609A20C2C0C9E5A001FBE71 /* Script.js in Resources */,
-				6609A2062C0C9E59001FBE71 /* Base in Resources */,
-				6609A20A2C0C9E5A001FBE71 /* Style.css in Resources */,
-				6609A2132C0C9E5A001FBE71 /* Assets.xcassets in Resources */,
-				6609A2112C0C9E5A001FBE71 /* Base in Resources */,
+				66F9FA9E2C0CA2BB001B526A /* Icon.png in Resources */,
+				66F9FAA22C0CA2BB001B526A /* Script.js in Resources */,
+				66F9FA9C2C0CA2BB001B526A /* Base in Resources */,
+				66F9FAA02C0CA2BB001B526A /* Style.css in Resources */,
+				66F9FAA92C0CA2BC001B526A /* Assets.xcassets in Resources */,
+				66F9FAA72C0CA2BB001B526A /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6609A2192C0C9E5B001FBE71 /* Resources */ = {
+		66F9FAAF2C0CA2BC001B526A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6609A23A2C0C9E5B001FBE71 /* icon64.plasmo.ec092b5f.png in Resources */,
-				6609A23C2C0C9E5B001FBE71 /* popup.html in Resources */,
-				6609A23E2C0C9E5B001FBE71 /* static in Resources */,
-				6609A23D2C0C9E5B001FBE71 /* icon128.plasmo.8ab6c1f7.png in Resources */,
-				6609A2402C0C9E5B001FBE71 /* manifest.json in Resources */,
-				6609A2392C0C9E5B001FBE71 /* icon32.plasmo.cc527bf5.png in Resources */,
-				6609A2412C0C9E5B001FBE71 /* icon48.plasmo.a904eb76.png in Resources */,
-				6609A2382C0C9E5B001FBE71 /* tabs in Resources */,
-				6609A23F2C0C9E5B001FBE71 /* icon16.plasmo.104a31dc.png in Resources */,
-				6609A23B2C0C9E5B001FBE71 /* popup.ffefc81b.js in Resources */,
+				66F9FAD02C0CA2BD001B526A /* icon64.plasmo.ec092b5f.png in Resources */,
+				66F9FAD22C0CA2BD001B526A /* popup.html in Resources */,
+				66F9FAD42C0CA2BD001B526A /* static in Resources */,
+				66F9FAD32C0CA2BD001B526A /* icon128.plasmo.8ab6c1f7.png in Resources */,
+				66F9FAD62C0CA2BD001B526A /* manifest.json in Resources */,
+				66F9FACF2C0CA2BD001B526A /* icon32.plasmo.cc527bf5.png in Resources */,
+				66F9FAD72C0CA2BD001B526A /* icon48.plasmo.a904eb76.png in Resources */,
+				66F9FACE2C0CA2BD001B526A /* tabs in Resources */,
+				66F9FAD52C0CA2BD001B526A /* icon16.plasmo.104a31dc.png in Resources */,
+				66F9FAD12C0CA2BD001B526A /* popup.ffefc81b.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		6609A1FA2C0C9E59001FBE71 /* Sources */ = {
+		66F9FA902C0CA2BB001B526A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6609A20E2C0C9E5A001FBE71 /* ViewController.swift in Sources */,
-				6609A2022C0C9E59001FBE71 /* AppDelegate.swift in Sources */,
+				66F9FAA42C0CA2BB001B526A /* ViewController.swift in Sources */,
+				66F9FA982C0CA2BB001B526A /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6609A2172C0C9E5B001FBE71 /* Sources */ = {
+		66F9FAAD2C0CA2BC001B526A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6609A2212C0C9E5B001FBE71 /* SafariWebExtensionHandler.swift in Sources */,
+				66F9FAB72C0CA2BC001B526A /* SafariWebExtensionHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		6609A21E2C0C9E5B001FBE71 /* PBXTargetDependency */ = {
+		66F9FAB42C0CA2BC001B526A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 6609A21A2C0C9E5B001FBE71 /* OpenTelemetry Browser Ext Extension */;
-			targetProxy = 6609A21D2C0C9E5B001FBE71 /* PBXContainerItemProxy */;
+			target = 66F9FAB02C0CA2BC001B526A /* OpenTelemetry Browser Ext Extension */;
+			targetProxy = 66F9FAB32C0CA2BC001B526A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		6609A2042C0C9E59001FBE71 /* Main.html */ = {
+		66F9FA9A2C0CA2BB001B526A /* Main.html */ = {
 			isa = PBXVariantGroup;
 			children = (
-				6609A2052C0C9E59001FBE71 /* Base */,
+				66F9FA9B2C0CA2BB001B526A /* Base */,
 			);
 			name = Main.html;
 			sourceTree = "<group>";
 		};
-		6609A20F2C0C9E5A001FBE71 /* Main.storyboard */ = {
+		66F9FAA52C0CA2BB001B526A /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				6609A2102C0C9E5A001FBE71 /* Base */,
+				66F9FAA62C0CA2BB001B526A /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -330,7 +330,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		6609A2242C0C9E5B001FBE71 /* Debug */ = {
+		66F9FABA2C0CA2BC001B526A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -393,7 +393,7 @@
 			};
 			name = Debug;
 		};
-		6609A2252C0C9E5B001FBE71 /* Release */ = {
+		66F9FABB2C0CA2BC001B526A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -448,12 +448,13 @@
 			};
 			name = Release;
 		};
-		6609A2272C0C9E5B001FBE71 /* Debug */ = {
+		66F9FABD2C0CA2BC001B526A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "OpenTelemetry Browser Ext Extension/OpenTelemetry_Browser_Ext_Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D38LM4UHT5;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "OpenTelemetry Browser Ext Extension/Info.plist";
@@ -470,7 +471,7 @@
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.theo.OpenTelemetry-Browser-Ext.Extension";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.theo.OpenTelemetry-Browser-Extension.Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -478,12 +479,13 @@
 			};
 			name = Debug;
 		};
-		6609A2282C0C9E5B001FBE71 /* Release */ = {
+		66F9FABE2C0CA2BC001B526A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "OpenTelemetry Browser Ext Extension/OpenTelemetry_Browser_Ext_Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D38LM4UHT5;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "OpenTelemetry Browser Ext Extension/Info.plist";
@@ -500,7 +502,7 @@
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.theo.OpenTelemetry-Browser-Ext.Extension";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.theo.OpenTelemetry-Browser-Extension.Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -508,20 +510,23 @@
 			};
 			name = Release;
 		};
-		6609A22B2C0C9E5B001FBE71 /* Debug */ = {
+		66F9FAC12C0CA2BC001B526A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "OpenTelemetry Browser Ext/OpenTelemetry Browser Ext.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D38LM4UHT5;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "OpenTelemetry Browser Ext/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "OpenTelemetry Browser Ext";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -537,27 +542,30 @@
 					"-framework",
 					WebKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.theo.OpenTelemetry-Browser-Ext";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.theo.OpenTelemetry-Browser-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
-		6609A22C2C0C9E5B001FBE71 /* Release */ = {
+		66F9FAC22C0CA2BC001B526A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "OpenTelemetry Browser Ext/OpenTelemetry Browser Ext.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D38LM4UHT5;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "OpenTelemetry Browser Ext/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "OpenTelemetry Browser Ext";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
@@ -573,7 +581,7 @@
 					"-framework",
 					WebKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.theo.OpenTelemetry-Browser-Ext";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.theo.OpenTelemetry-Browser-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -583,34 +591,34 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6609A1F92C0C9E59001FBE71 /* Build configuration list for PBXProject "OpenTelemetry Browser Ext" */ = {
+		66F9FA8F2C0CA2BB001B526A /* Build configuration list for PBXProject "OpenTelemetry Browser Ext" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				6609A2242C0C9E5B001FBE71 /* Debug */,
-				6609A2252C0C9E5B001FBE71 /* Release */,
+				66F9FABA2C0CA2BC001B526A /* Debug */,
+				66F9FABB2C0CA2BC001B526A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6609A2262C0C9E5B001FBE71 /* Build configuration list for PBXNativeTarget "OpenTelemetry Browser Ext Extension" */ = {
+		66F9FABC2C0CA2BC001B526A /* Build configuration list for PBXNativeTarget "OpenTelemetry Browser Ext Extension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				6609A2272C0C9E5B001FBE71 /* Debug */,
-				6609A2282C0C9E5B001FBE71 /* Release */,
+				66F9FABD2C0CA2BC001B526A /* Debug */,
+				66F9FABE2C0CA2BC001B526A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6609A22A2C0C9E5B001FBE71 /* Build configuration list for PBXNativeTarget "OpenTelemetry Browser Ext" */ = {
+		66F9FAC02C0CA2BC001B526A /* Build configuration list for PBXNativeTarget "OpenTelemetry Browser Ext" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				6609A22B2C0C9E5B001FBE71 /* Debug */,
-				6609A22C2C0C9E5B001FBE71 /* Release */,
+				66F9FAC12C0CA2BC001B526A /* Debug */,
+				66F9FAC22C0CA2BC001B526A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 6609A1F62C0C9E59001FBE71 /* Project object */;
+	rootObject = 66F9FA8C2C0CA2BB001B526A /* Project object */;
 }

@@ -9,7 +9,7 @@ import Cocoa
 import SafariServices
 import WebKit
 
-let extensionBundleIdentifier = "com.theo.OpenTelemetry-Browser-Ext.Extension"
+let extensionBundleIdentifier = "com.theo.OpenTelemetry-Browser-Extension.Extension"
 
 class ViewController: NSViewController, WKNavigationDelegate, WKScriptMessageHandler {
 
