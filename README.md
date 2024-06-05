@@ -2,9 +2,9 @@
     <h1>OpenTelemetry Browser Extension</h1>
     <p>available on:</p>
     <a href="https://chromewebstore.google.com/detail/opentelemetry-browser-ext/bgjeoaohfhbfabbfhbafjihbobjgniag"><img src='./assets/chrome.svg' height=50 alt='chrome download'></img></a>
-    <!-- /
-    <a href=""><img src='./assets/safari.svg' height=50 alt='safari download'></img></a>
     /
+    <a href="https://apps.apple.com/us/app/opentelemetry-browser-ext/id6503631744?mt=12"><img src='./assets/safari.svg' height=50 alt='safari download'></img></a>
+    <!-- /
     <a href=""><img src='./assets/edge.svg' height=50 alt='edge download'></img></a> -->
     <p>...or <a href='#making-a-production-build'>build it yourself!</a></p>
 </div>
