@@ -84,14 +84,15 @@ Then, follow the same steps as with running the development server, but load the
 
 ### Safari
 
-Safari requires a bit of extra work. After building the extension, run the following commands to convert the extension to a an XCode project and apply necessary patches:
+Safari requires a bit of extra work. After building the extension, run the following commands to convert the extension to a an XCode project (and apply some necessary patches, if publishing):
 
 ```bash
 pnpm convert:safari
+# (optional, if publishing an archive to apple store) 
 pnpm patch:safari
 ```
 
-Then, build the extension in XCode (using the MacOS target), and enable it in Safari
+Then, build the extension in XCode (using the MacOS target), and enable it in Safari.
 
 > [!NOTE]
 > Safari requires extensions to be signed before they can be installed. You can either sign the extension yourself, or load it as an unsigned extension after enabling "allow unsigned extensions" in Safari's developer settings.
