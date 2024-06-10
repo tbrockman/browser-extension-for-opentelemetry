@@ -28,7 +28,7 @@ A [Plasmo](https://docs.plasmo.com/)-based browser extension that automatically 
 
 * Automatically instrument webpages to collect traces and logs, sent to an OTLP-compatible collector
 * No content-security policy errors! Works around typical CSP limitations by making `fetch` requests from the background script instead of the webpage and using `chrome.scripting.executeScript({ ... , world: 'MAIN' })` to inject the content script.
-* Choose where and how you want it to run! Don't worry about the extension tracking every single webpage, limit it to however you see fit.
+* Choose where and how you want it to run! Don't worry about the extension tracking every single webpage, use [match patterns](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns) (ex. `https://<your-org-here>.com/*`) to specify the pages it should run on and have access to.
 * Propagate b3 and w3c trace context to websites of your choosing (matched by regular expressions)
 
 
