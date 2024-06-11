@@ -6,6 +6,8 @@
     <a href="https://apps.apple.com/us/app/opentelemetry-browser-ext/id6503631744?mt=12"><img src='./assets/safari.svg' height=50 alt='safari download'></img></a>
     /
     <a href="https://microsoftedge.microsoft.com/addons/detail/opentelemetry-browser-ext/agbimhpapcebokbphphbfcimebibcoga"><img src='./assets/edge.svg' height=50 alt='edge download'></img></a>
+    /
+    <a href="https://addons.mozilla.org/en-US/firefox/addon/opentelemetry-browserextension/"><img src='./assets/firefox.svg' height=50 alt='firefox nightly download'></img></a>
     <p>...or <a href='#making-a-production-build'>build it yourself!</a></p>
 </div>
 
@@ -14,7 +16,7 @@
 
 > [!NOTE] 
 > This project is in early development. Please forgive (or feel free to contribute) any missing documentation.
-> This project is largely similar to the archived [opentelemetry-browser-extension](https://github.com/open-telemetry/opentelemetry-js-contrib/tree/main/archive/opentelemetry-browser-extension-autoinjection) (by [@svrnm](https://github.com/svrnm/opentelemetry-browser-extension/)), but avoids CSP issues with a different content script injection method, offers a few more configurable settings in the UI, and was developed independently.
+> The extension is largely similar to the archived [opentelemetry-browser-extension](https://github.com/open-telemetry/opentelemetry-js-contrib/tree/main/archive/opentelemetry-browser-extension-autoinjection) (by [@svrnm](https://github.com/svrnm/opentelemetry-browser-extension/)), but avoids CSP issues with a different content script injection method, offers more configuration, and was developed independently.
 
 A [Plasmo](https://docs.plasmo.com/)-based browser extension that automatically instruments webpages with [OpenTelemetry](https://opentelemetry.io/docs/what-is-opentelemetry/).
 
