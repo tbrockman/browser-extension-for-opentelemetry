@@ -3,7 +3,7 @@
     <p>available on:</p>
     <a href="https://chromewebstore.google.com/detail/opentelemetry-browser-ext/bgjeoaohfhbfabbfhbafjihbobjgniag"><img src='./assets/chrome.svg' height=50 alt='chrome download'></img></a>
     /
-    <a href="https://apps.apple.com/us/app/opentelemetry-browser-ext/id6503631744?mt=12"><img src='./assets/safari.svg' height=50 alt='safari download'></img></a>
+    <a href="https://apps.apple.com/us/app/opentelemetry-browser-ext/id6503631744"><img src='./assets/safari.svg' height=50 alt='safari download'></img></a>
     /
     <a href="https://microsoftedge.microsoft.com/addons/detail/opentelemetry-browser-ext/agbimhpapcebokbphphbfcimebibcoga"><img src='./assets/edge.svg' height=50 alt='edge download'></img></a>
     /
