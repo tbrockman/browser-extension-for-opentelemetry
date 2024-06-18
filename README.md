@@ -40,18 +40,16 @@ This extension relies on the use of `chrome.scripting.executeScript({ ... , worl
 
 ## Developing
 
-Clone repository with git submodules (we use a custom fork of Plasmo):
+Clone the repository:
 
 ```bash
-git clone https://github.com/tbrockman/browser-extension-for-opentelemetry --recursive
+git clone https://github.com/tbrockman/browser-extension-for-opentelemetry
 ```
 
 Install dependencies:
 
 ```bash
 pnpm install
-# ... and then for some reason I haven't been able to dig into yet...
-pnpm install @plasmohq/storage -w
 ```
 
 Start the OpenTelemetry stack (Grafana + Quickwit + `opentelemetry-collector-contrib`):<sup> (optional if you have your own)</sup>
