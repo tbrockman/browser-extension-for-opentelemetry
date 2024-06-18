@@ -13,7 +13,7 @@
     "build": "npm-run-all build:safari build:windows",
     "build:windows": "npm-run-all build:chrome build:edge build:opera",
     "build:chrome": "plasmo build --target=chrome-mv3 --zip --hoist",
-    "build:firefox": "echo '\\033[1;31mwarning: firefox build is not currently functional due to its incomplete scripting.executeScript() functionality.\nproceeding to build anyways\\033[0m\n' && plasmo build --target=firefox-mv3 --zip --hoist",
+    "build:firefox": "echo '\\033[1;31mwarning: firefox build only functional in firefox nightly (>=128).\nproceeding to build anyways\\033[0m\n' && plasmo build --target=firefox-mv3 --zip --hoist",
     "build:edge": "plasmo build --target=edge-mv3 --zip --hoist",
     "build:safari": "plasmo build --target=safari-mv3 --zip --hoist",
     "convert:safari": "cd build && xcrun safari-web-extension-converter safari-mv3-prod --project-location ../generated/safari-xcode/ --app-name 'OpenTelemetry Browser Ext' --bundle-identifier 'com.theo.OpenTelemetry-Browser-Extension' --macos-only",
