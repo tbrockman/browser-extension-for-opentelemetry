@@ -62,8 +62,8 @@ const instrument = (sessionId: string, options: Options) => {
     consoleProxy.debug(`instrumenting`, { sessionId, options })
 
     const resource = new Resource({
-        [SEMRESATTRS_SERVICE_NAME]: 'opentelemetry-browser-extension',
-        [SEMRESATTRS_SERVICE_VERSION]: '0.0.7', // TODO: replace with package.json version
+        [SEMRESATTRS_SERVICE_NAME]: 'browser-extension-for-opentelemetry',
+        [SEMRESATTRS_SERVICE_VERSION]: '0.0.8', // TODO: replace with package.json version
         [SEMRESATTRS_TELEMETRY_SDK_LANGUAGE]: 'webjs',
         [SEMRESATTRS_TELEMETRY_SDK_NAME]: 'opentelemetry',
         [SEMRESATTRS_TELEMETRY_SDK_VERSION]: '1.22.0', // TODO: replace with resolved version

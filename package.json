@@ -1,8 +1,8 @@
 {
-  "name": "opentelemetry-browser-extension",
-  "displayName": "OpenTelemetry Browser Extension",
-  "version": "0.0.7",
-  "description": "An extension for instrumenting webpages using OpenTelemetry",
+  "name": "browser-extension-for-opentelemetry",
+  "displayName": "Browser Extension for OpenTelemetry",
+  "version": "0.0.8",
+  "description": "A browser extension for automatically instrumenting webpages using OpenTelemetry",
   "author": "Theodore Brockman <iam@theo.lol>",
   "packageManager": "pnpm@8.14.0",
   "scripts": {
@@ -101,7 +101,7 @@
     ],
     "browser_specific_settings": {
       "gecko": {
-        "id": "opentelemetry-browser-extension@theo.lol"
+        "id": "browser-extension-for-opentelemetry@theo.lol"
       }
     }
   },

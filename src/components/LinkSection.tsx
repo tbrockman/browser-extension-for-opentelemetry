@@ -30,7 +30,7 @@ export default function LinkSection() {
     const links = [
         {
             label: 'Link to projects GitHub',
-            href: 'https://github.com/tbrockman/opentelemetry-browser-extension',
+            href: 'https://github.com/tbrockman/browser-extension-for-opentelemetry',
             icon: <IconBrandGithubFilled />,
             tooltip: 'github'
         },

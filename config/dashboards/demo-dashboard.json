@@ -39,7 +39,7 @@
                     "showLineNumbers": true,
                     "showMiniMap": false
                 },
-                "content": "<!-- TODO: embed this file into demo-dashboard.json -->\n<div style=\"font-family:monospace;\">\n    <h1 style=\"font-family:monospace;\">👋 Welcome! / 📚 README</h1>\n    <p>\n        Thanks for taking the time to check out the project. If you feel the urge, please consider contributing to the\n        project or <a href=\"https://github.com/sponsors/tbrockman\">sponsoring the developer</a>.\n    </p>\n    <p>\n        <b>\n            <h3 style=\"font-family:monospace;\">Don't see any data here?</h3>\n        </b> Check out <a href=\"https://github.com/tbrockman/opentelemetry-browser-extension\">the\n            FAQ.</a>\n    </p>\n    <h3 style=\"font-family:monospace;\">Demo</h3>\n    <p> This dashboard is meant to serve as a basic demonstration of the kind of queries and visualizations you can make\n        with some of the data you collect with the extension.</p>\n    <p>\n        It's currently under development, so there might be a bug or missing feature or two.\n    </p>\n    <h3 style=\"font-family:monospace;\">How to query the data</h3>\n    <p>The data in this dashboard primarly leverages <a href=\"https://quickwit.io\">Quickwit</a>. Quickwit supports a\n        Lucene-like query\n        language (and Elasticsearch-search compatible API) which\n        you can learn\n        more about <a href=\"https://quickwit.io/docs/reference/query-language\">here</a>.</p>\n\n    <p>At the top of the dashboard you can also filter by log and trace attributes, which will automatically apply to\n        the\n        related dashboard visualizations.</p>\n</div>",
+                "content": "<!-- TODO: embed this file into demo-dashboard.json -->\n<div style=\"font-family:monospace;\">\n    <h1 style=\"font-family:monospace;\">👋 Welcome! / 📚 README</h1>\n    <p>\n        Thanks for taking the time to check out the project. If you feel the urge, please consider contributing to the\n        project or <a href=\"https://github.com/sponsors/tbrockman\">sponsoring the developer</a>.\n    </p>\n    <p>\n        <b>\n            <h3 style=\"font-family:monospace;\">Don't see any data here?</h3>\n        </b> Check out <a href=\"https://github.com/tbrockman/browser-extension-for-opentelemetry\">the\n            FAQ.</a>\n    </p>\n    <h3 style=\"font-family:monospace;\">Demo</h3>\n    <p> This dashboard is meant to serve as a basic demonstration of the kind of queries and visualizations you can make\n        with some of the data you collect with the extension.</p>\n    <p>\n        It's currently under development, so there might be a bug or missing feature or two.\n    </p>\n    <h3 style=\"font-family:monospace;\">How to query the data</h3>\n    <p>The data in this dashboard primarly leverages <a href=\"https://quickwit.io\">Quickwit</a>. Quickwit supports a\n        Lucene-like query\n        language (and Elasticsearch-search compatible API) which\n        you can learn\n        more about <a href=\"https://quickwit.io/docs/reference/query-language\">here</a>.</p>\n\n    <p>At the top of the dashboard you can also filter by log and trace attributes, which will automatically apply to\n        the\n        related dashboard visualizations.</p>\n</div>",
                 "mode": "html"
             },
             "pluginVersion": "10.4.1",
@@ -675,7 +675,7 @@
                     {
                         "key": "service_name",
                         "operator": "=",
-                        "value": "opentelemetry-browser-extension"
+                        "value": "browser-extension-for-opentelemetry"
                     }
                 ],
                 "hide": 0,
@@ -693,7 +693,7 @@
                     {
                         "key": "service_name",
                         "operator": "=",
-                        "value": "opentelemetry-browser-extension"
+                        "value": "browser-extension-for-opentelemetry"
                     }
                 ],
                 "hide": 0,

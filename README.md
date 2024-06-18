@@ -1,5 +1,5 @@
 <div align="center">
-    <h1>OpenTelemetry Browser Extension</h1>
+    <h1>Browser Extension for OpenTelemetry</h1>
     <p>available on:</p>
     <a href="https://chromewebstore.google.com/detail/opentelemetry-browser-ext/bgjeoaohfhbfabbfhbafjihbobjgniag"><img src='./assets/chrome.svg' height=50 alt='chrome download'></img></a>
     /

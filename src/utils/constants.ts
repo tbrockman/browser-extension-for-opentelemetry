@@ -95,4 +95,4 @@ export const events = [
     "wheel"
 ]
 
-export const logPrefix = '[opentelemetry-browser-extension]'
+export const logPrefix = '[browser-extension-for-opentelemetry]'
