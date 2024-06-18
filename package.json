@@ -4,7 +4,7 @@
   "version": "0.0.9",
   "description": "A browser extension for automatically instrumenting webpages using OpenTelemetry",
   "author": "Theodore Brockman <iam@theo.lol>",
-  "packageManager": "pnpm@9.6.0",
+  "packageManager": "pnpm@9.4.0",
   "scripts": {
     "build": "npm-run-all build:safari build:windows",
     "build:windows": "npm-run-all build:chrome build:edge build:opera",
