@@ -102,7 +102,7 @@
     ],
     "browser_specific_settings": {
       "gecko": {
-        "id": "browser-extension-for-opentelemetry@theo.lol"
+        "id": "opentelemetry-browser-extension@theo.lol"
       }
     }
   },
