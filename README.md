@@ -1,5 +1,5 @@
 <div align="center">
-    <h1>Browser Extension for OpenTelemetry</h1>
+    <h1>Browser Extension for OpenTelemetry™</h1>
     <p>available on:</p>
     <a href="https://chromewebstore.google.com/detail/opentelemetry-browser-ext/bgjeoaohfhbfabbfhbafjihbobjgniag"><img src='./assets/chrome.svg' height=50 alt='chrome download'></img></a>
     /
@@ -43,7 +43,7 @@ This extension relies on the use of `chrome.scripting.executeScript({ ... , worl
 Clone repository with git submodules (we use a custom fork of Plasmo):
 
 ```bash
-git clone https://github.com/tbrockman/opentelemetry-browser-extension --recursive
+git clone https://github.com/tbrockman/browser-extension-for-opentelemetry --recursive
 ```
 
 Install dependencies:
