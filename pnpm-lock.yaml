@@ -101,8 +101,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0
       deepmerge-ts:
-        specifier: ^5.1.0
-        version: 5.1.0
+        specifier: ^7.0.3
+        version: 7.0.3
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -4859,8 +4859,8 @@ packages:
     resolution: {integrity: sha512-LOHxIOaPYdHlJRtCQfDIVZtfw/ufM8+rVj649RIHzcm/vGwQRXFt6OPqIFWsm2XEMrNIEtWR64sY1LEKD2vAOA==}
     engines: {node: '>=4.0.0'}
 
-  deepmerge-ts@5.1.0:
-    resolution: {integrity: sha512-eS8dRJOckyo9maw9Tu5O5RUi/4inFLrnoLkBe3cPfDMx3WZioXtmOew4TXQaxq7Rhl4xjDtR7c6x8nNTxOvbFw==}
+  deepmerge-ts@7.0.3:
+    resolution: {integrity: sha512-dxFbFO2RSIhPNBPL/j8Nvdt6/vrkW9+uGf1NLah/QxBGAVbK9fj2fGTO+HwdHpPAyFAsyT9iEn/1SI9SUvespw==}
     engines: {node: '>=16.0.0'}
 
   deepmerge@4.3.1:
@@ -12629,7 +12629,7 @@ snapshots:
 
   deep-extend@0.6.0: {}
 
-  deepmerge-ts@5.1.0: {}
+  deepmerge-ts@7.0.3: {}
 
   deepmerge@4.3.1: {}
 
