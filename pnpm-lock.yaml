@@ -32,8 +32,8 @@ importers:
         specifier: ^7.6.1
         version: 7.10.1(react@18.2.0)
       '@opentelemetry/api-logs':
-        specifier: ^0.49.1
-        version: 0.49.1
+        specifier: ^0.52.1
+        version: 0.52.1
       '@opentelemetry/auto-instrumentations-web':
         specifier: ^0.36.0
         version: 0.36.0(@opentelemetry/api@1.8.0)(zone.js@0.14.6)
@@ -78,7 +78,7 @@ importers:
         version: 1.24.1(@opentelemetry/api@1.8.0)
       '@opentelemetry/sdk-logs':
         specifier: ^0.49.1
-        version: 0.49.1(@opentelemetry/api-logs@0.49.1)(@opentelemetry/api@1.8.0)
+        version: 0.49.1(@opentelemetry/api-logs@0.52.1)(@opentelemetry/api@1.8.0)
       '@opentelemetry/sdk-trace-base':
         specifier: ^1.22.0
         version: 1.24.1(@opentelemetry/api@1.8.0)
@@ -2492,6 +2492,10 @@ packages:
 
   '@opentelemetry/api-logs@0.49.1':
     resolution: {integrity: sha512-kaNl/T7WzyMUQHQlVq7q0oV4Kev6+0xFwqzofryC66jgGMacd0QH5TwfpbUwSTby+SdAdprAe5UKMvBw4tKS5Q==}
+    engines: {node: '>=14'}
+
+  '@opentelemetry/api-logs@0.52.1':
+    resolution: {integrity: sha512-qnSqB2DQ9TPP96dl8cDubDvrUyWc0/sK81xHTK8eSUspzDM3bsewX903qclQFvVhgStjRWdC5bLb3kQqMkfV5A==}
     engines: {node: '>=14'}
 
   '@opentelemetry/api@1.8.0':
@@ -8620,6 +8624,10 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.8.0
 
+  '@opentelemetry/api-logs@0.52.1':
+    dependencies:
+      '@opentelemetry/api': 1.8.0
+
   '@opentelemetry/api@1.8.0': {}
 
   '@opentelemetry/auto-instrumentations-web@0.36.0(@opentelemetry/api@1.8.0)(zone.js@0.14.6)':
@@ -8816,6 +8824,13 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.8.0
       '@opentelemetry/api-logs': 0.49.1
+      '@opentelemetry/core': 1.22.0(@opentelemetry/api@1.8.0)
+      '@opentelemetry/resources': 1.22.0(@opentelemetry/api@1.8.0)
+
+  '@opentelemetry/sdk-logs@0.49.1(@opentelemetry/api-logs@0.52.1)(@opentelemetry/api@1.8.0)':
+    dependencies:
+      '@opentelemetry/api': 1.8.0
+      '@opentelemetry/api-logs': 0.52.1
       '@opentelemetry/core': 1.22.0(@opentelemetry/api@1.8.0)
       '@opentelemetry/resources': 1.22.0(@opentelemetry/api@1.8.0)
 
