@@ -36,7 +36,7 @@ A [Plasmo](https://docs.plasmo.com/)-based browser extension that automatically 
 
 ## Browser compatibility
 
-This extension relies on the use of `chrome.scripting.executeScript({ ... , world: 'MAIN' })`. Luckily, this seems to be supported in every browser except Firefox, where the functionality is currently availabe in the lastest nightly build (128).
+This extension is compatible with [all major browsers](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/scripting/executeScript#browser_compatibility) as of Firefox 128! 🎉
 
 ## Developing
 
@@ -83,7 +83,7 @@ pnpm build:safari
 # or
 pnpm build:edge
 # or
-pnpm build:firefox # firefox nightly only (>=128)
+pnpm build:firefox
 ```
 
 Then, follow the same steps as with running the development server, but load the appropriate production build from the `build` directory, i.e: `build/chrome-mv3-prod`.

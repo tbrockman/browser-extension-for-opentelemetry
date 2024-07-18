@@ -6,7 +6,7 @@ import {
     SimpleLogRecordProcessor
 } from '@opentelemetry/sdk-logs';
 import { OTLPLogExporter } from '@opentelemetry/exporter-logs-otlp-proto';
-import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
+import { SimpleSpanProcessor, Span } from '@opentelemetry/sdk-trace-base';
 import { OTLPProtoExporterBrowserBase, getExportRequestProto } from '@opentelemetry/otlp-proto-exporter-base';
 import { OTLPExporterError } from '@opentelemetry/otlp-exporter-base';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
@@ -21,6 +21,7 @@ import { consoleProxy } from '~utils/logging';
 import { wrapConsoleWithLoggerProvider } from '~telemetry/logs';
 import type { Options } from '~utils/options';
 import { deserializer } from '~utils/serde';
+import type { FetchError } from '@opentelemetry/instrumentation-fetch/build/src/types';
 
 
 function createSendOverride<ExportItem, ServiceRequest>(sessionId: string, exporter: OTLPProtoExporterBrowserBase<ExportItem, ServiceRequest>, type: MessageTypes) {
@@ -63,7 +64,7 @@ const instrument = (sessionId: string, options: Options) => {
 
     const resource = new Resource({
         [SEMRESATTRS_SERVICE_NAME]: 'browser-extension-for-opentelemetry',
-        [SEMRESATTRS_SERVICE_VERSION]: '0.0.9', // TODO: replace with package.json version
+        [SEMRESATTRS_SERVICE_VERSION]: '0.0.10', // TODO: replace with package.json version
         [SEMRESATTRS_TELEMETRY_SDK_LANGUAGE]: 'webjs',
         [SEMRESATTRS_TELEMETRY_SDK_NAME]: 'opentelemetry',
         [SEMRESATTRS_TELEMETRY_SDK_VERSION]: '1.22.0', // TODO: replace with resolved version
@@ -125,11 +126,23 @@ const instrument = (sessionId: string, options: Options) => {
         fetch: [
             ['@opentelemetry/instrumentation-xml-http-request', {
                 clearTimingResources,
-                propagateTraceHeaderCorsUrls
+                propagateTraceHeaderCorsUrls,
+                // TODO: implement so we can abandon the related instrumentation patches
+                // applyCustomAttributesOnSpan: async (span: Span, xhr: XMLHttpRequest) => {
+                //     if (xhr.status >= 400) {
+                //         span.setStatus({ code: 2, message: xhr.statusText })
+                //     }
+                // }
             }],
             ['@opentelemetry/instrumentation-fetch', {
                 clearTimingResources,
-                propagateTraceHeaderCorsUrls
+                propagateTraceHeaderCorsUrls,
+                // TODO: implement so we can abandon the related instrumentation patches
+                // applyCustomAttributesOnSpan: async (span: Span, request: Request | RequestInit, response: Response | FetchError) => {
+                //     if ('message' in response) {
+                //         span.setStatus({ code: 2, message: response.message })
+                //     }
+                // },
             }]
         ],
         interaction: [
