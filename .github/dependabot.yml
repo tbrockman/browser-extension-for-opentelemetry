@@ -1,5 +1,5 @@
 version: 2
-updates:
+updates: []
 #   - package-ecosystem: "npm" # See documentation for possible values
 #     directory: "/" # Location of package manifests
 #     schedule:
