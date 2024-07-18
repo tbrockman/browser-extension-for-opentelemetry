@@ -12,7 +12,7 @@ receivers:
         endpoint: 0.0.0.0:4317
 exporters:
   otlp/quickwit:
-    endpoint: quickwit:7281
+    endpoint: http://quickwit:7281
     tls:
       insecure: true
   debug:

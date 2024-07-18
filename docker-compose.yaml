@@ -8,7 +8,7 @@ services:
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://127.0.0.1:7281"
     ports:
       - 7280:7280
-    command: ["run"]
+    command: [ "run" ]
     attach: false # comment this line if you'd like to view quickwit log output
 
   otel-collector:
@@ -39,7 +39,7 @@ services:
       - "3000:3000" # ui
       # - "${MAP_HOST_GRAFANA:-127.0.0.1}:3000:3000"
     attach: false
-  
+
   prometheus:
     image: prom/prometheus:latest
     command:

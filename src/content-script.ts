@@ -21,8 +21,6 @@ import { consoleProxy } from '~utils/logging';
 import { wrapConsoleWithLoggerProvider } from '~telemetry/logs';
 import type { Options } from '~utils/options';
 import { deserializer } from '~utils/serde';
-import type { FetchError } from '@opentelemetry/instrumentation-fetch/build/src/types';
-
 
 function createSendOverride<ExportItem, ServiceRequest>(sessionId: string, exporter: OTLPProtoExporterBrowserBase<ExportItem, ServiceRequest>, type: MessageTypes) {
 
@@ -193,18 +191,22 @@ export default function injectContentScript({ sessionId, options, retries = 10, 
 
         const key = `${sessionId}:relay-from-background`
         const listener = (event: CustomEvent) => {
-            if (event.detail.type === 'disconnect') {
-                consoleProxy.debug(`received disconnect message from relay`, event.detail)
-                deregisterInstrumentation && deregisterInstrumentation()
-                window.removeEventListener(key, listener)
-            } else if (event.detail.type === 'storageChanged') {
-                consoleProxy.debug(`received storage changed message from relay`, event.detail)
-                options = {
-                    ...options as Options,
-                    ...event.detail.data as Partial<Options>
+            try {
+                if (event.detail.type === 'disconnect') {
+                    consoleProxy.debug(`received disconnect message from relay`, event.detail)
+                    deregisterInstrumentation && deregisterInstrumentation()
+                    window.removeEventListener(key, listener)
+                } else if (event.detail.type === 'storageChanged') {
+                    consoleProxy.debug(`received storage changed message from relay`, event.detail)
+                    options = {
+                        ...options as Options,
+                        ...event.detail.data as Partial<Options>
+                    }
+                    deregisterInstrumentation && deregisterInstrumentation()
+                    deregisterInstrumentation = instrument(sessionId, options)
                 }
-                deregisterInstrumentation && deregisterInstrumentation()
-                deregisterInstrumentation = instrument(sessionId, options)
+            } catch (e) {
+                consoleProxy.error(`error handling message from relay`, e, event)
             }
         }
 
