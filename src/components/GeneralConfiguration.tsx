@@ -2,8 +2,9 @@ import { Anchor, Fieldset, Group, Text } from "@mantine/core";
 import { TagsInput } from "~components/TagsInput";
 import ColorModeSwitch from "~components/ColorModeSwitch";
 import { useLocalStorage } from "~hooks/storage";
-import { defaultOptions, type MatchPatternError } from "~utils/options";
+import { defaultOptions } from "~utils/options";
 import { matchPatternsChanged } from "~utils/match-pattern";
+import { setLocalStorage, type MatchPatternError } from "~utils/storage";
 
 type GeneralConfigurationProps = {
     enabled: boolean
@@ -40,17 +41,22 @@ const patternErrorsToPills = (patterns: string[], errors: MatchPatternError[]): 
 }
 
 export default function GeneralConfiguration({ enabled }: GeneralConfigurationProps) {
-    const [headers, setHeaders] = useLocalStorage<Map<string, string>>("headers")
+    const { headers, attributes, matchPatterns, matchPatternErrors } = useLocalStorage([
+        'headers',
+        'attributes',
+        'matchPatterns',
+        'matchPatternErrors'
+    ])
     const headersStrings = mapToColonSeparatedStrings(headers)
-    const [attributes, setAttributes] = useLocalStorage<Map<string, string>>("attributes")
     const attributesStrings = mapToColonSeparatedStrings(attributes)
+    const pillErrors = patternErrorsToPills(matchPatterns, matchPatternErrors)
 
-    const [matchPatterns, setMatchPatterns] = useLocalStorage<string[]>("matchPatterns")
-    const [patternErrors, setPatternErrors] = useLocalStorage<MatchPatternError[]>("matchPatternErrors")
-    const pillErrors = patternErrorsToPills(matchPatterns, patternErrors)
+    const setPatternErrors = (errors: MatchPatternError[]) => {
+        setLocalStorage({ matchPatternErrors: errors })
+    }
 
     const onEnabledUrlsChange = async (values: string[]) => {
-        setMatchPatterns(values)
+        setLocalStorage({ matchPatterns: values })
         matchPatternsChanged({ prev: matchPatterns, next: values, setErrors: setPatternErrors })
     }
 
@@ -108,11 +114,11 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                     onValueRemoved={(index) => {
                         const newAttributes = [...attributesStrings]
                         newAttributes.splice(index, 1)
-                        setAttributes(colonSeparatedStringsToMap(newAttributes))
+                        setLocalStorage({ attributes: colonSeparatedStringsToMap(newAttributes) })
                     }}
                     onValueAdded={(value) => {
                         attributesStrings.push(value)
-                        setAttributes(colonSeparatedStringsToMap(attributesStrings))
+                        setLocalStorage({ attributes: colonSeparatedStringsToMap(attributesStrings) })
                     }}
                     label="Resource attributes"
                     disabled={!enabled}
@@ -121,15 +127,15 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                     delimiter={","}
                 />
                 <TagsInput
-                    value={mapToColonSeparatedStrings(headers)}
+                    value={headersStrings}
                     onValueRemoved={(index) => {
                         const newState = [...headersStrings]
                         newState.splice(index, 1)
-                        setHeaders(colonSeparatedStringsToMap(newState))
+                        setLocalStorage({ headers: colonSeparatedStringsToMap(newState) })
                     }}
                     onValueAdded={(value) => {
                         headersStrings.push(value)
-                        setHeaders(colonSeparatedStringsToMap(headersStrings))
+                        setLocalStorage({ headers: colonSeparatedStringsToMap(headersStrings) })
                     }}
                     label="Request headers"
                     disabled={!enabled}

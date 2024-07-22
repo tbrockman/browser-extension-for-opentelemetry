@@ -1,6 +1,7 @@
 import { SeverityNumber } from "@opentelemetry/api-logs";
 import { LoggerProvider } from "@opentelemetry/sdk-logs";
 import { logPrefix } from "~utils/constants";
+import { serializer } from "~utils/serde";
 
 
 export const wrapConsoleWithLoggerProvider = (provider: LoggerProvider) => {
@@ -26,7 +27,7 @@ export const wrapConsoleWithLoggerProvider = (provider: LoggerProvider) => {
 
                 return function (...args) {
                     const [severityNumber, severityText] = targets[prop]
-                    logger.emit({ severityNumber, severityText, body: JSON.stringify(args) });
+                    logger.emit({ severityNumber, severityText, body: serializer(args) });
                     target[prop].apply(target, args);
                 };
             } else {

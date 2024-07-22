@@ -39,3 +39,12 @@ export interface OTLPMetricMessage extends PortMessageBase {
     type: MessageTypes.OTLPMetricMessage
     bytes: number[],
 }
+
+export type Primitive = string | number | boolean | null | undefined | object;
+export type Values = Primitive | Primitive[] | KeyValueStructure
+
+export type KeyValueStructure = {
+    [key in string]: Values;
+};
+
+export type KeyValues = KeyValueStructure;

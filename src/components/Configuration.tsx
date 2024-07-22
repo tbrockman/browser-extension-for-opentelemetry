@@ -15,10 +15,10 @@ import TraceConfiguration from "./TraceConfiguration"
 import LogConfiguration from "./LogConfiguration"
 import GeneralConfiguration from "./GeneralConfiguration"
 import { useLocalStorage } from "~hooks/storage"
+import { setLocalStorage } from "~utils/storage"
 
 export default function Configuration() {
-
-    const [enabled, setEnabled] = useLocalStorage<boolean>("enabled")
+    const { enabled } = useLocalStorage(["enabled"])
 
     return (
         <Box>
@@ -30,7 +30,7 @@ export default function Configuration() {
                 <Switch
                     checked={enabled}
                     disabled={false}
-                    onChange={(event) => setEnabled(event.currentTarget.checked)}
+                    onChange={(event) => setLocalStorage({ enabled: event.currentTarget.checked })}
                     size='md'
                     aria-label='Enable or disable the extension'
                     thumbIcon={

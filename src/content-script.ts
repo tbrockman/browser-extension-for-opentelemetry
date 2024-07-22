@@ -19,7 +19,7 @@ import { CompositePropagator, W3CTraceContextPropagator } from '@opentelemetry/c
 import { MessageTypes } from '~types';
 import { consoleProxy } from '~utils/logging';
 import { wrapConsoleWithLoggerProvider } from '~telemetry/logs';
-import type { Options } from '~utils/options';
+import type { LocalStorageType } from '~utils/options';
 import { deserializer } from '~utils/serde';
 
 function createSendOverride<ExportItem, ServiceRequest>(sessionId: string, exporter: OTLPProtoExporterBrowserBase<ExportItem, ServiceRequest>, type: MessageTypes) {
@@ -51,7 +51,7 @@ function createSendOverride<ExportItem, ServiceRequest>(sessionId: string, expor
     }
 }
 
-const instrument = (sessionId: string, options: Options) => {
+const instrument = (sessionId: string, options: LocalStorageType) => {
 
     if (!options || !options.enabled || !options.instrumentations || options.instrumentations.length === 0 || window.__OTEL_BROWSER_EXT_INSTRUMENTED__) {
         consoleProxy.debug(`not instrumenting as either options missing or already instrumented`, options, window.__OTEL_BROWSER_EXT_INSTRUMENTED__)
@@ -173,7 +173,7 @@ const instrument = (sessionId: string, options: Options) => {
 
 export type InjectContentScriptArgs = {
     sessionId: string,
-    options: Options | string,
+    options: LocalStorageType | string,
     retries?: number,
     backoff?: number,
 }
@@ -185,7 +185,7 @@ export default function injectContentScript({ sessionId, options, retries = 10, 
 
     try {
         if (typeof options === 'string') {
-            options = deserializer<Options>(options)
+            options = deserializer<LocalStorageType>(options)
         }
         let deregisterInstrumentation = instrument(sessionId, options);
 
@@ -199,8 +199,8 @@ export default function injectContentScript({ sessionId, options, retries = 10, 
                 } else if (event.detail.type === 'storageChanged') {
                     consoleProxy.debug(`received storage changed message from relay`, event.detail)
                     options = {
-                        ...options as Options,
-                        ...event.detail.data as Partial<Options>
+                        ...options as LocalStorageType,
+                        ...event.detail.data as Partial<LocalStorageType>
                     }
                     deregisterInstrumentation && deregisterInstrumentation()
                     deregisterInstrumentation = instrument(sessionId, options)

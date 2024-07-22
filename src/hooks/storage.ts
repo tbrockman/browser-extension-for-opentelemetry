@@ -1,43 +1,54 @@
-import { Storage } from "@plasmohq/storage"
-import { useStorage as usePlasmoStorage } from "@plasmohq/storage/hook"
+import { useEffect, useState } from "react"
+import type { Values } from "~types"
+import { deserializer } from "~utils/serde";
+import { defaultLocalStorage, getStorage, LocalStorage } from "~utils/storage"
 
-import type { Options } from "~utils/options"
-import { defaultOptions } from "~utils/options"
-import { serializer, deserializer } from "~utils/serde"
+export function useLocalStorage<T extends (keyof LocalStorage)[]>(keys: T): {
+    [K in T[number]]: LocalStorage[K];
+} {
+    const obj = keys.reduce((acc, key) => {
+        return { ...acc, [key]: defaultLocalStorage[key] }
+    }, {} as {
+        [K in T[number]]: LocalStorage[K];
+    });
 
-// technically we could store more than just options, but we don't currently
-// update default handling if we ever do
-type StorageKey = keyof Options
-type StorageType = Options[StorageKey]
+    return useStorage(obj, 'local');
+}
 
-const localStorage = new Storage({ area: "local", serde: { serializer, deserializer } })
-const syncStorage = new Storage({ area: "sync", serde: { serializer, deserializer } })
+export function useStorage<T extends Record<string, Values>>(keysWithDefaults: T, storageArea: chrome.storage.AreaName = 'sync'): T {
+    const [state, setState] = useState(keysWithDefaults);
 
-function useStorageSingleton(area: "local" | "sync" = "local") {
-    if (area === "local") {
-        return localStorage
+    const listener = (event: Record<string, chrome.storage.StorageChange>, area: chrome.storage.AreaName) => {
+
+        if (area !== storageArea) return;
+
+        const intersection = Object.entries(event).filter(([key,]) => keysWithDefaults.hasOwnProperty(key));
+
+        if (intersection.length == 0) return;
+
+        const newStorage: T = intersection.reduce((acc, [key, { newValue }]) => {
+            if (!keysWithDefaults.hasOwnProperty(key)) return acc;
+
+            return { ...acc, [key]: deserializer(newValue) }
+        }, state);
+
+        setState(newStorage);
     }
-    return syncStorage
-}
 
-function useStorage<T = StorageType>(key: StorageKey, instance: Storage) {
-    return usePlasmoStorage<T>({
-        key,
-        instance
-    }, (v?: T, isHydrated?: boolean) => v === undefined ? defaultOptions[key] as T : v)
-}
+    useEffect(() => {
+        if (!keysWithDefaults || Object.keys(keysWithDefaults).length == 0) return;
 
-function useLocalStorage<T = StorageType>(key: StorageKey) {
-    return useStorage<T>(key, localStorage)
-}
+        getStorage(storageArea, keysWithDefaults).then((response) => {
+            setState(response);
+        });
+    }, [])
 
-function useSyncStorage<T>(key: StorageKey) {
-    return useStorage<T>(key, syncStorage)
-}
+    useEffect(() => {
+        chrome.storage.onChanged.addListener(listener);
 
-export {
-    useStorage,
-    useStorageSingleton,
-    useLocalStorage,
-    useSyncStorage
+        return () => {
+            chrome.storage.onChanged.removeListener(listener);
+        }
+    }, [keysWithDefaults])
+    return state;
 }

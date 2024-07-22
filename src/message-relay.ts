@@ -1,6 +1,6 @@
 import type { PortMessage, TypedPort } from "~types";
 import { consoleProxy } from "~utils/logging";
-import type { Options } from "~utils/options";
+import type { LocalStorageType } from "~utils/options";
 
 export type InjectRelayArgs = {
     sessionId: string
@@ -8,7 +8,7 @@ export type InjectRelayArgs = {
 
 export default function injectRelay({ sessionId }: InjectRelayArgs) {
     consoleProxy.debug(`injecting relay for session ${sessionId}`)
-    const port: TypedPort<PortMessage, Partial<Options>> = chrome.runtime.connect();
+    const port: TypedPort<PortMessage, Partial<LocalStorageType>> = chrome.runtime.connect();
     consoleProxy.debug(`port`, port)
     const fromBackground = `${sessionId}:relay-from-background`
     const toBackground = `${sessionId}:relay-to-background`

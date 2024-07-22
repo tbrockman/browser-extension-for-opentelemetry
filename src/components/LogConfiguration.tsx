@@ -1,8 +1,9 @@
 import { Checkbox, Fieldset, Group, Text, TextInput, type CheckboxProps } from "@mantine/core";
 import { IconTerminal } from "@tabler/icons-react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocalStorage } from "~hooks/storage";
 import { defaultOptions } from "~utils/options";
+import { setLocalStorage } from "~utils/storage";
 
 const LogsIcon: CheckboxProps['icon'] = ({ ...others }) =>
     <IconTerminal {...others} />;
@@ -13,14 +14,20 @@ type LogConfigurationProps = {
 
 export default function LogConfiguration({ enabled }: LogConfigurationProps) {
 
-    const [logsCollectorUrl, , {
-        setRenderValue: setLogsRenderValue,
-        setStoreValue: setLogsStoreValue
-    }] = useLocalStorage<string>("logCollectorUrl")
-    const [loggingEnabled, setLoggingEnabled] = useLocalStorage<boolean>("loggingEnabled")
+    const { logCollectorUrl, loggingEnabled } = useLocalStorage(["logCollectorUrl", "loggingEnabled"])
+    const checkboxRef = useRef<HTMLInputElement>(null);
+    // Hack for Firefox disabled fieldset checkbox event handling
+    // see: https://stackoverflow.com/questions/63740106/checkbox-onchange-in-legend-inside-disabled-fieldset-not-firing-in-firefox-w
     useEffect(() => {
-        setLogsStoreValue(logsCollectorUrl)
-    }, [logsCollectorUrl])
+        const listener = (event) => {
+            setLocalStorage({ tracingEnabled: event.currentTarget.checked })
+        }
+        checkboxRef.current.addEventListener('change', listener)
+
+        return () => {
+            checkboxRef.current.removeEventListener('change', listener)
+        }
+    }, [loggingEnabled])
 
     return (
         <Fieldset aria-label="Logs"
@@ -38,7 +45,11 @@ export default function LogConfiguration({ enabled }: LogConfigurationProps) {
                         checked={loggingEnabled}
                         disabled={false}
                         icon={LogsIcon}
-                        onChange={(event) => setLoggingEnabled(event.currentTarget.checked)}
+                        onChange={(event) => {
+                            if (!event.currentTarget.checked) {
+                                setLocalStorage({ loggingEnabled: event.currentTarget.checked })
+                            }
+                        }}
                         size="lg"
                         variant='outline'
                         aria-label='Enable or disable exporting logs'
@@ -61,9 +72,9 @@ export default function LogConfiguration({ enabled }: LogConfigurationProps) {
                     </>
                 }
                 placeholder={defaultOptions.logCollectorUrl}
-                value={logsCollectorUrl}
+                value={logCollectorUrl}
                 onChange={(event) => {
-                    setLogsRenderValue(event.currentTarget.value)
+                    setLocalStorage({ logCollectorUrl: event.currentTarget.value })
                 }}
             />
         </Fieldset>

@@ -1,7 +1,7 @@
 {
   "name": "browser-extension-for-opentelemetry",
   "displayName": "Browser Extension for OpenTelemetry",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "A browser extension for automatically instrumenting webpages using OpenTelemetry",
   "author": "Theodore Brockman <iam@theo.lol>",
   "packageManager": "pnpm@9.4.0",
@@ -95,6 +95,9 @@
       "gecko": {
         "id": "opentelemetry-browser-extension@theo.lol"
       }
+    },
+    "content_security_policy": {
+      "extension_pages": "script-src 'self'; object-src 'self'; connect-src *; style-src 'self' 'unsafe-inline'; default-src 'self'; "
     }
   },
   "overrides": {

@@ -1,11 +1,12 @@
 import { Anchor, Checkbox, Fieldset, Group, TagsInput, Text, TextInput, type CheckboxProps } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { IconChartDots3, IconAffiliate } from "@tabler/icons-react";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useLocalStorage } from "~hooks/storage";
 
 import { events as EventList } from "~utils/constants"
 import { defaultOptions } from "~utils/options";
+import { setLocalStorage } from "~utils/storage";
 
 const CheckboxIcon: CheckboxProps['icon'] = ({ ...others }) =>
     <IconAffiliate {...others} />;
@@ -16,19 +17,25 @@ type TraceConfigurationProps = {
 
 export default function TraceConfiguration({ enabled }: TraceConfigurationProps) {
 
-    const [traceCollectorUrl, , {
-        setRenderValue: setUrlRenderValue,
-        setStoreValue: setUrlStoreValue
-    }] = useLocalStorage<string>("traceCollectorUrl")
+    const { traceCollectorUrl, tracingEnabled, instrumentations, events, propagateTo } = useLocalStorage(["traceCollectorUrl", "tracingEnabled", "instrumentations", "events", "propagateTo"])
     const [debouncedTraceCollectorUrl] = useDebouncedValue(traceCollectorUrl, 200);
+    const checkboxRef = React.useRef<HTMLInputElement>(null);
     useEffect(() => {
-        setUrlStoreValue(debouncedTraceCollectorUrl)
+        setLocalStorage({ traceCollectorUrl: debouncedTraceCollectorUrl })
     }, [debouncedTraceCollectorUrl])
 
-    const [tracingEnabled, setTracingEnabled] = useLocalStorage<boolean>("tracingEnabled")
-    const [instrumentations, setInstrumentations] = useLocalStorage<string[]>("instrumentations")
-    const [events, setEvents] = useLocalStorage<string[]>("events")
-    const [propagateTo, setPropagateTo] = useLocalStorage<string[]>("propagateTo")
+    // Hack for Firefox disabled fieldset checkbox event handling
+    // see: https://stackoverflow.com/questions/63740106/checkbox-onchange-in-legend-inside-disabled-fieldset-not-firing-in-firefox-w
+    useEffect(() => {
+        const listener = (event) => {
+            setLocalStorage({ tracingEnabled: event.currentTarget.checked })
+        }
+        checkboxRef.current.addEventListener('change', listener)
+
+        return () => {
+            checkboxRef.current.removeEventListener('change', listener)
+        }
+    }, [tracingEnabled])
 
     return (
         <Fieldset aria-label="Traces"
@@ -43,8 +50,13 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
                         checked={tracingEnabled}
                         icon={CheckboxIcon}
                         label={<Text>Tracing</Text>}
+                        ref={checkboxRef}
                         disabled={false}
-                        onChange={(event) => setTracingEnabled(event.currentTarget.checked)}
+                        onChange={(event) => {
+                            if (!event.currentTarget.checked) {
+                                setLocalStorage({ tracingEnabled: event.currentTarget.checked })
+                            }
+                        }}
                         size="lg"
                         variant='outline'
                         styles={{
@@ -55,12 +67,13 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
                         aria-label='Enable or disable exporting traces'
                     />
                 </Group>
-            } disabled={!tracingEnabled}>
+            }
+            disabled={!tracingEnabled}>
             <Group>
                 <Checkbox.Group
                     label="Instrumentation"
                     value={instrumentations}
-                    onChange={setInstrumentations}
+                    onChange={(value) => setLocalStorage({ instrumentations: value as ("load" | "fetch" | "interaction")[] })}
                     description={
                         <>
                             Choose which events are automatically instrumented, see {" "}
@@ -81,12 +94,12 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
                     placeholder={defaultOptions.traceCollectorUrl}
                     value={traceCollectorUrl}
                     onChange={(event) => {
-                        setUrlRenderValue(event.currentTarget.value)
+                        setLocalStorage({ traceCollectorUrl: event.currentTarget.value })
                     }}
                 />
                 <TagsInput
                     value={events}
-                    onChange={setEvents}
+                    onChange={(value) => setLocalStorage({ events: value as (keyof HTMLElementEventMap)[] })}
                     disabled={instrumentations.indexOf('interaction') == -1 || !enabled}
                     label="Event listeners"
                     data={EventList}
@@ -109,7 +122,7 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
                 />
                 <TagsInput
                     value={propagateTo}
-                    onChange={setPropagateTo}
+                    onChange={(value) => setLocalStorage({ propagateTo: value })}
                     disabled={instrumentations.indexOf('fetch') == -1 || !enabled}
                     label="Forward trace context to"
                     maxDropdownHeight={200}
