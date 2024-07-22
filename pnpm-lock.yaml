@@ -110,8 +110,8 @@ importers:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
       uuidv7:
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: ^1.0.1
+        version: 1.0.1
     devDependencies:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: 4.1.1
@@ -7546,8 +7546,8 @@ packages:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
     hasBin: true
 
-  uuidv7@1.0.0:
-    resolution: {integrity: sha512-XkvPwTtSmYwxIE1FSYQTYg79zHL1ZWV5vM/Qyl9ahXCU8enOPPA4bTjzvafvYUB7l2+miv4EqK/qEe75cOXIdA==}
+  uuidv7@1.0.1:
+    resolution: {integrity: sha512-2noB909GbI352dKfASOY6VHHl59KvevZ1FF8gCAXCwDyrt2kkZhuFbczF9udqTfeejiRYEmO4wzUZ0WhVP+IUA==}
     hasBin: true
 
   v8-compile-cache-lib@3.0.1:
@@ -9697,7 +9697,7 @@ snapshots:
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
       '@parcel/logger': 2.12.0
       '@parcel/node-resolver-core': 3.3.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))
-      '@parcel/types': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
+      '@parcel/types': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.11)
       '@parcel/utils': 2.12.0
       '@parcel/workers': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
       '@swc/core': 1.3.96(@swc/helpers@0.5.11)
@@ -9712,7 +9712,7 @@ snapshots:
       '@parcel/fs': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.11)
       '@parcel/logger': 2.12.0
       '@parcel/node-resolver-core': 3.3.0(@parcel/core@2.9.3)
-      '@parcel/types': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
+      '@parcel/types': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.11)
       '@parcel/utils': 2.12.0
       '@parcel/workers': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.11)
       '@swc/core': 1.3.96(@swc/helpers@0.5.11)
@@ -16210,7 +16210,7 @@ snapshots:
 
   uuid@9.0.1: {}
 
-  uuidv7@1.0.0: {}
+  uuidv7@1.0.1: {}
 
   v8-compile-cache-lib@3.0.1: {}
 
