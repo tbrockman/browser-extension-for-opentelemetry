@@ -20,12 +20,12 @@ export default function LogConfiguration({ enabled }: LogConfigurationProps) {
     // see: https://stackoverflow.com/questions/63740106/checkbox-onchange-in-legend-inside-disabled-fieldset-not-firing-in-firefox-w
     useEffect(() => {
         const listener = (event) => {
-            setLocalStorage({ tracingEnabled: event.currentTarget.checked })
+            setLocalStorage({ loggingEnabled: event.currentTarget.checked })
         }
-        checkboxRef.current.addEventListener('change', listener)
+        checkboxRef.current?.addEventListener('change', listener)
 
         return () => {
-            checkboxRef.current.removeEventListener('change', listener)
+            checkboxRef.current?.removeEventListener('change', listener)
         }
     }, [loggingEnabled])
 
@@ -45,6 +45,7 @@ export default function LogConfiguration({ enabled }: LogConfigurationProps) {
                         checked={loggingEnabled}
                         disabled={false}
                         icon={LogsIcon}
+                        ref={checkboxRef}
                         onChange={(event) => {
                             if (!event.currentTarget.checked) {
                                 setLocalStorage({ loggingEnabled: event.currentTarget.checked })

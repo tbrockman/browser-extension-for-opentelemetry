@@ -30,10 +30,10 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
         const listener = (event) => {
             setLocalStorage({ tracingEnabled: event.currentTarget.checked })
         }
-        checkboxRef.current.addEventListener('change', listener)
+        checkboxRef.current?.addEventListener('change', listener)
 
         return () => {
-            checkboxRef.current.removeEventListener('change', listener)
+            checkboxRef.current?.removeEventListener('change', listener)
         }
     }, [tracingEnabled])
 
