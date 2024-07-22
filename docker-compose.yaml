@@ -4,10 +4,10 @@ services:
     volumes:
       - ./qwdata:/quickwit/qwdata
     environment:
-      QW_ENABLE_OPENTELEMETRY_OTLP_EXPORTER: "true"
-      OTEL_EXPORTER_OTLP_ENDPOINT: "http://127.0.0.1:7281"
+      QW_ENABLE_OTLP_ENDPOINT: "true"
     ports:
       - 7280:7280
+      - 7281:7281
     command: [ "run" ]
     attach: false # comment this line if you'd like to view quickwit log output
 
@@ -36,7 +36,7 @@ services:
       - GF_AUTH_DISABLE_LOGIN_FORM=true
       - GF_FEATURE_TOGGLES_ENABLE=metricsSummary
     ports:
-      - "3000:3000" # ui
+      - 3000:3000 # ui
       # - "${MAP_HOST_GRAFANA:-127.0.0.1}:3000:3000"
     attach: false
 
