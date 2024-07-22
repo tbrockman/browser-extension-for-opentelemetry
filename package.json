@@ -46,7 +46,7 @@
     "@plasmohq/storage": "^1.11.0",
     "@tabler/icons-react": "^2.47.0",
     "browser-extension-url-match": "^1.2.0",
-    "deepmerge-ts": "^7.0.3",
+    "deepmerge-ts": "^7.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "uuidv7": "^1.0.0"

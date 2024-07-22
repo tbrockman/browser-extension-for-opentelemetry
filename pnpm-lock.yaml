@@ -101,8 +101,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0
       deepmerge-ts:
-        specifier: ^7.0.3
-        version: 7.0.3
+        specifier: ^7.1.0
+        version: 7.1.0
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -4859,8 +4859,8 @@ packages:
     resolution: {integrity: sha512-LOHxIOaPYdHlJRtCQfDIVZtfw/ufM8+rVj649RIHzcm/vGwQRXFt6OPqIFWsm2XEMrNIEtWR64sY1LEKD2vAOA==}
     engines: {node: '>=4.0.0'}
 
-  deepmerge-ts@7.0.3:
-    resolution: {integrity: sha512-dxFbFO2RSIhPNBPL/j8Nvdt6/vrkW9+uGf1NLah/QxBGAVbK9fj2fGTO+HwdHpPAyFAsyT9iEn/1SI9SUvespw==}
+  deepmerge-ts@7.1.0:
+    resolution: {integrity: sha512-q6bNsfNBtgr8ZOQqmZbl94MmYWm+QcDNIkqCxVWiw1vKvf+y/N2dZQKdnDXn4c5Ygt/y63tDof6OCN+2YwWVEg==}
     engines: {node: '>=16.0.0'}
 
   deepmerge@4.3.1:
@@ -9697,7 +9697,7 @@ snapshots:
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
       '@parcel/logger': 2.12.0
       '@parcel/node-resolver-core': 3.3.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))
-      '@parcel/types': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
+      '@parcel/types': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.11)
       '@parcel/utils': 2.12.0
       '@parcel/workers': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
       '@swc/core': 1.3.96(@swc/helpers@0.5.11)
@@ -9712,7 +9712,7 @@ snapshots:
       '@parcel/fs': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.11)
       '@parcel/logger': 2.12.0
       '@parcel/node-resolver-core': 3.3.0(@parcel/core@2.9.3)
-      '@parcel/types': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
+      '@parcel/types': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.11)
       '@parcel/utils': 2.12.0
       '@parcel/workers': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.11)
       '@swc/core': 1.3.96(@swc/helpers@0.5.11)
@@ -12629,7 +12629,7 @@ snapshots:
 
   deep-extend@0.6.0: {}
 
-  deepmerge-ts@7.0.3: {}
+  deepmerge-ts@7.1.0: {}
 
   deepmerge@4.3.1: {}
 
