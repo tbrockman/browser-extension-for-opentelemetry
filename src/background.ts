@@ -1,4 +1,3 @@
-import { Storage } from '@plasmohq/storage'
 import { consoleProxy } from '~utils/logging'
 import injectContentScript from 'inlinefunc:./content-script'
 import injectRelay from 'inlinefunc:./message-relay'
@@ -10,7 +9,6 @@ import { serializer, deserializer } from '~utils/serde'
 import { uuidv7 } from 'uuidv7';
 import { getLocalStorage, type LocalStorage } from '~utils/storage'
 
-let storage = new Storage({ area: 'local', serde: { serializer, deserializer } })
 let ports = {}
 
 const getDestinationForMessage = async (message: PortMessage) => {
@@ -39,6 +37,8 @@ const onConnect = async (p: TypedPort<Partial<LocalStorageType>, PortMessage>) =
 
     ports[p.sender.tab.id] = p;
 
+    consoleProxy.debug('pattern match', p.sender.url, matchPatterns)
+
     p.onMessage.addListener(async (message) => {
         consoleProxy.debug('received message', message)
 
@@ -50,13 +50,15 @@ const onConnect = async (p: TypedPort<Partial<LocalStorageType>, PortMessage>) =
 
                 // Even though the content script could send us the headers and url, we don't trust them
                 // So in the absolute worst case adversarial scenario we're still just sending arbitrary bytes to our chosen server
-                const stored = await storage.get<Map<string, string>>('headers')
+                const { headers: stored } = await getLocalStorage(['headers'])
+                consoleProxy.debug('stored headers', stored)
                 const headers = {
                     ...(Object.fromEntries(stored.entries())),
                     'Content-Type': 'application/x-protobuf',
                     Accept: 'application/x-protobuf'
                 }
                 let url = await getDestinationForMessage(message)
+                consoleProxy.debug('message destination', url)
                 const body = new Blob([new Uint8Array(bytes)], { type: 'application/x-protobuf' });
 
                 try {
@@ -112,8 +114,6 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
         }
 
         consoleProxy.debug("injecting content script")
-
-        // TODO: refactor, remove usage of @plasmohq/storage (so we don't have to make multiple get requests here) and have options store its own defaults
         const options = await getOptions()
 
         consoleProxy.debug("loaded options", options)

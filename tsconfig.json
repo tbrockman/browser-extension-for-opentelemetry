@@ -2,7 +2,6 @@
   "extends": "plasmo/templates/tsconfig.base",
   "exclude": [
     "node_modules",
-    "vendored",
     "build",
     "coverage",
     "assets"
