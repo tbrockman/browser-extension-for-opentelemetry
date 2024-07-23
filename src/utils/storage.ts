@@ -1,5 +1,5 @@
 import type { KeyValues, Values } from "~types"
-import { deserializer, serializer } from "./serde"
+import { deserializer, replacer, reviver, serializer } from "./serde"
 
 export type MatchPatternError = {
     error: string
@@ -89,7 +89,10 @@ export async function getLocalStorage<T extends (keyof LocalStorage)[] | undefin
 }
 
 export async function getStorage<T>(storageArea: chrome.storage.AreaName, keysWithDefaults: T): Promise<T> {
-    return parseStorageResponse(await chrome.storage[storageArea].get(keysWithDefaults)) as T;
+    const serializedDefaults = Object.entries(keysWithDefaults).reduce((acc, [key, value]) => {
+        return { ...acc, [key]: serializer(value) };
+    }, {});
+    return parseStorageResponse(await chrome.storage[storageArea].get(serializedDefaults)) as T;
 }
 
 export async function setStorage<T extends KeyValues>(storageArea: chrome.storage.AreaName, data: T): Promise<void> {

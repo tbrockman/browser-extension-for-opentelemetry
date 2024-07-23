@@ -472,7 +472,7 @@
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.theo.OpenTelemetry-Browser-Extension.Extension";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.theo.Browser-Ext-for-OpenTelemetry.Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -504,7 +504,7 @@
 					"-framework",
 					SafariServices,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.theo.OpenTelemetry-Browser-Extension.Extension";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.theo.Browser-Ext-for-OpenTelemetry.Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -527,7 +527,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "OpenTelemetry Browser Ext/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "OpenTelemetry Browser Ext";
+				INFOPLIST_KEY_CFBundleDisplayName = "Browser Ext for OpenTelemetry";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
@@ -537,14 +537,14 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
 					"-framework",
 					WebKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.theo.OpenTelemetry-Browser-Extension";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.theo.Browser-Ext-for-OpenTelemetry";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -566,7 +566,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "OpenTelemetry Browser Ext/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "OpenTelemetry Browser Ext";
+				INFOPLIST_KEY_CFBundleDisplayName = "Browser Ext for OpenTelemetry";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainStoryboardFile = Main;
@@ -576,14 +576,14 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				OTHER_LDFLAGS = (
 					"-framework",
 					SafariServices,
 					"-framework",
 					WebKit,
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.theo.OpenTelemetry-Browser-Extension";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.theo.Browser-Ext-for-OpenTelemetry";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

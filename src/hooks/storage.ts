@@ -11,7 +11,6 @@ export function useLocalStorage<T extends (keyof LocalStorage)[]>(keys: T): {
     }, {} as {
         [K in T[number]]: LocalStorage[K];
     });
-
     return useStorage(obj, 'local');
 }
 

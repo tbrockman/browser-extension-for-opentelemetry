@@ -7,7 +7,7 @@
   "packageManager": "pnpm@9.4.0",
   "scripts": {
     "build": "npm-run-all build:safari build:windows",
-    "build:windows": "npm-run-all build:chrome build:edge build:opera",
+    "build:windows": "npm-run-all build:chrome build:edge build:opera build:firefox",
     "build:chrome": "plasmo build --target=chrome-mv3 --zip --hoist",
     "build:firefox": "plasmo build --target=firefox-mv3 --zip --hoist",
     "build:edge": "plasmo build --target=edge-mv3 --zip --hoist",
