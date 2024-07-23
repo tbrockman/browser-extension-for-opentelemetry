@@ -1,7 +1,7 @@
 import { Anchor, Checkbox, Fieldset, Group, TagsInput, Text, TextInput, type CheckboxProps } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { IconChartDots3, IconAffiliate } from "@tabler/icons-react";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { useLocalStorage } from "~hooks/storage";
 
 import { events as EventList } from "~utils/constants"
@@ -19,23 +19,23 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
 
     const { traceCollectorUrl, tracingEnabled, instrumentations, events, propagateTo } = useLocalStorage(["traceCollectorUrl", "tracingEnabled", "instrumentations", "events", "propagateTo"])
     const [debouncedTraceCollectorUrl] = useDebouncedValue(traceCollectorUrl, 200);
-    const checkboxRef = React.useRef<HTMLInputElement>(null);
+    const checkboxRef = useRef<HTMLInputElement>(null);
     useEffect(() => {
         setLocalStorage({ traceCollectorUrl: debouncedTraceCollectorUrl })
     }, [debouncedTraceCollectorUrl])
+    const toggleDisabled = useCallback(() => {
+        setLocalStorage({ tracingEnabled: !tracingEnabled })
+    }, [tracingEnabled]);
 
     // Hack for Firefox disabled fieldset checkbox event handling
     // see: https://stackoverflow.com/questions/63740106/checkbox-onchange-in-legend-inside-disabled-fieldset-not-firing-in-firefox-w
     useEffect(() => {
-        const listener = (event) => {
-            setLocalStorage({ tracingEnabled: event.currentTarget.checked })
-        }
-        checkboxRef.current?.addEventListener('change', listener)
+        checkboxRef.current?.addEventListener('change', toggleDisabled)
 
         return () => {
-            checkboxRef.current?.removeEventListener('change', listener)
+            checkboxRef.current?.removeEventListener('change', toggleDisabled)
         }
-    }, [tracingEnabled])
+    }, [toggleDisabled])
 
     return (
         <Fieldset aria-label="Traces"
@@ -52,11 +52,7 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
                         label={<Text>Tracing</Text>}
                         ref={checkboxRef}
                         disabled={false}
-                        onChange={(event) => {
-                            if (!event.currentTarget.checked) {
-                                setLocalStorage({ tracingEnabled: event.currentTarget.checked })
-                            }
-                        }}
+                        onChange={() => { }}
                         size="lg"
                         variant='outline'
                         styles={{

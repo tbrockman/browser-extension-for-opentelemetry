@@ -1,6 +1,6 @@
 import { Checkbox, Fieldset, Group, Text, TextInput, type CheckboxProps } from "@mantine/core";
 import { IconTerminal } from "@tabler/icons-react";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useLocalStorage } from "~hooks/storage";
 import { defaultOptions } from "~utils/options";
 import { setLocalStorage } from "~utils/storage";
@@ -13,21 +13,20 @@ type LogConfigurationProps = {
 }
 
 export default function LogConfiguration({ enabled }: LogConfigurationProps) {
-
     const { logCollectorUrl, loggingEnabled } = useLocalStorage(["logCollectorUrl", "loggingEnabled"])
     const checkboxRef = useRef<HTMLInputElement>(null);
+    const toggleDisabled = useCallback(() => {
+        setLocalStorage({ loggingEnabled: !loggingEnabled })
+    }, [loggingEnabled]);
     // Hack for Firefox disabled fieldset checkbox event handling
     // see: https://stackoverflow.com/questions/63740106/checkbox-onchange-in-legend-inside-disabled-fieldset-not-firing-in-firefox-w
     useEffect(() => {
-        const listener = (event) => {
-            setLocalStorage({ loggingEnabled: event.currentTarget.checked })
-        }
-        checkboxRef.current?.addEventListener('change', listener)
+        checkboxRef.current?.addEventListener('change', toggleDisabled)
 
         return () => {
-            checkboxRef.current?.removeEventListener('change', listener)
+            checkboxRef.current?.removeEventListener('change', toggleDisabled)
         }
-    }, [loggingEnabled])
+    }, [toggleDisabled])
 
     return (
         <Fieldset aria-label="Logs"
@@ -46,11 +45,7 @@ export default function LogConfiguration({ enabled }: LogConfigurationProps) {
                         disabled={false}
                         icon={LogsIcon}
                         ref={checkboxRef}
-                        onChange={(event) => {
-                            if (!event.currentTarget.checked) {
-                                setLocalStorage({ loggingEnabled: event.currentTarget.checked })
-                            }
-                        }}
+                        onChange={() => { }}
                         size="lg"
                         variant='outline'
                         aria-label='Enable or disable exporting logs'
