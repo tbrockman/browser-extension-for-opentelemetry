@@ -1,1 +1,0 @@
-This folder contains code necessary to patch the generated XCode Safari project for publishing.

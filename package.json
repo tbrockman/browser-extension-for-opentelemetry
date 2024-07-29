@@ -96,7 +96,7 @@
       }
     },
     "content_security_policy": {
-      "extension_pages": "script-src 'self'; object-src 'self'; connect-src * ws: wss: http://localhost:* https://localhost:* http: https: ; style-src 'self' 'unsafe-inline'; default-src 'self'; "
+      "extension_pages": "default-src 'self'; script-src 'self'; connect-src *; style-src 'self' 'unsafe-inline';"
     }
   },
   "overrides": {
