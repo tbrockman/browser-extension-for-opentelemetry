@@ -50,7 +50,7 @@
     "uuidv7": "^1.0.0"
   },
   "devDependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "4.1.1",
+    "@ianvs/prettier-plugin-sort-imports": "4.3.1",
     "@parcel/config-default": "^2.12.0",
     "@parcel/packager-ts": "2.12.0",
     "@plasmohq/parcel-config": "^0.41.0",
