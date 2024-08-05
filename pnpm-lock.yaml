@@ -186,8 +186,8 @@ importers:
         specifier: ^10.9.2
         version: 10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(@types/node@20.11.24)(typescript@5.3.3)
       tsx:
-        specifier: ^4.16.0
-        version: 4.16.2
+        specifier: ^4.16.5
+        version: 4.16.5
       typescript:
         specifier: 5.3.3
         version: 5.3.3
@@ -4872,8 +4872,8 @@ packages:
       typescript:
         optional: true
 
-  tsx@4.16.2:
-    resolution: {integrity: sha512-C1uWweJDgdtX2x600HjaFaucXTilT7tgUZHbOE4+ypskZ1OP8CRCSDkCxG6Vya9EwaFIVagWwpaVAn5wzypaqQ==}
+  tsx@4.16.5:
+    resolution: {integrity: sha512-ArsiAQHEW2iGaqZ8fTA1nX0a+lN5mNTyuGRRO6OW3H/Yno1y9/t1f9YOI1Cfoqz63VAthn++ZYcbDP7jPflc+A==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -6041,25 +6041,21 @@ snapshots:
       '@parcel/utils': 2.11.0
       lmdb: 2.8.5
 
-  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))(@swc/helpers@0.5.12)':
+  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))':
     dependencies:
       '@parcel/core': 2.12.0(@swc/helpers@0.5.12)
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))(@swc/helpers@0.5.12)
       '@parcel/logger': 2.12.0
       '@parcel/utils': 2.12.0
       lmdb: 2.8.5
-    transitivePeerDependencies:
-      - '@swc/helpers'
 
-  '@parcel/cache@2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.12)':
+  '@parcel/cache@2.12.0(@parcel/core@2.9.3)':
     dependencies:
       '@parcel/core': 2.9.3
       '@parcel/fs': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.12)
       '@parcel/logger': 2.12.0
       '@parcel/utils': 2.12.0
       lmdb: 2.8.5
-    transitivePeerDependencies:
-      - '@swc/helpers'
 
   '@parcel/cache@2.8.3(@parcel/core@2.9.3)':
     dependencies:
@@ -6293,7 +6289,7 @@ snapshots:
   '@parcel/core@2.12.0(@swc/helpers@0.5.12)':
     dependencies:
       '@mischnic/json-sourcemap': 0.1.1
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))(@swc/helpers@0.5.12)
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))
       '@parcel/diagnostic': 2.12.0
       '@parcel/events': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))(@swc/helpers@0.5.12)
@@ -7666,7 +7662,7 @@ snapshots:
 
   '@parcel/types@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))(@swc/helpers@0.5.12)':
     dependencies:
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))(@swc/helpers@0.5.12)
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))
       '@parcel/diagnostic': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))(@swc/helpers@0.5.12)
       '@parcel/package-manager': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))(@swc/helpers@0.5.12)
@@ -7679,7 +7675,7 @@ snapshots:
 
   '@parcel/types@2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.12)':
     dependencies:
-      '@parcel/cache': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.12)
+      '@parcel/cache': 2.12.0(@parcel/core@2.9.3)
       '@parcel/diagnostic': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.12)
       '@parcel/package-manager': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.12)
@@ -11225,7 +11221,7 @@ snapshots:
       - supports-color
       - ts-node
 
-  tsx@4.16.2:
+  tsx@4.16.5:
     dependencies:
       esbuild: 0.21.5
       get-tsconfig: 4.7.6
