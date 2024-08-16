@@ -1,7 +1,7 @@
 import { Anchor, Checkbox, Fieldset, Group, TagsInput, Text, TextInput, type CheckboxProps } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { IconChartDots3, IconAffiliate } from "@tabler/icons-react";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useLocalStorage } from "~hooks/storage";
 
 import { events as EventList } from "~utils/constants"
@@ -18,11 +18,21 @@ type TraceConfigurationProps = {
 export default function TraceConfiguration({ enabled }: TraceConfigurationProps) {
 
     const { traceCollectorUrl, tracingEnabled, instrumentations, events, propagateTo } = useLocalStorage(["traceCollectorUrl", "tracingEnabled", "instrumentations", "events", "propagateTo"])
-    const [debouncedTraceCollectorUrl] = useDebouncedValue(traceCollectorUrl, 200);
+    const [renderedTraceCollectorUrl, setRenderedTraceCollectorUrl] = useState(traceCollectorUrl)
+    const [debouncedRenderedUrl] = useDebouncedValue(renderedTraceCollectorUrl, 500);
     const checkboxRef = useRef<HTMLInputElement>(null);
+    // If the local storage value changes, update the rendered value
     useEffect(() => {
-        setLocalStorage({ traceCollectorUrl: debouncedTraceCollectorUrl })
-    }, [debouncedTraceCollectorUrl])
+        if (traceCollectorUrl !== renderedTraceCollectorUrl) {
+            setRenderedTraceCollectorUrl(traceCollectorUrl)
+        }
+    }, [traceCollectorUrl])
+    // If the rendered value changes, update the local storage value
+    useEffect(() => {
+        if (debouncedRenderedUrl !== traceCollectorUrl) {
+            setLocalStorage({ traceCollectorUrl: debouncedRenderedUrl })
+        }
+    }, [debouncedRenderedUrl])
     const toggleDisabled = useCallback(() => {
         setLocalStorage({ tracingEnabled: !tracingEnabled })
     }, [tracingEnabled]);
@@ -88,9 +98,9 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
                         </>
                     }
                     placeholder={defaultOptions.traceCollectorUrl}
-                    value={traceCollectorUrl}
+                    value={renderedTraceCollectorUrl}
                     onChange={(event) => {
-                        setLocalStorage({ traceCollectorUrl: event.currentTarget.value })
+                        setRenderedTraceCollectorUrl(event.currentTarget.value)
                     }}
                 />
                 <TagsInput
