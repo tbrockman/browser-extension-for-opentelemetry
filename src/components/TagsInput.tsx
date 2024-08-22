@@ -2,6 +2,7 @@ import { Combobox, Pill, PillsInput, Tooltip, useCombobox } from "@mantine/core"
 import { useClickOutside } from "@mantine/hooks";
 import { IconExclamationCircle } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
+import { parseKeyValuePairs } from "~utils/string";
 
 type PillErrorMap = Map<number, string>
 
@@ -62,7 +63,7 @@ export const TagsInput = ({ delimiter, description, disabled, errors, label, pla
                         handleValueRemoved(i);
                     }
                 }}
-                onFocus={(e) => {
+                onFocus={(event) => {
                     event.preventDefault();
                     handleTagSelected(i)
                 }}
@@ -96,14 +97,12 @@ export const TagsInput = ({ delimiter, description, disabled, errors, label, pla
     }
 
     useEffect(() => {
-        const split = pillInputValue.split(delimiter);
+        const [parsed, remainder] = parseKeyValuePairs(pillInputValue, delimiter);
+        parsed.forEach((value, key) => handleValueSubmit(`${key}:${value}`));
 
-        if (split.length > 1) {
-            const last = split.pop();
-            split.forEach((value) => handleValueSubmit(value.trim()));
-            setPillInputValue(last);
+        if (remainder.length > 0) {
+            setPillInputValue(remainder);
         }
-
     }, [pillInputValue])
 
     return (
