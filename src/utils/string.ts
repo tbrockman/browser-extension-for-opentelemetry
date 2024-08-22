@@ -80,7 +80,7 @@ export const parseKeyValuePairs = (input: string, delimiter: string = ','): [Map
                     }
                 } else if (char === delimiter) {
                     if (!insideQuotes) {
-                        result[key.trim()] = value.trim();
+                        result.set(key.trim(), value.trim());
                         key = '';
                         value = '';
                         state = 'key';
@@ -102,7 +102,7 @@ export const parseKeyValuePairs = (input: string, delimiter: string = ','): [Map
         if (insideQuotes) {
             remainder = `${key}:${quoteChar}${value}`; // Include the open quote in remainder
         } else {
-            result[key.trim()] = value.trim();
+            result.set(key.trim(), value.trim());
         }
     }
     return [result, remainder];
