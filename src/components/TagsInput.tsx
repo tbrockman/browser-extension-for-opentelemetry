@@ -2,6 +2,7 @@ import { Combobox, Pill, PillsInput, Tooltip, useCombobox } from "@mantine/core"
 import { useClickOutside } from "@mantine/hooks";
 import { IconExclamationCircle } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
+import { consoleProxy } from "~utils/logging";
 import { parseKeyValuePairs } from "~utils/string";
 
 type PillErrorMap = Map<number, string>
@@ -88,6 +89,7 @@ export const TagsInput = ({ delimiter, description, disabled, errors, label, pla
     }
 
     const handleValueRemoved = (index: number) => {
+        consoleProxy.debug('removing value at index', index);
         onValueRemoved && onValueRemoved(index);
     }
 
@@ -98,11 +100,10 @@ export const TagsInput = ({ delimiter, description, disabled, errors, label, pla
 
     useEffect(() => {
         const [parsed, remainder] = parseKeyValuePairs(pillInputValue, delimiter);
-        parsed.forEach((value, key) => handleValueSubmit(`${key}:${value}`));
+        consoleProxy.debug('pill input value changed', parsed, remainder);
 
-        if (remainder.length > 0) {
-            setPillInputValue(remainder);
-        }
+        parsed.forEach((value, key) => handleValueSubmit(`${key}:${value}`));
+        setPillInputValue(remainder);
     }, [pillInputValue])
 
     return (
@@ -126,6 +127,8 @@ export const TagsInput = ({ delimiter, description, disabled, errors, label, pla
                             onKeyDown={(event) => {
                                 if (event.key === 'Backspace') {
 
+                                    consoleProxy.debug('backspace key pressed', selectedIndex, pillInputValue.length);
+
                                     if (selectedIndex !== -1 || pillInputValue.length === 0) {
                                         event.preventDefault();
                                         handleValueRemoved(selectedIndex)
@@ -134,8 +137,12 @@ export const TagsInput = ({ delimiter, description, disabled, errors, label, pla
                                 else if (event.key === 'Enter') {
 
                                     if (pillInputValue.length > 0) {
-                                        setPillInputValue('');
-                                        handleValueSubmit(event.currentTarget.value);
+                                        const [kvs, _] = parseKeyValuePairs(pillInputValue, delimiter, false);
+
+                                        if (kvs.size > 0) {
+                                            handleValueSubmit(pillInputValue);
+                                            setPillInputValue('');
+                                        }
                                     }
                                 }
                             }}

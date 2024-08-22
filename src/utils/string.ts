@@ -4,9 +4,9 @@
  * 
  * @param input - The input string to parse.
  * @param delimiter - The delimiter used to separate key-value pairs. Default is ','.
- * @returns A tuple containing a `Map<string, string>` of key-value pairs and a remainder string.
+ * @returns A tuple containing a `Map<string, string>` of key-value pairs, and a configurable remainder string of either the last undelimited key-value pair or any remaining text.
  */
-export const parseKeyValuePairs = (input: string, delimiter: string = ','): [Map<string, string>, string] => {
+export const parseKeyValuePairs = (input: string, delimiter: string = ',', lastRemains: boolean = true): [Map<string, string>, string] => {
     const result: Map<string, string> = new Map();
     let remainder = '';
     let key = '';
@@ -19,6 +19,10 @@ export const parseKeyValuePairs = (input: string, delimiter: string = ','): [Map
 
     for (let i = 0; i < input.length; i++) {
         const char = input[i];
+
+        if (lastRemains) {
+            remainder += char;
+        }
 
         if (escapeNextChar) {
 
@@ -80,10 +84,14 @@ export const parseKeyValuePairs = (input: string, delimiter: string = ','): [Map
                     }
                 } else if (char === delimiter) {
                     if (!insideQuotes) {
-                        result.set(key.trim(), value.trim());
+                        result.set(key.trim(), value);
                         key = '';
                         value = '';
                         state = 'key';
+
+                        if (lastRemains) {
+                            remainder = ''; // Reset remainder
+                        }
                         afterColon = false;
                     } else {
                         value += char;
@@ -96,13 +104,16 @@ export const parseKeyValuePairs = (input: string, delimiter: string = ','): [Map
     }
 
     // Final key-value pair handling
-    if (state === 'key') {
-        remainder = insideQuotes ? `${quoteChar}${key}` : key; // Include the open quote in remainder
-    } else if (state === 'value') {
-        if (insideQuotes) {
-            remainder = `${key}:${quoteChar}${value}`; // Include the open quote in remainder
-        } else {
-            result.set(key.trim(), value.trim());
+
+    if (!lastRemains) {
+        if (state === 'key') {
+            remainder = insideQuotes ? `${quoteChar}${key}` : key; // Include the open quote in remainder
+        } else if (state === 'value') {
+            if (insideQuotes) {
+                remainder = `${key}:${quoteChar}${value}`; // Include the open quote in remainder
+            } else {
+                result.set(key.trim(), value);
+            }
         }
     }
     return [result, remainder];

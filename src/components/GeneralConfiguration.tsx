@@ -5,6 +5,8 @@ import { useLocalStorage } from "~hooks/storage";
 import { defaultOptions } from "~utils/options";
 import { matchPatternsChanged } from "~utils/match-pattern";
 import { setLocalStorage, type MatchPatternError } from "~utils/storage";
+import { parseKeyValuePairs } from "~utils/string";
+import { consoleProxy } from "~utils/logging";
 
 type GeneralConfigurationProps = {
     enabled: boolean
@@ -13,9 +15,14 @@ type GeneralConfigurationProps = {
 const colonSeparatedStringsToMap = (strings: string[]): Map<string, string> => {
     const map = new Map<string, string>()
     strings.forEach((string) => {
-        const [key, value] = string.split(':')
-        map.set(key, value ?? '')
+        const [kvs, _] = parseKeyValuePairs(string, ',', false)
+        consoleProxy.debug('parsed kvs', kvs, 'for string', string)
+
+        kvs.forEach((value, key) => {
+            map.set(key, value)
+        })
     })
+    consoleProxy.debug('converted strings to map', map)
     return map
 }
 
@@ -23,9 +30,10 @@ const mapToColonSeparatedStrings = (map: Map<string, string>): string[] => {
     const strings = []
     if (map) {
         map.forEach((value, key) => {
-            strings.push(`${key}:${value ?? ''}`)
+            strings.push(`${key}:${value}`)
         })
     }
+    consoleProxy.debug('converted map to strings', strings, 'from map', map)
     return strings
 }
 
@@ -129,11 +137,12 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                 <TagsInput
                     value={headersStrings}
                     onValueRemoved={(index) => {
-                        const newState = [...headersStrings]
-                        newState.splice(index, 1)
-                        setLocalStorage({ headers: colonSeparatedStringsToMap(newState) })
+                        headersStrings.splice(index, 1)
+                        console.log('value removed at index', index, 'from', headersStrings)
+                        setLocalStorage({ headers: colonSeparatedStringsToMap(headersStrings) })
                     }}
                     onValueAdded={(value) => {
+                        consoleProxy.debug('adding header', value)
                         headersStrings.push(value)
                         setLocalStorage({ headers: colonSeparatedStringsToMap(headersStrings) })
                     }}
