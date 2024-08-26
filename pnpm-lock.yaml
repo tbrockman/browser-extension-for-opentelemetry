@@ -123,8 +123,8 @@ importers:
         specifier: ^0.41.0
         version: 0.41.0(@swc/core@1.7.0(@swc/helpers@0.5.12))(@swc/helpers@0.5.12)(lodash@4.17.21)(postcss@8.4.39)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(@types/node@20.11.24)(typescript@5.3.3))(typescript@5.3.3)
       '@types/chrome':
-        specifier: 0.0.262
-        version: 0.0.262
+        specifier: 0.0.270
+        version: 0.0.270
       '@types/jest':
         specifier: ^29.5.12
         version: 29.5.12
@@ -2541,8 +2541,8 @@ packages:
   '@tsconfig/node16@1.0.4':
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
 
-  '@types/chrome@0.0.262':
-    resolution: {integrity: sha512-TOoj3dqSYE13PD2fRuMQ6X6pggEvL9rRk/yOYOyWE6sfqRWxsJm4VoVm+wr9pkr4Sht/M5t7FFL4vXato8d1gA==}
+  '@types/chrome@0.0.270':
+    resolution: {integrity: sha512-ADvkowV7YnJfycZZxL2brluZ6STGW+9oKG37B422UePf2PCXuFA/XdERI0T18wtuWPx0tmFeZqq6MOXVk1IC+Q==}
 
   '@types/estree@1.0.5':
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
@@ -8566,7 +8566,7 @@ snapshots:
 
   '@tsconfig/node16@1.0.4': {}
 
-  '@types/chrome@0.0.262':
+  '@types/chrome@0.0.270':
     dependencies:
       '@types/filesystem': 0.0.36
       '@types/har-format': 1.2.15
