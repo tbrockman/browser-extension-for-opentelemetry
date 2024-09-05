@@ -1,3 +1,5 @@
+import { consoleProxy } from "./logging";
+
 /**
  * Parses a string of key-value pairs separated by a single-character delimiter, where keys and values are separated by a single colon.
  * Allows quoting of keys and values using single or double quotes.
@@ -117,4 +119,29 @@ export const parseKeyValuePairs = (input: string, delimiter: string = ',', lastR
         }
     }
     return [result, remainder];
+}
+
+export const colonSeparatedStringsToMap = (strings: string[]): Map<string, string> => {
+    const map = new Map<string, string>()
+    strings.forEach((string) => {
+        const [kvs, _] = parseKeyValuePairs(string, ',', false)
+        consoleProxy.debug('parsed kvs', kvs, 'for string', string)
+
+        kvs.forEach((value, key) => {
+            map.set(key, value)
+        })
+    })
+    consoleProxy.debug('converted strings to map', map)
+    return map
+}
+
+export const mapToColonSeparatedStrings = (map: Map<string, string>): string[] => {
+    const strings = []
+    if (map) {
+        map.forEach((value, key) => {
+            strings.push(`${key}:${value}`)
+        })
+    }
+    consoleProxy.debug('converted map to strings', strings, 'from map', map)
+    return strings
 }
