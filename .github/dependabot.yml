@@ -1,8 +1,8 @@
 version: 2
-updates: []
-#   - package-ecosystem: "npm" # See documentation for possible values
-#     directory: "/" # Location of package manifests
-#     schedule:
-#       interval: "weekly"
-#     labels:
-#       - automerge
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    ignore:
+      - dependency-name: "@opentelemetry/*" # ignore otel dependencies until patches aren't needed
+    schedule:
+      interval: "weekly"

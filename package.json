@@ -1,7 +1,7 @@
 {
   "name": "browser-extension-for-opentelemetry",
   "displayName": "Browser Extension for OpenTelemetry",
-  "version": "0.0.16",
+  "version": "0.0.18",
   "description": "A browser extension for automatically instrumenting webpages using OpenTelemetry",
   "author": "Theodore Brockman <iam@theo.lol>",
   "packageManager": "pnpm@9.4.0",
@@ -41,8 +41,7 @@
     "@opentelemetry/sdk-trace-base": "^1.22.0",
     "@opentelemetry/sdk-trace-web": "^1.22.0",
     "@opentelemetry/semantic-conventions": "^1.22.0",
-    "@plasmohq/messaging": "^0.6.2",
-    "@tabler/icons-react": "^2.47.0",
+    "@tabler/icons-react": "^3.14.0",
     "browser-extension-url-match": "^1.2.0",
     "deepmerge-ts": "^7.0.3",
     "react": "18.2.0",
@@ -54,21 +53,21 @@
     "@parcel/config-default": "^2.12.0",
     "@parcel/packager-ts": "2.12.0",
     "@plasmohq/parcel-config": "^0.41.0",
-    "@types/chrome": "0.0.262",
+    "@types/chrome": "0.0.270",
     "@types/jest": "^29.5.12",
     "@types/mocha": "^10.0.7",
-    "@types/node": "20.11.24",
+    "@types/node": "22.5.4",
     "@types/react": "18.2.61",
     "@types/react-dom": "18.2.19",
     "cross-env": "^7.0.3",
-    "esbuild": "^0.20.1",
+    "esbuild": "^0.23.1",
     "esbuild-plugin-polyfill-node": "^0.3.0",
     "mocha": "^10.5.2",
     "mocha-suppress-logs": "^0.5.1",
     "npm-run-all": "^4.1.5",
     "parcel": "^2.12.0",
     "parcel-resolver-inlinefunc": "^1.0.0",
-    "plasmo": "^0.88.0",
+    "plasmo": "^0.89.1",
     "postcss": "^8.4.35",
     "postcss-preset-mantine": "^1.13.0",
     "postcss-simple-vars": "^7.0.1",
@@ -92,6 +91,13 @@
     "browser_specific_settings": {
       "gecko": {
         "id": "opentelemetry-browser-extension@theo.lol"
+      }
+    },
+    "overrides": {
+      "firefox": {
+        "content_security_policy": {
+          "extension_pages": "script-src 'self'; object-src 'self'; connect-src *; style-src 'self' 'unsafe-inline'; default-src 'self'; "
+        }
       }
     }
   },

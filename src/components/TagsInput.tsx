@@ -2,6 +2,7 @@ import { Combobox, Pill, PillsInput, Tooltip, useCombobox } from "@mantine/core"
 import { useClickOutside } from "@mantine/hooks";
 import { IconExclamationCircle } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
+import { parseKeyValuePairs } from "~utils/string";
 
 type PillErrorMap = Map<number, string>
 
@@ -11,6 +12,7 @@ type TagsInputProps = {
     disabled?: boolean
     error?: string
     errors?: PillErrorMap
+    keyValueMode?: boolean
     label: string | React.ReactNode
     placeholder: string
     value: React.ReactNode[] | string[]
@@ -19,7 +21,7 @@ type TagsInputProps = {
     onTagSelected?: (index: number) => void
 }
 
-export const TagsInput = ({ delimiter, description, disabled, errors, label, placeholder, value, onValueRemoved, onValueAdded, onTagSelected }: TagsInputProps) => {
+export const TagsInput = ({ delimiter, description, disabled, errors, label, placeholder, value, onValueRemoved, onValueAdded, onTagSelected, keyValueMode: kevValueMode = false }: TagsInputProps) => {
     const [selectedIndex, setSelectedIndex] = useState<number>(-1);
     const [pillInputValue, setPillInputValue] = useState<string>('');
     const handleClickOutside = () => setSelectedIndex(-1);
@@ -62,7 +64,7 @@ export const TagsInput = ({ delimiter, description, disabled, errors, label, pla
                         handleValueRemoved(i);
                     }
                 }}
-                onFocus={(e) => {
+                onFocus={(event) => {
                     event.preventDefault();
                     handleTagSelected(i)
                 }}
@@ -96,14 +98,20 @@ export const TagsInput = ({ delimiter, description, disabled, errors, label, pla
     }
 
     useEffect(() => {
-        const split = pillInputValue.split(delimiter);
 
-        if (split.length > 1) {
-            const last = split.pop();
-            split.forEach((value) => handleValueSubmit(value.trim()));
-            setPillInputValue(last);
+        if (kevValueMode) {
+            const [parsed, remainder] = parseKeyValuePairs(pillInputValue, delimiter);
+            parsed.forEach((value, key) => handleValueSubmit(`${key}:${value}`));
+            setPillInputValue(remainder);
+        } else {
+            const split = pillInputValue.split(delimiter);
+
+            if (split.length > 1) {
+                const last = split.pop();
+                split.forEach((value) => handleValueSubmit(value.trim()));
+                setPillInputValue(last);
+            }
         }
-
     }, [pillInputValue])
 
     return (
@@ -125,18 +133,20 @@ export const TagsInput = ({ delimiter, description, disabled, errors, label, pla
                                 setSelectedIndex(-1);
                             }}
                             onKeyDown={(event) => {
-                                if (event.key === 'Backspace') {
-
-                                    if (selectedIndex !== -1 || pillInputValue.length === 0) {
-                                        event.preventDefault();
-                                        handleValueRemoved(selectedIndex)
-                                    }
+                                if (event.key === 'Backspace' && (selectedIndex !== -1 || pillInputValue.length === 0)) {
+                                    event.preventDefault();
+                                    handleValueRemoved(selectedIndex)
                                 }
                                 else if (event.key === 'Enter') {
 
                                     if (pillInputValue.length > 0) {
-                                        setPillInputValue('');
-                                        handleValueSubmit(event.currentTarget.value);
+
+                                        const [kvs, _] = parseKeyValuePairs(pillInputValue, delimiter, false);
+
+                                        if (!kevValueMode || kvs.size > 0) {
+                                            handleValueSubmit(pillInputValue);
+                                            setPillInputValue('');
+                                        }
                                     }
                                 }
                             }}

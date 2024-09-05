@@ -5,28 +5,10 @@ import { useLocalStorage } from "~hooks/storage";
 import { defaultOptions } from "~utils/options";
 import { matchPatternsChanged } from "~utils/match-pattern";
 import { setLocalStorage, type MatchPatternError } from "~utils/storage";
+import { colonSeparatedStringsToMap, mapToColonSeparatedStrings } from "~utils/string";
 
 type GeneralConfigurationProps = {
     enabled: boolean
-}
-
-const colonSeparatedStringsToMap = (strings: string[]): Map<string, string> => {
-    const map = new Map<string, string>()
-    strings.forEach((string) => {
-        const [key, value] = string.split(':')
-        map.set(key, value ?? '')
-    })
-    return map
-}
-
-const mapToColonSeparatedStrings = (map: Map<string, string>): string[] => {
-    const strings = []
-    if (map) {
-        map.forEach((value, key) => {
-            strings.push(`${key}:${value ?? ''}`)
-        })
-    }
-    return strings
 }
 
 const patternErrorsToPills = (patterns: string[], errors: MatchPatternError[]): Map<number, string> => {
@@ -112,9 +94,8 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                 <TagsInput
                     value={attributesStrings}
                     onValueRemoved={(index) => {
-                        const newAttributes = [...attributesStrings]
-                        newAttributes.splice(index, 1)
-                        setLocalStorage({ attributes: colonSeparatedStringsToMap(newAttributes) })
+                        attributesStrings.splice(index, 1)
+                        setLocalStorage({ attributes: colonSeparatedStringsToMap(attributesStrings) })
                     }}
                     onValueAdded={(value) => {
                         attributesStrings.push(value)
@@ -125,13 +106,13 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                     description="Attach additional attributes on all exported logs/traces."
                     placeholder={attributesStrings.length == 0 ? 'key:value, key2:value2' : ''}
                     delimiter={","}
+                    keyValueMode={true}
                 />
                 <TagsInput
                     value={headersStrings}
                     onValueRemoved={(index) => {
-                        const newState = [...headersStrings]
-                        newState.splice(index, 1)
-                        setLocalStorage({ headers: colonSeparatedStringsToMap(newState) })
+                        headersStrings.splice(index, 1)
+                        setLocalStorage({ headers: colonSeparatedStringsToMap(headersStrings) })
                     }}
                     onValueAdded={(value) => {
                         headersStrings.push(value)
@@ -142,6 +123,7 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                     description="Include additional HTTP headers on all export requests."
                     placeholder={headersStrings.length == 0 ? 'key:value, key2:value2' : ''}
                     delimiter={","}
+                    keyValueMode={true}
                 />
             </Group>
         </Fieldset>
