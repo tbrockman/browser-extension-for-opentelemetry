@@ -104,8 +104,8 @@ importers:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
       uuidv7:
-        specifier: ^1.0.0
-        version: 1.0.1
+        specifier: ^1.0.2
+        version: 1.0.2
     devDependencies:
       '@ianvs/prettier-plugin-sort-imports':
         specifier: 4.1.1
@@ -4843,8 +4843,8 @@ packages:
     resolution: {integrity: sha512-6Z7Ma2aVEWisaL6TvBCy7P8rm2LQoPv6dJ7ecIaIixHcwfbJ0x7mWdbcwlIM5IGQxPZSFYeqRCqlOOeKoJYMkw==}
     engines: {node: '>= 4'}
 
-  uuidv7@1.0.1:
-    resolution: {integrity: sha512-2noB909GbI352dKfASOY6VHHl59KvevZ1FF8gCAXCwDyrt2kkZhuFbczF9udqTfeejiRYEmO4wzUZ0WhVP+IUA==}
+  uuidv7@1.0.2:
+    resolution: {integrity: sha512-8JQkH4ooXnm1JCIhqTMbtmdnYEn6oKukBxHn1Ic9878jMkL7daTI7anTExfY18VRCX7tcdn5quzvCb6EWrR8PA==}
     hasBin: true
 
   v8-compile-cache-lib@3.0.1:
@@ -11092,7 +11092,7 @@ snapshots:
 
   utility-types@3.11.0: {}
 
-  uuidv7@1.0.1: {}
+  uuidv7@1.0.2: {}
 
   v8-compile-cache-lib@3.0.1: {}
 
