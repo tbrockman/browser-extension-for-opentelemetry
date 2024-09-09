@@ -1,0 +1,189 @@
+{
+  "$id": "Configuration",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "enabled": {
+      "type": "boolean"
+    },
+    "tracingEnabled": {
+      "type": "boolean"
+    },
+    "loggingEnabled": {
+      "type": "boolean"
+    },
+    "metricsEnabled": {
+      "type": "boolean"
+    },
+    "matchPatterns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "traceCollectorUrl": {
+      "type": "string"
+    },
+    "logCollectorUrl": {
+      "type": "string"
+    },
+    "metricCollectorUrl": {
+      "type": "string"
+    },
+    "attributes": {
+      "type": "object"
+    },
+    "headers": {
+      "type": "object"
+    },
+    "concurrencyLimit": {
+      "type": "number"
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "fullscreenchange",
+          "fullscreenerror",
+          "abort",
+          "animationcancel",
+          "animationend",
+          "animationiteration",
+          "animationstart",
+          "auxclick",
+          "beforeinput",
+          "beforetoggle",
+          "blur",
+          "cancel",
+          "canplay",
+          "canplaythrough",
+          "change",
+          "click",
+          "close",
+          "compositionend",
+          "compositionstart",
+          "compositionupdate",
+          "contextmenu",
+          "copy",
+          "cuechange",
+          "cut",
+          "dblclick",
+          "drag",
+          "dragend",
+          "dragenter",
+          "dragleave",
+          "dragover",
+          "dragstart",
+          "drop",
+          "durationchange",
+          "emptied",
+          "ended",
+          "error",
+          "focus",
+          "focusin",
+          "focusout",
+          "formdata",
+          "gotpointercapture",
+          "input",
+          "invalid",
+          "keydown",
+          "keypress",
+          "keyup",
+          "load",
+          "loadeddata",
+          "loadedmetadata",
+          "loadstart",
+          "lostpointercapture",
+          "mousedown",
+          "mouseenter",
+          "mouseleave",
+          "mousemove",
+          "mouseout",
+          "mouseover",
+          "mouseup",
+          "paste",
+          "pause",
+          "play",
+          "playing",
+          "pointercancel",
+          "pointerdown",
+          "pointerenter",
+          "pointerleave",
+          "pointermove",
+          "pointerout",
+          "pointerover",
+          "pointerup",
+          "progress",
+          "ratechange",
+          "reset",
+          "resize",
+          "scroll",
+          "scrollend",
+          "securitypolicyviolation",
+          "seeked",
+          "seeking",
+          "select",
+          "selectionchange",
+          "selectstart",
+          "slotchange",
+          "stalled",
+          "submit",
+          "suspend",
+          "timeupdate",
+          "toggle",
+          "touchcancel",
+          "touchend",
+          "touchmove",
+          "touchstart",
+          "transitioncancel",
+          "transitionend",
+          "transitionrun",
+          "transitionstart",
+          "volumechange",
+          "waiting",
+          "webkitanimationend",
+          "webkitanimationiteration",
+          "webkitanimationstart",
+          "webkittransitionend",
+          "wheel"
+        ]
+      }
+    },
+    "propagateTo": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "instrumentations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "fetch",
+          "load",
+          "interaction"
+        ]
+      }
+    }
+  },
+  "required": [
+    "enabled",
+    "tracingEnabled",
+    "loggingEnabled",
+    "metricsEnabled",
+    "matchPatterns",
+    "traceCollectorUrl",
+    "logCollectorUrl",
+    "metricCollectorUrl",
+    "attributes",
+    "headers",
+    "concurrencyLimit",
+    "events",
+    "propagateTo",
+    "instrumentations"
+  ],
+  "additionalProperties": false,
+  "definitions": {}
+}
