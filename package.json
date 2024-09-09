@@ -41,7 +41,7 @@
     "@opentelemetry/sdk-trace-base": "^1.22.0",
     "@opentelemetry/sdk-trace-web": "^1.22.0",
     "@opentelemetry/semantic-conventions": "^1.22.0",
-    "@tabler/icons-react": "^3.14.0",
+    "@tabler/icons-react": "^3.15.0",
     "browser-extension-url-match": "^1.2.0",
     "deepmerge-ts": "^7.0.3",
     "react": "18.2.0",
