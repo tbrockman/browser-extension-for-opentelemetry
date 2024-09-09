@@ -1,4 +1,4 @@
-import { getLocalStorage, defaultLocalStorage, type LocalStorageType } from "./storage"
+import { getLocalStorage, defaultLocalStorage, type LocalStoragePublic } from "./storage"
 
 const getOptions = async () => {
     return await getLocalStorage()
@@ -10,5 +10,5 @@ export {
 }
 
 export type {
-    LocalStorageType
+    LocalStoragePublic as LocalStorageType
 }

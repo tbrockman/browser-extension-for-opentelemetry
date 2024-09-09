@@ -47,9 +47,6 @@ export default function LogConfiguration({ enabled }: LogConfigurationProps) {
     return (
         <Fieldset aria-label="Logs"
             styles={{
-                legend: {
-                    paddingRight: '1rem'
-                },
                 root: {
                     borderColor: (enabled && loggingEnabled) ? 'var(--mantine-primary-color-5)' : 'var(--mantine-color-default-border)'
                 }

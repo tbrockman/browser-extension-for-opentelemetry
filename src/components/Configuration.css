@@ -5,3 +5,15 @@
     padding-bottom: 0;
     padding-top: 0;
 }
+
+.cm-editor {
+    background-color: var(--mantine-color-body);
+}
+
+.cm-editor .cm-gutters {
+    background-color: var(--mantine-color-body);
+}
+
+.cm-editor.cm-focused {
+    outline: none;
+}

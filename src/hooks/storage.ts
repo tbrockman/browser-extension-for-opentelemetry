@@ -1,20 +1,21 @@
 import { useEffect, useState } from "react"
 import type { Values } from "~types"
 import { deserializer } from "~utils/serde";
-import { defaultLocalStorage, getStorage, LocalStorage } from "~utils/storage"
+import { defaultLocalStorage, getStorage, LocalStorage, type ExtractKeys } from "~utils/storage"
 
-export function useLocalStorage<T extends (keyof LocalStorage)[]>(keys: T): {
-    [K in T[number]]: LocalStorage[K];
-} {
+export function useLocalStorage<T extends (keyof LocalStorage)[]>(keys?: T): ExtractKeys<T> {
+    if (!keys) {
+        return useStorage(defaultLocalStorage, 'local') as ExtractKeys<T>
+    }
     const obj = keys.reduce((acc, key) => {
         return { ...acc, [key]: defaultLocalStorage[key] }
     }, {} as {
         [K in T[number]]: LocalStorage[K];
     });
-    return useStorage(obj, 'local');
+    return useStorage(obj, 'local') as ExtractKeys<T>;
 }
 
-export function useStorage<T extends Record<string, Values>>(keysWithDefaults: T, storageArea: chrome.storage.AreaName = 'sync'): T {
+export function useStorage<T>(keysWithDefaults: T, storageArea: chrome.storage.AreaName = 'sync'): T {
     const [state, setState] = useState(keysWithDefaults);
 
     const listener = (event: Record<string, chrome.storage.StorageChange>, area: chrome.storage.AreaName) => {

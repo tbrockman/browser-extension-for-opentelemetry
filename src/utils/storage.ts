@@ -1,12 +1,14 @@
 import type { KeyValues, Values } from "~types"
-import { deserializer, replacer, reviver, serializer } from "./serde"
+import { deserializer, serializer } from "./serde"
 
 export type MatchPatternError = {
     error: string
     pattern: string
 }
 
-export type LocalStorageType = {
+// Settings available in LocalStorage which are exposed to the end user
+// and can be modified as they desire
+export type LocalStoragePublic = {
     enabled: boolean
     tracingEnabled: boolean
     loggingEnabled: boolean
@@ -21,11 +23,20 @@ export type LocalStorageType = {
     events: (keyof HTMLElementEventMap)[]
     propagateTo: string[]
     instrumentations: ('fetch' | 'load' | 'interaction')[]
+}
+
+// Data in LocalStorage used internally by the extension
+// But which isn't exposed to the end user
+export type LocalStorageInternal = {
     matchPatternErrors: MatchPatternError[]
     traceExportErrors?: string[]
     logExportErrors?: string[]
     metricExportErrors?: string[]
+    configMode: 'visual' | 'code'
+    configText: string
 }
+
+export type LocalStorageType = LocalStoragePublic & LocalStorageInternal
 
 export class LocalStorage implements LocalStorageType {
     enabled = true;
@@ -43,10 +54,12 @@ export class LocalStorage implements LocalStorageType {
         ['key', 'value']
     ]);
     concurrencyLimit = 50;
-    events = ['submit', 'click', 'keypress', 'scroll', 'resize', 'contextmenu', 'drag', 'cut', 'copy', 'input', 'pointerdown', 'pointerenter', 'pointerleave'] as (keyof HTMLElementEventMap)[];
+    events = ['submit', 'click', 'keypress', 'resize', 'contextmenu', 'drag', 'cut', 'copy', 'input', 'pointerdown', 'pointerenter', 'pointerleave'] as (keyof HTMLElementEventMap)[];
     propagateTo = [];
     instrumentations = ['fetch', 'load', 'interaction'] as ("load" | "fetch" | "interaction")[];
     matchPatternErrors = [];
+    configMode = 'visual' as 'visual' | 'code';
+    configText = '{}';
 }
 
 export const defaultLocalStorage = new LocalStorage();
@@ -71,7 +84,7 @@ export async function setLocalStorage<T extends Partial<LocalStorage>>(data: T):
     return await setStorage('local', data);
 }
 
-type ExtractKeys<T extends (keyof LocalStorage)[] | undefined> = T extends undefined
+export type ExtractKeys<T extends (keyof LocalStorage)[] | undefined> = T extends undefined
     ? LocalStorage
     : Pick<LocalStorage, T[number]>;
 
