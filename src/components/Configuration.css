@@ -10,6 +10,10 @@
     background-color: var(--mantine-color-body);
 }
 
+.cm-editor .cm-content {
+    padding: 0;
+}
+
 .cm-editor .cm-gutters {
     background-color: var(--mantine-color-body);
 }

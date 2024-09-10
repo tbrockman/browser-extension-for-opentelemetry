@@ -122,7 +122,8 @@
       "@opentelemetry/otlp-proto-exporter-base@0.49.1": "patches/@opentelemetry__otlp-proto-exporter-base@0.49.1.patch",
       "@opentelemetry/instrumentation-xml-http-request@0.49.1": "patches/@opentelemetry__instrumentation-xml-http-request@0.49.1.patch",
       "@opentelemetry/instrumentation-fetch@0.49.1": "patches/@opentelemetry__instrumentation-fetch@0.49.1.patch",
-      "@opentelemetry/instrumentation-user-interaction@0.35.0": "patches/@opentelemetry__instrumentation-user-interaction@0.35.0.patch"
+      "@opentelemetry/instrumentation-user-interaction@0.35.0": "patches/@opentelemetry__instrumentation-user-interaction@0.35.0.patch",
+      "codemirror-json-schema": "patches/codemirror-json-schema.patch"
     }
   },
   "parcel-resolver-inlinefunc": {

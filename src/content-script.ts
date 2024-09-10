@@ -20,7 +20,7 @@ import { MessageTypes } from '~types';
 import { consoleProxy } from '~utils/logging';
 import { wrapConsoleWithLoggerProvider } from '~telemetry/logs';
 import type { LocalStorageType } from '~utils/options';
-import { deserializer } from '~utils/serde';
+import { de } from '~utils/serde';
 
 function createSendOverride<ExportItem, ServiceRequest>(sessionId: string, exporter: OTLPProtoExporterBrowserBase<ExportItem, ServiceRequest>, type: MessageTypes) {
 
@@ -185,7 +185,7 @@ export default function injectContentScript({ sessionId, options, retries = 10, 
 
     try {
         if (typeof options === 'string') {
-            options = deserializer<LocalStorageType>(options)
+            options = de<LocalStorageType>(options)
         }
         let deregisterInstrumentation = instrument(sessionId, options);
 

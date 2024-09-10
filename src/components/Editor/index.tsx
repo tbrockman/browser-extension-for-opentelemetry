@@ -6,7 +6,7 @@ import { useLocalStorage } from "~hooks/storage";
 import { useDebouncedValue } from "@mantine/hooks";
 import { setLocalStorage } from "~utils/storage";
 import { linter } from "@codemirror/lint";
-import { hoverTooltip } from "@codemirror/view";
+import { EditorView, hoverTooltip } from "@codemirror/view";
 import { json, jsonParseLinter, jsonLanguage } from "@codemirror/lang-json";
 import schema from "~generated/schemas/configuration.schema.json";
 
@@ -32,15 +32,6 @@ export const Editor = () => {
     useEffect(() => {
         if (configText !== renderedConfig) {
             setRenderedConfig(configText)
-
-            try {
-                const config = JSON.parse(configText)
-
-
-
-            } catch (e) {
-                console.error(e)
-            }
         }
     }, [configText])
 
@@ -54,9 +45,10 @@ export const Editor = () => {
         <Box>
             <ReactCodeMirror
                 value={renderedConfig}
-                height="200px"
+                height="100%"
                 theme={computedColorScheme == 'dark' ? vscodeDark : vscodeLight}
                 extensions={[
+                    EditorView.lineWrapping,
                     json(),
                     linter(jsonParseLinter(), {
                         // default is 750ms

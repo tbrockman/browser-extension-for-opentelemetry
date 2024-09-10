@@ -45,7 +45,10 @@ export default function Configuration() {
                 <Switch
                     checked={enabled}
                     disabled={false}
-                    onChange={(event) => setLocalStorage({ enabled: event.currentTarget.checked })}
+                    onChange={(event) => {
+                        console.log('swtch changed', event.currentTarget.checked, 'enabled', enabled)
+                        setLocalStorage({ enabled: event.currentTarget.checked })
+                    }}
                     size='md'
                     aria-label='Enable or disable the extension'
                     thumbIcon={
@@ -84,7 +87,7 @@ export default function Configuration() {
                         position={{ bottom: 10, right: 10 }}
                         portalProps={{ target: portalTargetRef.current }} styles={{ root: { position: "absolute" } }}>
                         <Button leftSection={configMode === 'visual' ? <IconCode /> : <IconFileCheck />}>
-                            {configMode === 'visual' ? 'Edit as JSON' : 'Use form mode'}
+                            {configMode === 'visual' ? 'Edit as JSON' : 'Edit as form'}
                         </Button>
                     </Affix>
                 }

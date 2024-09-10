@@ -4,9 +4,8 @@ export const replacer = (key, value) => {
             dataType: 'Map',
             value: Array.from(value.entries()), // or with spread: value: [...value]
         };
-    } else {
-        return value;
     }
+    return value;
 }
 
 export const reviver = (key, value) => {
@@ -18,10 +17,11 @@ export const reviver = (key, value) => {
     return value;
 }
 
-export const serializer = <T>(value: T): string => {
-    return JSON.stringify(value, replacer);
+export const ser = <T>(value: T, pretty: boolean = false): string => {
+    return JSON.stringify(value, replacer, pretty ? 2 : undefined);
 }
 
-export const deserializer = <T>(value: string): T => {
-    return JSON.parse(value, reviver);
+export const de = <T>(value: string, constructor?: new (args: Partial<T>) => T): T => {
+    let deserialized = JSON.parse(value, reviver);
+    return constructor ? new constructor(deserialized) : deserialized;
 }

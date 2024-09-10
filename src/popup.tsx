@@ -1,5 +1,4 @@
 import {
-  colorsTuple,
   createTheme,
   Flex,
   MantineProvider,

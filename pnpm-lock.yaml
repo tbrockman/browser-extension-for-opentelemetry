@@ -20,6 +20,9 @@ patchedDependencies:
   '@protobufjs/inquire@1.1.0':
     hash: eo4p6hw36ofhihemhysfxmamv4
     path: patches/@protobufjs__inquire@1.1.0.patch
+  codemirror-json-schema:
+    hash: 36holn6iayfhdhkr24yrq7fyiq
+    path: patches/codemirror-json-schema.patch
 
 importers:
 
@@ -114,7 +117,7 @@ importers:
         version: 1.2.0
       codemirror-json-schema:
         specifier: ^0.7.8
-        version: 0.7.8(@codemirror/language@6.10.2)(@codemirror/lint@6.8.1)(@codemirror/state@6.4.1)(@codemirror/view@6.33.0)(@lezer/common@1.2.1)(typescript@5.5.4)(vite@5.4.3(@types/node@22.5.4)(less@4.2.0)(lightningcss@1.25.1)(sass@1.77.8)(sugarss@4.0.1(postcss@8.4.45)))
+        version: 0.7.8(patch_hash=36holn6iayfhdhkr24yrq7fyiq)(@codemirror/language@6.10.2)(@codemirror/lint@6.8.1)(@codemirror/state@6.4.1)(@codemirror/view@6.33.0)(@lezer/common@1.2.1)(typescript@5.5.4)(vite@5.4.3(@types/node@22.5.4)(less@4.2.0)(lightningcss@1.25.1)(sass@1.77.8)(sugarss@4.0.1(postcss@8.4.45)))
       deepmerge-ts:
         specifier: ^7.0.3
         version: 7.1.0
@@ -7610,7 +7613,7 @@ snapshots:
       '@parcel/source-map': 2.1.1
       '@parcel/types': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))(@swc/helpers@0.5.12)
       '@parcel/utils': 2.12.0
-      '@parcel/workers': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))(@swc/helpers@0.5.12)
+      '@parcel/workers': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))
       abortcontroller-polyfill: 1.7.5
       base-x: 3.0.10
       browserslist: 4.23.2
@@ -7702,7 +7705,7 @@ snapshots:
       '@parcel/types': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))(@swc/helpers@0.5.12)
       '@parcel/utils': 2.12.0
       '@parcel/watcher': 2.4.1
-      '@parcel/workers': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))(@swc/helpers@0.5.12)
+      '@parcel/workers': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))
     transitivePeerDependencies:
       - '@swc/helpers'
 
@@ -7713,7 +7716,7 @@ snapshots:
       '@parcel/types': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.12)
       '@parcel/utils': 2.12.0
       '@parcel/watcher': 2.4.1
-      '@parcel/workers': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.12)
+      '@parcel/workers': 2.12.0(@parcel/core@2.9.3)
     transitivePeerDependencies:
       - '@swc/helpers'
 
@@ -7986,7 +7989,7 @@ snapshots:
       '@parcel/plugin': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))
       '@parcel/rust': 2.12.0
       '@parcel/utils': 2.12.0
-      '@parcel/workers': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))(@swc/helpers@0.5.12)
+      '@parcel/workers': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))
 
   '@parcel/optimizer-image@2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.12)':
     dependencies:
@@ -7995,7 +7998,7 @@ snapshots:
       '@parcel/plugin': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.12)
       '@parcel/rust': 2.12.0
       '@parcel/utils': 2.12.0
-      '@parcel/workers': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.12)
+      '@parcel/workers': 2.12.0(@parcel/core@2.9.3)
     transitivePeerDependencies:
       - '@swc/helpers'
 
@@ -8092,7 +8095,7 @@ snapshots:
       '@parcel/node-resolver-core': 3.3.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))
       '@parcel/types': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))(@swc/helpers@0.5.12)
       '@parcel/utils': 2.12.0
-      '@parcel/workers': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))(@swc/helpers@0.5.12)
+      '@parcel/workers': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))
       '@swc/core': 1.7.0(@swc/helpers@0.5.12)
       semver: 7.6.3
     transitivePeerDependencies:
@@ -8107,7 +8110,7 @@ snapshots:
       '@parcel/node-resolver-core': 3.3.0(@parcel/core@2.9.3)
       '@parcel/types': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.12)
       '@parcel/utils': 2.12.0
-      '@parcel/workers': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.12)
+      '@parcel/workers': 2.12.0(@parcel/core@2.9.3)
       '@swc/core': 1.7.0(@swc/helpers@0.5.12)
       semver: 7.6.3
     transitivePeerDependencies:
@@ -8670,7 +8673,7 @@ snapshots:
       '@parcel/core': 2.12.0(@swc/helpers@0.5.12)
       '@parcel/plugin': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))
       '@parcel/utils': 2.12.0
-      '@parcel/workers': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))(@swc/helpers@0.5.12)
+      '@parcel/workers': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))
       nullthrows: 1.1.1
 
   '@parcel/transformer-image@2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.12)':
@@ -8678,7 +8681,7 @@ snapshots:
       '@parcel/core': 2.9.3
       '@parcel/plugin': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.12)
       '@parcel/utils': 2.12.0
-      '@parcel/workers': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.12)
+      '@parcel/workers': 2.12.0(@parcel/core@2.9.3)
       nullthrows: 1.1.1
     transitivePeerDependencies:
       - '@swc/helpers'
@@ -8705,7 +8708,7 @@ snapshots:
       '@parcel/rust': 2.12.0
       '@parcel/source-map': 2.1.1
       '@parcel/utils': 2.12.0
-      '@parcel/workers': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))(@swc/helpers@0.5.12)
+      '@parcel/workers': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))
       '@swc/helpers': 0.5.12
       browserslist: 4.23.2
       nullthrows: 1.1.1
@@ -8720,7 +8723,7 @@ snapshots:
       '@parcel/rust': 2.12.0
       '@parcel/source-map': 2.1.1
       '@parcel/utils': 2.12.0
-      '@parcel/workers': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.12)
+      '@parcel/workers': 2.12.0(@parcel/core@2.9.3)
       '@swc/helpers': 0.5.12
       browserslist: 4.23.2
       nullthrows: 1.1.1
@@ -8975,7 +8978,7 @@ snapshots:
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))(@swc/helpers@0.5.12)
       '@parcel/package-manager': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))(@swc/helpers@0.5.12)
       '@parcel/source-map': 2.1.1
-      '@parcel/workers': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))(@swc/helpers@0.5.12)
+      '@parcel/workers': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))
       utility-types: 3.11.0
     transitivePeerDependencies:
       - '@parcel/core'
@@ -8988,7 +8991,7 @@ snapshots:
       '@parcel/fs': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.12)
       '@parcel/package-manager': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.12)
       '@parcel/source-map': 2.1.1
-      '@parcel/workers': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.12)
+      '@parcel/workers': 2.12.0(@parcel/core@2.9.3)
       utility-types: 3.11.0
     transitivePeerDependencies:
       - '@parcel/core'
@@ -9175,7 +9178,7 @@ snapshots:
       '@parcel/utils': 2.11.0
       nullthrows: 1.1.1
 
-  '@parcel/workers@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))(@swc/helpers@0.5.12)':
+  '@parcel/workers@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))':
     dependencies:
       '@parcel/core': 2.12.0(@swc/helpers@0.5.12)
       '@parcel/diagnostic': 2.12.0
@@ -9184,10 +9187,8 @@ snapshots:
       '@parcel/types': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.12))(@swc/helpers@0.5.12)
       '@parcel/utils': 2.12.0
       nullthrows: 1.1.1
-    transitivePeerDependencies:
-      - '@swc/helpers'
 
-  '@parcel/workers@2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.12)':
+  '@parcel/workers@2.12.0(@parcel/core@2.9.3)':
     dependencies:
       '@parcel/core': 2.9.3
       '@parcel/diagnostic': 2.12.0
@@ -9196,8 +9197,6 @@ snapshots:
       '@parcel/types': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.12)
       '@parcel/utils': 2.12.0
       nullthrows: 1.1.1
-    transitivePeerDependencies:
-      - '@swc/helpers'
 
   '@parcel/workers@2.8.3(@parcel/core@2.9.3)':
     dependencies:
@@ -10481,7 +10480,7 @@ snapshots:
       estree-walker: 3.0.3
       periscopic: 3.1.0
 
-  codemirror-json-schema@0.7.8(@codemirror/language@6.10.2)(@codemirror/lint@6.8.1)(@codemirror/state@6.4.1)(@codemirror/view@6.33.0)(@lezer/common@1.2.1)(typescript@5.5.4)(vite@5.4.3(@types/node@22.5.4)(less@4.2.0)(lightningcss@1.25.1)(sass@1.77.8)(sugarss@4.0.1(postcss@8.4.45))):
+  codemirror-json-schema@0.7.8(patch_hash=36holn6iayfhdhkr24yrq7fyiq)(@codemirror/language@6.10.2)(@codemirror/lint@6.8.1)(@codemirror/state@6.4.1)(@codemirror/view@6.33.0)(@lezer/common@1.2.1)(typescript@5.5.4)(vite@5.4.3(@types/node@22.5.4)(less@4.2.0)(lightningcss@1.25.1)(sass@1.77.8)(sugarss@4.0.1(postcss@8.4.45))):
     dependencies:
       '@changesets/changelog-github': 0.4.8
       '@codemirror/language': 6.10.2

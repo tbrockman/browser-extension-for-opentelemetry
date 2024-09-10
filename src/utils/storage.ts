@@ -1,5 +1,5 @@
 import type { KeyValues, Values } from "~types"
-import { deserializer, serializer } from "./serde"
+import { de, ser } from "./serde"
 
 export type MatchPatternError = {
     error: string
@@ -8,7 +8,7 @@ export type MatchPatternError = {
 
 // Settings available in LocalStorage which are exposed to the end user
 // and can be modified as they desire
-export type LocalStoragePublic = {
+export type ConfigurationType = {
     enabled: boolean
     tracingEnabled: boolean
     loggingEnabled: boolean
@@ -27,7 +27,7 @@ export type LocalStoragePublic = {
 
 // Data in LocalStorage used internally by the extension
 // But which isn't exposed to the end user
-export type LocalStorageInternal = {
+export type InternalStorage = {
     matchPatternErrors: MatchPatternError[]
     traceExportErrors?: string[]
     logExportErrors?: string[]
@@ -36,9 +36,10 @@ export type LocalStorageInternal = {
     configText: string
 }
 
-export type LocalStorageType = LocalStoragePublic & LocalStorageInternal
-
-export class LocalStorage implements LocalStorageType {
+export type LocalStorageType = ConfigurationType & InternalStorage
+export type MapOrRecord = Map<string, string> | Record<string, string>
+export type LocalStorageProps = Partial<LocalStorageType> & { headers?: MapOrRecord, attributes?: MapOrRecord }
+export class Configuration implements ConfigurationType {
     enabled = true;
     tracingEnabled = true;
     loggingEnabled = true;
@@ -57,9 +58,35 @@ export class LocalStorage implements LocalStorageType {
     events = ['submit', 'click', 'keypress', 'resize', 'contextmenu', 'drag', 'cut', 'copy', 'input', 'pointerdown', 'pointerenter', 'pointerleave'] as (keyof HTMLElementEventMap)[];
     propagateTo = [];
     instrumentations = ['fetch', 'load', 'interaction'] as ("load" | "fetch" | "interaction")[];
+
+    constructor({ headers, attributes, ...params }: LocalStorageProps = {}) {
+        console.log('constructor being called at all ever?', headers, attributes, params)
+        if (headers instanceof Map) {
+            this.headers = headers;
+        } else if (typeof headers == 'object') {
+            this.headers = new Map(Object.entries(headers));
+        }
+
+        if (attributes instanceof Map) {
+            this.attributes = attributes;
+        } else if (typeof this.attributes == 'object') {
+            this.attributes = new Map(Object.entries(this.attributes));
+        }
+
+        Object.entries(this).forEach(([key, value]) => {
+
+            if (params.hasOwnProperty(key)) {
+                this[key] = params[key];
+            }
+        })
+        console.log('after being constructed', this)
+    }
+}
+
+export class LocalStorage extends Configuration implements LocalStorageType {
     matchPatternErrors = [];
     configMode = 'visual' as 'visual' | 'code';
-    configText = '{}';
+    configText = ser(this, true);
 }
 
 export const defaultLocalStorage = new LocalStorage();
@@ -72,7 +99,7 @@ function parseStorageResponse(response: Record<string, Values>): Record<string, 
         }
         else {
             try {
-                return { ...acc, [key]: deserializer(value) };
+                return { ...acc, [key]: de(value) };
             } catch (e) {
                 return { ...acc, [key]: value };
             }
@@ -103,14 +130,14 @@ export async function getLocalStorage<T extends (keyof LocalStorage)[] | undefin
 
 export async function getStorage<T>(storageArea: chrome.storage.AreaName, keysWithDefaults: T): Promise<T> {
     const serializedDefaults = Object.entries(keysWithDefaults).reduce((acc, [key, value]) => {
-        return { ...acc, [key]: serializer(value) };
+        return { ...acc, [key]: ser(value) };
     }, {});
     return parseStorageResponse(await chrome.storage[storageArea].get(serializedDefaults)) as T;
 }
 
 export async function setStorage<T extends KeyValues>(storageArea: chrome.storage.AreaName, data: T): Promise<void> {
     const serialized = Object.entries(data).reduce((acc, [key, value]) => {
-        return { ...acc, [key]: serializer(value) };
+        return { ...acc, [key]: ser(value) };
     }, {});
     return await chrome.storage[storageArea].set(serialized);
 }

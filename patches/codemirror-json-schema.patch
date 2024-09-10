@@ -1,0 +1,74 @@
+diff --git a/cjs/utils/markdown.js b/cjs/utils/markdown.js
+index d4dd9e7e9c8dd643c3ad5956b17e88ff6d4bdfdf..2702a49a602ce1a698113989eb07afa42ba754a6 100644
+--- a/cjs/utils/markdown.js
++++ b/cjs/utils/markdown.js
+@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.renderMarkdown = void 0;
+ const markdown_it_1 = __importDefault(require("markdown-it"));
+-const markdown_it_2 = __importDefault(require("@shikijs/markdown-it"));
++// const markdown_it_2 = __importDefault(require("@shikijs/markdown-it"));
+ // const defaultPlugins = [
+ //   "markdown-it-abbr",
+ //   "markdown-it-deflist",
+@@ -30,15 +30,15 @@ const renderer = (0, markdown_it_1.default)({
+     linkify: true,
+     typographer: true,
+ });
+-(async () => {
+-    const shikiRenderer = await (0, markdown_it_2.default)({
+-        themes: {
+-            light: "vitesse-light",
+-            dark: "vitesse-dark",
+-        },
+-    });
+-    renderer.use(shikiRenderer);
+-})();
++// (async () => {
++//     const shikiRenderer = await (0, markdown_it_2.default)({
++//         themes: {
++//             light: "vitesse-light",
++//             dark: "vitesse-dark",
++//         },
++//     });
++//     renderer.use(shikiRenderer);
++// })();
+ function renderMarkdown(markdown, inline = true) {
+     if (!inline)
+         return renderer.render(markdown);
+diff --git a/dist/utils/markdown.js b/dist/utils/markdown.js
+index b85b66417e4c5264f087dbe39c62a1e3077d9910..f6f921b42a2ae956cabb6f3b72587fa89c79b358 100644
+--- a/dist/utils/markdown.js
++++ b/dist/utils/markdown.js
+@@ -1,5 +1,5 @@
+ import md from "markdown-it";
+-import shiki from "@shikijs/markdown-it";
++// import shiki from "@shikijs/markdown-it";
+ // const defaultPlugins = [
+ //   "markdown-it-abbr",
+ //   "markdown-it-deflist",
+@@ -24,15 +24,15 @@ const renderer = md({
+     linkify: true,
+     typographer: true,
+ });
+-(async () => {
+-    const shikiRenderer = await shiki({
+-        themes: {
+-            light: "vitesse-light",
+-            dark: "vitesse-dark",
+-        },
+-    });
+-    renderer.use(shikiRenderer);
+-})();
++// (async () => {
++//     const shikiRenderer = await shiki({
++//         themes: {
++//             light: "vitesse-light",
++//             dark: "vitesse-dark",
++//         },
++//     });
++//     renderer.use(shikiRenderer);
++// })();
+ export function renderMarkdown(markdown, inline = true) {
+     if (!inline)
+         return renderer.render(markdown);

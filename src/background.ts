@@ -5,9 +5,10 @@ import { MessageTypes, type OTLPExportTraceMessage, type OTLPExportLogMessage, t
 import type { LocalStorageType } from '~utils/options'
 import { getOptions } from '~utils/options'
 import { match } from '~utils/match-pattern'
-import { serializer, deserializer } from '~utils/serde'
+import { ser, de } from '~utils/serde'
 import { uuidv7 } from 'uuidv7';
 import { getLocalStorage, type LocalStorage } from '~utils/storage'
+import '~listeners/storage/onChanged'
 
 let ports = {}
 
@@ -88,7 +89,7 @@ chrome.storage.onChanged.addListener((event: Record<keyof LocalStorage, chrome.s
     consoleProxy.debug('storage changed', { event })
 
     const parsed = Object.entries(event).reduce((acc, [k, v]) => {
-        return { ...acc, [k]: deserializer(v.newValue) }
+        return { ...acc, [k]: de(v.newValue) }
     }, {})
 
     consoleProxy.debug('storage parsed', { parsed })
@@ -134,7 +135,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
             func: injectContentScript,
             args: [{
                 sessionId,
-                options: serializer(options),
+                options: ser(options),
             }],
             injectImmediately: true,
             world: "MAIN"
