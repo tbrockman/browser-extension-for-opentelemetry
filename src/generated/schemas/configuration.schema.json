@@ -4,43 +4,78 @@
   "type": "object",
   "properties": {
     "enabled": {
-      "type": "boolean"
+      "type": "boolean",
+      "description": "Whether the extension is enabled"
     },
     "matchPatterns": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "examples": [
+        [
+          "http://localhost/*",
+          "https://*.example.com/*"
+        ]
+      ],
+      "description": "List of [match patterns](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns) for which the extension should be enabled"
     },
     "attributes": {
       "type": "object",
       "additionalProperties": {
         "type": "string"
-      }
+      },
+      "examples": [
+        {
+          "key": "value"
+        }
+      ],
+      "description": "[Attributes](https://opentelemetry.io/docs/specs/semconv/general/attributes/) to be added to all traces"
     },
     "headers": {
       "type": "object",
       "additionalProperties": {
         "type": "string"
-      }
+      },
+      "examples": [
+        {
+          "x-example-header": "value"
+        }
+      ],
+      "description": "HTTP headers to be added to requests when exporting collected telemetry"
     },
     "propagateTo": {
       "type": "array",
       "items": {
         "type": "string"
-      }
+      },
+      "examples": [
+        [
+          "https://example.com/.*"
+        ]
+      ],
+      "description": "List of regular expression to match outbound request URLs for which trace context should be forwarded"
     },
     "concurrencyLimit": {
-      "type": "number"
+      "type": "number",
+      "examples": [
+        50
+      ],
+      "description": "Maximum number of concurrent requests than can be queued for export"
     },
     "tracing": {
       "type": "object",
       "properties": {
         "enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether tracing is enabled"
         },
         "collectorUrl": {
-          "type": "string"
+          "type": "string",
+          "examples": [
+            "http://localhost:4318/v1/traces"
+          ],
+          "description": "URL to which traces should be exported. Must accept Protobuf-encoded OTLP traces over HTTP"
         },
         "events": {
           "type": "array",
@@ -151,7 +186,15 @@
               "webkittransitionend",
               "wheel"
             ]
-          }
+          },
+          "examples": [
+            [
+              "submit",
+              "click",
+              "keypress"
+            ]
+          ],
+          "description": "List of browser events to track (if 'interaction' instrumentation is enabled)"
         },
         "instrumentations": {
           "type": "array",
@@ -162,7 +205,8 @@
               "load",
               "interaction"
             ]
-          }
+          },
+          "description": "List of automatic instrumentations to enable"
         }
       },
       "required": [
@@ -171,35 +215,44 @@
         "events",
         "instrumentations"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "description": "Configuration for trace telemetry"
     },
     "logging": {
       "type": "object",
       "properties": {
         "enabled": {
-          "type": "boolean"
+          "type": "boolean",
+          "description": "Whether logging is enabled"
         },
         "collectorUrl": {
-          "type": "string"
+          "type": "string",
+          "examples": [
+            "http://localhost:4318/v1/logs"
+          ],
+          "description": "URL to which logs should be exported, must accept Protobuf-encoded OTLP logs over HTTP"
         }
       },
       "required": [
         "enabled",
         "collectorUrl"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "description": "Configuration for logging telemetry"
     }
   },
   "required": [
-    "attributes",
-    "concurrencyLimit",
     "enabled",
-    "headers",
-    "logging",
     "matchPatterns",
+    "attributes",
+    "headers",
     "propagateTo",
-    "tracing"
+    "concurrencyLimit",
+    "tracing",
+    "logging"
   ],
   "additionalProperties": false,
+  "title": "Configuration",
+  "description": "User-facing settings for the extension",
   "definitions": {}
 }

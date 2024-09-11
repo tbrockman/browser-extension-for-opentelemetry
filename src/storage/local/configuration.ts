@@ -1,18 +1,72 @@
+/**
+ * @title Configuration
+ * @description User-facing settings for the extension
+ */
 export type UserFacingConfigurationType = {
+    /**
+     * @description Whether the extension is enabled
+     */
     enabled: boolean
+    /**
+     * @description List of [match patterns](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns) for which the extension should be enabled
+     * @example ["http://localhost/*", "https://*.example.com/*"]
+     */
     matchPatterns: string[]
+    /**
+     * @description [Attributes](https://opentelemetry.io/docs/specs/semconv/general/attributes/) to be added to all traces
+     * @example { "key": "value" }
+     */
     attributes: Record<string, string>
+    /**
+     * @description HTTP headers to be added to requests when exporting collected telemetry
+     * @example { "x-example-header": "value" }
+     */
     headers: Record<string, string>
+    /**
+     * @description List of regular expression to match outbound request URLs for which trace context should be forwarded
+     * @example ["https://example.com/.*"]
+     */
     propagateTo: string[]
+    /**
+     * @description Maximum number of concurrent requests than can be queued for export
+     * @example 50
+     */
     concurrencyLimit: number
+    /**
+     * @description Configuration for trace telemetry
+     */
     tracing: {
+        /**
+         * @description Whether tracing is enabled
+         */
         enabled: boolean
+        /**
+         * @description URL to which traces should be exported. Must accept Protobuf-encoded OTLP traces over HTTP
+         * @example "http://localhost:4318/v1/traces"
+         */
         collectorUrl: string
+        /**
+         * @description List of browser events to track (if 'interaction' instrumentation is enabled)
+         * @example ["submit", "click", "keypress"]
+         */
         events: ConfigurationType["events"]
+        /**
+         * @description List of automatic instrumentations to enable
+         */
         instrumentations: ConfigurationType["instrumentations"]
     },
+    /**
+     * @description Configuration for logging telemetry
+     */
     logging: {
+        /**
+         * @description Whether logging is enabled
+         */
         enabled: boolean
+        /**
+         * @description URL to which logs should be exported. Must accept Protobuf-encoded OTLP logs over HTTP
+         * @example "http://localhost:4318/v1/logs"
+         */
         collectorUrl: string
     },
     // TODO: implement
@@ -48,7 +102,7 @@ export class UserFacingConfiguration implements UserFacingConfigurationType {
             collectorUrl: defaultConfiguration.logCollectorUrl
         }
 
-    constructor(params: Partial<UserFacingConfigurationType>) {
+    constructor(params: Partial<UserFacingConfigurationType> = {}) {
         Object.entries(this).forEach(([key, value]) => {
             if (params.hasOwnProperty(key)) {
                 this[key] = params[key];
@@ -95,15 +149,15 @@ export class UserFacingConfiguration implements UserFacingConfigurationType {
     }
 }
 
-// Settings available in LocalStorage which are exposed to the end user
+// Settings stored in LocalStorage which are exposed to the end user through UserFacingConfiguration
 export type ConfigurationType = {
     enabled: boolean
     tracingEnabled: boolean
     loggingEnabled: boolean
-    // metricsEnabled: boolean
     matchPatterns: string[]
     traceCollectorUrl: string
     logCollectorUrl: string
+    // metricsEnabled: boolean
     // metricCollectorUrl: string
     attributes: Map<string, string>
     headers: Map<string, string>
@@ -114,7 +168,7 @@ export type ConfigurationType = {
 }
 
 export type MapOrRecord = Map<string, string> | Record<string, string>
-export type ConfigurationProps = Partial<ConfigurationType> & { headers?: MapOrRecord, attributes?: MapOrRecord }
+export type ConfigurationProps = Partial<ConfigurationType & { headers: MapOrRecord, attributes: MapOrRecord }>
 
 export class Configuration implements ConfigurationType {
     enabled = true;

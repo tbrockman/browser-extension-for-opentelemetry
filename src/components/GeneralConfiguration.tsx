@@ -39,8 +39,13 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
 
     consoleProxy.log('configMode in GeneralConfiguration', configMode)
 
+    const setPatternErrors = (errors: MatchPatternError[]) => {
+        setLocalStorage({ matchPatternErrors: errors })
+    }
+
     const onEnabledUrlsChange = async (values: string[]) => {
         setLocalStorage({ matchPatterns: values })
+        matchPatternsChanged({ prev: matchPatterns, next: values, setErrors: setPatternErrors })
     }
 
     return (

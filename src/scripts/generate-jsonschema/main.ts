@@ -6,9 +6,10 @@ const config = {
     ...DEFAULT_CONFIG,
     path: 'src/storage/local/configuration.ts',
     tsconfig: 'tsconfig.json',
-    type: 'UserFacingConfiguration',
+    type: 'UserFacingConfigurationType',
     topRef: false,
     schemaId: 'Configuration',
+    jsDoc: 'extended' as const,
 }
 const program = createProgram(config);
 const parser = createParser(program, config, (prs) => {
