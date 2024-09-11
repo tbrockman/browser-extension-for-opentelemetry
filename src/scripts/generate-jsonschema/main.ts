@@ -4,9 +4,9 @@ import fs from 'fs';
 
 const config = {
     ...DEFAULT_CONFIG,
-    path: 'src/utils/storage.ts',
+    path: 'src/storage/local/configuration.ts',
     tsconfig: 'tsconfig.json',
-    type: 'LocalStoragePublic',
+    type: 'UserFacingConfiguration',
     topRef: false,
     schemaId: 'Configuration',
 }

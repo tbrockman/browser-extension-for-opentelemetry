@@ -13,17 +13,20 @@ import {
 import './Configuration.css'
 import { IconChecklist, IconCode, IconFileCheck, IconPower } from "@tabler/icons-react"
 import { IconSettings } from "@tabler/icons-react"
-import TraceConfiguration from "./TraceConfiguration"
-import LogConfiguration from "./LogConfiguration"
-import GeneralConfiguration from "./GeneralConfiguration"
+import TraceConfiguration from "~components/TraceConfiguration"
+import LogConfiguration from "~components/LogConfiguration"
+import GeneralConfiguration from "~components/GeneralConfiguration"
 import { useLocalStorage } from "~hooks/storage"
-import { setLocalStorage } from "~utils/storage"
+import { setLocalStorage } from "~storage/local"
 import { useEffect, useRef, useState } from "react"
+import { consoleProxy } from "~utils/logging"
 
 export default function Configuration() {
     const { enabled, configMode } = useLocalStorage(["enabled", "configMode"])
     const portalTargetRef = useRef<HTMLDivElement>(null)
     const [refsInitialized, setRefsInitialized] = useState(false)
+
+    consoleProxy.log('configMode', configMode)
 
     const handleConfigModeAffixClick = () => {
         setLocalStorage({ configMode: configMode === 'visual' ? 'code' : 'visual' })

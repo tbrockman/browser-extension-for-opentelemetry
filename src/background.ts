@@ -7,8 +7,8 @@ import { getOptions } from '~utils/options'
 import { match } from '~utils/match-pattern'
 import { ser, de } from '~utils/serde'
 import { uuidv7 } from 'uuidv7';
-import { getLocalStorage, type LocalStorage } from '~utils/storage'
-import '~listeners/storage/onChanged'
+import { getLocalStorage, type LocalStorage } from '~storage/local'
+import '~listeners'
 
 let ports = {}
 

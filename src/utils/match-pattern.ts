@@ -1,7 +1,7 @@
 import { matchPattern, presets } from 'browser-extension-url-match'
 import type { MatchPatternOptions } from 'browser-extension-url-match/dist/types';
 import { consoleProxy } from '~utils/logging';
-import type { MatchPatternError } from './storage';
+import type { MatchPatternError } from '~storage/local/internal';
 
 // TODO: potentially link to testing website somewhere: https://clearlylocal.github.io/browser-extension-url-match/
 

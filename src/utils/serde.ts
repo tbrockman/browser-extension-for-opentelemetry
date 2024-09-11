@@ -1,3 +1,14 @@
+const userFacingReplacer = (key, value) => {
+    if (value instanceof Map) {
+        const object = {};
+        for (let [k, v] of value) {
+            object[k] = v;
+        }
+        return object;
+    }
+    return value;
+}
+
 export const replacer = (key, value) => {
     if (value instanceof Map) {
         return {
@@ -17,8 +28,11 @@ export const reviver = (key, value) => {
     return value;
 }
 
-export const ser = <T>(value: T, pretty: boolean = false): string => {
-    return JSON.stringify(value, replacer, pretty ? 2 : undefined);
+export const ser = <T>(value: T, userFacing: boolean = false): string => {
+    if (userFacing) {
+        return JSON.stringify(value, userFacingReplacer, 2);
+    }
+    return JSON.stringify(value, replacer);
 }
 
 export const de = <T>(value: string, constructor?: new (args: Partial<T>) => T): T => {

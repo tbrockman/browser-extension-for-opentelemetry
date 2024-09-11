@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { vscodeDark, vscodeLight } from "@uiw/codemirror-theme-vscode";
 import { useLocalStorage } from "~hooks/storage";
 import { useDebouncedValue } from "@mantine/hooks";
-import { setLocalStorage } from "~utils/storage";
+import { setLocalStorage } from "~storage/local";
 import { linter } from "@codemirror/lint";
 import { EditorView, hoverTooltip } from "@codemirror/view";
 import { json, jsonParseLinter, jsonLanguage } from "@codemirror/lang-json";
@@ -17,6 +17,7 @@ import {
     stateExtensions,
     handleRefresh
 } from "codemirror-json-schema";
+import { consoleProxy } from "~utils/logging";
 
 
 export const Editor = () => {
@@ -25,9 +26,13 @@ export const Editor = () => {
     const [renderedConfig, setRenderedConfig] = useState(configText);
     const [debouncedConfig] = useDebouncedValue(renderedConfig, 500);
 
+    // TODO: probably make saving explicit instead of having autosave (or some option)
     const onChange = (val, viewUpdate) => {
         setRenderedConfig(val);
     }
+
+    // TODO: handle updating matchPatterns 
+    // (probably deserialize text and check if matchPatterns have changed)
 
     useEffect(() => {
         if (configText !== renderedConfig) {
@@ -61,6 +66,7 @@ export const Editor = () => {
                         autocomplete: jsonCompletion(),
                     }),
                     hoverTooltip(jsonSchemaHover()),
+                    // @ts-ignore
                     stateExtensions(schema)]}
                 onChange={onChange}
             />

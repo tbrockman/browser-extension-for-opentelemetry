@@ -1,0 +1,1 @@
+import '~listeners/storage/onChanged/configTextSync'

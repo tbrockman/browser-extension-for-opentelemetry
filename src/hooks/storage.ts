@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
-import type { Values } from "~types"
 import { de } from "~utils/serde";
-import { defaultLocalStorage, getStorage, LocalStorage, type ExtractKeys } from "~utils/storage"
+import { defaultLocalStorage, getStorage, LocalStorage, type ExtractKeys } from "~storage/local";
 
 export function useLocalStorage<T extends (keyof LocalStorage)[]>(keys?: T): ExtractKeys<T> {
     if (!keys) {
@@ -28,7 +27,6 @@ export function useStorage<T>(keysWithDefaults: T, storageArea: chrome.storage.A
 
         const newStorage: T = intersection.reduce((acc, [key, { newValue }]) => {
             if (!keysWithDefaults.hasOwnProperty(key)) return acc;
-            console.log('deserializing', key, newValue, de(newValue), typeof de(newValue))
             return { ...acc, [key]: de(newValue) }
         }, state);
 

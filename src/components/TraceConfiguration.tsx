@@ -6,7 +6,7 @@ import { useLocalStorage } from "~hooks/storage";
 
 import { events as EventList } from "~utils/constants"
 import { defaultOptions } from "~utils/options";
-import { setLocalStorage } from "~utils/storage";
+import { setLocalStorage } from "~storage/local";
 
 const CheckboxIcon: CheckboxProps['icon'] = ({ ...others }) =>
     <IconAffiliate {...others} />;
