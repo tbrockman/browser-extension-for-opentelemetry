@@ -1,6 +1,8 @@
 import type { BaseType, Context, ReferenceType, SubNodeParser } from "ts-json-schema-generator";
 import { ObjectType, ts } from "ts-json-schema-generator";
 
+// Not technically necessary since we're not exposing Maps to users anymore
+
 export class MapConstructorParser implements SubNodeParser {
     public supportsNode(node: ts.Node): boolean {
         if (node.kind === ts.SyntaxKind.TypeReference) {
