@@ -17,7 +17,6 @@ import {
     stateExtensions,
     handleRefresh
 } from "codemirror-json-schema";
-import { consoleProxy } from "~utils/logging";
 
 
 export const Editor = () => {

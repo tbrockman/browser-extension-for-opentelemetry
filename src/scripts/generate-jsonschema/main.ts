@@ -1,5 +1,4 @@
 import { createProgram, createParser, SchemaGenerator, createFormatter, DEFAULT_CONFIG } from "ts-json-schema-generator"
-import { MapConstructorParser } from "./map-parser";
 import fs from 'fs';
 
 const config = {
@@ -12,9 +11,7 @@ const config = {
     jsDoc: 'extended' as const,
 }
 const program = createProgram(config);
-const parser = createParser(program, config, (prs) => {
-    prs.addNodeParser(new MapConstructorParser());
-});
+const parser = createParser(program, config);
 const formatter = createFormatter(config);
 const generator = new SchemaGenerator(program, parser, formatter, config);
 const outputPath = 'src/generated/schemas/configuration.schema.json';
