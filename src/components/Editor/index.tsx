@@ -25,7 +25,7 @@ export const Editor = () => {
     const computedColorScheme = useComputedColorScheme('dark');
     const { configText } = useLocalStorage(['configText']);
     const [renderedConfig, setRenderedConfig] = useState(configText);
-    const [debouncedConfig] = useDebouncedValue(renderedConfig, 500);
+    const [debouncedConfig] = useDebouncedValue(renderedConfig, 1000);
     const theme = computedColorScheme == 'dark' ? themeDark : themeLight
     // second element returned by createTheme is the syntaxHighlighting extension
     const highlighter = theme[1].find(item => item.value instanceof HighlightStyle)?.value;

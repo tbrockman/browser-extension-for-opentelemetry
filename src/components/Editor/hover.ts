@@ -17,6 +17,7 @@ export const renderExample = (jsonExample: any, highlighter: HighlightStyle) => 
             let span = document.createElement("span")
             span.appendChild(node)
             span.className = classes
+            // @ts-ignore
             node = span
         }
         result.appendChild(node)

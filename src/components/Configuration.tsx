@@ -11,7 +11,7 @@ import {
     rem
 } from "@mantine/core"
 import './Configuration.css'
-import { IconChecklist, IconCode, IconFileCheck, IconPower } from "@tabler/icons-react"
+import { IconBraces, IconFileCheck, IconPower } from "@tabler/icons-react"
 import { IconSettings } from "@tabler/icons-react"
 import TraceConfiguration from "~components/TraceConfiguration"
 import LogConfiguration from "~components/LogConfiguration"
@@ -48,10 +48,7 @@ export default function Configuration() {
                 <Switch
                     checked={enabled}
                     disabled={false}
-                    onChange={(event) => {
-                        console.log('swtch changed', event.currentTarget.checked, 'enabled', enabled)
-                        setLocalStorage({ enabled: event.currentTarget.checked })
-                    }}
+                    onChange={(event) => setLocalStorage({ enabled: event.currentTarget.checked })}
                     size='md'
                     aria-label='Enable or disable the extension'
                     thumbIcon={
@@ -80,7 +77,6 @@ export default function Configuration() {
                         position: 'relative',
                     },
                     legend: { fontSize: 'var(--mantine-font-size-lg)', fontWeight: 'bold' },
-                    // root: { borderColor: enabled ? 'var(--mantine-color-orange-4)' : 'var(--mantine-color-dark-4)' }
                 }}
                 // @ts-ignore
                 ref={portalTargetRef}
@@ -89,7 +85,7 @@ export default function Configuration() {
                     <Affix onClick={handleConfigModeAffixClick}
                         position={{ bottom: 10, right: 10 }}
                         portalProps={{ target: portalTargetRef.current }} styles={{ root: { position: "absolute" } }}>
-                        <Button leftSection={configMode === 'visual' ? <IconCode /> : <IconFileCheck />}>
+                        <Button leftSection={configMode === 'visual' ? <IconBraces /> : <IconFileCheck />}>
                             {configMode === 'visual' ? 'Edit as JSON' : 'Edit as form'}
                         </Button>
                     </Affix>

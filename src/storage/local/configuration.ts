@@ -46,7 +46,7 @@ export type UserFacingConfigurationType = {
          */
         collectorUrl: string
         /**
-         * @description List of browser events to track (if 'interaction' instrumentation is enabled).
+         * @description List of [browser events](https://azuresdkdocs.blob.core.windows.net/$web/javascript/azure-app-configuration/1.1.0/interfaces/htmlelementeventmap.html) to track (if 'interaction' instrumentation is enabled).
          * @example ["submit", "click", "keypress"]
          */
         events: ConfigurationType["events"]
@@ -105,7 +105,12 @@ export class UserFacingConfiguration implements UserFacingConfigurationType {
     constructor(params: Partial<UserFacingConfigurationType> = {}) {
         Object.entries(this).forEach(([key, value]) => {
             if (params.hasOwnProperty(key)) {
-                this[key] = params[key];
+
+                if (params[key].constructor == this[key].constructor) {
+                    this[key] = params[key];
+                } else {
+                    throw new Error(`Invalid value for ${key}: ${params[key]}`)
+                }
             }
         })
     }
@@ -191,7 +196,6 @@ export class Configuration implements ConfigurationType {
     instrumentations = ['fetch', 'load', 'interaction'] as ("load" | "fetch" | "interaction")[];
 
     constructor({ headers, attributes, ...params }: ConfigurationProps = {}) {
-        console.log('constructor being called at all ever?', headers, attributes, params)
         if (headers instanceof Map) {
             this.headers = headers;
         } else if (typeof headers == 'object') {
@@ -207,10 +211,13 @@ export class Configuration implements ConfigurationType {
         Object.entries(this).forEach(([key, value]) => {
 
             if (params.hasOwnProperty(key)) {
-                this[key] = params[key];
+                if (params[key].constructor == this[key].constructor) {
+                    this[key] = params[key];
+                } else {
+                    throw new Error(`Invalid value for ${key}: ${params[key]}`)
+                }
             }
         })
-        console.log('after being constructed', this)
     }
 }
 

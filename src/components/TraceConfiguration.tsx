@@ -117,7 +117,7 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
                             <Anchor
                                 target="_blank"
                                 size="xs"
-                                href="https://microsoft.github.io/PowerBI-JavaScript/interfaces/_node_modules_typedoc_node_modules_typescript_lib_lib_dom_d_.htmlelementeventmap.html">
+                                href="https://azuresdkdocs.blob.core.windows.net/$web/javascript/azure-app-configuration/1.1.0/interfaces/htmlelementeventmap.html">
                                 HTMLElementEventMap
                             </Anchor>{" "}
                             for a list of valid events.
