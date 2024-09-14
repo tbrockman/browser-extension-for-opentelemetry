@@ -1,7 +1,6 @@
 import { Box, useComputedColorScheme } from "@mantine/core";
 import ReactCodeMirror from "@uiw/react-codemirror";
 import { useEffect, useState } from "react";
-import { vscodeDark, vscodeLight } from "@uiw/codemirror-theme-vscode";
 import { useLocalStorage } from "~hooks/storage";
 import { useDebouncedValue } from "@mantine/hooks";
 import { setLocalStorage } from "~storage/local";
@@ -15,15 +14,21 @@ import {
     jsonSchemaHover,
     jsonCompletion,
     stateExtensions,
-    handleRefresh
+    handleRefresh,
 } from "codemirror-json-schema";
-
+import { getHoverTexts, formatHover } from "~components/Editor/hover";
+import { themeDark, themeLight } from "./theme";
+import './index.css';
+import { HighlightStyle } from "@codemirror/language";
 
 export const Editor = () => {
     const computedColorScheme = useComputedColorScheme('dark');
     const { configText } = useLocalStorage(['configText']);
     const [renderedConfig, setRenderedConfig] = useState(configText);
     const [debouncedConfig] = useDebouncedValue(renderedConfig, 500);
+    const theme = computedColorScheme == 'dark' ? themeDark : themeLight
+    // second element returned by createTheme is the syntaxHighlighting extension
+    const highlighter = theme[1].find(item => item.value instanceof HighlightStyle)?.value;
 
     // TODO: probably make saving explicit instead of having autosave (or some option)
     const onChange = (val, viewUpdate) => {
@@ -50,7 +55,7 @@ export const Editor = () => {
             <ReactCodeMirror
                 value={renderedConfig}
                 height="100%"
-                theme={computedColorScheme == 'dark' ? vscodeDark : vscodeLight}
+                theme={theme}
                 extensions={[
                     EditorView.lineWrapping,
                     json(),
@@ -64,7 +69,8 @@ export const Editor = () => {
                     jsonLanguage.data.of({
                         autocomplete: jsonCompletion(),
                     }),
-                    hoverTooltip(jsonSchemaHover()),
+                    // @ts-ignore
+                    hoverTooltip(jsonSchemaHover({ getHoverTexts, formatHover: formatHover(highlighter) })),
                     // @ts-ignore
                     stateExtensions(schema)]}
                 onChange={onChange}
