@@ -6,19 +6,3 @@
     padding-top: 0;
     min-height: 402px;
 }
-
-.cm-editor {
-    background-color: var(--mantine-color-body);
-}
-
-.cm-editor .cm-content {
-    padding: 0;
-}
-
-.cm-editor .cm-gutters {
-    background-color: var(--mantine-color-body);
-}
-
-.cm-editor.cm-focused {
-    outline: none;
-}

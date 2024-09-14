@@ -4,67 +4,67 @@
  */
 export type UserFacingConfigurationType = {
     /**
-     * @description Whether the extension is enabled
+     * @description Whether the extension is enabled.
      */
     enabled: boolean
     /**
-     * @description List of [match patterns](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns) for which the extension should be enabled
+     * @description List of [match patterns](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns) for which the extension should be enabled.
      * @example ["http://localhost/*", "https://*.example.com/*"]
      */
     matchPatterns: string[]
     /**
-     * @description [Attributes](https://opentelemetry.io/docs/specs/semconv/general/attributes/) to be added to all traces
+     * @description [Attributes](https://opentelemetry.io/docs/specs/semconv/general/attributes/) to be added to all traces.
      * @example { "key": "value" }
      */
     attributes: Record<string, string>
     /**
-     * @description HTTP headers to be added to requests when exporting collected telemetry
+     * @description HTTP headers to be added to requests when exporting collected telemetry.
      * @example { "x-example-header": "value" }
      */
     headers: Record<string, string>
     /**
-     * @description List of regular expression to match outbound request URLs for which trace context should be forwarded
+     * @description List of regular expressions to match against outbound request URLs for which trace context should be forwarded.
      * @example ["https://example.com/.*"]
      */
     propagateTo: string[]
     /**
-     * @description Maximum number of concurrent requests than can be queued for export
+     * @description Maximum number of concurrent requests that can be queued for export.
      * @example 50
      */
     concurrencyLimit: number
     /**
-     * @description Configuration for trace telemetry
+     * @description Configuration for trace telemetry.
      */
     tracing: {
         /**
-         * @description Whether tracing is enabled
+         * @description Whether tracing is enabled.
          */
         enabled: boolean
         /**
-         * @description URL to which traces should be exported. Must accept Protobuf-encoded OTLP traces over HTTP
+         * @description URL to which traces should be exported. Must accept Protobuf-encoded OTLP traces over HTTP.
          * @example "http://localhost:4318/v1/traces"
          */
         collectorUrl: string
         /**
-         * @description List of browser events to track (if 'interaction' instrumentation is enabled)
+         * @description List of browser events to track (if 'interaction' instrumentation is enabled).
          * @example ["submit", "click", "keypress"]
          */
         events: ConfigurationType["events"]
         /**
-         * @description List of automatic instrumentations to enable
+         * @description List of automatic instrumentations to enable.
          */
         instrumentations: ConfigurationType["instrumentations"]
     },
     /**
-     * @description Configuration for logging telemetry
+     * @description Configuration for logging telemetry.
      */
     logging: {
         /**
-         * @description Whether logging is enabled
+         * @description Whether logging is enabled.
          */
         enabled: boolean
         /**
-         * @description URL to which logs should be exported. Must accept Protobuf-encoded OTLP logs over HTTP
+         * @description URL to which logs should be exported. Must accept Protobuf-encoded OTLP logs over HTTP.
          * @example "http://localhost:4318/v1/logs"
          */
         collectorUrl: string
