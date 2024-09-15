@@ -23,7 +23,7 @@ import { HighlightStyle } from "@codemirror/language";
 import { de } from "~utils/serde";
 import { UserFacingConfiguration } from "~storage/local/configuration";
 import { consoleProxy } from "~utils/logging";
-import { matchPatternsChanged } from "~utils/match-pattern";
+import { syncMatchPatternPermissions } from "~utils/match-pattern";
 import type { MatchPatternError } from "~storage/local/internal";
 
 export const Editor = () => {
@@ -61,7 +61,7 @@ export const Editor = () => {
                 const newConfig = de(debouncedConfig, UserFacingConfiguration);
 
                 if (newConfig.matchPatterns !== matchPatterns) {
-                    await matchPatternsChanged({ prev: matchPatterns, next: newConfig.matchPatterns, setErrors: setPatternErrors });
+                    await syncMatchPatternPermissions({ prev: matchPatterns, next: newConfig.matchPatterns });
                 }
 
             } catch (e) {

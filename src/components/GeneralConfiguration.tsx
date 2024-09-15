@@ -3,7 +3,7 @@ import { TagsInput } from "~components/TagsInput";
 import ColorModeSwitch from "~components/ColorModeSwitch";
 import { useLocalStorage } from "~hooks/storage";
 import { defaultOptions } from "~utils/options";
-import { matchPatternsChanged } from "~utils/match-pattern";
+import { syncMatchPatternPermissions } from "~utils/match-pattern";
 import { setLocalStorage } from "~storage/local";
 import type { MatchPatternError } from "~storage/local/internal";
 import { colonSeparatedStringsToMap, mapToColonSeparatedStrings } from "~utils/string";
@@ -37,15 +37,9 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
     const attributesStrings = mapToColonSeparatedStrings(attributes)
     const pillErrors = patternErrorsToPills(matchPatterns, matchPatternErrors)
 
-    consoleProxy.log('configMode in GeneralConfiguration', configMode)
-
-    const setPatternErrors = (errors: MatchPatternError[]) => {
-        setLocalStorage({ matchPatternErrors: errors })
-    }
-
     const onEnabledUrlsChange = async (values: string[]) => {
         setLocalStorage({ matchPatterns: values })
-        matchPatternsChanged({ prev: matchPatterns, next: values, setErrors: setPatternErrors })
+        syncMatchPatternPermissions({ prev: matchPatterns, next: values })
     }
 
     return (

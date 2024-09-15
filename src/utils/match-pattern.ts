@@ -5,15 +5,47 @@ import type { MatchPatternError } from '~storage/local/internal';
 
 // TODO: potentially link to testing website somewhere: https://clearlylocal.github.io/browser-extension-url-match/
 
-// this function assumes it's possible for us to end up in an inconsistent state,
-// so our best effort is to remove permissions for removed patterns
-// and request permissions for all currently valid patterns
-type MatchPatternsChangedArgs = {
+type SyncMatchPatternPermissionsArgs = {
     prev: string[],
     next: string[],
-    setErrors: (errors: MatchPatternError[]) => void,
 }
-const matchPatternsChanged = async ({ prev, next, setErrors }: MatchPatternsChangedArgs) => {
+
+export const validatePatternPermissions = async (patterns: string[]): Promise<MatchPatternError[]> => {
+    // find which patterns are currently missing permissions
+    const contains = await Promise.all(patterns.map(async (pattern) => {
+        let t = await chrome.permissions.contains({
+            origins: [pattern]
+        })
+        return [t, pattern]
+    }))
+
+    return contains.filter(([t,]) => !t).map(([, pat]) => ({
+        pattern: pat,
+        error: 'Permission missing or not granted'
+    })) as MatchPatternError[]
+}
+
+export const validatePatterns = (patterns: string[]): [string[], MatchPatternError[]] => {
+    let validPatterns = []
+    let patternErrors: MatchPatternError[] = []
+
+    // verify added patterns are valid
+    for (const pattern of patterns) {
+        const matcher = matchPattern(pattern, { ...presets.chrome });
+
+        if (!matcher.valid) {
+            patternErrors.push({
+                pattern,
+                error: matcher.error.message
+            })
+        } else {
+            validPatterns.push(pattern)
+        }
+    }
+    return [validPatterns, patternErrors]
+}
+
+export const syncMatchPatternPermissions = async ({ prev, next }: SyncMatchPatternPermissionsArgs) => {
     consoleProxy.debug('match patterns changed', { prev, next })
 
     const removed = prev.filter((x) => !next.includes(x))
@@ -31,22 +63,7 @@ const matchPatternsChanged = async ({ prev, next, setErrors }: MatchPatternsChan
         consoleProxy.error('error removing permissions', e)
     }
 
-    let validPatterns = []
-    let patternErrors: MatchPatternError[] = []
-
-    // verify added patterns are valid
-    for (const pattern of next) {
-        const matcher = matchPattern(pattern, { ...presets.chrome });
-
-        if (!matcher.valid) {
-            patternErrors.push({
-                pattern,
-                error: matcher.error.message
-            })
-        } else {
-            validPatterns.push(pattern)
-        }
-    }
+    let [validPatterns, _] = validatePatterns(next)
 
     consoleProxy.debug('requesting permissions for patterns', validPatterns)
 
@@ -58,28 +75,9 @@ const matchPatternsChanged = async ({ prev, next, setErrors }: MatchPatternsChan
     } catch (e) {
         consoleProxy.error('error requesting or checking permissions', e)
     }
-
-    // find which patterns are currently missing permissions
-    const contains = await Promise.all(validPatterns.map(async (pattern) => {
-        let t = await chrome.permissions.contains({
-            origins: [pattern]
-        })
-        return [t, pattern]
-    }))
-    // TODO: clear match pattern errors when permissions are granted outside of events where we check them
-    validPatterns = contains.filter(([t,]) => t).map(([, pat]) => pat)
-    let errors = contains.filter(([t,]) => !t).map(([, pat]) => ({
-        pattern: pat,
-        error: 'Permission missing or not granted'
-    }))
-    patternErrors = patternErrors.concat(errors)
-
-    consoleProxy.debug('match pattern errors', { patternErrors })
-
-    setErrors(patternErrors)
 }
 
-function match(url: string, patterns: string[], options?: Partial<MatchPatternOptions>) {
+export const match = (url: string, patterns: string[], options?: Partial<MatchPatternOptions>) => {
     for (let pattern of patterns) {
         const matcher = matchPattern(pattern, { ...presets.chrome, ...options });
 
@@ -90,9 +88,4 @@ function match(url: string, patterns: string[], options?: Partial<MatchPatternOp
         }
     }
     return false;
-}
-
-export {
-    match,
-    matchPatternsChanged
 }
