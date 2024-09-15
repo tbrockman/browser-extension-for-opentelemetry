@@ -52,28 +52,27 @@ const matchPatternsChanged = async ({ prev, next, setErrors }: MatchPatternsChan
 
     try {
         // add permissions for added patterns
-        const result = await chrome.permissions.request({
+        await chrome.permissions.request({
             origins: validPatterns
         });
-
-        if (!result) {
-            // find which patterns are currently missing permissions
-            const contains = await Promise.all(validPatterns.map(async (pattern) => {
-                let t = await chrome.permissions.contains({
-                    origins: [pattern]
-                })
-                return [t, pattern]
-            }))
-            validPatterns = contains.filter(([t,]) => t).map(([, pat]) => pat)
-            let errors = contains.filter(([t,]) => !t).map(([, pat]) => ({
-                pattern: pat,
-                error: 'Permission missing or not granted'
-            }))
-            patternErrors = patternErrors.concat(errors)
-        }
     } catch (e) {
         consoleProxy.error('error requesting or checking permissions', e)
     }
+
+    // find which patterns are currently missing permissions
+    const contains = await Promise.all(validPatterns.map(async (pattern) => {
+        let t = await chrome.permissions.contains({
+            origins: [pattern]
+        })
+        return [t, pattern]
+    }))
+    // TODO: clear match pattern errors when permissions are granted outside of events where we check them
+    validPatterns = contains.filter(([t,]) => t).map(([, pat]) => pat)
+    let errors = contains.filter(([t,]) => !t).map(([, pat]) => ({
+        pattern: pat,
+        error: 'Permission missing or not granted'
+    }))
+    patternErrors = patternErrors.concat(errors)
 
     consoleProxy.debug('match pattern errors', { patternErrors })
 

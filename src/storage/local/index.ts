@@ -5,12 +5,12 @@ import { defaultInternalStorage, type InternalStorageType, type MatchPatternErro
 
 
 export type LocalStorageType = ConfigurationType & InternalStorageType;
-export class CombineStorage<T extends object[]> {
+export class Combine<T extends object[]> {
     constructor(types: T) {
         Object.assign(this, ...types);
     }
 }
-export class LocalStorage extends CombineStorage<[ConfigurationType, InternalStorageType]> implements LocalStorageType {
+export class LocalStorage extends Combine<[ConfigurationType, InternalStorageType]> implements LocalStorageType {
     enabled: boolean;
     tracingEnabled: boolean;
     loggingEnabled: boolean;
@@ -34,8 +34,6 @@ export class LocalStorage extends CombineStorage<[ConfigurationType, InternalSto
 }
 
 export const defaultLocalStorage = new LocalStorage([defaultConfiguration, defaultInternalStorage]);
-
-console.log('defaultLocalStorage', defaultLocalStorage)
 
 function parseStorageResponse(response: Record<string, Values>): Record<string, Values> {
     return Object.entries(response).reduce((acc, [key, value]) => {
