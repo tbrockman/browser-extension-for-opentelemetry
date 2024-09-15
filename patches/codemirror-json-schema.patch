@@ -36,6 +36,62 @@ index d4dd9e7e9c8dd643c3ad5956b17e88ff6d4bdfdf..2702a49a602ce1a698113989eb07afa4
  function renderMarkdown(markdown, inline = true) {
      if (!inline)
          return renderer.render(markdown);
+diff --git a/cjs/utils/parse-yaml-document.js b/cjs/utils/parse-yaml-document.js
+index fb135225cf89f84869078e99fcfb68496c4de583..b95fe1fe207c455f8cc61a5c48e24728ba568a52 100644
+--- a/cjs/utils/parse-yaml-document.js
++++ b/cjs/utils/parse-yaml-document.js
+@@ -1,27 +1,27 @@
+-"use strict";
+-/**
+- * Mimics the behavior of `json-source-map`'s `parseJSONDocument` function using codemirror EditorState... for YAML
+- */
+-var __importDefault = (this && this.__importDefault) || function (mod) {
+-    return (mod && mod.__esModule) ? mod : { "default": mod };
+-};
+-Object.defineProperty(exports, "__esModule", { value: true });
+-exports.parseYAMLDocumentState = void 0;
+-const yaml_1 = __importDefault(require("yaml"));
+-const json_pointers_1 = require("./json-pointers");
+-const constants_1 = require("../constants");
+-/**
+- * Return parsed data and YAML pointers for a given codemirror EditorState
+- * @group Utilities
+- */
++// "use strict";
++// /**
++//  * Mimics the behavior of `json-source-map`'s `parseJSONDocument` function using codemirror EditorState... for YAML
++//  */
++// var __importDefault = (this && this.__importDefault) || function (mod) {
++//     return (mod && mod.__esModule) ? mod : { "default": mod };
++// };
++// Object.defineProperty(exports, "__esModule", { value: true });
++// exports.parseYAMLDocumentState = void 0;
++// const yaml_1 = __importDefault(require("yaml"));
++// const json_pointers_1 = require("./json-pointers");
++// const constants_1 = require("../constants");
++// /**
++//  * Return parsed data and YAML pointers for a given codemirror EditorState
++//  * @group Utilities
++//  */
+ function parseYAMLDocumentState(state) {
+-    let data = null;
+-    try {
+-        data = yaml_1.default.parse(state.doc.toString());
+-        // return pointers regardless of whether YAML.parse succeeds
+-    }
+-    catch (_a) { }
+-    const pointers = (0, json_pointers_1.getJsonPointers)(state, constants_1.MODES.YAML);
+-    return { data, pointers };
++    // let data = null;
++    // try {
++    //     data = yaml_1.default.parse(state.doc.toString());
++    //     // return pointers regardless of whether YAML.parse succeeds
++    // }
++    // catch (_a) { }
++    // const pointers = (0, json_pointers_1.getJsonPointers)(state, constants_1.MODES.YAML);
++    // return { data, pointers };
+ }
+ exports.parseYAMLDocumentState = parseYAMLDocumentState;
 diff --git a/dist/utils/markdown.js b/dist/utils/markdown.js
 index b85b66417e4c5264f087dbe39c62a1e3077d9910..f6f921b42a2ae956cabb6f3b72587fa89c79b358 100644
 --- a/dist/utils/markdown.js
@@ -72,3 +128,65 @@ index b85b66417e4c5264f087dbe39c62a1e3077d9910..f6f921b42a2ae956cabb6f3b72587fa8
  export function renderMarkdown(markdown, inline = true) {
      if (!inline)
          return renderer.render(markdown);
+diff --git a/dist/utils/parse-yaml-document.js b/dist/utils/parse-yaml-document.js
+index 6710a512036d2a12416e52c2a579af46cb6f40e4..efc6fe88f4d66409803dcf911296e77c74010090 100644
+--- a/dist/utils/parse-yaml-document.js
++++ b/dist/utils/parse-yaml-document.js
+@@ -1,20 +1,20 @@
+-/**
+- * Mimics the behavior of `json-source-map`'s `parseJSONDocument` function using codemirror EditorState... for YAML
+- */
+-import YAML from "yaml";
+-import { getJsonPointers } from "./json-pointers";
+-import { MODES } from "../constants";
+-/**
+- * Return parsed data and YAML pointers for a given codemirror EditorState
+- * @group Utilities
+- */
+-export function parseYAMLDocumentState(state) {
+-    let data = null;
+-    try {
+-        data = YAML.parse(state.doc.toString());
+-        // return pointers regardless of whether YAML.parse succeeds
+-    }
+-    catch (_a) { }
+-    const pointers = getJsonPointers(state, MODES.YAML);
+-    return { data, pointers };
+-}
++// /**
++//  * Mimics the behavior of `json-source-map`'s `parseJSONDocument` function using codemirror EditorState... for YAML
++//  */
++// import YAML from "yaml";
++// import { getJsonPointers } from "./json-pointers";
++// import { MODES } from "../constants";
++// /**
++//  * Return parsed data and YAML pointers for a given codemirror EditorState
++//  * @group Utilities
++//  */
++// export function parseYAMLDocumentState(state) {
++//     // let data = null;
++//     // try {
++//     //     data = YAML.parse(state.doc.toString());
++//     //     // return pointers regardless of whether YAML.parse succeeds
++//     // }
++//     // catch (_a) { }
++//     // const pointers = getJsonPointers(state, MODES.YAML);
++//     // return { data, pointers };
++// }
+diff --git a/dist/yaml/hover.js b/dist/yaml/hover.js
+index 34a58b6ac8ad4ca686c3ecbb819cf771ccd7d9f9..fd9fca9176dc7291fa1ed84e530c41cca01729ad 100644
+--- a/dist/yaml/hover.js
++++ b/dist/yaml/hover.js
+@@ -6,8 +6,8 @@ import { MODES } from "../constants";
+  * @group Codemirror Extensions
+  */
+ export function yamlSchemaHover(options) {
+-    const hover = new JSONHover(Object.assign(Object.assign({}, options), { parser: YAML.parse, mode: MODES.YAML }));
+-    return async function jsonDoHover(view, pos, side) {
+-        return hover.doHover(view, pos, side);
+-    };
++    // const hover = new JSONHover(Object.assign(Object.assign({}, options), { parser: YAML.parse, mode: MODES.YAML }));
++    // return async function jsonDoHover(view, pos, side) {
++    //     return hover.doHover(view, pos, side);
++    // };
+ }

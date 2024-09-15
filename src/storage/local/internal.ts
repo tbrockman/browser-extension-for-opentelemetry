@@ -19,7 +19,7 @@ export class InternalStorage implements InternalStorageType {
     logExportErrors?: string[]
     metricExportErrors?: string[]
     configMode: 'visual' | 'code' = 'visual'
-    configText: string = ''
+    configText: string = '{}'
 }
 
 export const defaultInternalStorage = new InternalStorage();
