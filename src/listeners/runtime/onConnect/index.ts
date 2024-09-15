@@ -56,7 +56,7 @@ chrome.runtime.onConnect.addListener(async (p: TypedPort<Partial<LocalStorageTyp
                 const body = new Blob([new Uint8Array(bytes)], { type: 'application/x-protobuf' });
 
                 try {
-                    consoleProxy.log('sending message', { url, headers })
+                    consoleProxy.debug('sending message', { url, headers })
                     // TODO: retries and timeouts
                     await fetch(url, {
                         method: 'POST',

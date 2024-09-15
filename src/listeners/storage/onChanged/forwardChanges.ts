@@ -3,6 +3,9 @@ import { consoleProxy } from "~utils/logging"
 import { getPorts } from "~utils/ports"
 import { de } from "~utils/serde"
 
+/**
+ * Forwards storage changes to all content scripts.
+ */
 chrome.storage.onChanged.addListener((event: Record<keyof LocalStorage, chrome.storage.StorageChange>, area) => {
     consoleProxy.debug('storage changed', { event })
 

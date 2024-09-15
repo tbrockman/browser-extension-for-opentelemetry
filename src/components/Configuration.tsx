@@ -26,8 +26,6 @@ export default function Configuration() {
     const portalTargetRef = useRef<HTMLDivElement>(null)
     const [refsInitialized, setRefsInitialized] = useState(false)
 
-    consoleProxy.log('configMode', configMode)
-
     const handleConfigModeAffixClick = () => {
         setLocalStorage({ configMode: configMode === 'visual' ? 'code' : 'visual' })
     }

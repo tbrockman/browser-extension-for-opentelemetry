@@ -3,10 +3,23 @@ import type { FoundCursorData } from "codemirror-json-schema/dist/features/hover
 import { parser } from "@lezer/json"
 import { HighlightStyle } from "@codemirror/language"
 import { highlightCode, tags } from "@lezer/highlight"
+
 const renderer = md({
     linkify: true,
     typographer: true,
 });
+
+var defaultRender = renderer.renderer.rules.link_open || function (tokens, idx, options, env, self) {
+    return self.renderToken(tokens, idx, options);
+};
+
+renderer.renderer.rules.link_open = function (tokens, idx, options, env, self) {
+    // Add a new `target` attribute, or replace the value of the existing one.
+    tokens[idx].attrSet('target', '_blank');
+
+    // Pass the token to the default renderer.
+    return defaultRender(tokens, idx, options, env, self);
+};
 
 export const renderExample = (jsonExample: any, highlighter: HighlightStyle) => {
     let result = document.createElement("pre")

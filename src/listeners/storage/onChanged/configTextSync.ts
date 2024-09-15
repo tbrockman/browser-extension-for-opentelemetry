@@ -4,6 +4,9 @@ import { LocalStorage } from "~storage/local";
 import { Configuration, UserFacingConfiguration } from "~storage/local/configuration";
 import { consoleProxy } from "~utils/logging";
 
+/**
+ * Syncs changes between configText and config storage.
+ */
 chrome.storage.onChanged.addListener(async (event: Record<keyof LocalStorage, chrome.storage.StorageChange>, area) => {
     const { configText } = event
 
