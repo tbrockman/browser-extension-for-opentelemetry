@@ -1,3 +1,5 @@
+import { consoleProxy } from "~utils/logging"
+
 /**
  * @title Configuration
  * @description User-facing settings for the extension
@@ -109,7 +111,7 @@ export class UserFacingConfiguration implements UserFacingConfigurationType {
                 if (params[key].constructor == this[key].constructor) {
                     this[key] = params[key];
                 } else {
-                    throw new Error(`Invalid value for ${key}: ${params[key]}`)
+                    consoleProxy.warn(`Invalid value for ${key}: ${params[key]}`)
                 }
             }
         })
@@ -214,7 +216,7 @@ export class Configuration implements ConfigurationType {
                 if (params[key].constructor == this[key].constructor) {
                     this[key] = params[key];
                 } else {
-                    throw new Error(`Invalid value for ${key}: ${params[key]}`)
+                    consoleProxy.warn(`Invalid value for ${key}: ${params[key]}`)
                 }
             }
         })
