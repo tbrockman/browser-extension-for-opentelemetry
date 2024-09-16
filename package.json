@@ -56,7 +56,7 @@
     "@types/chrome": "0.0.271",
     "@types/jest": "^29.5.12",
     "@types/mocha": "^10.0.8",
-    "@types/node": "22.5.4",
+    "@types/node": "22.5.5",
     "@types/react": "18.2.61",
     "@types/react-dom": "18.2.19",
     "cross-env": "^7.0.3",
