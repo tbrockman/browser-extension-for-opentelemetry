@@ -55,7 +55,7 @@
     "@plasmohq/parcel-config": "^0.41.0",
     "@types/chrome": "0.0.271",
     "@types/jest": "^29.5.12",
-    "@types/mocha": "^10.0.7",
+    "@types/mocha": "^10.0.8",
     "@types/node": "22.5.4",
     "@types/react": "18.2.61",
     "@types/react-dom": "18.2.19",
