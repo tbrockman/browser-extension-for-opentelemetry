@@ -97,7 +97,7 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                         onChange={(attributes) => setLocalStorage({ attributes })}
                         label="Resource attributes"
                         disabled={!enabled}
-                        description="Attach additional attributes on all exported logs/traces."
+                        description={<>Attach additional <Anchor target="_blank" size="xs" href="https://opentelemetry.io/docs/specs/semconv/general/attributes/">attributes</Anchor> on all exported logs/traces.</>}
                         tableProps={{
                             withRowBorders: false,
                             withColumnBorders: true,
@@ -120,24 +120,6 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                         valuePlaceholder="value"
                         fullWidth
                     />
-                    {/*
-                    <TagsInput
-                        value={headersStrings}
-                        onValueRemoved={(index) => {
-                            headersStrings.splice(index, 1)
-                            setLocalStorage({ headers: colonSeparatedStringsToMap(headersStrings) })
-                        }}
-                        onValueAdded={(key: string, value: string) => {
-                            headersStrings.push(`${key}:${value}`)
-                            setLocalStorage({ headers: colonSeparatedStringsToMap(headersStrings) })
-                        }}
-                        label="Request headers"
-                        disabled={!enabled}
-                        description="Include additional HTTP headers on all export requests."
-                        placeholder={headersStrings.length == 0 ? 'key:value, key2:value2' : ''}
-                        delimiter={","}
-                        keyValueMode={true}
-                    /> */}
                 </Group>
             }
             {configMode === 'code' &&
