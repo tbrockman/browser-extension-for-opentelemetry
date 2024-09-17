@@ -49,9 +49,9 @@ This extension is compatible with [all major browsers](https://developer.mozilla
 
 ### Why?
 
-The extension background script exports any Protobuf-encoded OTLP data that it receives from the injected content script that it is able to parse. 
+The extension background script exports any Protobuf-encoded OTLP data that it receives from the injected content script that it's able to parse. 
 
-While some mitigations are implemented, the data can be tampered with by any malicious Javascript running in the same context as the content script, and as such the integrity of the data cannot be guaranteed. This may result in minor frustrations like storing garbage data or worse depending on how your backend decodes Protobuf data. 
+While some mitigations are implemented, the data can always be tampered with by any malicious Javascript running in the same context as the content script, and as such the integrity of the data cannot be guaranteed. This may result in minor frustrations like storing garbage or worse depending on how your backend decodes Protobuf data. 
 
 So, just as a general safety measure, it's probably best if you don't allow the extension to run in untrusted pages.
 
