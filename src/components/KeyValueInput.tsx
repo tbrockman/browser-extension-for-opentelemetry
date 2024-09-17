@@ -90,21 +90,20 @@ export const KeyValueInput = ({ value, onChange, label, description, disabled, t
         if (oldKey != newKey) {
             value.delete(oldKey)
         }
-        value.set(newKey, newValue)
+        newKey && value.set(newKey, newValue)
         onChange(value)
         setFocusTarget({ key: newKey, target: oldKey == newKey ? 'value' : 'key' })
     }
 
     const onRemove = (key: string) => {
-        consoleProxy.log('deleting key', key)
         value.delete(key)
-        consoleProxy.log('onchange value', value)
         onChange(value)
 
         if (focusTarget?.key == key) {
             setFocusTarget({ key: '', target: 'key' })
         }
     }
+
     let i = 0;
     value.forEach((val, key) => {
         rows.push(<KeyValueRow _key={key} key={i} value={val} onChange={rowOnChange} onRemove={() => onRemove(key)} shouldFocus={focusTarget?.key == key ? focusTarget.target : undefined} keyPlaceholder={keyPlaceholder} valuePlaceholder={valuePlaceholder} />)
