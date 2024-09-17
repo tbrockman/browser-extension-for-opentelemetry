@@ -206,8 +206,8 @@ export class Configuration implements ConfigurationType {
 
         if (attributes instanceof Map) {
             this.attributes = attributes;
-        } else if (typeof this.attributes == 'object') {
-            this.attributes = new Map(Object.entries(this.attributes));
+        } else if (typeof attributes == 'object') {
+            this.attributes = new Map(Object.entries(attributes));
         }
 
         Object.entries(this).forEach(([key, value]) => {

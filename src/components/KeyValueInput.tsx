@@ -20,6 +20,8 @@ export type KeyValueRowProps = {
     valuePlaceholder?: string
 }
 
+// TODO: backspace should remove the row if the key is empty
+// TODO: backspace should focus key input if the value is empty
 export const KeyValueRow = ({ _key: key, value, onChange, onRemove, disabled, shouldFocus, keyPlaceholder, valuePlaceholder }: KeyValueRowProps) => {
 
     const keyOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {

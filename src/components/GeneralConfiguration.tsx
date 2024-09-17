@@ -99,12 +99,11 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                         disabled={!enabled}
                         description="Attach additional attributes on all exported logs/traces."
                         tableProps={{
-                            highlightOnHover: true,
                             withRowBorders: false,
                             withColumnBorders: true,
                         }}
-                        keyPlaceholder="Key"
-                        valuePlaceholder="Value"
+                        keyPlaceholder="key"
+                        valuePlaceholder="value"
                         fullWidth
                     />
                     <KeyValueInput
@@ -114,12 +113,11 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                         disabled={!enabled}
                         description="Include additional HTTP headers on all export requests."
                         tableProps={{
-                            highlightOnHover: true,
                             withRowBorders: false,
                             withColumnBorders: true,
                         }}
-                        keyPlaceholder="Key"
-                        valuePlaceholder="Value"
+                        keyPlaceholder="key"
+                        valuePlaceholder="value"
                         fullWidth
                     />
                     {/*
