@@ -19,7 +19,7 @@ export const replacer = (key, value) => {
     return value;
 }
 
-export const reviver = (key, value) => {
+export const reviver = (_, value) => {
     if (typeof value === 'object' && value !== null) {
         if (value.dataType === 'Map') {
             return new Map(value.value);

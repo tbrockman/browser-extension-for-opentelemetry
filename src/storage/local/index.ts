@@ -35,7 +35,7 @@ export class LocalStorage extends Combine<[ConfigurationType, InternalStorageTyp
 
 export const defaultLocalStorage = new LocalStorage([defaultConfiguration, defaultInternalStorage]);
 
-function parseStorageResponse(response: Record<string, Values>): Record<string, Values> {
+export const parseStorageResponse = (response: Record<string, Values>): Record<string, Values> => {
     return Object.entries(response).reduce((acc, [key, value]) => {
 
         if (typeof value !== 'string') {

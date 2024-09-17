@@ -138,7 +138,7 @@ export class UserFacingConfiguration implements UserFacingConfigurationType {
         })
     }
 
-    serialize(): ConfigurationType {
+    serializable(): ConfigurationType {
         return {
             enabled: this.enabled,
             matchPatterns: this.matchPatterns,

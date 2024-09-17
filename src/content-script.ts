@@ -11,7 +11,7 @@ import { OTLPProtoExporterBrowserBase, getExportRequestProto } from '@openteleme
 import { OTLPExporterError } from '@opentelemetry/otlp-exporter-base';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { ZoneContextManager } from '@opentelemetry/context-zone';
-import { SEMRESATTRS_SERVICE_NAME, SEMRESATTRS_SERVICE_VERSION, SEMRESATTRS_TELEMETRY_SDK_LANGUAGE, SEMRESATTRS_TELEMETRY_SDK_NAME, SEMRESATTRS_TELEMETRY_SDK_VERSION } from '@opentelemetry/semantic-conventions';
+import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION, ATTR_TELEMETRY_SDK_LANGUAGE, ATTR_TELEMETRY_SDK_NAME, ATTR_TELEMETRY_SDK_VERSION, SEMRESATTRS_SERVICE_NAME, SEMRESATTRS_SERVICE_VERSION, SEMRESATTRS_TELEMETRY_SDK_LANGUAGE, SEMRESATTRS_TELEMETRY_SDK_NAME, SEMRESATTRS_TELEMETRY_SDK_VERSION } from '@opentelemetry/semantic-conventions';
 import { Resource } from '@opentelemetry/resources';
 import { B3Propagator } from '@opentelemetry/propagator-b3';
 import { CompositePropagator, W3CTraceContextPropagator } from '@opentelemetry/core';
@@ -20,7 +20,7 @@ import { MessageTypes } from '~types';
 import { consoleProxy } from '~utils/logging';
 import { wrapConsoleWithLoggerProvider } from '~telemetry/logs';
 import type { LocalStorageType } from '~utils/options';
-import { de } from '~utils/serde';
+import { de, reviver } from '~utils/serde';
 
 function createSendOverride<ExportItem, ServiceRequest>(sessionId: string, exporter: OTLPProtoExporterBrowserBase<ExportItem, ServiceRequest>, type: MessageTypes) {
 
@@ -61,11 +61,11 @@ const instrument = (sessionId: string, options: LocalStorageType) => {
     consoleProxy.debug(`instrumenting`, { sessionId, options })
 
     const resource = new Resource({
-        [SEMRESATTRS_SERVICE_NAME]: 'browser-extension-for-opentelemetry',
-        [SEMRESATTRS_SERVICE_VERSION]: '0.0.10', // TODO: replace with package.json version
-        [SEMRESATTRS_TELEMETRY_SDK_LANGUAGE]: 'webjs',
-        [SEMRESATTRS_TELEMETRY_SDK_NAME]: 'opentelemetry',
-        [SEMRESATTRS_TELEMETRY_SDK_VERSION]: '1.22.0', // TODO: replace with resolved version
+        [ATTR_SERVICE_NAME]: 'browser-extension-for-opentelemetry',
+        [ATTR_SERVICE_VERSION]: '0.0.10', // TODO: replace with package.json version
+        [ATTR_TELEMETRY_SDK_LANGUAGE]: 'webjs',
+        [ATTR_TELEMETRY_SDK_NAME]: 'opentelemetry',
+        [ATTR_TELEMETRY_SDK_VERSION]: '1.22.0', // TODO: replace with resolved version
         // 'browser.name': process.env.PLASMO_BROWSER, // TODO: fix why this is undefined
         'extension.session.id': sessionId,
         ...Object.fromEntries(options.attributes.entries())
@@ -200,8 +200,9 @@ export default function injectContentScript({ sessionId, options, retries = 10, 
                     consoleProxy.debug(`received storage changed message from relay`, event.detail)
                     options = {
                         ...options as LocalStorageType,
-                        ...event.detail.data as Partial<LocalStorageType>
+                        ...(event.detail.data || {}) as Partial<LocalStorageType>
                     }
+                    consoleProxy.debug(`re-instrumenting with parsed options`, options)
                     deregisterInstrumentation && deregisterInstrumentation()
                     deregisterInstrumentation = instrument(sessionId, options)
                 }

@@ -1,3 +1,4 @@
+import { parseStorageResponse } from "~storage/local";
 import type { PortMessage, TypedPort } from "~types";
 import { consoleProxy } from "~utils/logging";
 import type { LocalStorageType } from "~utils/options";
@@ -34,7 +35,11 @@ export default function injectRelay({ sessionId }: InjectRelayArgs) {
     })
 
     port.onMessage.addListener((data) => {
-        consoleProxy.debug(`received message from background script`, data);
+        // TODO: don't just assume every message is a storage change
+        // TODO: filter out forwarding unnecessary storage change events (which may leak sensitive data)
+        consoleProxy.debug(`received message to relay from background script`, data);
+        data = parseStorageResponse(data)
+        consoleProxy.debug(`deserialized data from background script`, data);
         const event = new CustomEvent(fromBackground, {
             detail: { type: 'storageChanged', data }
         })

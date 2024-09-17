@@ -38,6 +38,22 @@
 
 This extension is compatible with [all major browsers](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/scripting/executeScript#browser_compatibility) as of Firefox 128! 🎉
 
+## Architecture
+
+`TODO`
+
+## Security considerations
+
+> [!WARNING]
+> The extension background script exports any Protobuf-encoded OTLP data that it receives from the injected content script that it is able to parse. 
+
+While some mitigations are implemented, the data can be tampered with by any malicious Javascript running in the same context as the content script, and as such the integrity of the data cannot be guaranteed. This may result in minor frustrations like storing garbage data or worse depending on how your backend decodes Protobuf data. 
+
+So, just as a general safety measure:
+
+> [!CAUTION]
+> Don't run this extension on webpages you don't trust
+
 ## Developing
 
 Clone the repository:

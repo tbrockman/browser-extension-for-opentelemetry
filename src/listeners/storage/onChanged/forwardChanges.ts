@@ -10,7 +10,7 @@ chrome.storage.onChanged.addListener((event: Record<keyof LocalStorage, chrome.s
     consoleProxy.debug('storage changed', { event })
 
     const parsed = Object.entries(event).reduce((acc, [k, v]) => {
-        return { ...acc, [k]: de(v.newValue) }
+        return { ...acc, [k]: v.newValue }
     }, {})
 
     consoleProxy.debug('storage parsed', { parsed })

@@ -1,6 +1,6 @@
 import { consoleProxy } from '~utils/logging'
-import injectContentScript from 'inlinefunc:./content-script'
-import injectRelay from 'inlinefunc:./message-relay'
+import injectContentScript from 'inlinefunc:content-script'
+import injectRelay from 'inlinefunc:message-relay'
 import { getOptions } from '~utils/options'
 import { match } from '~utils/match-pattern'
 import { ser } from '~utils/serde'

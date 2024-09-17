@@ -15,7 +15,7 @@ chrome.storage.onChanged.addListener(async (event: Record<keyof LocalStorage, ch
         try {
             const config = de<UserFacingConfiguration>(de(configText.newValue), UserFacingConfiguration)
             consoleProxy.debug('deserialized config', config)
-            await setLocalStorage(config.serialize())
+            await setLocalStorage(config.serializable())
         } catch (e) {
             consoleProxy.error('failed to deserialize config', e)
         }
