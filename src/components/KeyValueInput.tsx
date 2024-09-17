@@ -118,7 +118,7 @@ export const KeyValueInput = ({ value, onChange, label, description, disabled, t
         <Stack gap={0} style={fullWidth && { width: '100%' }}>
             <Stack gap={0} style={{ marginBottom: 'calc(var(--mantine-spacing-xs) / 2)' }}>
                 <Text component="label" size='sm' fw='500'>{label}</Text>
-                <Text size="xs" c="gray">{description}</Text>
+                <Text size="xs" c="var(--mantine-color-dimmed)">{description}</Text>
             </Stack>
             <Table aria-disabled={disabled} {...tableProps}>
                 <Table.Tbody
