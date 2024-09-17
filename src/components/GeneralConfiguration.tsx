@@ -6,9 +6,8 @@ import { defaultOptions } from "~utils/options";
 import { syncMatchPatternPermissions } from "~utils/match-pattern";
 import { setLocalStorage } from "~storage/local";
 import type { MatchPatternError } from "~storage/local/internal";
-import { colonSeparatedStringsToMap, mapToColonSeparatedStrings } from "~utils/string";
-import { Editor } from "./Editor";
-import { consoleProxy } from "~utils/logging";
+import { Editor } from "~components/Editor";
+import { KeyValueInput } from "~components/KeyValueInput";
 
 type GeneralConfigurationProps = {
     enabled: boolean
@@ -33,8 +32,6 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
         'matchPatternErrors',
         'configMode'
     ])
-    const headersStrings = mapToColonSeparatedStrings(headers)
-    const attributesStrings = mapToColonSeparatedStrings(attributes)
     const pillErrors = patternErrorsToPills(matchPatterns, matchPatternErrors)
 
     const onEnabledUrlsChange = async (values: string[]) => {
@@ -95,31 +92,45 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                         placeholder={matchPatterns.length == 0 ? defaultOptions.matchPatterns.join(', ') : ''}
                         delimiter={","}
                     />
-                    <TagsInput
-                        value={attributesStrings}
-                        onValueRemoved={(index) => {
-                            attributesStrings.splice(index, 1)
-                            setLocalStorage({ attributes: colonSeparatedStringsToMap(attributesStrings) })
-                        }}
-                        onValueAdded={(value) => {
-                            attributesStrings.push(value)
-                            setLocalStorage({ attributes: colonSeparatedStringsToMap(attributesStrings) })
-                        }}
+                    <KeyValueInput
+                        value={attributes}
+                        onChange={(attributes) => setLocalStorage({ attributes })}
                         label="Resource attributes"
                         disabled={!enabled}
                         description="Attach additional attributes on all exported logs/traces."
-                        placeholder={attributesStrings.length == 0 ? 'key:value, key2:value2' : ''}
-                        delimiter={","}
-                        keyValueMode={true}
+                        tableProps={{
+                            highlightOnHover: true,
+                            withRowBorders: false,
+                            withColumnBorders: true,
+                        }}
+                        keyPlaceholder="Key"
+                        valuePlaceholder="Value"
+                        fullWidth
                     />
+                    <KeyValueInput
+                        value={headers}
+                        onChange={(headers) => setLocalStorage({ headers })}
+                        label="Request headers"
+                        disabled={!enabled}
+                        description="Include additional HTTP headers on all export requests."
+                        tableProps={{
+                            highlightOnHover: true,
+                            withRowBorders: false,
+                            withColumnBorders: true,
+                        }}
+                        keyPlaceholder="Key"
+                        valuePlaceholder="Value"
+                        fullWidth
+                    />
+                    {/*
                     <TagsInput
                         value={headersStrings}
                         onValueRemoved={(index) => {
                             headersStrings.splice(index, 1)
                             setLocalStorage({ headers: colonSeparatedStringsToMap(headersStrings) })
                         }}
-                        onValueAdded={(value) => {
-                            headersStrings.push(value)
+                        onValueAdded={(key: string, value: string) => {
+                            headersStrings.push(`${key}:${value}`)
                             setLocalStorage({ headers: colonSeparatedStringsToMap(headersStrings) })
                         }}
                         label="Request headers"
@@ -128,7 +139,7 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                         placeholder={headersStrings.length == 0 ? 'key:value, key2:value2' : ''}
                         delimiter={","}
                         keyValueMode={true}
-                    />
+                    /> */}
                 </Group>
             }
             {configMode === 'code' &&

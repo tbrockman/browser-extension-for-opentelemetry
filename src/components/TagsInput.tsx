@@ -2,26 +2,23 @@ import { Combobox, Pill, PillsInput, Tooltip, useCombobox } from "@mantine/core"
 import { useClickOutside } from "@mantine/hooks";
 import { IconExclamationCircle } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import { parseKeyValuePairs } from "~utils/string";
 
 type PillErrorMap = Map<number, string>
-
 type TagsInputProps = {
     delimiter: string
     description: string | React.ReactNode
     disabled?: boolean
     error?: string
     errors?: PillErrorMap
-    keyValueMode?: boolean
     label: string | React.ReactNode
     placeholder: string
     value: React.ReactNode[] | string[]
     onValueRemoved?: (index: number) => void
-    onValueAdded?: (value: string) => void
+    onValueAdded?: (value: string) => void;
     onTagSelected?: (index: number) => void
 }
 
-export const TagsInput = ({ delimiter, description, disabled, errors, label, placeholder, value, onValueRemoved, onValueAdded, onTagSelected, keyValueMode: kevValueMode = false }: TagsInputProps) => {
+export const TagsInput = ({ delimiter, description, disabled, errors, label, placeholder, value, onValueRemoved, onValueAdded, onTagSelected }: TagsInputProps) => {
     const [selectedIndex, setSelectedIndex] = useState<number>(-1);
     const [pillInputValue, setPillInputValue] = useState<string>('');
     const handleClickOutside = () => setSelectedIndex(-1);
@@ -84,33 +81,24 @@ export const TagsInput = ({ delimiter, description, disabled, errors, label, pla
             : inner
     });
 
-    const handleValueSubmit = (val: string) => {
-        onValueAdded && onValueAdded(val);
+    const handleValueSubmit = (input: string) => {
+        onValueAdded && onValueAdded(input);
     }
-
     const handleValueRemoved = (index: number) => {
         onValueRemoved && onValueRemoved(index);
     }
-
     const handleTagSelected = (index: number) => {
         setSelectedIndex(index);
         onTagSelected && onTagSelected(index);
     }
 
     useEffect(() => {
+        const split = pillInputValue.split(delimiter);
 
-        if (kevValueMode) {
-            const [parsed, remainder] = parseKeyValuePairs(pillInputValue, delimiter);
-            parsed.forEach((value, key) => handleValueSubmit(`${key}:${value}`));
-            setPillInputValue(remainder);
-        } else {
-            const split = pillInputValue.split(delimiter);
-
-            if (split.length > 1) {
-                const last = split.pop();
-                split.forEach((value) => handleValueSubmit(value.trim()));
-                setPillInputValue(last);
-            }
+        if (split.length > 1) {
+            const last = split.pop();
+            split.forEach((value) => onValueAdded(value.trim()));
+            setPillInputValue(last);
         }
     }, [pillInputValue])
 
@@ -140,13 +128,8 @@ export const TagsInput = ({ delimiter, description, disabled, errors, label, pla
                                 else if (event.key === 'Enter') {
 
                                     if (pillInputValue.length > 0) {
-
-                                        const [kvs, _] = parseKeyValuePairs(pillInputValue, delimiter, false);
-
-                                        if (!kevValueMode || kvs.size > 0) {
-                                            handleValueSubmit(pillInputValue);
-                                            setPillInputValue('');
-                                        }
+                                        handleValueSubmit(pillInputValue);
+                                        setPillInputValue('');
                                     }
                                 }
                             }}

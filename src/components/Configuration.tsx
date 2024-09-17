@@ -19,7 +19,6 @@ import GeneralConfiguration from "~components/GeneralConfiguration"
 import { useLocalStorage } from "~hooks/storage"
 import { setLocalStorage } from "~storage/local"
 import { useEffect, useRef, useState } from "react"
-import { consoleProxy } from "~utils/logging"
 
 export default function Configuration() {
     const { enabled, configMode } = useLocalStorage(["enabled", "configMode"])
