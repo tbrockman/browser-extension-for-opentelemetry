@@ -46,13 +46,8 @@ export type UserFacingConfigurationType = {
      * @example 50
      */
     concurrencyLimit: number
-    /**
-     * @description Configuration for trace telemetry.
-     */
+
     tracing: UserFacingTracingConfigurationType,
-    /**
-     * @description Configuration for logging telemetry.
-     */
     logging: UserFacingLoggingConfigurationType,
     // TODO: implement
     // metrics: {
@@ -61,6 +56,9 @@ export type UserFacingConfigurationType = {
     // }
 }
 
+/**
+ * @description Configuration for trace telemetry.
+ */
 export type UserFacingTracingConfigurationType = {
     /**
      * @description Whether tracing is enabled.
@@ -82,6 +80,9 @@ export type UserFacingTracingConfigurationType = {
     instrumentations: ContentScriptConfigurationType["instrumentations"]
 }
 
+/**
+ * @description Configuration for logging telemetry.
+ */
 export type UserFacingLoggingConfigurationType = {
     /**
      * @description Whether logging is enabled.

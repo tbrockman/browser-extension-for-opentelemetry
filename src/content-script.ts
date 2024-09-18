@@ -51,6 +51,7 @@ function createSendOverride<ExportItem, ServiceRequest>(sessionId: string, expor
     }
 }
 
+// TODO: investigate why reinstrumenting isn't working (or whether it can)
 const instrument = (sessionId: string, options: ContentScriptConfigurationType) => {
 
     if (!options || !options.enabled || !options.instrumentations || options.instrumentations.length === 0 || window.__OTEL_BROWSER_EXT_INSTRUMENTATION__) {
@@ -152,7 +153,7 @@ const instrument = (sessionId: string, options: ContentScriptConfigurationType) 
         })
     })
     consoleProxy.debug(`registering instrumentations`, instrumentationsToRegister)
-    window.__OTEL_BROWSER_EXT_INSTRUMENTATION__ = registerInstrumentations({
+    const deregister = registerInstrumentations({
         instrumentations: [
             getWebAutoInstrumentations(instrumentationsToRegister),
         ],
@@ -162,7 +163,7 @@ const instrument = (sessionId: string, options: ContentScriptConfigurationType) 
 
     return () => {
         consoleProxy.log(`deregistering instrumentations`)
-        window.__OTEL_BROWSER_EXT_INSTRUMENTATION__()
+        deregister()
         window.__OTEL_BROWSER_EXT_INSTRUMENTATION__ = undefined
     }
 }

@@ -26,8 +26,6 @@
     "target": "ES6",
     "baseUrl": ".",
     "isolatedModules": true,
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "allowSyntheticDefaultImports": true
   }
 }

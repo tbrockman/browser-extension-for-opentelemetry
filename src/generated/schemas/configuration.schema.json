@@ -64,12 +64,10 @@
       "description": "Maximum number of concurrent requests that can be queued for export."
     },
     "tracing": {
-      "$ref": "#/definitions/UserFacingTracingConfigurationType",
-      "description": "Configuration for trace telemetry."
+      "$ref": "#/definitions/UserFacingTracingConfigurationType"
     },
     "logging": {
-      "$ref": "#/definitions/UserFacingLoggingConfigurationType",
-      "description": "Configuration for logging telemetry."
+      "$ref": "#/definitions/UserFacingLoggingConfigurationType"
     }
   },
   "required": [
@@ -240,7 +238,8 @@
         "events",
         "instrumentations"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "description": "Configuration for trace telemetry."
     },
     "UserFacingLoggingConfigurationType": {
       "type": "object",
@@ -261,7 +260,8 @@
         "enabled",
         "collectorUrl"
       ],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "description": "Configuration for logging telemetry."
     }
   }
 }

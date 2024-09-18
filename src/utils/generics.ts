@@ -19,3 +19,18 @@ export const assignPartial = <T extends object>(instance: T, params?: Partial<T>
         }
     });
 }
+
+export const pick = <Data extends object, Keys extends keyof Data>(
+    data: Data,
+    keys: Keys[]
+): Pick<Data, Keys> => {
+    const result = {} as Pick<Data, Keys>;
+
+    for (const key of keys) {
+
+        if (Reflect.has(data, key)) {
+            result[key] = data[key];
+        }
+    }
+    return result;
+}
