@@ -1,5 +1,4 @@
 import { getLocalStorage, defaultLocalStorage } from "~storage/local"
-import type { ConfigurationType } from "~storage/local/configuration"
 
 const getOptions = async () => {
     return await getLocalStorage()
@@ -8,8 +7,4 @@ const getOptions = async () => {
 export {
     defaultLocalStorage as defaultOptions,
     getOptions,
-}
-
-export type {
-    ConfigurationType as LocalStorageType
 }

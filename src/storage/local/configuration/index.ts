@@ -1,7 +1,16 @@
 import { defaultBackendConfiguration } from "./backend"
 import { defaultContentScriptConfiguration, type ContentScriptConfigurationType } from "./content-script"
-import { Base } from "~utils/generics"
 import type { ConfigurationType } from "./configuration"
+import { assignPartial } from "~utils/generics";
+
+export { Configuration, defaultConfiguration } from "./configuration";
+export type { ConfigurationType } from "./configuration";
+
+export { BackendConfiguration } from "./backend";
+export type { BackendConfigurationType } from "./backend";
+
+export { ContentScriptConfiguration } from "./content-script";
+export type { ContentScriptConfigurationType } from "./content-script";
 
 /**
  * @title Configuration
@@ -85,11 +94,11 @@ export type UserFacingLoggingConfigurationType = {
     collectorUrl: string
 }
 
-export class UserFacingConfiguration extends Base<UserFacingConfiguration> implements UserFacingConfigurationType {
+export class UserFacingConfiguration implements UserFacingConfigurationType {
     enabled = defaultContentScriptConfiguration.enabled
     matchPatterns = defaultBackendConfiguration.matchPatterns
-    attributes = Object.fromEntries(defaultBackendConfiguration.attributes.entries())
-    headers = Object.fromEntries(defaultBackendConfiguration.headers.entries())
+    attributes: Record<string, string> = Object.fromEntries(defaultBackendConfiguration.attributes.entries())
+    headers: Record<string, string> = Object.fromEntries(defaultBackendConfiguration.headers.entries())
     propagateTo = defaultContentScriptConfiguration.propagateTo
     concurrencyLimit = defaultContentScriptConfiguration.concurrencyLimit
     tracing = {
@@ -101,6 +110,10 @@ export class UserFacingConfiguration extends Base<UserFacingConfiguration> imple
     logging = {
         enabled: defaultContentScriptConfiguration.loggingEnabled,
         collectorUrl: defaultBackendConfiguration.logCollectorUrl
+    }
+
+    constructor(params?: Partial<UserFacingConfigurationType>) {
+        assignPartial(this, params)
     }
 
     static from(stored: ConfigurationType): UserFacingConfiguration {

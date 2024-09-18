@@ -19,8 +19,8 @@ import { CompositePropagator, W3CTraceContextPropagator } from '@opentelemetry/c
 import { MessageTypes } from '~types';
 import { consoleProxy } from '~utils/logging';
 import { wrapConsoleWithLoggerProvider } from '~telemetry/logs';
-import type { LocalStorageType } from '~utils/options';
 import { de } from '~utils/serde';
+import type { ContentScriptConfigurationType } from '~storage/local/configuration';
 
 function createSendOverride<ExportItem, ServiceRequest>(sessionId: string, exporter: OTLPProtoExporterBrowserBase<ExportItem, ServiceRequest>, type: MessageTypes) {
 
@@ -51,18 +51,18 @@ function createSendOverride<ExportItem, ServiceRequest>(sessionId: string, expor
     }
 }
 
-const instrument = (sessionId: string, options: LocalStorageType) => {
+const instrument = (sessionId: string, options: ContentScriptConfigurationType) => {
 
-    if (!options || !options.enabled || !options.instrumentations || options.instrumentations.length === 0 || window.__OTEL_BROWSER_EXT_INSTRUMENTED__) {
-        consoleProxy.debug(`not instrumenting as either options missing or already instrumented`, options, window.__OTEL_BROWSER_EXT_INSTRUMENTED__)
+    if (!options || !options.enabled || !options.instrumentations || options.instrumentations.length === 0 || window.__OTEL_BROWSER_EXT_INSTRUMENTATION__) {
+        consoleProxy.debug(`not instrumenting as either options missing or already instrumented`, options, window.__OTEL_BROWSER_EXT_INSTRUMENTATION__)
         return () => { }
     }
-    window.__OTEL_BROWSER_EXT_INSTRUMENTED__ = true
+    window.__OTEL_BROWSER_EXT_INSTRUMENTATION__ = () => { }
     consoleProxy.debug(`instrumenting`, { sessionId, options })
 
     const resource = new Resource({
         [ATTR_SERVICE_NAME]: 'browser-extension-for-opentelemetry',
-        [ATTR_SERVICE_VERSION]: process.env.npm_package_version, // TODO: replace with package.json version
+        [ATTR_SERVICE_VERSION]: process.env.npm_package_version,
         [ATTR_TELEMETRY_SDK_LANGUAGE]: 'webjs',
         [ATTR_TELEMETRY_SDK_NAME]: 'opentelemetry',
         [ATTR_TELEMETRY_SDK_VERSION]: '1.22.0', // TODO: replace with resolved version
@@ -152,7 +152,7 @@ const instrument = (sessionId: string, options: LocalStorageType) => {
         })
     })
     consoleProxy.debug(`registering instrumentations`, instrumentationsToRegister)
-    const deregister = registerInstrumentations({
+    window.__OTEL_BROWSER_EXT_INSTRUMENTATION__ = registerInstrumentations({
         instrumentations: [
             getWebAutoInstrumentations(instrumentationsToRegister),
         ],
@@ -162,14 +162,14 @@ const instrument = (sessionId: string, options: LocalStorageType) => {
 
     return () => {
         consoleProxy.log(`deregistering instrumentations`)
-        window.__OTEL_BROWSER_EXT_INSTRUMENTED__ = false
-        return deregister()
+        window.__OTEL_BROWSER_EXT_INSTRUMENTATION__()
+        window.__OTEL_BROWSER_EXT_INSTRUMENTATION__ = undefined
     }
 }
 
 export type InjectContentScriptArgs = {
     sessionId: string,
-    options: LocalStorageType | string,
+    options: ContentScriptConfigurationType | string,
     retries?: number,
     backoff?: number,
 }
@@ -181,26 +181,26 @@ export default function injectContentScript({ sessionId, options, retries = 10, 
 
     try {
         if (typeof options === 'string') {
-            options = de<LocalStorageType>(options)
+            options = de<ContentScriptConfigurationType>(options)
         }
-        let deregisterInstrumentation = instrument(sessionId, options);
+        window.__OTEL_BROWSER_EXT_INSTRUMENTATION__ = instrument(sessionId, options);
 
         const key = `${sessionId}:relay-from-background`
         const listener = (event: CustomEvent) => {
             try {
                 if (event.detail.type === 'disconnect') {
                     consoleProxy.debug(`received disconnect message from relay`, event.detail)
-                    deregisterInstrumentation && deregisterInstrumentation()
+                    window.__OTEL_BROWSER_EXT_INSTRUMENTATION__ && window.__OTEL_BROWSER_EXT_INSTRUMENTATION__()
                     window.removeEventListener(key, listener)
                 } else if (event.detail.type === 'storageChanged') {
                     consoleProxy.debug(`received storage changed message from relay`, event.detail)
                     options = {
-                        ...options as LocalStorageType,
-                        ...(event.detail.data || {}) as Partial<LocalStorageType>
+                        ...options as ContentScriptConfigurationType,
+                        ...(event.detail.data || {}) as Partial<ContentScriptConfigurationType>
                     }
                     consoleProxy.debug(`re-instrumenting with parsed options`, options)
-                    deregisterInstrumentation && deregisterInstrumentation()
-                    deregisterInstrumentation = instrument(sessionId, options)
+                    window.__OTEL_BROWSER_EXT_INSTRUMENTATION__ && window.__OTEL_BROWSER_EXT_INSTRUMENTATION__()
+                    window.__OTEL_BROWSER_EXT_INSTRUMENTATION__ = instrument(sessionId, options)
                 }
             } catch (e) {
                 consoleProxy.error(`error handling message from relay`, e, event)

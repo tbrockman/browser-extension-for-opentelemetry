@@ -64,6 +64,29 @@
       "description": "Maximum number of concurrent requests that can be queued for export."
     },
     "tracing": {
+      "$ref": "#/definitions/UserFacingTracingConfigurationType",
+      "description": "Configuration for trace telemetry."
+    },
+    "logging": {
+      "$ref": "#/definitions/UserFacingLoggingConfigurationType",
+      "description": "Configuration for logging telemetry."
+    }
+  },
+  "required": [
+    "enabled",
+    "matchPatterns",
+    "attributes",
+    "headers",
+    "propagateTo",
+    "concurrencyLimit",
+    "tracing",
+    "logging"
+  ],
+  "additionalProperties": false,
+  "title": "Configuration",
+  "description": "User-facing settings for the extension",
+  "definitions": {
+    "UserFacingTracingConfigurationType": {
       "type": "object",
       "properties": {
         "enabled": {
@@ -102,7 +125,9 @@
               "compositionend",
               "compositionstart",
               "compositionupdate",
+              "contextlost",
               "contextmenu",
+              "contextrestored",
               "copy",
               "cuechange",
               "cut",
@@ -201,8 +226,8 @@
           "items": {
             "type": "string",
             "enum": [
-              "fetch",
               "load",
+              "fetch",
               "interaction"
             ]
           },
@@ -215,10 +240,9 @@
         "events",
         "instrumentations"
       ],
-      "additionalProperties": false,
-      "description": "Configuration for trace telemetry."
+      "additionalProperties": false
     },
-    "logging": {
+    "UserFacingLoggingConfigurationType": {
       "type": "object",
       "properties": {
         "enabled": {
@@ -237,22 +261,7 @@
         "enabled",
         "collectorUrl"
       ],
-      "additionalProperties": false,
-      "description": "Configuration for logging telemetry."
+      "additionalProperties": false
     }
-  },
-  "required": [
-    "enabled",
-    "matchPatterns",
-    "attributes",
-    "headers",
-    "propagateTo",
-    "concurrencyLimit",
-    "tracing",
-    "logging"
-  ],
-  "additionalProperties": false,
-  "title": "Configuration",
-  "description": "User-facing settings for the extension",
-  "definitions": {}
+  }
 }

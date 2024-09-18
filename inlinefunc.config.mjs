@@ -1,8 +1,5 @@
 import { polyfillNode } from "esbuild-plugin-polyfill-node";
 
-console.log('process.env.PLASMO_BROWSER: ', process.env.PLASMO_BROWSER);
-console.log(JSON.stringify(process.env, null, 2));
-
 export default {
     plugins: [
         polyfillNode({
@@ -15,7 +12,7 @@ export default {
     define: {
         global: 'undefined',
         'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`,
-        'process.env.PLASMO_BROWSER': `"${process.env.PLASMO_BROWSER}"`,
+        // 'process.env.PLASMO_BROWSER': `"${process.env.PLASMO_BROWSER}"`,
         'process.env.npm_package_version': `"${process.env.npm_package_version}"`,
     }
 }

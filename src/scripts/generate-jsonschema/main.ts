@@ -3,7 +3,7 @@ import fs from 'fs';
 
 const config = {
     ...DEFAULT_CONFIG,
-    path: 'src/storage/local/configuration.ts',
+    path: 'src/storage/local/configuration/index.ts',
     tsconfig: 'tsconfig.json',
     type: 'UserFacingConfigurationType',
     topRef: false,

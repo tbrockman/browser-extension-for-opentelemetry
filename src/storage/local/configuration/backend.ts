@@ -1,4 +1,4 @@
-import { Base } from "~utils/generics"
+import { assignPartial } from "~utils/generics"
 
 export type BackendConfigurationType = {
     matchPatterns: string[]
@@ -13,11 +13,11 @@ export type BackendConfigurationType = {
 export type MapOrRecord = Map<string, string> | Record<string, string>
 export type BackendConfigurationProps = Partial<BackendConfigurationType & { headers: MapOrRecord, attributes: MapOrRecord }>
 
-export class BackendConfiguration extends Base<BackendConfiguration> implements BackendConfigurationType {
+export class BackendConfiguration implements BackendConfigurationType {
     matchPatterns = ['http://localhost/*'];
     traceCollectorUrl = 'http://localhost:4318/v1/traces';
     logCollectorUrl = 'http://localhost:4318/v1/logs';
-    metricCollectorUrl = 'http://localhost:4318/v1/metrics';
+    // metricCollectorUrl = 'http://localhost:4318/v1/metrics';
     headers = new Map([
         ['x-example-header', 'value']
     ]);
@@ -26,7 +26,7 @@ export class BackendConfiguration extends Base<BackendConfiguration> implements 
     ]);
 
     constructor({ headers, attributes, ...params }: BackendConfigurationProps = {}) {
-        super(params);
+        assignPartial(this, params as Partial<BackendConfigurationType>);
 
         if (headers instanceof Map) {
             this.headers = headers;

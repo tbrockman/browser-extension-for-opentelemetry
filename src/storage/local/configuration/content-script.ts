@@ -1,4 +1,4 @@
-import { Base } from "~utils/generics";
+import { assignPartial } from "~utils/generics";
 
 export type ContentScriptConfigurationType = {
     enabled: boolean;
@@ -12,7 +12,7 @@ export type ContentScriptConfigurationType = {
     attributes: Map<string, string>
 }
 
-export class ContentScriptConfiguration extends Base<ContentScriptConfiguration> implements ContentScriptConfigurationType {
+export class ContentScriptConfiguration implements ContentScriptConfigurationType {
     enabled: boolean = true;
     tracingEnabled: boolean = true;
     loggingEnabled: boolean = true;
@@ -21,9 +21,14 @@ export class ContentScriptConfiguration extends Base<ContentScriptConfiguration>
     propagateTo: string[] = [];
     events: (keyof HTMLElementEventMap)[] = [];
     concurrencyLimit: number = 50;
+    // TODO: get rid of passing this to content script (parse proto in background script -> apply attributes to object -> re-encode)
     attributes = new Map([
         ['key', 'value']
     ]);
+
+    constructor(params?: Partial<ContentScriptConfigurationType>) {
+        assignPartial(this, params)
+    }
 }
 
 export const defaultContentScriptConfiguration = new ContentScriptConfiguration();

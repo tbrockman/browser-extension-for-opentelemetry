@@ -1,13 +1,21 @@
 import { consoleProxy } from "./logging";
 
-export class Base<T> {
-    constructor(params?: Partial<T>) {
-        params && Object.entries(params).forEach(([key, value]) => {
-            if (this.hasOwnProperty(key)) {
-                this[key] = value;
-            } else {
-                consoleProxy.warn(`Invalid value for ${key}: ${params[key]}`)
-            }
-        })
+export const assignPartial = <T extends object>(instance: T, params?: Partial<T>): void => {
+    if (!params) {
+        return;
     }
+
+    Object.entries(params).forEach(([key, value]) => {
+        // Check if the key exists on the instance
+        if (Reflect.has(instance, key)) {
+
+            if (value.constructor == instance[key].constructor) {
+                instance[key] = value;
+            } else {
+                consoleProxy.warn(`Invalid constructor for ${key}: ${value} (have: ${value.constructor}, expected: ${instance[key].constructor})`);
+            }
+        } else {
+            consoleProxy.warn(`Invalid key: ${key}, expected one of: ${Object.keys(instance)}`);
+        }
+    });
 }

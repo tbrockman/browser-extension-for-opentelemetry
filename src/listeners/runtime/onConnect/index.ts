@@ -1,8 +1,7 @@
 import { consoleProxy } from '~utils/logging'
 import { MessageTypes, type OTLPExportTraceMessage, type OTLPExportLogMessage, type PortMessage, type TypedPort } from '~types'
-import type { LocalStorageType } from '~utils/options'
 import { match } from '~utils/match-pattern'
-import { getLocalStorage } from '~storage/local'
+import { getLocalStorage, type LocalStorageType } from '~storage/local'
 import { addPort, removePort } from '~utils/ports'
 
 const getDestinationForMessage = async (message: PortMessage) => {
@@ -12,7 +11,7 @@ const getDestinationForMessage = async (message: PortMessage) => {
         case MessageTypes.OTLPTraceMessage:
             return (await getLocalStorage(['traceCollectorUrl'])).traceCollectorUrl
         case MessageTypes.OTLPMetricMessage:
-            return (await getLocalStorage(['metricCollectorUrl'])).metricCollectorUrl
+        // return (await getLocalStorage(['metricCollectorUrl'])).metricCollectorUrl
         default:
             throw new Error('unknown message type')
     }
@@ -30,8 +29,6 @@ chrome.runtime.onConnect.addListener(async (p: TypedPort<Partial<LocalStorageTyp
     }
 
     addPort(p)
-
-
 
     consoleProxy.debug('pattern match', p.sender.url, matchPatterns)
     p.onMessage.addListener(async (message) => {

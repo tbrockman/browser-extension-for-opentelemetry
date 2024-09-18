@@ -1,27 +1,34 @@
-import { hasMixin, Mixin } from "ts-mixer";
+import { hasMixin } from "ts-mixer";
 import { InternalStorage } from "./internal";
 import { Configuration } from "./configuration";
 import { describe } from "mocha";
 import { assert } from "chai";
-import type { LocalStorageType } from "~utils/options";
-
-export class LocalStorageTest extends Mixin(Configuration, InternalStorage) {
-
-}
-
-const test = new LocalStorageTest({ configMode: 'code', enabled: true } as Partial<LocalStorageType>);
-console.log('test')
+import { LocalStorage } from ".";
 
 describe('LocalStorage', () => {
-    describe('LocalStorageTest', () => {
-        it('should be an instance of Configuration', () => {
-            assert(hasMixin(test, Configuration))
+
+    const test = new LocalStorage()
+
+    it('should be an instance of Configuration', () => {
+        assert(hasMixin(test, Configuration))
+    })
+
+    it('should be an instance of InternalStorage', () => {
+        assert(hasMixin(test, InternalStorage))
+    })
+
+    it('should have the properties and default values of Configuration and InternalStorage', () => {
+        const configurationKeys = Object.keys(new Configuration())
+        const internalStorageKeys = Object.keys(new InternalStorage())
+
+        assert.containsAllKeys(test, [...configurationKeys, ...internalStorageKeys])
+
+        configurationKeys.forEach(key => {
+            assert.deepEqual(test[key], new Configuration()[key])
         })
-        it('should be an instance of InternalStorage', () => {
-            assert(hasMixin(test, InternalStorage))
-        })
-        it('should have the properties of Configuration and InternalStorage', () => {
-            assert.containsAllKeys(test, ['configMode', 'enabled'])
+
+        internalStorageKeys.forEach(key => {
+            assert.deepEqual(test[key], new InternalStorage()[key])
         })
     })
 })

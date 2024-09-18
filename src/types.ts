@@ -1,6 +1,6 @@
 declare global {
     interface Window {
-        __OTEL_BROWSER_EXT_INSTRUMENTED__: boolean
+        __OTEL_BROWSER_EXT_INSTRUMENTATION__: () => void
     }
 }
 
