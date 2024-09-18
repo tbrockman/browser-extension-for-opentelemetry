@@ -1,24 +1,20 @@
 import type { KeyValues, Values } from "~types"
 import { de, ser } from "~utils/serde";
-import { defaultConfiguration, type ConfigurationType } from "~storage/local/configuration";
-import { defaultInternalStorage, type InternalStorageType, type MatchPatternError } from "./internal";
-
+import { Configuration, defaultConfiguration, type ConfigurationType } from "~storage/local/configuration";
+import { defaultInternalStorage, InternalStorage, type InternalStorageType, type MatchPatternError } from "./internal";
+import { Mixin } from 'ts-mixer';
 
 export type LocalStorageType = ConfigurationType & InternalStorageType;
-export class Combine<T extends object[]> {
-    constructor(types: T) {
-        Object.assign(this, ...types);
-    }
-}
-export class LocalStorage extends Combine<[ConfigurationType, InternalStorageType]> implements LocalStorageType {
+
+export class LocalStorage extends Mixin(Configuration, InternalStorage) implements LocalStorageType {
     enabled: boolean;
     tracingEnabled: boolean;
     loggingEnabled: boolean;
-    metricsEnabled: boolean;
+    // metricsEnabled: boolean;
     matchPatterns: string[];
     traceCollectorUrl: string;
     logCollectorUrl: string;
-    metricCollectorUrl: string;
+    // metricCollectorUrl: string;
     attributes: Map<string, string>;
     headers: Map<string, string>;
     concurrencyLimit: number;
@@ -33,7 +29,7 @@ export class LocalStorage extends Combine<[ConfigurationType, InternalStorageTyp
     configText: string;
 }
 
-export const defaultLocalStorage = new LocalStorage([defaultConfiguration, defaultInternalStorage]);
+export const defaultLocalStorage = new LocalStorage({ ...defaultConfiguration, ...defaultInternalStorage });
 
 export const parseStorageResponse = (response: Record<string, Values>): Record<string, Values> => {
     return Object.entries(response).reduce((acc, [key, value]) => {

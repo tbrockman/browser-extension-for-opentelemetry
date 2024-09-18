@@ -1,7 +1,7 @@
 {
   "name": "browser-extension-for-opentelemetry",
   "displayName": "Browser Extension for OpenTelemetry",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "A browser extension for automatically instrumenting webpages using OpenTelemetry",
   "author": "Theodore Brockman <iam@theo.lol>",
   "packageManager": "pnpm@9.10.0",
@@ -17,7 +17,7 @@
     "dev": "plasmo dev",
     "clean": "rm -fr build",
     "test": "pnpm test:unit",
-    "test:unit": "mocha --require mocha-suppress-logs src/**/*.test.ts",
+    "test:unit": "mocha --require mocha-suppress-logs 'src/**/*.test.ts'",
     "generate:jsonschema": "tsx src/scripts/generate-jsonschema/main.ts"
   },
   "dependencies": {
@@ -60,11 +60,13 @@
     "markdown-it": "^14.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "ts-mixer": "^6.0.4",
     "uuidv7": "^1.0.2"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "4.1.1",
     "@plasmohq/parcel-config": "^0.41.0",
+    "@types/chai": "^4.3.19",
     "@types/chrome": "0.0.271",
     "@types/jest": "^29.5.12",
     "@types/markdown-it": "^14.1.2",
@@ -72,6 +74,7 @@
     "@types/node": "22.5.4",
     "@types/react": "18.2.61",
     "@types/react-dom": "18.2.19",
+    "chai": "^5.1.1",
     "cross-env": "^7.0.3",
     "esbuild-plugin-polyfill-node": "^0.3.0",
     "mocha": "^10.7.3",

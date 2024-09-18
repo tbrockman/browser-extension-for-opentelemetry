@@ -1,3 +1,5 @@
+import { Base } from "~utils/generics"
+
 export type MatchPatternError = {
     error: string
     pattern: string
@@ -13,7 +15,7 @@ export type InternalStorageType = {
     configText: string
 }
 
-export class InternalStorage implements InternalStorageType {
+export class InternalStorage extends Base<InternalStorage> implements InternalStorageType {
     matchPatternErrors: MatchPatternError[] = []
     traceExportErrors?: string[]
     logExportErrors?: string[]

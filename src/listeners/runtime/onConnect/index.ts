@@ -31,8 +31,9 @@ chrome.runtime.onConnect.addListener(async (p: TypedPort<Partial<LocalStorageTyp
 
     addPort(p)
 
-    consoleProxy.debug('pattern match', p.sender.url, matchPatterns)
 
+
+    consoleProxy.debug('pattern match', p.sender.url, matchPatterns)
     p.onMessage.addListener(async (message) => {
         consoleProxy.debug('received message', message)
 
@@ -45,6 +46,7 @@ chrome.runtime.onConnect.addListener(async (p: TypedPort<Partial<LocalStorageTyp
                 // Even though the content script could send us the headers and url, we don't trust them
                 // So in the absolute worst case adversarial scenario we're still just sending arbitrary bytes to our chosen server
                 const { headers: stored } = await getLocalStorage(['headers'])
+                // TODO: stop sending attributes to content script, set here instead
                 consoleProxy.debug('stored headers', stored)
                 const headers = {
                     ...(Object.fromEntries(stored.entries())),

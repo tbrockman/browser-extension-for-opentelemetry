@@ -20,7 +20,7 @@ import { MessageTypes } from '~types';
 import { consoleProxy } from '~utils/logging';
 import { wrapConsoleWithLoggerProvider } from '~telemetry/logs';
 import type { LocalStorageType } from '~utils/options';
-import { de, reviver } from '~utils/serde';
+import { de } from '~utils/serde';
 
 function createSendOverride<ExportItem, ServiceRequest>(sessionId: string, exporter: OTLPProtoExporterBrowserBase<ExportItem, ServiceRequest>, type: MessageTypes) {
 
@@ -62,7 +62,7 @@ const instrument = (sessionId: string, options: LocalStorageType) => {
 
     const resource = new Resource({
         [ATTR_SERVICE_NAME]: 'browser-extension-for-opentelemetry',
-        [ATTR_SERVICE_VERSION]: '0.0.10', // TODO: replace with package.json version
+        [ATTR_SERVICE_VERSION]: process.env.npm_package_version, // TODO: replace with package.json version
         [ATTR_TELEMETRY_SDK_LANGUAGE]: 'webjs',
         [ATTR_TELEMETRY_SDK_NAME]: 'opentelemetry',
         [ATTR_TELEMETRY_SDK_VERSION]: '1.22.0', // TODO: replace with resolved version
@@ -78,8 +78,6 @@ const instrument = (sessionId: string, options: LocalStorageType) => {
             resource,
         })
         const traceExporter = new OTLPTraceExporter({
-            url: options.traceCollectorUrl,
-            headers: Object.fromEntries(options.headers.entries()),
             concurrencyLimit: options.concurrencyLimit,
         })
         // @ts-ignore
@@ -102,8 +100,6 @@ const instrument = (sessionId: string, options: LocalStorageType) => {
 
     if (options.loggingEnabled) {
         const logExporter = new OTLPLogExporter({
-            url: options.logCollectorUrl,
-            headers: Object.fromEntries(options.headers.entries()),
             concurrencyLimit: options.concurrencyLimit,
         })
         // @ts-ignore

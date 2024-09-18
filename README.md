@@ -57,7 +57,7 @@ So, just as a general safety measure, it's probably best if you don't allow the 
 
 ### Can it be fixed?
 
-Probably not in the near future. Unless browsers expose the data themselves, there's no way for the instrumentation to both run in an isolated context as well as gather desired telemetry.
+Probably not in the near future. Unless browsers expose telemetry themselves, there's no way for the instrumentation to both run in an isolated context as well as gather the desired data.
 
 ## Developing
 
