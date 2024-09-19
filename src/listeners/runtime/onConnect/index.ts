@@ -1,10 +1,10 @@
 import { consoleProxy } from '~utils/logging'
-import { MessageTypes, type OTLPExportTraceMessage, type OTLPExportLogMessage, type PortMessage, type TypedPort } from '~types'
+import { MessageTypes, type OTLPExportTraceMessage, type OTLPExportLogMessage, type ToBackgroundMessage, type TypedPort, type ToContentScriptMessage } from '~types'
 import { match } from '~utils/match-pattern'
-import { getLocalStorage, type LocalStorageType } from '~storage/local'
-import { addPort, removePort } from '~utils/ports'
+import { getLocalStorage } from '~storage/local'
+import { addPort, removePort } from '~utils/background-ports'
 
-const getDestinationForMessage = async (message: PortMessage) => {
+const getDestinationForMessage = async (message: ToBackgroundMessage) => {
     switch (message.type) {
         case MessageTypes.OTLPLogMessage:
             return (await getLocalStorage(['logCollectorUrl'])).logCollectorUrl
@@ -17,7 +17,7 @@ const getDestinationForMessage = async (message: PortMessage) => {
     }
 }
 
-chrome.runtime.onConnect.addListener(async (p: TypedPort<Partial<LocalStorageType>, PortMessage>) => {
+chrome.runtime.onConnect.addListener(async (p: TypedPort<ToContentScriptMessage, ToBackgroundMessage>) => {
 
     consoleProxy.debug('connection attempt on port:', p)
 

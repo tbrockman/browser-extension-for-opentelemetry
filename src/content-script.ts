@@ -16,7 +16,7 @@ import { Resource } from '@opentelemetry/resources';
 import { B3Propagator } from '@opentelemetry/propagator-b3';
 import { CompositePropagator, W3CTraceContextPropagator } from '@opentelemetry/core';
 
-import { MessageTypes } from '~types';
+import { MessageTypes, type CustomAppEvent } from '~types';
 import { consoleProxy } from '~utils/logging';
 import { wrapConsoleWithLoggerProvider } from '~telemetry/logs';
 import { de } from '~utils/serde';
@@ -187,27 +187,28 @@ export default function injectContentScript({ sessionId, options, retries = 10, 
         window.__OTEL_BROWSER_EXT_INSTRUMENTATION__ = instrument(sessionId, options);
 
         const key = `${sessionId}:relay-from-background`
-        const listener = (event: CustomEvent) => {
+        const listener = (event: CustomAppEvent) => {
             try {
-                if (event.detail.type === 'disconnect') {
+                if (event.detail.type === MessageTypes.Disconnect) {
                     consoleProxy.debug(`received disconnect message from relay`, event.detail)
                     window.__OTEL_BROWSER_EXT_INSTRUMENTATION__ && window.__OTEL_BROWSER_EXT_INSTRUMENTATION__()
                     window.removeEventListener(key, listener)
-                } else if (event.detail.type === 'storageChanged') {
+                } else if (event.detail.type === MessageTypes.ConfigurationChanged) {
                     consoleProxy.debug(`received storage changed message from relay`, event.detail)
                     options = {
                         ...options as ContentScriptConfigurationType,
-                        ...(event.detail.data || {}) as Partial<ContentScriptConfigurationType>
+                        ...(event.detail.data || {})
                     }
                     consoleProxy.debug(`re-instrumenting with parsed options`, options)
                     window.__OTEL_BROWSER_EXT_INSTRUMENTATION__ && window.__OTEL_BROWSER_EXT_INSTRUMENTATION__()
                     window.__OTEL_BROWSER_EXT_INSTRUMENTATION__ = instrument(sessionId, options)
+                } else {
+                    consoleProxy.debug(`received malformed message from relay`, event.detail)
                 }
             } catch (e) {
                 consoleProxy.error(`error handling message from relay`, e, event)
             }
         }
-
         // listen for messages from the relay
         window.addEventListener(key, listener)
     } catch (e) {

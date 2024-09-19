@@ -1,6 +1,6 @@
-import { parseStorageResponse, type LocalStorageType } from "~storage/local";
+import { parseStorageResponse } from "~storage/local";
 import { defaultContentScriptConfiguration } from "~storage/local/configuration/content-script";
-import type { PortMessage, TypedPort } from "~types";
+import { MessageTypes, type CustomAppEvent, type ToContentScriptMessage, type ToBackgroundMessage, type TypedPort, type ToRelayMessage, type ConfigurationChangedMessage } from "~types";
 import { pick } from "~utils/generics";
 import { consoleProxy } from "~utils/logging";
 
@@ -10,7 +10,7 @@ export type InjectRelayArgs = {
 
 export default function injectRelay({ sessionId }: InjectRelayArgs) {
     consoleProxy.debug(`injecting relay for session ${sessionId}`)
-    const port: TypedPort<PortMessage, Partial<LocalStorageType>> = chrome.runtime.connect();
+    const port: TypedPort<ToBackgroundMessage, ToRelayMessage> = chrome.runtime.connect();
     consoleProxy.debug(`port`, port)
     const fromBackground = `${sessionId}:relay-from-background`
     const toBackground = `${sessionId}:relay-to-background`
@@ -29,25 +29,35 @@ export default function injectRelay({ sessionId }: InjectRelayArgs) {
     port.onDisconnect.addListener(obj => {
         consoleProxy.debug(`background script disconnected port`, obj);
         port.disconnect()
-        const event = new CustomEvent(fromBackground, {
-            detail: { type: 'disconnect' }
+        const event: CustomAppEvent = new CustomEvent(fromBackground, {
+            detail: { type: MessageTypes.Disconnect } as ToContentScriptMessage
         })
         window.dispatchEvent(event)
     })
 
-    port.onMessage.addListener((data) => {
-        // TODO: don't just assume every message is a storage change
-        consoleProxy.debug(`received message to relay from background script`, data);
-        // extract only keys necessary for content script
-        data = pick(parseStorageResponse(data), Object.keys(defaultContentScriptConfiguration))
+    port.onMessage.addListener((message) => {
+        consoleProxy.debug(`received message to relay from background script`, message);
 
-        if (!data) {
-            return
+        switch (message.type) {
+            case MessageTypes.StorageChanged:
+                const relay = {
+                    type: MessageTypes.ConfigurationChanged,
+                    // extract only the keys content script needs to run (limiting data exposure)
+                    data: pick(parseStorageResponse(message.data), Object.keys(defaultContentScriptConfiguration))
+                } as ConfigurationChangedMessage
+                consoleProxy.debug(`deserialized message to be relayed`, relay);
+                // no keys we care about
+                if (Object.keys(relay.data).length === 0) {
+                    consoleProxy.debug(`no relevant changes found to forward to content script, skipping`);
+                    return
+                }
+                const event: CustomAppEvent = new CustomEvent(fromBackground, {
+                    detail: relay
+                })
+                window.dispatchEvent(event)
+                break
+            default:
+                consoleProxy.debug(`malformed message`, message)
         }
-        consoleProxy.debug(`deserialized data from background script`, data);
-        const event = new CustomEvent(fromBackground, {
-            detail: { type: 'storageChanged', data }
-        })
-        window.dispatchEvent(event)
     })
 }
