@@ -28,7 +28,7 @@ export const KeyValueRow = ({ _key: key, value, onChange, onRemove, disabled, ke
         <Table.Tr style={{ display: 'flex', width: '100%', alignItems: 'center' }}>
             <Table.Td style={{ paddingLeft: 0 }}>
                 <TextInput
-                    value={key}
+                    defaultValue={key}
                     onChange={keyOnChange}
                     disabled={disabled}
                     placeholder={keyPlaceholder} />
@@ -36,7 +36,7 @@ export const KeyValueRow = ({ _key: key, value, onChange, onRemove, disabled, ke
             </Table.Td>
             <Table.Td style={{ flexGrow: 1 }}>
                 <TextInput
-                    value={value}
+                    defaultValue={value}
                     onChange={valueOnChange}
                     disabled={disabled}
                     placeholder={valuePlaceholder}
@@ -44,7 +44,7 @@ export const KeyValueRow = ({ _key: key, value, onChange, onRemove, disabled, ke
 
             </Table.Td>
             <Table.Td>
-                <ActionIcon onClick={onRemove} disabled={disabled || !key}>
+                <ActionIcon onClick={onRemove} disabled={disabled || !(key || value)}>
                     <IconTrash />
                 </ActionIcon>
             </Table.Td>

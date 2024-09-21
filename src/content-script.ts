@@ -162,7 +162,6 @@ const instrument = (sessionId: string, options: ContentScriptConfigurationType) 
     });
 
     return () => {
-        consoleProxy.log(`deregistering instrumentations`)
         deregister()
         window.__OTEL_BROWSER_EXT_INSTRUMENTATION__ = undefined
     }

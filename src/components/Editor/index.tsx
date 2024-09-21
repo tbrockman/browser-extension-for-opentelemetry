@@ -90,7 +90,6 @@ export const Editor = ({ }: EditorProps) => {
         setRenderedConfig(val);
 
         const state = viewUpdate.state.toJSON(stateFields);
-        consoleProxy.log('setting editorstate', state);
         await setLocalStorage({ editorState: state });
     }
 
@@ -148,7 +147,6 @@ export const Editor = ({ }: EditorProps) => {
         const init = async () => {
             if (initialEditorState == null) {
                 const { editorState, configText } = await getLocalStorage(['editorState', 'configText'])
-                consoleProxy.log('got editor state in init', editorState, configText, editorState?.doc || configText);
                 setRenderedConfig(editorState?.doc || configText);
                 setInitialEditorState(editorState);
             }
