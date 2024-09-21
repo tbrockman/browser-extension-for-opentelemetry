@@ -21,6 +21,7 @@
     "generate:jsonschema": "tsx src/scripts/generate-jsonschema/main.ts"
   },
   "dependencies": {
+    "@codemirror/autocomplete": "^6.18.1",
     "@codemirror/commands": "^6.6.2",
     "@codemirror/lang-json": "^6.0.1",
     "@codemirror/language": "^6.10.2",
@@ -61,6 +62,7 @@
     "markdown-it": "^14.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-error-boundary": "^4.0.13",
     "ts-mixer": "^6.0.4",
     "uuidv7": "^1.0.2"
   },

@@ -9,9 +9,8 @@ import { MessageTypes, type ToRelayMessage } from "~types"
 chrome.storage.onChanged.addListener((event: Record<keyof LocalStorage, chrome.storage.StorageChange>, area) => {
 
     // TODO: change this and related if we ever use storage in other areas
-    if (area !== 'local') {
-        return
-    }
+    if (area !== 'local') return
+
     consoleProxy.debug('storage changed', { event })
 
     const parsed = Object.entries(event).reduce((acc, [k, v]) => {

@@ -19,14 +19,17 @@ import GeneralConfiguration from "~components/GeneralConfiguration"
 import { useLocalStorage } from "~hooks/storage"
 import { setLocalStorage } from "~storage/local"
 import { useEffect, useRef, useState } from "react"
+import { ConfigMode } from "~storage/local/internal"
+import { usePlatformInfo } from "~hooks/platform"
 
 export default function Configuration() {
     const { enabled, configMode } = useLocalStorage(["enabled", "configMode"])
     const portalTargetRef = useRef<HTMLDivElement>(null)
     const [refsInitialized, setRefsInitialized] = useState(false)
 
-    const handleConfigModeAffixClick = () => {
-        setLocalStorage({ configMode: configMode === 'visual' ? 'code' : 'visual' })
+    const configModeToggle = () => {
+        // toggle config mode
+        setLocalStorage({ configMode: configMode === ConfigMode.Visual ? ConfigMode.Code : ConfigMode.Visual })
     }
 
     useEffect(() => {
@@ -79,19 +82,21 @@ export default function Configuration() {
                 ref={portalTargetRef}
             >
                 {refsInitialized &&
-                    <Affix onClick={handleConfigModeAffixClick}
+                    <Affix
                         position={{ bottom: 10, right: 10 }}
                         portalProps={{ target: portalTargetRef.current }} styles={{ root: { position: "absolute" } }}>
-                        <Button leftSection={configMode === 'visual' ? <IconBraces /> : <IconFileCheck />}>
-                            {configMode === 'visual' ? 'Edit as JSON' : 'Edit as form'}
-                        </Button>
+                        <Group>
+                            <Button onClick={configModeToggle} leftSection={configMode === ConfigMode.Visual ? <IconBraces /> : <IconFileCheck />}>
+                                {configMode === ConfigMode.Visual ? 'Edit as JSON' : 'Edit as form'}
+                            </Button>
+                        </Group>
                     </Affix>
                 }
                 <ScrollArea.Autosize mah={400}>
 
                     <Stack pr='lg' pb='lg' pt='lg'>
                         <GeneralConfiguration enabled={enabled} />
-                        {configMode === 'visual' &&
+                        {configMode === ConfigMode.Visual &&
                             <>
                                 <TraceConfiguration enabled={enabled} />
                                 <LogConfiguration enabled={enabled} />

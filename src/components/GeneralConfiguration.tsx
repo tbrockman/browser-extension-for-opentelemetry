@@ -5,9 +5,10 @@ import { useLocalStorage } from "~hooks/storage";
 import { defaultOptions } from "~utils/options";
 import { syncMatchPatternPermissions } from "~utils/match-pattern";
 import { setLocalStorage } from "~storage/local";
-import type { MatchPatternError } from "~storage/local/internal";
+import { ConfigMode, type MatchPatternError } from "~storage/local/internal";
 import { Editor } from "~components/Editor";
 import { KeyValueInput } from "~components/KeyValueInput";
+import { ErrorBoundary } from "react-error-boundary";
 
 type GeneralConfigurationProps = {
     enabled: boolean
@@ -24,6 +25,8 @@ const patternErrorsToPills = (patterns: string[], errors: MatchPatternError[]): 
     return map
 }
 
+// TODO: some sort of editor feature that allows saving not-yet-committed changes to configText
+// which are only overwritten once any relevant config variable is changed
 export default function GeneralConfiguration({ enabled }: GeneralConfigurationProps) {
     const { headers, attributes, matchPatterns, matchPatternErrors, configMode } = useLocalStorage([
         'headers',
@@ -58,7 +61,7 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                     }} />
                 </Group>
             }>
-            {configMode === 'visual' &&
+            {configMode === ConfigMode.Visual &&
                 <Group>
                     <TagsInput
                         value={matchPatterns}
@@ -122,8 +125,10 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                     />
                 </Group>
             }
-            {configMode === 'code' &&
-                <Editor />
+            {configMode === ConfigMode.Code &&
+                <ErrorBoundary fallback={<>poop, we had an issue</>}>
+                    <Editor />
+                </ErrorBoundary>
             }
         </Fieldset>
     );

@@ -3,6 +3,7 @@ import { de, ser } from "~utils/serde";
 import { Configuration, type ConfigurationType } from "~storage/local/configuration";
 import { InternalStorage, type InternalStorageType } from "./internal";
 import { Mixin } from 'ts-mixer';
+import { consoleProxy } from "~utils/logging";
 
 export type LocalStorageType = ConfigurationType & InternalStorageType;
 export class LocalStorage extends Mixin(Configuration, InternalStorage) implements LocalStorageType { }
@@ -22,6 +23,11 @@ export const parseStorageResponse = (response: Record<string, Values>): Record<s
             }
         }
     }, {});
+}
+
+export async function removeLocalStorage(keys: (keyof LocalStorage)[]): Promise<void> {
+    consoleProxy.debug(`removing local storage`, { keys });
+    return await chrome.storage.local.remove(keys);
 }
 
 export async function setLocalStorage<T extends Partial<LocalStorage>>(data: T): Promise<void> {
@@ -49,12 +55,16 @@ export async function getStorage<T>(storageArea: chrome.storage.AreaName, keysWi
     const serializedDefaults = Object.entries(keysWithDefaults).reduce((acc, [key, value]) => {
         return { ...acc, [key]: ser(value) };
     }, {});
-    return parseStorageResponse(await chrome.storage[storageArea].get(serializedDefaults)) as T;
+    consoleProxy.debug(`getting storage`, { storageArea, keysWithDefaults, serializedDefaults });
+    const parsed = parseStorageResponse(await chrome.storage[storageArea].get(serializedDefaults)) as T;
+    consoleProxy.debug(`got storage`, parsed);
+    return parsed;
 }
 
 export async function setStorage<T extends KeyValues>(storageArea: chrome.storage.AreaName, data: T): Promise<void> {
     const serialized = Object.entries(data).reduce((acc, [key, value]) => {
         return { ...acc, [key]: ser(value) };
     }, {});
+    consoleProxy.debug(`setting storage`, { storageArea, data, serialized });
     return await chrome.storage[storageArea].set(serialized);
 }
