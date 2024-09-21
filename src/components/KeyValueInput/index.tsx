@@ -26,12 +26,13 @@ export const KeyValueInput = ({ value, onChange, label, description, disabled, t
     consoleProxy.log('rows', rows, 'value', value)
 
     useEffect(() => {
-        if (!value.has('')) {
-            value.set('', '')
+        const newMap = new Map(value)
+        if (!newMap.has('')) {
+            newMap.set('', '')
         }
-        const newRows = Array.from(value.entries())
-        setRows(newRows)
+        const newRows = Array.from(newMap.entries())
         consoleProxy.log('on change for value with newRows', newRows)
+        setRows(newRows)
     }, [value])
 
     useEffect(() => {
