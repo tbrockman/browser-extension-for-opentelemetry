@@ -1,5 +1,5 @@
 import { Stack, Table, Text, type TableProps } from "@mantine/core"
-import { useState, type ReactNode } from "react"
+import { useEffect, useState, type ReactNode } from "react"
 import { KeyValueRow } from "~components/KeyValueInput/KeyValueRow"
 import { consoleProxy } from "~utils/logging"
 
@@ -20,13 +20,34 @@ export type KeyValueInputProps = {
  * (a wrapper around Table that allows for adding/removing rows, key/value columns, and editable cells)
  */
 export const KeyValueInput = ({ value, onChange, label, description, disabled, tableProps, keyPlaceholder, valuePlaceholder, fullWidth }: KeyValueInputProps) => {
-    const [generation, setGeneration] = useState(0)
-    const copied = new Map(value)
 
-    if (!copied.has('')) {
-        copied.set('', '')
-    }
-    const [rows, setRows] = useState(copied)
+    const [rows, setRows] = useState<[string, string][]>(Array.from(value.entries()))
+
+    consoleProxy.log('rows', rows, 'value', value)
+
+    useEffect(() => {
+        if (!value.has('')) {
+            value.set('', '')
+        }
+        const newRows = Array.from(value.entries())
+        setRows(newRows)
+        consoleProxy.log('on change for value with newRows', newRows)
+    }, [value])
+
+    useEffect(() => {
+        consoleProxy.log('in rows dep with', rows, 'and value', value)
+        // remove last row if it's empty
+        const hasUnmatchedLastEmptyRow = rows.length > 0 && rows[rows.length - 1][0] == '' && rows[rows.length - 1][1] == '' && value.get('') != ''
+        const fromRows = hasUnmatchedLastEmptyRow ? rows.slice(0, -1) : rows
+
+        consoleProxy.log('in rows dep with fromRows', fromRows, 'has unmatched last empty row', hasUnmatchedLastEmptyRow)
+
+        if (!(fromRows.every(([key, val]) => (value.has(key) && value.get(key) == val)) && fromRows.length == value.size)) {
+            const newMap = new Map(fromRows)
+            consoleProxy.log('on change for rows with newMap', newMap)
+            onChange(newMap)
+        }
+    }, [rows])
 
     const rowOnChange = (oldKey: string, newKey: string, oldValue: string, newValue: string) => {
         const newMap = new Map<string, string>()
@@ -42,44 +63,23 @@ export const KeyValueInput = ({ value, onChange, label, description, disabled, t
         if (!newMap.has(newKey)) {
             newMap.set(newKey, newValue)
         }
-
-        if (newMap.size < value.size) {
-            consoleProxy.debug(`incrementing generation to: ${generation + 1}`)
-            setGeneration(generation + 1)
-        }
-        onChange(newMap)
+        setRows(Array.from(newMap.entries()))
     }
 
     const onRemove = (index: number, key: string) => {
-        const newMap = new Map(value) // Create a new Map instance
-        newMap.delete(key)
-        consoleProxy.debug(`incrementing generation to: ${generation + 1}`)
-        setGeneration(generation + 1)
-        onChange(newMap)
+        const newRows = rows.filter(([k, v], i) => i != index)
+        setRows([...newRows])
     }
 
     let i = 0;
 
-    const getRowKey = (i: number, key: string) => {
-        const rowKey = `${generation}.${i}`
-        // consoleProxy.debug(`getRowKey(${i}, ${key}) => ${rowKey}`)
-        // return rowKey
-        return key
+    const getRowKey = (i: number, key: string, val: string) => {
+        return `kv-row-${i}`
+        // return !(key && val) ? `kv-row-null` : `kv-row-${i}`
     }
-
-    value.forEach((val, key) => {
-        rows.push(<KeyValueRow _key={key} key={getRowKey(i, key)} value={val} onChange={rowOnChange} onRemove={() => onRemove(i, key)} keyPlaceholder={keyPlaceholder} valuePlaceholder={valuePlaceholder} />)
-        i++;
-    })
-
-    if (!value.has('')) {
-        rows.push(<KeyValueRow _key='' key={getRowKey(i, '')} value='' onChange={rowOnChange} onRemove={() => { }} keyPlaceholder={keyPlaceholder} valuePlaceholder={valuePlaceholder} />)
-    }
-
-    rows.forEach((row, i) => consoleProxy.debug(`row ${i}: ${row.props._key} => ${row.key}`))
 
     return (
-        <Stack gap={0} style={fullWidth && { width: '100%' }}>
+        <Stack gap={0} style={fullWidth ? { width: '100%' } : {}}>
             <Stack gap={0} style={{ marginBottom: 'calc(var(--mantine-spacing-xs) / 2)' }}>
                 <Text component="label" size='sm' fw='500'>{label}</Text>
                 <Text size="xs" c="var(--mantine-color-dimmed)">{description}</Text>
@@ -90,7 +90,7 @@ export const KeyValueInput = ({ value, onChange, label, description, disabled, t
                         display: 'flex',
                         flexDirection: 'column',
                     }}>
-                    {rows}
+                    {rows.map(([key, val], i) => <KeyValueRow _key={key} key={getRowKey(i, key, val)} value={val} onChange={rowOnChange} onRemove={() => onRemove(i, key)} keyPlaceholder={keyPlaceholder} valuePlaceholder={valuePlaceholder} />)}
                 </Table.Tbody>
             </Table>
         </Stack>

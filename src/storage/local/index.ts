@@ -34,24 +34,26 @@ export async function setLocalStorage<T extends Partial<LocalStorage>>(data: T):
     return await setStorage('local', data);
 }
 
-export type ExtractKeys<T extends (keyof LocalStorage)[] | undefined> = T extends undefined
-    ? LocalStorage
-    : Pick<LocalStorage, T[number]>;
+export type ExtractLocalStorageKeys<T extends (keyof LocalStorage)[] | undefined> = ExtractKeysFrom<T, LocalStorage>;
 
-export async function getLocalStorage<T extends (keyof LocalStorage)[] | undefined>(keys?: T): Promise<ExtractKeys<T>> {
+export type ExtractKeysFrom<T extends (keyof K)[] | undefined, K> = T extends (keyof K)[]
+    ? Pick<K, T[number]>
+    : K;
+
+export async function getLocalStorage<T extends (keyof LocalStorage)[] | undefined>(keys?: T): Promise<ExtractLocalStorageKeys<T>> {
     if (!keys) {
-        return await getStorage('local', defaultLocalStorage) as ExtractKeys<T>;
+        return await getStorage('local', defaultLocalStorage) as ExtractLocalStorageKeys<T>;
     }
 
     const selectedStorage = keys.reduce((acc, key) => {
         acc[key] = defaultLocalStorage[key];
         return acc;
-    }, {} as { [K in T[number]]: LocalStorage[K] });
+    }, {} as Partial<Record<keyof LocalStorage, LocalStorage[keyof LocalStorage]>>);
 
-    return await getStorage('local', selectedStorage) as ExtractKeys<T>;
+    return await getStorage('local', selectedStorage) as ExtractLocalStorageKeys<T>;
 }
 
-export async function getStorage<T>(storageArea: chrome.storage.AreaName, keysWithDefaults: T): Promise<T> {
+export async function getStorage<T extends Record<string, any>>(storageArea: chrome.storage.AreaName, keysWithDefaults: T): Promise<T> {
     const serializedDefaults = Object.entries(keysWithDefaults).reduce((acc, [key, value]) => {
         return { ...acc, [key]: ser(value) };
     }, {});

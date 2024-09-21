@@ -72,7 +72,7 @@ const instrument = (sessionId: string, options: ContentScriptConfigurationType) 
         ...Object.fromEntries(options.attributes.entries())
     })
 
-    let tracerProvider: WebTracerProvider
+    let tracerProvider: WebTracerProvider | undefined
 
     if (options.tracingEnabled) {
         tracerProvider = new WebTracerProvider({
@@ -97,7 +97,7 @@ const instrument = (sessionId: string, options: ContentScriptConfigurationType) 
         })
     }
 
-    let loggerProvider: LoggerProvider
+    let loggerProvider: LoggerProvider | undefined
 
     if (options.loggingEnabled) {
         const logExporter = new OTLPLogExporter({

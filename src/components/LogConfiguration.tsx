@@ -53,7 +53,7 @@ export default function LogConfiguration({ enabled }: LogConfigurationProps) {
             }}
             legend={
                 <Group gap='xs'>
-                    <Checkbox
+                    {loggingEnabled !== undefined && <Checkbox
                         checked={loggingEnabled}
                         disabled={false}
                         icon={LogsIcon}
@@ -70,10 +70,10 @@ export default function LogConfiguration({ enabled }: LogConfigurationProps) {
                         label={
                             <Text>Logging</Text>
                         }
-                    />
+                    />}
                 </Group>
             } disabled={!loggingEnabled}>
-            <TextInput
+            {renderedLogCollectorUrl !== undefined && <TextInput
                 label="Export URL"
                 description={
                     <>
@@ -85,7 +85,7 @@ export default function LogConfiguration({ enabled }: LogConfigurationProps) {
                 onChange={(event) => {
                     setRenderedLogCollectorUrl(event.currentTarget.value)
                 }}
-            />
+            />}
         </Fieldset>
     );
 }

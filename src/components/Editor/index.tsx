@@ -75,11 +75,11 @@ export type EditorProps = {
 
 export const Editor = ({ }: EditorProps) => {
     const computedColorScheme = useComputedColorScheme('dark');
-    const editor = useRef();
+    const editor = useRef<HTMLDivElement>(null);
     const { matchPatterns } = useLocalStorage(['matchPatterns']);
     const [initialEditorState, setInitialEditorState] = useState(null);
     // some sort of state so that we can populate with proper editor state initially?
-    const [renderedConfig, setRenderedConfig] = useState(null);
+    const [renderedConfig, setRenderedConfig] = useState<string>('');
     const [saving, setSaving] = useState<boolean | null>(null);
     const theme = computedColorScheme == 'dark' ? themeDark : themeLight
     // second element returned by createTheme is the syntaxHighlighting extension
@@ -114,7 +114,7 @@ export const Editor = ({ }: EditorProps) => {
             const newConfig = de(renderedConfig, UserFacingConfiguration);
 
             if (newConfig.matchPatterns !== matchPatterns) {
-                await syncMatchPatternPermissions({ prev: matchPatterns, next: newConfig.matchPatterns });
+                await syncMatchPatternPermissions({ prev: matchPatterns || [], next: newConfig.matchPatterns });
             }
         } catch (e) {
             consoleProxy.error(e);
@@ -147,7 +147,9 @@ export const Editor = ({ }: EditorProps) => {
         const init = async () => {
             if (initialEditorState == null) {
                 const { editorState, configText } = await getLocalStorage(['editorState', 'configText'])
+                // @ts-ignore TODO: fix this
                 setRenderedConfig(editorState?.doc || configText);
+                // @ts-ignore TODO: fix this
                 setInitialEditorState(editorState);
             }
         }

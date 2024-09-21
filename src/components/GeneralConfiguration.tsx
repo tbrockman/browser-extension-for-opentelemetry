@@ -1,7 +1,7 @@
 import { Anchor, Fieldset, Group, Text } from "@mantine/core";
 import { TagsInput } from "~components/TagsInput";
 import ColorModeSwitch from "~components/ColorModeSwitch";
-import { useLocalStorage } from "~hooks/storage";
+import { useLocalStorage, useStorage } from "~hooks/storage";
 import { defaultOptions } from "~utils/options";
 import { syncMatchPatternPermissions } from "~utils/match-pattern";
 import { setLocalStorage } from "~storage/local";
@@ -9,15 +9,16 @@ import { ConfigMode, type MatchPatternError } from "~storage/local/internal";
 import { Editor } from "~components/Editor";
 import { KeyValueInput } from "~components/KeyValueInput";
 import { ErrorBoundary } from "react-error-boundary";
+import { consoleProxy } from "~utils/logging";
 
 type GeneralConfigurationProps = {
     enabled: boolean
 }
 
-const patternErrorsToPills = (patterns: string[], errors: MatchPatternError[]): Map<number, string> => {
+const patternErrorsToPills = (patterns?: string[], errors?: MatchPatternError[]): Map<number, string> => {
     const map = new Map<number, string>()
-    errors.forEach((error) => {
-        const index = patterns.indexOf(error.pattern)
+    errors?.forEach((error) => {
+        const index = patterns?.indexOf(error.pattern) || -1
         if (index !== -1) {
             map.set(index, error.error)
         }
@@ -28,18 +29,19 @@ const patternErrorsToPills = (patterns: string[], errors: MatchPatternError[]): 
 // TODO: some sort of editor feature that allows saving not-yet-committed changes to configText
 // which are only overwritten once any relevant config variable is changed
 export default function GeneralConfiguration({ enabled }: GeneralConfigurationProps) {
-    const { headers, attributes, matchPatterns, matchPatternErrors, configMode } = useLocalStorage([
+    const storage = useLocalStorage([
         'headers',
         'attributes',
         'matchPatterns',
         'matchPatternErrors',
         'configMode'
     ])
-    const pillErrors = patternErrorsToPills(matchPatterns, matchPatternErrors)
+    consoleProxy.log('testing partial (should be undefined until storage returns)', storage)
+    const pillErrors = patternErrorsToPills(storage.matchPatterns, storage.matchPatternErrors)
 
     const onEnabledUrlsChange = async (values: string[]) => {
         setLocalStorage({ matchPatterns: values })
-        syncMatchPatternPermissions({ prev: matchPatterns, next: values })
+        syncMatchPatternPermissions({ prev: storage.matchPatterns || [], next: values })
     }
 
     return (
@@ -61,19 +63,22 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                     }} />
                 </Group>
             }>
-            {configMode === ConfigMode.Visual &&
+            {storage.configMode === ConfigMode.Visual &&
                 <Group>
                     <TagsInput
-                        value={matchPatterns}
+                        value={storage.matchPatterns || []}
                         errors={pillErrors}
                         onValueRemoved={(index) => {
-                            const newPatterns = [...matchPatterns]
+                            const newPatterns = [...(storage.matchPatterns || [])]
                             newPatterns.splice(index, 1)
                             onEnabledUrlsChange(newPatterns)
                         }}
                         onValueAdded={(value) => {
-                            matchPatterns.push(value)
-                            onEnabledUrlsChange(matchPatterns)
+
+                            if (storage.matchPatterns) {
+                                storage.matchPatterns.push(value)
+                                onEnabledUrlsChange(storage.matchPatterns)
+                            }
                         }}
                         label={
                             <>
@@ -92,11 +97,11 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                                 </Anchor>. <Text c='orange.3' component='span' size='xs'>⚠️&nbsp;Adding new entries will require reloading targeted pages.</Text>
                             </>
                         }
-                        placeholder={matchPatterns.length == 0 ? defaultOptions.matchPatterns.join(', ') : ''}
+                        placeholder={storage.matchPatterns?.length == 0 ? defaultOptions.matchPatterns.join(', ') : ''}
                         delimiter={","}
                     />
-                    <KeyValueInput
-                        value={attributes}
+                    {storage.attributes && <KeyValueInput
+                        value={storage.attributes}
                         onChange={(attributes) => setLocalStorage({ attributes })}
                         label="Resource attributes"
                         disabled={!enabled}
@@ -108,9 +113,9 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                         keyPlaceholder="key"
                         valuePlaceholder="value"
                         fullWidth
-                    />
-                    <KeyValueInput
-                        value={headers}
+                    />}
+                    {storage.headers && <KeyValueInput
+                        value={storage.headers}
                         onChange={(headers) => setLocalStorage({ headers })}
                         label="Request headers"
                         disabled={!enabled}
@@ -122,10 +127,10 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                         keyPlaceholder="key"
                         valuePlaceholder="value"
                         fullWidth
-                    />
+                    />}
                 </Group>
             }
-            {configMode === ConfigMode.Code &&
+            {storage.configMode === ConfigMode.Code &&
                 <ErrorBoundary fallback={<>poop, we had an issue</>}>
                     <Editor />
                 </ErrorBoundary>

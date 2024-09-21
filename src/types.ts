@@ -3,7 +3,7 @@ import type { ContentScriptConfigurationType } from "~storage/local/configuratio
 
 declare global {
     interface Window {
-        __OTEL_BROWSER_EXT_INSTRUMENTATION__: () => void
+        __OTEL_BROWSER_EXT_INSTRUMENTATION__: (() => void) | undefined
     }
 }
 

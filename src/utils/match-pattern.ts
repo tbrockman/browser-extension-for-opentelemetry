@@ -26,7 +26,7 @@ export const validatePatternPermissions = async (patterns: string[]): Promise<Ma
 }
 
 export const validatePatterns = (patterns: string[]): [string[], MatchPatternError[]] => {
-    let validPatterns = []
+    let validPatterns: string[] = []
     let patternErrors: MatchPatternError[] = []
 
     // verify added patterns are valid
