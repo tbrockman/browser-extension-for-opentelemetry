@@ -4,13 +4,13 @@ import ColorModeSwitch from "~components/ColorModeSwitch";
 import { useLocalStorage, useStorage } from "~hooks/storage";
 import { defaultOptions } from "~utils/options";
 import { syncMatchPatternPermissions } from "~utils/match-pattern";
-import { setLocalStorage } from "~storage/local";
+import { getLocalStorage, LocalStorage, setLocalStorage, type LocalStorageType } from "~storage/local";
 import { ConfigMode, type MatchPatternError } from "~storage/local/internal";
 import { Editor } from "~components/Editor";
 import { KeyValueInput } from "~components/KeyValueInput";
 import { ErrorBoundary } from "react-error-boundary";
 import { consoleProxy } from "~utils/logging";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type GeneralConfigurationProps = {
     enabled: boolean
@@ -31,13 +31,12 @@ const patternErrorsToPills = (patterns?: string[], errors?: MatchPatternError[])
 // which are only overwritten once any relevant config variable is changed
 export default function GeneralConfiguration({ enabled }: GeneralConfigurationProps) {
     const storage = useLocalStorage([
-        'headers',
-        'attributes',
         'matchPatterns',
         'matchPatternErrors',
         'configMode'
     ])
-    const [attrRev, setAttrRev] = useState(0)
+    const [attributes, setAttributes] = useState<LocalStorageType['attributes'] | null>(null)
+    const [headers, setHeaders] = useState<LocalStorageType['headers'] | null>(null)
     consoleProxy.log('testing partial (should be undefined until storage returns)', storage)
     const pillErrors = patternErrorsToPills(storage.matchPatterns, storage.matchPatternErrors)
 
@@ -45,6 +44,15 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
         setLocalStorage({ matchPatterns: values })
         syncMatchPatternPermissions({ prev: storage.matchPatterns || [], next: values })
     }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const { attributes, headers } = await getLocalStorage(['attributes', 'headers'])
+            setAttributes(attributes)
+            setHeaders(headers)
+        }
+        fetchData()
+    }, [storage.configMode])
 
     return (
         <Fieldset radius="md"
@@ -102,14 +110,9 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                         placeholder={storage.matchPatterns?.length == 0 ? defaultOptions.matchPatterns.join(', ') : ''}
                         delimiter={","}
                     />
-                    {storage.attributes && <KeyValueInput
-                        value={storage.attributes}
-                        revision={attrRev}
-                        onChange={async (attributes, revision) => {
-                            consoleProxy.log('setting attributes', attributes, 'with revision', revision)
-                            await setLocalStorage({ attributes })
-                            setAttrRev(revision)
-                        }}
+                    {attributes && <KeyValueInput
+                        defaultValue={attributes}
+                        onChange={async (attributes) => await setLocalStorage({ attributes })}
                         label="Resource attributes"
                         disabled={!enabled}
                         description={<>Attach additional <Anchor target="_blank" size="xs" href="https://opentelemetry.io/docs/specs/semconv/general/attributes/">attributes</Anchor> on all exported logs/traces.</>}
@@ -121,8 +124,8 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                         valuePlaceholder="value"
                         fullWidth
                     />}
-                    {/* {storage.headers && <KeyValueInput
-                        value={storage.headers}
+                    {headers && <KeyValueInput
+                        defaultValue={headers}
                         onChange={async (headers) => await setLocalStorage({ headers })}
                         label="Request headers"
                         disabled={!enabled}
@@ -134,7 +137,7 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                         keyPlaceholder="key"
                         valuePlaceholder="value"
                         fullWidth
-                    />} */}
+                    />}
                 </Group>
             }
             {storage.configMode === ConfigMode.Code &&
