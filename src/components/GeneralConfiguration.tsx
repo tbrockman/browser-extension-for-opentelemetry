@@ -10,6 +10,7 @@ import { Editor } from "~components/Editor";
 import { KeyValueInput } from "~components/KeyValueInput";
 import { ErrorBoundary } from "react-error-boundary";
 import { consoleProxy } from "~utils/logging";
+import { useState } from "react";
 
 type GeneralConfigurationProps = {
     enabled: boolean
@@ -36,6 +37,7 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
         'matchPatternErrors',
         'configMode'
     ])
+    const [attrRev, setAttrRev] = useState(0)
     consoleProxy.log('testing partial (should be undefined until storage returns)', storage)
     const pillErrors = patternErrorsToPills(storage.matchPatterns, storage.matchPatternErrors)
 
@@ -102,7 +104,12 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                     />
                     {storage.attributes && <KeyValueInput
                         value={storage.attributes}
-                        onChange={(attributes) => setLocalStorage({ attributes })}
+                        revision={attrRev}
+                        onChange={async (attributes, revision) => {
+                            consoleProxy.log('setting attributes', attributes, 'with revision', revision)
+                            await setLocalStorage({ attributes })
+                            setAttrRev(revision)
+                        }}
                         label="Resource attributes"
                         disabled={!enabled}
                         description={<>Attach additional <Anchor target="_blank" size="xs" href="https://opentelemetry.io/docs/specs/semconv/general/attributes/">attributes</Anchor> on all exported logs/traces.</>}
@@ -114,9 +121,9 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                         valuePlaceholder="value"
                         fullWidth
                     />}
-                    {storage.headers && <KeyValueInput
+                    {/* {storage.headers && <KeyValueInput
                         value={storage.headers}
-                        onChange={(headers) => setLocalStorage({ headers })}
+                        onChange={async (headers) => await setLocalStorage({ headers })}
                         label="Request headers"
                         disabled={!enabled}
                         description="Include additional HTTP headers on all export requests."
@@ -127,7 +134,7 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                         keyPlaceholder="key"
                         valuePlaceholder="value"
                         fullWidth
-                    />}
+                    />} */}
                 </Group>
             }
             {storage.configMode === ConfigMode.Code &&

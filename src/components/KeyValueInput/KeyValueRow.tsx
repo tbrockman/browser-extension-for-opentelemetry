@@ -1,11 +1,12 @@
 import { ActionIcon, Table, TextInput } from "@mantine/core"
 import { IconTrash } from "@tabler/icons-react"
+import { useEffect, useRef } from "react"
 
 export type KeyValueRowProps = {
     _key: string
     value: string
     disabled?: boolean
-    onChange: (oldKey: string, newKey: string, oldValue: string, newValue: string) => void
+    onChange: (newKey: string, newValue: string) => void
     onRemove: () => void
     keyPlaceholder?: string
     valuePlaceholder?: string
@@ -17,11 +18,11 @@ export type KeyValueRowProps = {
 export const KeyValueRow = ({ _key: key, value, onChange, onRemove, disabled, keyPlaceholder, valuePlaceholder }: KeyValueRowProps) => {
 
     const keyOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        onChange(key, event.currentTarget.value, value, value)
+        onChange(event.currentTarget.value, value)
     }
 
     const valueOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        onChange(key, key, value, event.currentTarget.value)
+        onChange(key, event.currentTarget.value)
     }
 
     return (

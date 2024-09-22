@@ -14,16 +14,11 @@ chrome.storage.onChanged.addListener(async (event: Record<keyof LocalStorage, ch
     // Serialize config text as storage, persist changes 
     if (event.configText) {
         try {
-            const { editorState } = await getLocalStorage(['editorState'])
-            const configTextString: string = de(configText.newValue)
-
-            consoleProxy.debug('editorstate?.doc', editorState?.doc?.toString(), 'configText', configTextString)
-
-            if (configTextString === editorState?.doc?.toString()) {
-                consoleProxy.debug('config text same as editor doc state, skipping')
+            if (configText.newValue === configText.oldValue) {
+                consoleProxy.debug('config text same, skipping')
                 return
             }
-            const config = de<UserFacingConfiguration>(configTextString, UserFacingConfiguration)
+            const config = de<UserFacingConfiguration>(de(configText.newValue), UserFacingConfiguration)
             consoleProxy.debug('deserialized config', config)
             await setLocalStorage(config.serializable())
         } catch (e) {
