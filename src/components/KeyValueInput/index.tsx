@@ -15,33 +15,31 @@ export type KeyValueInputProps = {
     fullWidth?: boolean
 }
 
+const rowsWithEmpty = (value: Map<string, string>) => {
+    const newMap = new Map(value)
+    if (!newMap.has('')) {
+        newMap.set('', '')
+    }
+    return Array.from(newMap.entries())
+}
+
 /**
  * A component that allows the user to input key-value pairs.
  * (a wrapper around Table that allows for adding/removing rows, key/value columns, and editable cells)
  */
 export const KeyValueInput = ({ value, onChange, label, description, disabled, tableProps, keyPlaceholder, valuePlaceholder, fullWidth }: KeyValueInputProps) => {
+    const renderRows = rowsWithEmpty(value)
+    const [rows, setRows] = useState<[string, string][]>(renderRows)
 
-    const [rows, setRows] = useState<[string, string][]>(Array.from(value.entries()))
-
-    consoleProxy.log('rows', rows, 'value', value)
-
-    useEffect(() => {
-        const newMap = new Map(value)
-        if (!newMap.has('')) {
-            newMap.set('', '')
-        }
-        const newRows = Array.from(newMap.entries())
-        consoleProxy.log('on change for value with newRows', newRows)
-        setRows(newRows)
-    }, [value])
+    consoleProxy.log('rows being rendered: ', renderRows)
 
     useEffect(() => {
-        consoleProxy.log('in rows dep with', rows, 'and value', value)
+        consoleProxy.debug('in rows dep with', rows, 'and value', value)
         // remove last row if it's empty
         const hasUnmatchedLastEmptyRow = rows.length > 0 && rows[rows.length - 1][0] == '' && rows[rows.length - 1][1] == '' && value.get('') != ''
         const fromRows = hasUnmatchedLastEmptyRow ? rows.slice(0, -1) : rows
 
-        consoleProxy.log('in rows dep with fromRows', fromRows, 'has unmatched last empty row', hasUnmatchedLastEmptyRow)
+        consoleProxy.debug('in rows dep with fromRows', fromRows, 'has unmatched last empty row', hasUnmatchedLastEmptyRow)
 
         if (!(fromRows.every(([key, val]) => (value.has(key) && value.get(key) == val)) && fromRows.length == value.size)) {
             const newMap = new Map(fromRows)
@@ -54,8 +52,8 @@ export const KeyValueInput = ({ value, onChange, label, description, disabled, t
         const newMap = new Map<string, string>()
         // renaming a key or updating a value
         value.forEach((val, key) => {
-            if (key == oldKey) {
-                newKey && newMap.set(newKey, newValue)
+            if (key == oldKey && newKey) {
+                newMap.set(newKey, newValue)
             } else {
                 newMap.set(key, val)
             }
@@ -71,8 +69,6 @@ export const KeyValueInput = ({ value, onChange, label, description, disabled, t
         const newRows = rows.filter(([k, v], i) => i != index)
         setRows([...newRows])
     }
-
-    let i = 0;
 
     const getRowKey = (i: number, key: string, val: string) => {
         return `kv-row-${i}`
@@ -91,7 +87,7 @@ export const KeyValueInput = ({ value, onChange, label, description, disabled, t
                         display: 'flex',
                         flexDirection: 'column',
                     }}>
-                    {rows.map(([key, val], i) => <KeyValueRow _key={key} key={getRowKey(i, key, val)} value={val} onChange={rowOnChange} onRemove={() => onRemove(i, key)} keyPlaceholder={keyPlaceholder} valuePlaceholder={valuePlaceholder} />)}
+                    {renderRows.map(([key, val], i) => <KeyValueRow _key={key} key={getRowKey(i, key, val)} value={val} onChange={rowOnChange} onRemove={() => onRemove(i, key)} keyPlaceholder={keyPlaceholder} valuePlaceholder={valuePlaceholder} />)}
                 </Table.Tbody>
             </Table>
         </Stack>

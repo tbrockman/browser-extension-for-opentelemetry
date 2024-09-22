@@ -1,5 +1,5 @@
 import { de, ser } from "~utils/serde";
-import { getStorage, removeLocalStorage, setLocalStorage } from "~storage/local";
+import { getLocalStorage, getStorage, removeLocalStorage, setLocalStorage } from "~storage/local";
 import { LocalStorage } from "~storage/local";
 import { Configuration, defaultConfiguration, UserFacingConfiguration } from "~storage/local/configuration";
 import { consoleProxy } from "~utils/logging";
@@ -9,12 +9,21 @@ import { pick } from "~utils/generics";
  * Syncs changes between configText and config storage.
  */
 chrome.storage.onChanged.addListener(async (event: Record<keyof LocalStorage, chrome.storage.StorageChange>, area) => {
-    const { configText, ...other } = pick(event, ['configText', ...(Object.keys(defaultConfiguration) as (keyof Configuration)[])])
+    const { configText, editorState, ...other } = pick(event, ['configText', 'editorState', ...(Object.keys(defaultConfiguration) as (keyof Configuration)[])])
 
     // Serialize config text as storage, persist changes 
     if (event.configText) {
         try {
-            const config = de<UserFacingConfiguration>(de(configText.newValue), UserFacingConfiguration)
+            const { editorState } = await getLocalStorage(['editorState'])
+            const configTextString: string = de(configText.newValue)
+
+            consoleProxy.debug('editorstate?.doc', editorState?.doc?.toString(), 'configText', configTextString)
+
+            if (configTextString === editorState?.doc?.toString()) {
+                consoleProxy.debug('config text same as editor doc state, skipping')
+                return
+            }
+            const config = de<UserFacingConfiguration>(configTextString, UserFacingConfiguration)
             consoleProxy.debug('deserialized config', config)
             await setLocalStorage(config.serializable())
         } catch (e) {

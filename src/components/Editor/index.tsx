@@ -73,6 +73,7 @@ export type EditorProps = {
     // onChange: (val: string) => void;
 }
 
+// TODO: preserve editor state after editor save -> toggle mode
 export const Editor = ({ }: EditorProps) => {
     const computedColorScheme = useComputedColorScheme('dark');
     const editor = useRef<HTMLDivElement>(null);
