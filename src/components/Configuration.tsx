@@ -9,6 +9,7 @@ import {
     Stack,
     Switch,
     Text,
+    Tooltip,
     rem
 } from "@mantine/core"
 import './Configuration.css'
@@ -21,11 +22,21 @@ import { useLocalStorage } from "~hooks/storage"
 import { setLocalStorage } from "~storage/local"
 import { useEffect, useRef, useState } from "react"
 import { ConfigMode } from "~storage/local/internal"
+import { de } from "~utils/serde"
+import { UserFacingConfiguration } from "~storage/local/configuration"
+import { syncMatchPatternPermissions } from "~utils/match-pattern"
+import { consoleProxy } from "~utils/logging"
+import { usePlatformInfo } from "~hooks/platform"
+import { toPlatformSpecificKeys } from "~utils/platform"
 
 export default function Configuration() {
-    const { enabled, configMode, editorDirty } = useLocalStorage(["enabled", "configMode", "editorDirty"])
+    const { enabled, configMode, matchPatterns, configText } = useLocalStorage(["enabled", "configMode", "matchPatterns", "configText"])
+    const [editorText, setEditorText] = useState<string | null>(null)
+    const editorDirty = editorText != null && editorText !== configText
     const portalTargetRef = useRef<HTMLElement>()
     const [refsInitialized, setRefsInitialized] = useState(false)
+    const platformInfo = usePlatformInfo()
+    const saveKeys = toPlatformSpecificKeys(['Ctrl', 'S'], platformInfo)
 
     const configModeToggle = () => {
         // toggle config mode
@@ -37,6 +48,32 @@ export default function Configuration() {
             setRefsInitialized(true)
         }
     }, [portalTargetRef])
+
+
+    const checkMatchPatterns = async (text: string) => {
+        try {
+            const newConfig = de(text, UserFacingConfiguration);
+
+            if (newConfig.matchPatterns !== matchPatterns) {
+                await syncMatchPatternPermissions({ prev: matchPatterns || [], next: newConfig.matchPatterns });
+            }
+        } catch (e) {
+            consoleProxy.error(e);
+        }
+    }
+
+    const onEditorChange = (text: string) => {
+        setEditorText(text);
+    }
+
+    const onEditorSave = async (text: string) => {
+        try {
+            await checkMatchPatterns(text);
+            await setLocalStorage({ configText: text })
+        } catch (e) {
+            consoleProxy.error(e);
+        }
+    }
 
     return (
         <Box>
@@ -97,15 +134,17 @@ export default function Configuration() {
                     <Affix
                         position={{ bottom: 10, left: 10 }}
                         portalProps={{ target: portalTargetRef.current }} styles={{ root: { position: "absolute" } }}>
-                        <ActionIcon size='xl' onClick={() => { }}>
-                            <IconDeviceFloppy />
-                        </ActionIcon>
+                        <Tooltip label={`Save (${saveKeys?.join('+')})`} withArrow>
+                            <ActionIcon size='lg' onClick={() => { onEditorSave(editorText) }}>
+                                <IconDeviceFloppy />
+                            </ActionIcon>
+                        </Tooltip>
                     </Affix>
                 }
                 <ScrollArea.Autosize mah={400}>
 
                     <Stack pr='lg' pb='lg' pt='lg'>
-                        <GeneralConfiguration enabled={!!enabled} />
+                        <GeneralConfiguration enabled={!!enabled} onEditorSave={onEditorSave} onEditorChange={onEditorChange} />
                         {configMode === ConfigMode.Visual &&
                             <>
                                 <TraceConfiguration enabled={!!enabled} />

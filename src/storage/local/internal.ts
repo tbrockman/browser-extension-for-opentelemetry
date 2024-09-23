@@ -21,7 +21,6 @@ export type InternalStorageType = {
     configMode: 'visual' | 'code'
     configText: string
     editorState?: KeyValues | null
-    editorDirty?: boolean
 }
 
 export class InternalStorage implements InternalStorageType {
@@ -32,7 +31,6 @@ export class InternalStorage implements InternalStorageType {
     configMode = ConfigMode.Visual
     configText = ser(defaultUserFacingConfiguration, true)
     editorState = null
-    editorDirty = false
 }
 
 export const defaultInternalStorage = new InternalStorage();

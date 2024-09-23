@@ -1,7 +1,6 @@
 import { Box, useComputedColorScheme } from "@mantine/core";
-import { EditorState, useCodeMirror } from "@uiw/react-codemirror";
+import { useCodeMirror } from "@uiw/react-codemirror";
 import { useEffect, useRef, useState } from "react";
-import { useLocalStorage } from "~hooks/storage";
 import { getLocalStorage, setLocalStorage } from "~storage/local";
 import { linter, lintKeymap, lintGutter } from "@codemirror/lint";
 import {
@@ -30,10 +29,7 @@ import { themeDark, themeLight } from "./theme";
 import './index.css';
 import { defaultKeymap, historyKeymap, historyField } from "@codemirror/commands";
 import { HighlightStyle, indentOnInput, bracketMatching, foldKeymap } from "@codemirror/language";
-import { de } from "~utils/serde";
-import { UserFacingConfiguration } from "~storage/local/configuration";
 import { consoleProxy } from "~utils/logging";
-import { syncMatchPatternPermissions } from "~utils/match-pattern";
 
 const stateFields = { history: historyField };
 const constExtensions = [
@@ -67,58 +63,37 @@ const constExtensions = [
     }),
 ]
 
-export type EditorProps = {}
+export type EditorProps = {
+    onSave?: (text: string) => void;
+    onChange?: (text: string) => void;
+}
 
 // TODO: preserve editor state after editor save -> toggle mode
-// TODO: prompt ctrl+s to save in top right corner after changes
 // TODO: fix ctrl+f search styling
 // TODO: fix autocomplete typing option background color flicker
-export const Editor = ({ }: EditorProps) => {
+export const Editor = ({ onSave, onChange }: EditorProps) => {
     const computedColorScheme = useComputedColorScheme('dark');
     const editor = useRef<HTMLDivElement>(null);
-    const { matchPatterns } = useLocalStorage(['matchPatterns']);
     const [initialEditorState, setInitialEditorState] = useState(null);
     // some sort of state so that we can populate with proper editor state initially?
     const [renderedConfig, setRenderedConfig] = useState<string>('');
-    const [saving, setSaving] = useState<boolean | null>(null);
+    // const [saving, setSaving] = useState<boolean | null>(null);
     const theme = computedColorScheme == 'dark' ? themeDark : themeLight
     // second element returned by createTheme is the syntaxHighlighting extension
     const highlighter = theme[1].find(item => item.value instanceof HighlightStyle)?.value;
 
-    const onChange = async (val: string, viewUpdate: ViewUpdate) => {
+    const onEditorChange = async (val: string, viewUpdate: ViewUpdate) => {
         consoleProxy.debug('editor change', val, viewUpdate);
         setRenderedConfig(val);
+        onChange && onChange(val);
 
         const state = viewUpdate.state.toJSON(stateFields);
-        await setLocalStorage({ editorState: state, editorDirty: true });
+        await setLocalStorage({ editorState: state });
     }
 
-    const onSave = () => {
-        const save = async () => {
-            try {
-                await checkMatchPatterns();
-                await setLocalStorage({ configText: renderedConfig })
-            } catch (e) {
-                consoleProxy.error(e);
-            }
-            setSaving(false);
-        }
-        setSaving(true);
-        save();
-
+    const onEditorSave = () => {
+        onSave && onSave(renderedConfig);
         return true;
-    }
-
-    const checkMatchPatterns = async () => {
-        try {
-            const newConfig = de(renderedConfig, UserFacingConfiguration);
-
-            if (newConfig.matchPatterns !== matchPatterns) {
-                await syncMatchPatternPermissions({ prev: matchPatterns || [], next: newConfig.matchPatterns });
-            }
-        } catch (e) {
-            consoleProxy.error(e);
-        }
     }
 
     const codemirror = useCodeMirror({
@@ -134,11 +109,11 @@ export const Editor = ({ }: EditorProps) => {
             // @ts-ignore
             stateExtensions(schema),
             keymap.of([
-                { key: "Mod-s", run: onSave },
+                { key: "Mod-s", run: onEditorSave },
             ]),
         ],
         theme,
-        onChange,
+        onChange: onEditorChange,
         value: renderedConfig,
         height: '100%',
     });

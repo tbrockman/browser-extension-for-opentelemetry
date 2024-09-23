@@ -1,7 +1,7 @@
 import { Combobox, Pill, PillsInput, Tooltip, useCombobox } from "@mantine/core";
 import { useClickOutside } from "@mantine/hooks";
 import { IconExclamationCircle } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 type PillErrorMap = Map<number, string>
 type TagsInputProps = {
@@ -12,7 +12,7 @@ type TagsInputProps = {
     errors?: PillErrorMap
     label: string | React.ReactNode
     placeholder: string
-    value: React.ReactNode[] | string[]
+    value: string[]
     onValueRemoved?: (index: number) => void
     onValueAdded?: (value: string) => void;
     onTagSelected?: (index: number) => void
@@ -25,7 +25,7 @@ export const TagsInput = ({ delimiter, description, disabled, errors, label, pla
     const ref = useClickOutside(handleClickOutside, ['mousedown', 'touchstart', 'focusin']);
     const combobox = useCombobox({});
 
-    value = value.map((value, i) => {
+    const elements = value.map((val: string, i: number) => {
         const hasError = errors?.has(i);
         const error = errors?.get(i);
         const styles = {
@@ -49,7 +49,7 @@ export const TagsInput = ({ delimiter, description, disabled, errors, label, pla
             <Pill
                 component={'div'}
                 tabIndex={0}
-                key={i}
+                key={val}
                 className="mantine-focus-always"
                 styles={styles}
                 onClick={(event) => {
@@ -69,7 +69,7 @@ export const TagsInput = ({ delimiter, description, disabled, errors, label, pla
                 onRemove={() => handleValueRemoved(i)}
             >
                 {hasError && <IconExclamationCircle width={12} height={12} />}
-                {value}
+                {val}
             </Pill>
         return hasError
             ? <Tooltip
@@ -82,14 +82,14 @@ export const TagsInput = ({ delimiter, description, disabled, errors, label, pla
     });
 
     const handleValueSubmit = (input: string) => {
-        onValueAdded && onValueAdded(input);
+        onValueAdded?.(input);
     }
     const handleValueRemoved = (index: number) => {
-        onValueRemoved && onValueRemoved(index);
+        onValueRemoved?.(index);
     }
     const handleTagSelected = (index: number) => {
         setSelectedIndex(index);
-        onTagSelected && onTagSelected(index);
+        onTagSelected?.(index);
     }
 
     useEffect(() => {
@@ -97,8 +97,8 @@ export const TagsInput = ({ delimiter, description, disabled, errors, label, pla
 
         if (split.length > 1) {
             const last = split.pop();
-            split.forEach((value) => onValueAdded(value.trim()));
-            setPillInputValue(last);
+            split.forEach((value) => onValueAdded?.(value.trim()));
+            setPillInputValue(last || '');
         }
     }, [pillInputValue])
 
@@ -106,7 +106,7 @@ export const TagsInput = ({ delimiter, description, disabled, errors, label, pla
         <Combobox store={combobox} onOptionSubmit={handleValueSubmit} disabled={disabled}>
             <PillsInput ref={ref} pointer description={description} label={label}>
                 <Pill.Group>
-                    {value}
+                    {elements}
 
                     <Combobox.EventsTarget>
                         <PillsInput.Field

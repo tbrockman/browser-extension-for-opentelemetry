@@ -13,6 +13,8 @@ import { useEffect, useState } from "react";
 
 type GeneralConfigurationProps = {
     enabled: boolean
+    onEditorSave: (text: string) => void
+    onEditorChange: (text: string) => void
 }
 
 const patternErrorsToPills = (patterns?: string[], errors?: MatchPatternError[]): Map<number, string> => {
@@ -26,7 +28,7 @@ const patternErrorsToPills = (patterns?: string[], errors?: MatchPatternError[])
     return map
 }
 
-export default function GeneralConfiguration({ enabled }: GeneralConfigurationProps) {
+export default function GeneralConfiguration({ enabled, onEditorSave, onEditorChange }: GeneralConfigurationProps) {
     const storage = useLocalStorage([
         'matchPatterns',
         'matchPatternErrors',
@@ -140,7 +142,7 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
             }
             {storage.configMode === ConfigMode.Code &&
                 <ErrorBoundary fallback={<>shucks, looks like the editor is having an issue</>}>
-                    <Editor />
+                    <Editor onSave={onEditorSave} onChange={onEditorChange} />
                 </ErrorBoundary>
             }
         </Fieldset>

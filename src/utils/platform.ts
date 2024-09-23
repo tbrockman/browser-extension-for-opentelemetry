@@ -23,7 +23,12 @@ const keyMap = {
     },
 }
 
-export const toPlatformSpecificKeys = (keys: string[], platform: chrome.runtime.PlatformInfo) => {
+export const toPlatformSpecificKeys = (keys: string[], platform: chrome.runtime.PlatformInfo | null) => {
+
+    if (!platform) {
+        return
+    }
+
     return keys.map(key => {
 
         switch (key) {
