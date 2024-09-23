@@ -22,17 +22,19 @@ export type Row = {
 }
 
 const withEmptyRow = (rows: Row[]): Row[] => {
-    if (rows.length > 0) {
-        const lastRow = rows[rows.length - 1];
-        if (lastRow.key || lastRow.value) {
-            return [...rows, { id: generateUniqueId(), key: '', value: '' }];
-        }
+    const newRows = [...rows];
+    const lastRow = rows.length > 0 ? rows[rows.length - 1] : { key: null, value: null };
+
+    if (rows.length == 0 || lastRow.key || lastRow.value) {
+        newRows.push({ id: generateUniqueId(), key: '', value: '' });
     }
-    return rows;
+    return newRows;
 }
 
+// TODO: consider better way to generate ids than this generated one
 const generateUniqueId = () => '_' + Math.random().toString(36).substr(2, 9);
 
+// TODO: fix not rendering new rows after changing in configText
 /**
  * A component that allows the user to input key-value pairs.
  * (a wrapper around Table that allows for adding/removing rows, key/value columns, and editable cells)
@@ -42,22 +44,29 @@ export const KeyValueInput = ({ defaultValue, onChange, label, description, disa
         withEmptyRow(Array.from(defaultValue).map(([key, val]) => ({ id: generateUniqueId(), key, value: val } as Row)))
     );
 
+    consoleProxy.log('rows', rows,)
+
     useEffect(() => {
         const newMap = new Map(rows.filter(({ key, value }) => (key || value)).map(({ key, value }) => [key, value]));
 
         if (newMap.size === defaultValue.size && Array.from(newMap).every(([key, value]) => defaultValue.has(key) && defaultValue.get(key) === value)) {
-            consoleProxy.log('no change')
             return;
         }
+
         onChange(newMap);
     }, [rows])
 
     // TODO: handle key collisions
     const rowOnChange = (id: string) => {
         return (newKey: string, newValue: string) => {
-            const updatedRows = rows.map(row =>
+            const existingKeyIndex = rows.findIndex(row => row.key === newKey);
+            let updatedRows = rows.map(row =>
                 row.id === id ? { ...row, key: newKey, value: newValue } : row
             );
+
+            if (existingKeyIndex > -1 && rows[existingKeyIndex].id !== id) {
+                updatedRows = updatedRows.filter((row, i) => i !== existingKeyIndex);
+            }
             consoleProxy.log('rowOnChange', { id, newKey, newValue, updatedRows })
             setRows(withEmptyRow(updatedRows));
         }

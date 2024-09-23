@@ -33,11 +33,13 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
     const storage = useLocalStorage([
         'matchPatterns',
         'matchPatternErrors',
-        'configMode'
+        'configMode',
+        'attributes',
+        'headers'
     ])
-    const [attributes, setAttributes] = useState<LocalStorageType['attributes'] | null>(null)
-    const [headers, setHeaders] = useState<LocalStorageType['headers'] | null>(null)
-    consoleProxy.log('testing partial (should be undefined until storage returns)', storage)
+    const [attributes, setAttributes] = useState<LocalStorageType['attributes']>(new Map())
+    const [headers, setHeaders] = useState<LocalStorageType['headers']>(new Map())
+    consoleProxy.log('testing partial (should be undefined until storage returns)', { storage, headers, attributes })
     const pillErrors = patternErrorsToPills(storage.matchPatterns, storage.matchPatternErrors)
 
     const onEnabledUrlsChange = async (values: string[]) => {
@@ -48,11 +50,11 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
     useEffect(() => {
         const fetchData = async () => {
             const { attributes, headers } = await getLocalStorage(['attributes', 'headers'])
-            setAttributes(attributes)
-            setHeaders(headers)
+            setAttributes(new Map(attributes || []))
+            setHeaders(new Map(headers || []))
         }
         fetchData()
-    }, [storage.configMode])
+    }, [storage.configMode, storage.attributes, storage.headers])
 
     return (
         <Fieldset radius="md"

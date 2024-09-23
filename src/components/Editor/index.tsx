@@ -34,7 +34,6 @@ import { de } from "~utils/serde";
 import { UserFacingConfiguration } from "~storage/local/configuration";
 import { consoleProxy } from "~utils/logging";
 import { syncMatchPatternPermissions } from "~utils/match-pattern";
-import { get } from "http";
 
 const stateFields = { history: historyField };
 const constExtensions = [
@@ -74,6 +73,8 @@ export type EditorProps = {
 }
 
 // TODO: preserve editor state after editor save -> toggle mode
+// TODO: fix hover styles in light mode
+// TODO: prompt ctrl+s to save in top right corner after changes
 export const Editor = ({ }: EditorProps) => {
     const computedColorScheme = useComputedColorScheme('dark');
     const editor = useRef<HTMLDivElement>(null);
