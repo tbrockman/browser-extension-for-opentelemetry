@@ -1,4 +1,5 @@
 import {
+    ActionIcon,
     Affix,
     Box,
     Button,
@@ -11,7 +12,7 @@ import {
     rem
 } from "@mantine/core"
 import './Configuration.css'
-import { IconBraces, IconFileCheck, IconPower } from "@tabler/icons-react"
+import { IconBraces, IconDeviceFloppy, IconFileCheck, IconPower } from "@tabler/icons-react"
 import { IconSettings } from "@tabler/icons-react"
 import TraceConfiguration from "~components/TraceConfiguration"
 import LogConfiguration from "~components/LogConfiguration"
@@ -20,11 +21,10 @@ import { useLocalStorage } from "~hooks/storage"
 import { setLocalStorage } from "~storage/local"
 import { useEffect, useRef, useState } from "react"
 import { ConfigMode } from "~storage/local/internal"
-import { usePlatformInfo } from "~hooks/platform"
 
 export default function Configuration() {
-    const { enabled, configMode } = useLocalStorage(["enabled", "configMode"])
-    const portalTargetRef = useRef<HTMLDivElement>(null)
+    const { enabled, configMode, editorDirty } = useLocalStorage(["enabled", "configMode", "editorDirty"])
+    const portalTargetRef = useRef<HTMLElement>()
     const [refsInitialized, setRefsInitialized] = useState(false)
 
     const configModeToggle = () => {
@@ -92,14 +92,24 @@ export default function Configuration() {
                         </Group>
                     </Affix>
                 }
+                {
+                    refsInitialized && configMode == ConfigMode.Code && editorDirty &&
+                    <Affix
+                        position={{ bottom: 10, left: 10 }}
+                        portalProps={{ target: portalTargetRef.current }} styles={{ root: { position: "absolute" } }}>
+                        <ActionIcon size='xl' onClick={() => { }}>
+                            <IconDeviceFloppy />
+                        </ActionIcon>
+                    </Affix>
+                }
                 <ScrollArea.Autosize mah={400}>
 
                     <Stack pr='lg' pb='lg' pt='lg'>
-                        <GeneralConfiguration enabled={enabled} />
+                        <GeneralConfiguration enabled={!!enabled} />
                         {configMode === ConfigMode.Visual &&
                             <>
-                                <TraceConfiguration enabled={enabled} />
-                                <LogConfiguration enabled={enabled} />
+                                <TraceConfiguration enabled={!!enabled} />
+                                <LogConfiguration enabled={!!enabled} />
                             </>
                         }
                     </Stack>

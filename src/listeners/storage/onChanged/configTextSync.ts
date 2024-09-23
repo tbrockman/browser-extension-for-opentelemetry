@@ -1,5 +1,5 @@
 import { de, ser } from "~utils/serde";
-import { getLocalStorage, getStorage, removeLocalStorage, setLocalStorage } from "~storage/local";
+import { getStorage, removeLocalStorage, setLocalStorage } from "~storage/local";
 import { LocalStorage } from "~storage/local";
 import { Configuration, defaultConfiguration, UserFacingConfiguration } from "~storage/local/configuration";
 import { consoleProxy } from "~utils/logging";
@@ -14,13 +14,17 @@ chrome.storage.onChanged.addListener(async (event: Record<keyof LocalStorage, ch
     // Serialize config text as storage, persist changes 
     if (event.configText) {
         try {
+            let changes = { editorDirty: false }
+
             if (configText.newValue === configText.oldValue) {
                 consoleProxy.debug('config text same, skipping')
-                return
+            } else {
+                const config = de<UserFacingConfiguration>(de(configText.newValue), UserFacingConfiguration)
+                consoleProxy.debug('deserialized config', config)
+                changes = { ...changes, ...config.serializable() }
             }
-            const config = de<UserFacingConfiguration>(de(configText.newValue), UserFacingConfiguration)
-            consoleProxy.debug('deserialized config', config)
-            await setLocalStorage(config.serializable())
+            consoleProxy.debug('making changes as a result of configtext change', changes)
+            await setLocalStorage(changes)
         } catch (e) {
             consoleProxy.error('failed to deserialize config', e)
         }
@@ -37,6 +41,6 @@ chrome.storage.onChanged.addListener(async (event: Record<keyof LocalStorage, ch
         const serialized = ser(from, true)
         consoleProxy.debug('serialized configText', serialized)
         await removeLocalStorage(['editorState'])
-        await setLocalStorage({ configText: serialized })
+        await setLocalStorage({ configText: serialized, editorDirty: false })
     }
 })

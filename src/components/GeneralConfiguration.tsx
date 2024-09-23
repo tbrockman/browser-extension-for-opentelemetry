@@ -1,16 +1,19 @@
 import { Anchor, Fieldset, Group, Text } from "@mantine/core";
 import { TagsInput } from "~components/TagsInput";
 import ColorModeSwitch from "~components/ColorModeSwitch";
-import { useLocalStorage, useStorage } from "~hooks/storage";
+import { useLocalStorage } from "~hooks/storage";
 import { defaultOptions } from "~utils/options";
 import { syncMatchPatternPermissions } from "~utils/match-pattern";
-import { getLocalStorage, LocalStorage, setLocalStorage, type LocalStorageType } from "~storage/local";
+import { getLocalStorage, setLocalStorage, type LocalStorageType } from "~storage/local";
 import { ConfigMode, type MatchPatternError } from "~storage/local/internal";
 import { Editor } from "~components/Editor";
 import { KeyValueInput } from "~components/KeyValueInput";
 import { ErrorBoundary } from "react-error-boundary";
-import { consoleProxy } from "~utils/logging";
 import { useEffect, useState } from "react";
+import { consoleProxy } from "~utils/logging";
+import { de } from "~utils/serde";
+import { UserFacingConfiguration } from "~storage/local/configuration";
+import type { EditorState } from "@codemirror/state";
 
 type GeneralConfigurationProps = {
     enabled: boolean
@@ -37,6 +40,8 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
     ])
     const [attributes, setAttributes] = useState<LocalStorageType['attributes']>(new Map())
     const [headers, setHeaders] = useState<LocalStorageType['headers']>(new Map())
+    const [editorState, setEditorState] = useState<LocalStorageType['editorState']>(null)
+    const [configText, setConfigText] = useState<LocalStorageType['configText']>('{}')
     const pillErrors = patternErrorsToPills(storage.matchPatterns, storage.matchPatternErrors)
 
     const onEnabledUrlsChange = async (values: string[]) => {
@@ -47,11 +52,46 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
     useEffect(() => {
         const fetchData = async () => {
             const { attributes, headers } = await getLocalStorage(['attributes', 'headers'])
+            consoleProxy.log('attributes', attributes, 'headers', headers)
             setAttributes(new Map(attributes || []))
             setHeaders(new Map(headers || []))
         }
         fetchData()
     }, [storage.configMode, storage.attributes, storage.headers])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const { editorState, configText } = await getLocalStorage(['editorState', 'configText'])
+            setEditorState(editorState)
+            setConfigText(configText)
+        }
+        fetchData()
+    }, [storage.configMode])
+
+    const onChange = async (val: string, state: any) => {
+        await setLocalStorage({ editorState: state, editorDirty: true });
+    }
+
+    const onSave = async (text: string) => {
+        try {
+            await checkMatchPatterns(text);
+            await setLocalStorage({ configText: text })
+        } catch (e) {
+            consoleProxy.error(e);
+        }
+    }
+
+    const checkMatchPatterns = async (text: string) => {
+        try {
+            const newConfig = de(text, UserFacingConfiguration);
+
+            if (newConfig.matchPatterns !== storage.matchPatterns) {
+                await syncMatchPatternPermissions({ prev: storage.matchPatterns || [], next: newConfig.matchPatterns });
+            }
+        } catch (e) {
+            consoleProxy.error(e);
+        }
+    }
 
     return (
         <Fieldset radius="md"
@@ -140,8 +180,8 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
                 </Group>
             }
             {storage.configMode === ConfigMode.Code &&
-                <ErrorBoundary fallback={<>poop, we had an issue</>}>
-                    <Editor />
+                <ErrorBoundary fallback={<>shucks, looks like the editor is having an issue</>}>
+                    <Editor onChange={onChange} onSave={onSave} defaultValue={configText} defaultEditorState={editorState as any} />
                 </ErrorBoundary>
             }
         </Fieldset>

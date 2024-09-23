@@ -15,22 +15,24 @@ export enum ConfigMode {
 // Data in LocalStorage used internally by the extension
 export type InternalStorageType = {
     matchPatternErrors: MatchPatternError[]
-    traceExportErrors?: string[]
-    logExportErrors?: string[]
-    metricExportErrors?: string[]
+    // traceExportErrors?: string[]
+    // logExportErrors?: string[]
+    // metricExportErrors?: string[]
     configMode: 'visual' | 'code'
     configText: string
-    editorState?: KeyValues
+    editorState?: KeyValues | null
+    editorDirty?: boolean
 }
 
 export class InternalStorage implements InternalStorageType {
     matchPatternErrors: MatchPatternError[] = []
-    traceExportErrors?: string[] = [] // TODO:
-    logExportErrors?: string[] = [] // TODO:
-    metricExportErrors?: string[] = [] // TODO:
+    // traceExportErrors?: string[] = [] // TODO:
+    // logExportErrors?: string[] = [] // TODO:
+    // metricExportErrors?: string[] = [] // TODO:
     configMode = ConfigMode.Visual
     configText = ser(defaultUserFacingConfiguration, true)
-    editorState: KeyValues = null
+    editorState = null
+    editorDirty = false
 }
 
 export const defaultInternalStorage = new InternalStorage();

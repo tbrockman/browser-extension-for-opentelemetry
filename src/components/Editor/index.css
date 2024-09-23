@@ -57,3 +57,16 @@
         background-color: #0000000f;
     }
 }
+
+/* Completion tooltip fixes */
+
+.cm-tooltip>.cm-tooltip.cm-completionInfo {
+    overflow-wrap: break-word;
+    background-color: var(--mantine-color-body);
+    border: 1px solid var(--mantine-color-default-border);
+}
+
+.cm-editor .cm-tooltip.cm-tooltip.cm-tooltip-autocomplete>ul {
+    background-color: var(--mantine-color-body);
+    border: 1px solid var(--mantine-color-default-border);
+}
