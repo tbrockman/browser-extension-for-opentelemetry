@@ -67,14 +67,11 @@ const constExtensions = [
     }),
 ]
 
-export type EditorProps = {
-    // value: string;
-    // onChange: (val: string) => void;
-}
+export type EditorProps = {}
 
 // TODO: preserve editor state after editor save -> toggle mode
-// TODO: fix hover styles in light mode
 // TODO: prompt ctrl+s to save in top right corner after changes
+// TODO: fix ctrl+f search styling
 export const Editor = ({ }: EditorProps) => {
     const computedColorScheme = useComputedColorScheme('dark');
     const editor = useRef<HTMLDivElement>(null);

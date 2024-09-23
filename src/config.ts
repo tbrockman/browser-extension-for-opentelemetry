@@ -1,9 +1,16 @@
 import { deepmerge } from "deepmerge-ts";
+import { consoleProxy } from "~utils/logging";
 
-interface Config { }
+interface Config {
+    version: string | undefined
+    name: string | undefined
+}
 
 const configs = {
-    default: {},
+    default: {
+        version: process.env.PLASMO_PUBLIC_PACKAGE_VERSION,
+        name: process.env.PLASMO_PUBLIC_PACKAGE_NAME,
+    },
     production: {},
     development: {}
 }

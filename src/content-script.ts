@@ -21,6 +21,7 @@ import { consoleProxy } from '~utils/logging';
 import { wrapConsoleWithLoggerProvider } from '~telemetry/logs';
 import { de } from '~utils/serde';
 import type { ContentScriptConfigurationType } from '~storage/local/configuration';
+import { config } from '~config';
 
 function createSendOverride<ExportItem, ServiceRequest>(sessionId: string, exporter: OTLPProtoExporterBrowserBase<ExportItem, ServiceRequest>, type: MessageTypes) {
 
@@ -62,8 +63,8 @@ const instrument = (sessionId: string, options: ContentScriptConfigurationType) 
     consoleProxy.debug(`instrumenting`, { sessionId, options })
 
     const resource = new Resource({
-        [ATTR_SERVICE_NAME]: 'browser-extension-for-opentelemetry',
-        [ATTR_SERVICE_VERSION]: process.env.npm_package_version,
+        [ATTR_SERVICE_NAME]: config.name,
+        [ATTR_SERVICE_VERSION]: config.version, // TODO: probably want to inject this
         [ATTR_TELEMETRY_SDK_LANGUAGE]: 'webjs',
         [ATTR_TELEMETRY_SDK_NAME]: 'opentelemetry',
         [ATTR_TELEMETRY_SDK_VERSION]: '1.22.0', // TODO: replace with resolved version

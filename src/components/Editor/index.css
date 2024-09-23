@@ -1,3 +1,4 @@
+/* TODO: technically these should all be their own JS theme styles, instead of a CSS file */
 .cm-editor {
     background-color: var(--mantine-color-body);
 }
@@ -39,4 +40,20 @@
 
 .cm-json-schema-hover-examples {
     margin-top: 1rem;
+}
+
+/* Selection and active line style fixes */
+
+.cm-line>.cm-selectionMatch {
+    background-color: var(--mantine-primary-color-light-hover);
+}
+
+.cm-layer.cm-selectionLayer>.cm-selectionBackground {
+    background: var(--mantine-primary-color-light-hover) !important;
+}
+
+:root[data-mantine-color-scheme="light"] {
+    .cm-line.cm-activeLine {
+        background-color: #0000000f;
+    }
 }

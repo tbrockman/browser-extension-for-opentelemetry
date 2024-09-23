@@ -23,7 +23,7 @@ yarn-error.log*
 .env*.local
 
 out/
-build/
+/build
 dist/
 
 # plasmo

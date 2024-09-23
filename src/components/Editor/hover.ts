@@ -2,7 +2,7 @@ import md from "markdown-it";
 import type { FoundCursorData } from "codemirror-json-schema/dist/features/hover";
 import { parser } from "@lezer/json"
 import { HighlightStyle } from "@codemirror/language"
-import { highlightCode, tags } from "@lezer/highlight"
+import { highlightCode, Tag, tags } from "@lezer/highlight"
 
 const renderer = md({
     linkify: true,
@@ -49,7 +49,7 @@ export const formatHover = (highlighter: HighlightStyle): (data: FoundCursorData
 
     return (data: FoundCursorData) => {
         const { schema, pointer } = data;
-        const key = pointer.split("/").pop();
+        const key = pointer.split("/").pop() || "";
 
         const div = document.createElement("div");
         div.className = "cm-json-schema-hover";
@@ -73,7 +73,7 @@ export const formatHover = (highlighter: HighlightStyle): (data: FoundCursorData
         typeSpan.textContent = schema.type;
         typeSpan.className = "cm-json-schema-hover-type";
         keyAndType.appendChild(typeSpan);
-        let typeTags = []
+        let typeTags: Tag[] = []
 
         switch (schema.type) {
             case "object":

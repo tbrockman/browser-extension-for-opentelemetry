@@ -27,8 +27,6 @@ const patternErrorsToPills = (patterns?: string[], errors?: MatchPatternError[])
     return map
 }
 
-// TODO: some sort of editor feature that allows saving not-yet-committed changes to configText
-// which are only overwritten once any relevant config variable is changed
 export default function GeneralConfiguration({ enabled }: GeneralConfigurationProps) {
     const storage = useLocalStorage([
         'matchPatterns',
@@ -39,7 +37,6 @@ export default function GeneralConfiguration({ enabled }: GeneralConfigurationPr
     ])
     const [attributes, setAttributes] = useState<LocalStorageType['attributes']>(new Map())
     const [headers, setHeaders] = useState<LocalStorageType['headers']>(new Map())
-    consoleProxy.log('testing partial (should be undefined until storage returns)', { storage, headers, attributes })
     const pillErrors = patternErrorsToPills(storage.matchPatterns, storage.matchPatternErrors)
 
     const onEnabledUrlsChange = async (values: string[]) => {

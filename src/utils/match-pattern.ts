@@ -77,7 +77,9 @@ export const syncMatchPatternPermissions = async ({ prev, next }: SyncMatchPatte
     }
 }
 
-export const match = (url: string, patterns: string[], options?: Partial<MatchPatternOptions>) => {
+export const match = (url: string | undefined, patterns: string[], options?: Partial<MatchPatternOptions>) => {
+    if (!url) return false
+
     for (let pattern of patterns) {
         const matcher = matchPattern(pattern, { ...presets.chrome, ...options });
 

@@ -2,6 +2,7 @@ import { ActionIcon, Anchor, Flex, Group, Text, Tooltip } from "@mantine/core";
 import { IconBrandGithubFilled, IconCoffee, IconPalette } from "@tabler/icons-react";
 
 import './LinkSection.css'
+import { config } from "~config";
 
 type LinkSectionIconProps = {
     label: string,
