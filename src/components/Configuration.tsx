@@ -52,7 +52,7 @@ export default function Configuration() {
 
     useEffect(() => {
         if (editorText == null && editorState && editorState.doc) {
-            setEditorText(editorState.doc)
+            setEditorText(editorState.doc as string)
         }
     }, [editorState])
 

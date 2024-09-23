@@ -70,6 +70,7 @@ export type EditorProps = {
 
 // TODO: fix ctrl+f search styling
 // TODO: fix autocomplete typing option background color flicker
+// TODO: jsonschema validation of enums seems to be broken
 export const Editor = ({ onSave, onChange }: EditorProps) => {
     const computedColorScheme = useComputedColorScheme('dark');
     const editor = useRef<HTMLDivElement>(null);
