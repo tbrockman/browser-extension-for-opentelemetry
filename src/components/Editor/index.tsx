@@ -68,16 +68,13 @@ export type EditorProps = {
     onChange?: (text: string) => void;
 }
 
-// TODO: preserve editor state after editor save -> toggle mode
 // TODO: fix ctrl+f search styling
 // TODO: fix autocomplete typing option background color flicker
 export const Editor = ({ onSave, onChange }: EditorProps) => {
     const computedColorScheme = useComputedColorScheme('dark');
     const editor = useRef<HTMLDivElement>(null);
     const [initialEditorState, setInitialEditorState] = useState(null);
-    // some sort of state so that we can populate with proper editor state initially?
     const [renderedConfig, setRenderedConfig] = useState<string>('');
-    // const [saving, setSaving] = useState<boolean | null>(null);
     const theme = computedColorScheme == 'dark' ? themeDark : themeLight
     // second element returned by createTheme is the syntaxHighlighting extension
     const highlighter = theme[1].find(item => item.value instanceof HighlightStyle)?.value;
@@ -118,6 +115,7 @@ export const Editor = ({ onSave, onChange }: EditorProps) => {
         height: '100%',
     });
 
+    // TODO: seems like we should be able to supply the initial state directly to the editor instead
     useEffect(() => {
         const init = async () => {
             if (initialEditorState == null) {

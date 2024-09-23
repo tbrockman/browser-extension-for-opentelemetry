@@ -27,16 +27,22 @@ chrome.storage.onChanged.addListener(async (event: Record<keyof LocalStorage, ch
         }
     }
     // Technically we could translate these changes into EditorState transactions
-    // which would allow cool things like undo/redo, but that seems like extra work for now
+    // which would allow cool things like undo/redo, but that seems like unnecessary extra work for now
     else if (Object.keys(other).length > 0) {
-        // Otherwise, serialize config as config text, persist changes, *and* clear editor state
+        // Otherwise, serialize config as config text, persist changes, *and* clear editor state 
+        // (if this change invalidates the editor state)
         // Should only be ran when user configuration inputs change
         // assumes that an immediate read will contain the latest config (TODO: verify this assumption)
-        const stored = await getStorage('local', new Configuration())
+        const { configText, ...stored } = await getStorage('local', { ...(new Configuration()), configText: null })
         const from = UserFacingConfiguration.from(stored)
         consoleProxy.debug('user facing config to be serialized', from)
         const serialized = ser(from, true)
         consoleProxy.debug('serialized configText', serialized)
-        await setLocalStorage({ configText: serialized, editorState: null })
+
+        // TODO: technically whitespace changes should not trigger this, but it's fine for now
+        if (serialized !== configText) {
+            consoleProxy.debug('configText changed, updating', configText, serialized)
+            await setLocalStorage({ configText: serialized, editorState: null })
+        }
     }
 })

@@ -30,8 +30,9 @@ import { usePlatformInfo } from "~hooks/platform"
 import { toPlatformSpecificKeys } from "~utils/platform"
 
 export default function Configuration() {
-    const { enabled, configMode, matchPatterns, configText } = useLocalStorage(["enabled", "configMode", "matchPatterns", "configText"])
-    const [editorText, setEditorText] = useState<string | null>(null)
+    const { enabled, configMode, matchPatterns, configText, editorState } = useLocalStorage(["enabled", "configMode", "matchPatterns", "configText", "editorState"])
+    const [editorText, setEditorText] = useState(editorState?.doc as string | undefined)
+    const [saving, setSaving] = useState(false)
     const editorDirty = editorText != null && editorText !== configText
     const portalTargetRef = useRef<HTMLElement>()
     const [refsInitialized, setRefsInitialized] = useState(false)
@@ -49,6 +50,11 @@ export default function Configuration() {
         }
     }, [portalTargetRef])
 
+    useEffect(() => {
+        if (editorText == null && editorState && editorState.doc) {
+            setEditorText(editorState.doc)
+        }
+    }, [editorState])
 
     const checkMatchPatterns = async (text: string) => {
         try {
@@ -67,9 +73,12 @@ export default function Configuration() {
     }
 
     const onEditorSave = async (text: string) => {
+        const start = Date.now()
+        setSaving(true)
         try {
             await checkMatchPatterns(text);
             await setLocalStorage({ configText: text })
+            setSaving(false)
         } catch (e) {
             consoleProxy.error(e);
         }
@@ -133,9 +142,14 @@ export default function Configuration() {
                     refsInitialized && configMode == ConfigMode.Code && editorDirty &&
                     <Affix
                         position={{ bottom: 10, left: 10 }}
-                        portalProps={{ target: portalTargetRef.current }} styles={{ root: { position: "absolute" } }}>
-                        <Tooltip label={`Save (${saveKeys?.join('+')})`} withArrow>
-                            <ActionIcon size='lg' onClick={() => { onEditorSave(editorText) }}>
+                        portalProps={{ target: portalTargetRef.current }} styles={{ root: { position: "absolute" } }}
+                    >
+                        <Tooltip
+                            label={`Save (${saveKeys?.join('+')})`}
+                            withArrow
+                            position="top-start"
+                        >
+                            <ActionIcon size='lg' onClick={() => { onEditorSave(editorText) }} loading={saving}>
                                 <IconDeviceFloppy />
                             </ActionIcon>
                         </Tooltip>

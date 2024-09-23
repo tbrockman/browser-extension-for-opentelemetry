@@ -20,7 +20,7 @@ export type InternalStorageType = {
     // metricExportErrors?: string[]
     configMode: 'visual' | 'code'
     configText: string
-    editorState?: KeyValues | null
+    editorState: KeyValues | null
 }
 
 export class InternalStorage implements InternalStorageType {
@@ -30,7 +30,7 @@ export class InternalStorage implements InternalStorageType {
     // metricExportErrors?: string[] = [] // TODO:
     configMode = ConfigMode.Visual
     configText = ser(defaultUserFacingConfiguration, true)
-    editorState = null
+    editorState: KeyValues | null = null
 }
 
 export const defaultInternalStorage = new InternalStorage();
