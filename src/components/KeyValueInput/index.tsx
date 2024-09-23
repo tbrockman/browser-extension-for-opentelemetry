@@ -43,13 +43,14 @@ export const KeyValueInput = ({ defaultValue, onChange, label, description, disa
         withEmptyRow(Array.from(defaultValue).map(([key, val]) => ({ id: generateUniqueId(), key, value: val } as Row)))
     );
 
+    consoleProxy.debug('keyvalueinput rows', rows)
+
     useEffect(() => {
         const newMap = new Map(rows.filter(({ key, value }) => (key || value)).map(({ key, value }) => [key, value]));
 
         if (newMap.size === defaultValue.size && Array.from(newMap).every(([key, value]) => defaultValue.has(key) && defaultValue.get(key) === value)) {
             return;
         }
-
         onChange(newMap);
     }, [rows])
 

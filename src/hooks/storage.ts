@@ -37,7 +37,7 @@ export function useStorage<T extends object>(keysWithDefaults: T, storageArea: c
             return { ...acc, [key]: de(newValue) }
         }, state);
 
-        setState(newStorage);
+        setState({ ...newStorage });
     }
 
     useEffect(() => {

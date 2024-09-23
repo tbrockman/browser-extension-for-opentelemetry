@@ -67,38 +67,58 @@ const constExtensions = [
     }),
 ]
 
-export type EditorProps = {
-    onSave: (text: string) => Promise<void>
-    onChange: (val: string, state: any) => Promise<void>
-    defaultEditorState?: EditorState
-    defaultValue: string
-}
+export type EditorProps = {}
 
 // TODO: preserve editor state after editor save -> toggle mode
 // TODO: prompt ctrl+s to save in top right corner after changes
 // TODO: fix ctrl+f search styling
 // TODO: fix autocomplete typing option background color flicker
-export const Editor = ({ onSave, onChange, defaultValue, defaultEditorState }: EditorProps) => {
+export const Editor = ({ }: EditorProps) => {
     const computedColorScheme = useComputedColorScheme('dark');
     const editor = useRef<HTMLDivElement>(null);
-    const [initialEditorState, setInitialEditorState] = useState(defaultEditorState);
+    const { matchPatterns } = useLocalStorage(['matchPatterns']);
+    const [initialEditorState, setInitialEditorState] = useState(null);
     // some sort of state so that we can populate with proper editor state initially?
-    const [renderedText, setRenderedText] = useState<string>(defaultEditorState?.doc as string | undefined || defaultValue);
+    const [renderedConfig, setRenderedConfig] = useState<string>('');
     const [saving, setSaving] = useState<boolean | null>(null);
     const theme = computedColorScheme == 'dark' ? themeDark : themeLight
     // second element returned by createTheme is the syntaxHighlighting extension
     const highlighter = theme[1].find(item => item.value instanceof HighlightStyle)?.value;
 
-    const editorOnSave = (): boolean => {
+    const onChange = async (val: string, viewUpdate: ViewUpdate) => {
+        consoleProxy.debug('editor change', val, viewUpdate);
+        setRenderedConfig(val);
+
+        const state = viewUpdate.state.toJSON(stateFields);
+        await setLocalStorage({ editorState: state, editorDirty: true });
+    }
+
+    const onSave = () => {
+        const save = async () => {
+            try {
+                await checkMatchPatterns();
+                await setLocalStorage({ configText: renderedConfig })
+            } catch (e) {
+                consoleProxy.error(e);
+            }
+            setSaving(false);
+        }
         setSaving(true);
-        onSave(renderedText).finally(() => setSaving(false));
+        save();
+
         return true;
     }
 
-    const editorOnChange = async (val: string, viewUpdate: ViewUpdate) => {
-        setRenderedText(val);
-        const state = viewUpdate.state.toJSON(stateFields);
-        await onChange(val, state);
+    const checkMatchPatterns = async () => {
+        try {
+            const newConfig = de(renderedConfig, UserFacingConfiguration);
+
+            if (newConfig.matchPatterns !== matchPatterns) {
+                await syncMatchPatternPermissions({ prev: matchPatterns || [], next: newConfig.matchPatterns });
+            }
+        } catch (e) {
+            consoleProxy.error(e);
+        }
     }
 
     const codemirror = useCodeMirror({
@@ -114,14 +134,27 @@ export const Editor = ({ onSave, onChange, defaultValue, defaultEditorState }: E
             // @ts-ignore
             stateExtensions(schema),
             keymap.of([
-                { key: "Mod-s", run: editorOnSave },
+                { key: "Mod-s", run: onSave },
             ]),
         ],
         theme,
-        onChange: editorOnChange,
-        value: renderedText,
+        onChange,
+        value: renderedConfig,
         height: '100%',
     });
+
+    useEffect(() => {
+        const init = async () => {
+            if (initialEditorState == null) {
+                const { editorState, configText } = await getLocalStorage(['editorState', 'configText'])
+                // @ts-ignore TODO: fix this
+                setRenderedConfig(editorState?.doc || configText);
+                // @ts-ignore TODO: fix this
+                setInitialEditorState(editorState);
+            }
+        }
+        init();
+    }, [initialEditorState])
 
     useEffect(() => {
         initialEditorState && codemirror.setState(initialEditorState);

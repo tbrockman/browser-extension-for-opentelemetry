@@ -40,7 +40,6 @@ chrome.storage.onChanged.addListener(async (event: Record<keyof LocalStorage, ch
         consoleProxy.debug('user facing config to be serialized', from)
         const serialized = ser(from, true)
         consoleProxy.debug('serialized configText', serialized)
-        await removeLocalStorage(['editorState'])
-        await setLocalStorage({ configText: serialized, editorDirty: false })
+        await setLocalStorage({ configText: serialized, editorDirty: false, editorState: null })
     }
 })
