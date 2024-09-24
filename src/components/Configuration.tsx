@@ -29,6 +29,7 @@ import { consoleProxy } from "~utils/logging"
 import { usePlatformInfo } from "~hooks/platform"
 import { toPlatformSpecificKeys } from "~utils/platform"
 
+// TODO: Consider replacing "Configuration" header with a menu
 export default function Configuration() {
     const { enabled, configMode, matchPatterns, configText, editorState } = useLocalStorage(["enabled", "configMode", "matchPatterns", "configText", "editorState"])
     const [editorText, setEditorText] = useState(editorState?.doc as string | undefined)
@@ -145,7 +146,7 @@ export default function Configuration() {
                         portalProps={{ target: portalTargetRef.current }} styles={{ root: { position: "absolute" } }}
                     >
                         <Tooltip
-                            label={`Save (${saveKeys?.join('+')})`}
+                            label={`Save changes (${saveKeys?.join('+')})`}
                             withArrow
                             position="top-start"
                         >

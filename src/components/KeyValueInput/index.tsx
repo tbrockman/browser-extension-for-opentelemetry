@@ -1,7 +1,6 @@
 import { Stack, Table, Text, type TableProps } from "@mantine/core"
 import { useEffect, useState, type ReactNode } from "react"
 import { KeyValueRow } from "~components/KeyValueInput/KeyValueRow"
-import { consoleProxy } from "~utils/logging"
 
 export type KeyValueInputProps = {
     defaultValue: Map<string, string>

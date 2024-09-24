@@ -1,6 +1,5 @@
 import { ActionIcon, Table, TextInput } from "@mantine/core"
 import { IconTrash } from "@tabler/icons-react"
-import { useEffect, useRef } from "react"
 
 export type KeyValueRowProps = {
     _key: string

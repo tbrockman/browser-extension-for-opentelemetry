@@ -34,7 +34,6 @@ import { consoleProxy } from "~utils/logging";
 const stateFields = { history: historyField };
 const constExtensions = [
     EditorView.lineWrapping,
-    // autocompletion(),
     lintGutter(),
     gutter({ class: "CodeMirror-lint-markers" }),
     bracketMatching(),
