@@ -33,8 +33,7 @@ import { toPlatformSpecificKeys } from "~utils/platform"
 export default function Configuration() {
     const { enabled, configMode, matchPatterns, configText, editorState } = useLocalStorage(["enabled", "configMode", "matchPatterns", "configText", "editorState"])
     const [editorText, setEditorText] = useState(editorState?.doc as string | undefined)
-    const [saving, setSaving] = useState(false)
-    const editorDirty = editorText != null && editorText !== configText
+    const editorDirty = editorText && editorState && editorText !== configText
     const portalTargetRef = useRef<HTMLElement>()
     const [refsInitialized, setRefsInitialized] = useState(false)
     const platformInfo = usePlatformInfo()
@@ -74,12 +73,9 @@ export default function Configuration() {
     }
 
     const onEditorSave = async (text: string) => {
-        const start = Date.now()
-        setSaving(true)
         try {
             await checkMatchPatterns(text);
             await setLocalStorage({ configText: text })
-            setSaving(false)
         } catch (e) {
             consoleProxy.error(e);
         }
@@ -150,7 +146,7 @@ export default function Configuration() {
                             withArrow
                             position="top-start"
                         >
-                            <ActionIcon size='lg' onClick={() => { onEditorSave(editorText) }} loading={saving}>
+                            <ActionIcon size='lg' onClick={() => { onEditorSave(editorText) }}>
                                 <IconDeviceFloppy />
                             </ActionIcon>
                         </Tooltip>
