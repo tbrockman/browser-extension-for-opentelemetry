@@ -1,15 +1,25 @@
+const userFacingReplacer = (key, value) => {
+    if (value instanceof Map) {
+        const object = {};
+        for (let [k, v] of value) {
+            object[k] = v;
+        }
+        return object;
+    }
+    return value;
+}
+
 export const replacer = (key, value) => {
     if (value instanceof Map) {
         return {
             dataType: 'Map',
             value: Array.from(value.entries()), // or with spread: value: [...value]
         };
-    } else {
-        return value;
     }
+    return value;
 }
 
-export const reviver = (key, value) => {
+export const reviver = (_, value) => {
     if (typeof value === 'object' && value !== null) {
         if (value.dataType === 'Map') {
             return new Map(value.value);
@@ -18,10 +28,14 @@ export const reviver = (key, value) => {
     return value;
 }
 
-export const serializer = <T>(value: T): string => {
+export const ser = <T>(value: T, userFacing: boolean = false): string => {
+    if (userFacing) {
+        return JSON.stringify(value, userFacingReplacer, 2);
+    }
     return JSON.stringify(value, replacer);
 }
 
-export const deserializer = <T>(value: string): T => {
-    return JSON.parse(value, reviver);
+export const de = <T>(value: string, constructor?: new (args: Partial<T>) => T): T => {
+    let deserialized = JSON.parse(value, reviver);
+    return constructor ? new constructor(deserialized) : deserialized;
 }

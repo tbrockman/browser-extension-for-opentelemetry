@@ -26,6 +26,7 @@
     "target": "ES6",
     "baseUrl": ".",
     "isolatedModules": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "strictNullChecks": true
   }
 }

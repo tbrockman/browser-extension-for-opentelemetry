@@ -1,9 +1,9 @@
 .link-section {
     padding: 0 1rem 1rem 1rem;
-    
+
     .link-section-links {
         .link-section-icon {
-            & > svg {
+            &>svg {
                 padding: 2px;
             }
         }

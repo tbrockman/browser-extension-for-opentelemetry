@@ -1,24 +1,85 @@
 import {
+    ActionIcon,
+    Affix,
     Box,
+    Button,
     Fieldset,
     Group,
     ScrollArea,
     Stack,
     Switch,
     Text,
+    Tooltip,
     rem
 } from "@mantine/core"
 import './Configuration.css'
-import { IconPower } from "@tabler/icons-react"
+import { IconBraces, IconDeviceFloppy, IconFileCheck, IconPower } from "@tabler/icons-react"
 import { IconSettings } from "@tabler/icons-react"
-import TraceConfiguration from "./TraceConfiguration"
-import LogConfiguration from "./LogConfiguration"
-import GeneralConfiguration from "./GeneralConfiguration"
+import TraceConfiguration from "~components/TraceConfiguration"
+import LogConfiguration from "~components/LogConfiguration"
+import GeneralConfiguration from "~components/GeneralConfiguration"
 import { useLocalStorage } from "~hooks/storage"
-import { setLocalStorage } from "~utils/storage"
+import { setLocalStorage } from "~storage/local"
+import { useEffect, useRef, useState } from "react"
+import { ConfigMode } from "~storage/local/internal"
+import { de } from "~utils/serde"
+import { UserFacingConfiguration } from "~storage/local/configuration"
+import { syncMatchPatternPermissions } from "~utils/match-pattern"
+import { consoleProxy } from "~utils/logging"
+import { usePlatformInfo } from "~hooks/platform"
+import { toPlatformSpecificKeys } from "~utils/platform"
 
+// TODO: Consider replacing "Configuration" header with a menu
 export default function Configuration() {
-    const { enabled } = useLocalStorage(["enabled"])
+    const { enabled, configMode, matchPatterns, configText, editorState } = useLocalStorage(["enabled", "configMode", "matchPatterns", "configText", "editorState"])
+    const [editorText, setEditorText] = useState(editorState?.doc as string | undefined)
+    const editorDirty = editorText && editorState && editorText !== configText
+    const portalTargetRef = useRef<HTMLElement>()
+    const [refsInitialized, setRefsInitialized] = useState(false)
+    const platformInfo = usePlatformInfo()
+    const saveKeys = toPlatformSpecificKeys(['Ctrl', 'S'], platformInfo)
+
+    const configModeToggle = () => {
+        // toggle config mode
+        setLocalStorage({ configMode: configMode === ConfigMode.Visual ? ConfigMode.Code : ConfigMode.Visual })
+    }
+
+    useEffect(() => {
+        if (portalTargetRef.current) {
+            setRefsInitialized(true)
+        }
+    }, [portalTargetRef])
+
+    useEffect(() => {
+        if (editorText == null && editorState && editorState.doc) {
+            setEditorText(editorState.doc as string)
+        }
+    }, [editorState])
+
+    const checkMatchPatterns = async (text: string) => {
+        try {
+            const newConfig = de(text, UserFacingConfiguration);
+
+            if (newConfig.matchPatterns !== matchPatterns) {
+                await syncMatchPatternPermissions({ prev: matchPatterns || [], next: newConfig.matchPatterns });
+            }
+        } catch (e) {
+            consoleProxy.error(e);
+        }
+    }
+
+    const onEditorChange = (text: string) => {
+        setEditorText(text);
+    }
+
+    const onEditorSave = async (text: string) => {
+        try {
+            await checkMatchPatterns(text);
+            await setLocalStorage({ configText: text })
+        } catch (e) {
+            consoleProxy.error(e);
+        }
+    }
 
     return (
         <Box>
@@ -50,19 +111,57 @@ export default function Configuration() {
                 />
             </Group>
             <Fieldset
-                className='configuration-container'
+                data-editormode={configMode}
+                className={`configuration-container`}
                 radius="md"
                 disabled={!enabled}
                 styles={{
+                    root: {
+                        position: 'relative',
+                    },
                     legend: { fontSize: 'var(--mantine-font-size-lg)', fontWeight: 'bold' },
-                    // root: { borderColor: enabled ? 'var(--mantine-color-orange-4)' : 'var(--mantine-color-dark-4)' }
                 }}
+                // @ts-ignore
+                ref={portalTargetRef}
             >
+                {refsInitialized &&
+                    <Affix
+                        position={{ bottom: 10, right: 10 }}
+                        portalProps={{ target: portalTargetRef.current }} styles={{ root: { position: "absolute" } }}>
+                        <Group>
+                            <Button onClick={configModeToggle} leftSection={configMode === ConfigMode.Visual ? <IconBraces /> : <IconFileCheck />}>
+                                {configMode === ConfigMode.Visual ? 'Edit as JSON' : 'Edit as form'}
+                            </Button>
+                        </Group>
+                    </Affix>
+                }
+                {
+                    refsInitialized && configMode == ConfigMode.Code && editorDirty &&
+                    <Affix
+                        position={{ bottom: 10, left: 10 }}
+                        portalProps={{ target: portalTargetRef.current }} styles={{ root: { position: "absolute" } }}
+                    >
+                        <Tooltip
+                            label={`Save changes (${saveKeys?.join('+')})`}
+                            withArrow
+                            position="top-start"
+                        >
+                            <ActionIcon size='lg' onClick={() => { onEditorSave(editorText) }}>
+                                <IconDeviceFloppy />
+                            </ActionIcon>
+                        </Tooltip>
+                    </Affix>
+                }
                 <ScrollArea.Autosize mah={400}>
+
                     <Stack pr='lg' pb='lg' pt='lg'>
-                        <GeneralConfiguration enabled={enabled} />
-                        <TraceConfiguration enabled={enabled} />
-                        <LogConfiguration enabled={enabled} />
+                        <GeneralConfiguration enabled={!!enabled} onEditorSave={onEditorSave} onEditorChange={onEditorChange} />
+                        {configMode === ConfigMode.Visual &&
+                            <>
+                                <TraceConfiguration enabled={!!enabled} />
+                                <LogConfiguration enabled={!!enabled} />
+                            </>
+                        }
                     </Stack>
                 </ScrollArea.Autosize>
             </Fieldset>

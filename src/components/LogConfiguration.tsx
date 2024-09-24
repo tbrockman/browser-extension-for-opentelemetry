@@ -4,7 +4,7 @@ import { IconTerminal } from "@tabler/icons-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocalStorage } from "~hooks/storage";
 import { defaultOptions } from "~utils/options";
-import { setLocalStorage } from "~utils/storage";
+import { setLocalStorage } from "~storage/local";
 
 const LogsIcon: CheckboxProps['icon'] = ({ ...others }) =>
     <IconTerminal {...others} />;
@@ -47,16 +47,13 @@ export default function LogConfiguration({ enabled }: LogConfigurationProps) {
     return (
         <Fieldset aria-label="Logs"
             styles={{
-                legend: {
-                    paddingRight: '1rem'
-                },
                 root: {
                     borderColor: (enabled && loggingEnabled) ? 'var(--mantine-primary-color-5)' : 'var(--mantine-color-default-border)'
                 }
             }}
             legend={
                 <Group gap='xs'>
-                    <Checkbox
+                    {loggingEnabled !== undefined && <Checkbox
                         checked={loggingEnabled}
                         disabled={false}
                         icon={LogsIcon}
@@ -73,10 +70,10 @@ export default function LogConfiguration({ enabled }: LogConfigurationProps) {
                         label={
                             <Text>Logging</Text>
                         }
-                    />
+                    />}
                 </Group>
             } disabled={!loggingEnabled}>
-            <TextInput
+            {renderedLogCollectorUrl !== undefined && <TextInput
                 label="Export URL"
                 description={
                     <>
@@ -88,7 +85,7 @@ export default function LogConfiguration({ enabled }: LogConfigurationProps) {
                 onChange={(event) => {
                     setRenderedLogCollectorUrl(event.currentTarget.value)
                 }}
-            />
+            />}
         </Fieldset>
     );
 }

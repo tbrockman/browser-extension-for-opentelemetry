@@ -38,6 +38,27 @@
 
 This extension is compatible with [all major browsers](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/scripting/executeScript#browser_compatibility) as of Firefox 128! 🎉
 
+## Architecture
+
+`TODO`
+
+## Security considerations
+
+> [!CAUTION]
+> Don't run this extension on webpages you don't trust (even though it likely won't be an issue)
+
+### Why?
+
+The extension background script exports any Protobuf-encoded OTLP data that it receives from the injected content script that it's able to parse. 
+
+While some mitigations are implemented, the data can always be tampered with by any malicious Javascript running in the same context as the content script, and as such the integrity of the data cannot be guaranteed. This may result in minor frustrations like storing garbage or worse depending on how your backend decodes Protobuf data. 
+
+So, just as a general safety measure, it's probably best if you don't allow the extension to run in untrusted pages.
+
+### Can it be fixed?
+
+Probably not in the near future. Unless browsers expose telemetry themselves, there's no way for the instrumentation to both run in an isolated context as well as gather the desired data.
+
 ## Developing
 
 Clone the repository:

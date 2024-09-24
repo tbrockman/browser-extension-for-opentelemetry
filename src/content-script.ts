@@ -6,21 +6,22 @@ import {
     SimpleLogRecordProcessor
 } from '@opentelemetry/sdk-logs';
 import { OTLPLogExporter } from '@opentelemetry/exporter-logs-otlp-proto';
-import { SimpleSpanProcessor, Span } from '@opentelemetry/sdk-trace-base';
+import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
 import { OTLPProtoExporterBrowserBase, getExportRequestProto } from '@opentelemetry/otlp-proto-exporter-base';
 import { OTLPExporterError } from '@opentelemetry/otlp-exporter-base';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { ZoneContextManager } from '@opentelemetry/context-zone';
-import { SEMRESATTRS_SERVICE_NAME, SEMRESATTRS_SERVICE_VERSION, SEMRESATTRS_TELEMETRY_SDK_LANGUAGE, SEMRESATTRS_TELEMETRY_SDK_NAME, SEMRESATTRS_TELEMETRY_SDK_VERSION } from '@opentelemetry/semantic-conventions';
+import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION, ATTR_TELEMETRY_SDK_LANGUAGE, ATTR_TELEMETRY_SDK_NAME, ATTR_TELEMETRY_SDK_VERSION, SEMRESATTRS_SERVICE_NAME, SEMRESATTRS_SERVICE_VERSION, SEMRESATTRS_TELEMETRY_SDK_LANGUAGE, SEMRESATTRS_TELEMETRY_SDK_NAME, SEMRESATTRS_TELEMETRY_SDK_VERSION } from '@opentelemetry/semantic-conventions';
 import { Resource } from '@opentelemetry/resources';
 import { B3Propagator } from '@opentelemetry/propagator-b3';
 import { CompositePropagator, W3CTraceContextPropagator } from '@opentelemetry/core';
 
-import { MessageTypes } from '~types';
+import { MessageTypes, type CustomAppEvent } from '~types';
 import { consoleProxy } from '~utils/logging';
 import { wrapConsoleWithLoggerProvider } from '~telemetry/logs';
-import type { LocalStorageType } from '~utils/options';
-import { deserializer } from '~utils/serde';
+import { de } from '~utils/serde';
+import type { ContentScriptConfigurationType } from '~storage/local/configuration';
+import { config } from '~config';
 
 function createSendOverride<ExportItem, ServiceRequest>(sessionId: string, exporter: OTLPProtoExporterBrowserBase<ExportItem, ServiceRequest>, type: MessageTypes) {
 
@@ -51,35 +52,34 @@ function createSendOverride<ExportItem, ServiceRequest>(sessionId: string, expor
     }
 }
 
-const instrument = (sessionId: string, options: LocalStorageType) => {
+// TODO: investigate why reinstrumenting isn't working (or whether it can)
+const instrument = (sessionId: string, options: ContentScriptConfigurationType) => {
 
-    if (!options || !options.enabled || !options.instrumentations || options.instrumentations.length === 0 || window.__OTEL_BROWSER_EXT_INSTRUMENTED__) {
-        consoleProxy.debug(`not instrumenting as either options missing or already instrumented`, options, window.__OTEL_BROWSER_EXT_INSTRUMENTED__)
+    if (!options || !options.enabled || !options.instrumentations || options.instrumentations.length === 0 || window.__OTEL_BROWSER_EXT_INSTRUMENTATION__) {
+        consoleProxy.debug(`not instrumenting as either options missing or already instrumented`, options, window.__OTEL_BROWSER_EXT_INSTRUMENTATION__)
         return () => { }
     }
-    window.__OTEL_BROWSER_EXT_INSTRUMENTED__ = true
+    window.__OTEL_BROWSER_EXT_INSTRUMENTATION__ = () => { }
     consoleProxy.debug(`instrumenting`, { sessionId, options })
 
     const resource = new Resource({
-        [SEMRESATTRS_SERVICE_NAME]: 'browser-extension-for-opentelemetry',
-        [SEMRESATTRS_SERVICE_VERSION]: '0.0.10', // TODO: replace with package.json version
-        [SEMRESATTRS_TELEMETRY_SDK_LANGUAGE]: 'webjs',
-        [SEMRESATTRS_TELEMETRY_SDK_NAME]: 'opentelemetry',
-        [SEMRESATTRS_TELEMETRY_SDK_VERSION]: '1.22.0', // TODO: replace with resolved version
+        [ATTR_SERVICE_NAME]: config.name,
+        [ATTR_SERVICE_VERSION]: config.version, // TODO: probably want to inject this
+        [ATTR_TELEMETRY_SDK_LANGUAGE]: 'webjs',
+        [ATTR_TELEMETRY_SDK_NAME]: 'opentelemetry',
+        [ATTR_TELEMETRY_SDK_VERSION]: '1.22.0', // TODO: replace with resolved version
         // 'browser.name': process.env.PLASMO_BROWSER, // TODO: fix why this is undefined
         'extension.session.id': sessionId,
         ...Object.fromEntries(options.attributes.entries())
     })
 
-    let tracerProvider: WebTracerProvider
+    let tracerProvider: WebTracerProvider | undefined
 
     if (options.tracingEnabled) {
         tracerProvider = new WebTracerProvider({
             resource,
         })
         const traceExporter = new OTLPTraceExporter({
-            url: options.traceCollectorUrl,
-            headers: Object.fromEntries(options.headers.entries()),
             concurrencyLimit: options.concurrencyLimit,
         })
         // @ts-ignore
@@ -98,12 +98,10 @@ const instrument = (sessionId: string, options: LocalStorageType) => {
         })
     }
 
-    let loggerProvider: LoggerProvider
+    let loggerProvider: LoggerProvider | undefined
 
     if (options.loggingEnabled) {
         const logExporter = new OTLPLogExporter({
-            url: options.logCollectorUrl,
-            headers: Object.fromEntries(options.headers.entries()),
             concurrencyLimit: options.concurrencyLimit,
         })
         // @ts-ignore
@@ -165,15 +163,14 @@ const instrument = (sessionId: string, options: LocalStorageType) => {
     });
 
     return () => {
-        consoleProxy.log(`deregistering instrumentations`)
-        window.__OTEL_BROWSER_EXT_INSTRUMENTED__ = false
-        return deregister()
+        deregister()
+        window.__OTEL_BROWSER_EXT_INSTRUMENTATION__ = undefined
     }
 }
 
 export type InjectContentScriptArgs = {
     sessionId: string,
-    options: LocalStorageType | string,
+    options: ContentScriptConfigurationType | string,
     retries?: number,
     backoff?: number,
 }
@@ -185,31 +182,33 @@ export default function injectContentScript({ sessionId, options, retries = 10, 
 
     try {
         if (typeof options === 'string') {
-            options = deserializer<LocalStorageType>(options)
+            options = de<ContentScriptConfigurationType>(options)
         }
-        let deregisterInstrumentation = instrument(sessionId, options);
+        window.__OTEL_BROWSER_EXT_INSTRUMENTATION__ = instrument(sessionId, options);
 
         const key = `${sessionId}:relay-from-background`
-        const listener = (event: CustomEvent) => {
+        const listener = (event: CustomAppEvent) => {
             try {
-                if (event.detail.type === 'disconnect') {
+                if (event.detail.type === MessageTypes.Disconnect) {
                     consoleProxy.debug(`received disconnect message from relay`, event.detail)
-                    deregisterInstrumentation && deregisterInstrumentation()
+                    window.__OTEL_BROWSER_EXT_INSTRUMENTATION__ && window.__OTEL_BROWSER_EXT_INSTRUMENTATION__()
                     window.removeEventListener(key, listener)
-                } else if (event.detail.type === 'storageChanged') {
+                } else if (event.detail.type === MessageTypes.ConfigurationChanged) {
                     consoleProxy.debug(`received storage changed message from relay`, event.detail)
                     options = {
-                        ...options as LocalStorageType,
-                        ...event.detail.data as Partial<LocalStorageType>
+                        ...options as ContentScriptConfigurationType,
+                        ...(event.detail.data || {})
                     }
-                    deregisterInstrumentation && deregisterInstrumentation()
-                    deregisterInstrumentation = instrument(sessionId, options)
+                    consoleProxy.debug(`re-instrumenting with parsed options`, options)
+                    window.__OTEL_BROWSER_EXT_INSTRUMENTATION__ && window.__OTEL_BROWSER_EXT_INSTRUMENTATION__()
+                    window.__OTEL_BROWSER_EXT_INSTRUMENTATION__ = instrument(sessionId, options)
+                } else {
+                    consoleProxy.debug(`received malformed message from relay`, event.detail)
                 }
             } catch (e) {
                 consoleProxy.error(`error handling message from relay`, e, event)
             }
         }
-
         // listen for messages from the relay
         window.addEventListener(key, listener)
     } catch (e) {

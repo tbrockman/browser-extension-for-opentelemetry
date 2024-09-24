@@ -3,18 +3,24 @@ import { TagsInput } from "~components/TagsInput";
 import ColorModeSwitch from "~components/ColorModeSwitch";
 import { useLocalStorage } from "~hooks/storage";
 import { defaultOptions } from "~utils/options";
-import { matchPatternsChanged } from "~utils/match-pattern";
-import { setLocalStorage, type MatchPatternError } from "~utils/storage";
-import { colonSeparatedStringsToMap, mapToColonSeparatedStrings } from "~utils/string";
+import { syncMatchPatternPermissions } from "~utils/match-pattern";
+import { getLocalStorage, setLocalStorage, type LocalStorageType } from "~storage/local";
+import { ConfigMode, type MatchPatternError } from "~storage/local/internal";
+import { Editor } from "~components/Editor";
+import { KeyValueInput } from "~components/KeyValueInput";
+import { ErrorBoundary } from "react-error-boundary";
+import { useEffect, useState } from "react";
 
 type GeneralConfigurationProps = {
     enabled: boolean
+    onEditorSave: (text: string) => void
+    onEditorChange: (text: string) => void
 }
 
-const patternErrorsToPills = (patterns: string[], errors: MatchPatternError[]): Map<number, string> => {
+const patternErrorsToPills = (patterns?: string[], errors?: MatchPatternError[]): Map<number, string> => {
     const map = new Map<number, string>()
-    errors.forEach((error) => {
-        const index = patterns.indexOf(error.pattern)
+    errors?.forEach((error) => {
+        const index = patterns?.indexOf(error.pattern) || -1
         if (index !== -1) {
             map.set(index, error.error)
         }
@@ -22,110 +28,123 @@ const patternErrorsToPills = (patterns: string[], errors: MatchPatternError[]): 
     return map
 }
 
-export default function GeneralConfiguration({ enabled }: GeneralConfigurationProps) {
-    const { headers, attributes, matchPatterns, matchPatternErrors } = useLocalStorage([
-        'headers',
-        'attributes',
+export default function GeneralConfiguration({ enabled, onEditorSave, onEditorChange }: GeneralConfigurationProps) {
+    const storage = useLocalStorage([
         'matchPatterns',
-        'matchPatternErrors'
+        'matchPatternErrors',
+        'configMode',
+        'attributes',
+        'headers'
     ])
-    const headersStrings = mapToColonSeparatedStrings(headers)
-    const attributesStrings = mapToColonSeparatedStrings(attributes)
-    const pillErrors = patternErrorsToPills(matchPatterns, matchPatternErrors)
-
-    const setPatternErrors = (errors: MatchPatternError[]) => {
-        setLocalStorage({ matchPatternErrors: errors })
-    }
+    const [attributes, setAttributes] = useState<LocalStorageType['attributes']>(new Map())
+    const [headers, setHeaders] = useState<LocalStorageType['headers']>(new Map())
+    const pillErrors = patternErrorsToPills(storage.matchPatterns, storage.matchPatternErrors)
 
     const onEnabledUrlsChange = async (values: string[]) => {
         setLocalStorage({ matchPatterns: values })
-        matchPatternsChanged({ prev: matchPatterns, next: values, setErrors: setPatternErrors })
+        syncMatchPatternPermissions({ prev: storage.matchPatterns || [], next: values })
     }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const { attributes, headers } = await getLocalStorage(['attributes', 'headers'])
+            setAttributes(new Map(attributes || []))
+            setHeaders(new Map(headers || []))
+        }
+        fetchData()
+    }, [storage.configMode, storage.attributes, storage.headers])
 
     return (
         <Fieldset radius="md"
             styles={{
                 root: {
                     borderColor: enabled ? 'var(--mantine-primary-color-5)' : 'var(--mantine-color-default-border)'
+                },
+                legend: {
+                    paddingRight: '2px'
                 }
             }}
             legend={
-                <Group gap='xs'>
-                    <ColorModeSwitch label={"General"} styles={{
+                <Group>
+                    <ColorModeSwitch styles={{
                         labelWrapper: {
                             justifyContent: 'center'
                         }
                     }} />
                 </Group>
             }>
-            <Group>
-                <TagsInput
-                    value={matchPatterns}
-                    errors={pillErrors}
-                    onValueRemoved={(index) => {
-                        const newPatterns = [...matchPatterns]
-                        newPatterns.splice(index, 1)
-                        onEnabledUrlsChange(newPatterns)
-                    }}
-                    onValueAdded={(value) => {
-                        matchPatterns.push(value)
-                        onEnabledUrlsChange(matchPatterns)
-                    }}
-                    label={
-                        <>
-                            Allow extension on {" "}
-                        </>
-                    }
-                    disabled={!enabled}
-                    description={
-                        <>
-                            Choose webpages which should be instrumented, specified as a list of {" "}
-                            <Anchor
-                                target="_blank"
-                                size="xs"
-                                href="https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns">
-                                match patterns
-                            </Anchor>. <Text c='orange.3' component='span' size='xs'>⚠️&nbsp;Adding new entries will require reloading targeted pages.</Text>
-                        </>
-                    }
-                    placeholder={matchPatterns.length == 0 ? defaultOptions.matchPatterns.join(', ') : ''}
-                    delimiter={","}
-                />
-                <TagsInput
-                    value={attributesStrings}
-                    onValueRemoved={(index) => {
-                        attributesStrings.splice(index, 1)
-                        setLocalStorage({ attributes: colonSeparatedStringsToMap(attributesStrings) })
-                    }}
-                    onValueAdded={(value) => {
-                        attributesStrings.push(value)
-                        setLocalStorage({ attributes: colonSeparatedStringsToMap(attributesStrings) })
-                    }}
-                    label="Resource attributes"
-                    disabled={!enabled}
-                    description="Attach additional attributes on all exported logs/traces."
-                    placeholder={attributesStrings.length == 0 ? 'key:value, key2:value2' : ''}
-                    delimiter={","}
-                    keyValueMode={true}
-                />
-                <TagsInput
-                    value={headersStrings}
-                    onValueRemoved={(index) => {
-                        headersStrings.splice(index, 1)
-                        setLocalStorage({ headers: colonSeparatedStringsToMap(headersStrings) })
-                    }}
-                    onValueAdded={(value) => {
-                        headersStrings.push(value)
-                        setLocalStorage({ headers: colonSeparatedStringsToMap(headersStrings) })
-                    }}
-                    label="Request headers"
-                    disabled={!enabled}
-                    description="Include additional HTTP headers on all export requests."
-                    placeholder={headersStrings.length == 0 ? 'key:value, key2:value2' : ''}
-                    delimiter={","}
-                    keyValueMode={true}
-                />
-            </Group>
+            {storage.configMode === ConfigMode.Visual &&
+                <Group>
+                    <TagsInput
+                        value={storage.matchPatterns || []}
+                        errors={pillErrors}
+                        onValueRemoved={(index) => {
+                            const newPatterns = [...(storage.matchPatterns || [])]
+                            newPatterns.splice(index, 1)
+                            onEnabledUrlsChange(newPatterns)
+                        }}
+                        onValueAdded={(value) => {
+
+                            if (storage.matchPatterns) {
+                                storage.matchPatterns.push(value)
+                                onEnabledUrlsChange(storage.matchPatterns)
+                            }
+                        }}
+                        label={
+                            <>
+                                Allow extension on {" "}
+                            </>
+                        }
+                        disabled={!enabled}
+                        description={
+                            <>
+                                Choose webpages which should be instrumented, specified as a list of {" "}
+                                <Anchor
+                                    target="_blank"
+                                    size="xs"
+                                    href="https://developer.chrome.com/docs/extensions/develop/concepts/match-patterns">
+                                    match patterns
+                                </Anchor>. <Text c='orange.3' component='span' size='xs'>⚠️&nbsp;Adding new entries will require reloading targeted pages.</Text>
+                            </>
+                        }
+                        placeholder={storage.matchPatterns?.length == 0 ? defaultOptions.matchPatterns.join(', ') : ''}
+                        delimiter={","}
+                    />
+                    {attributes && <KeyValueInput
+                        defaultValue={attributes}
+                        onChange={async (attributes) => await setLocalStorage({ attributes })}
+                        label="Resource attributes"
+                        disabled={!enabled}
+                        description={<>Attach additional <Anchor target="_blank" size="xs" href="https://opentelemetry.io/docs/specs/semconv/general/attributes/">attributes</Anchor> on all exported logs/traces.</>}
+                        tableProps={{
+                            withRowBorders: false,
+                            withColumnBorders: true,
+                        }}
+                        keyPlaceholder="key"
+                        valuePlaceholder="value"
+                        fullWidth
+                    />}
+                    {headers && <KeyValueInput
+                        defaultValue={headers}
+                        onChange={async (headers) => await setLocalStorage({ headers })}
+                        label="Request headers"
+                        disabled={!enabled}
+                        description="Include additional HTTP headers on all export requests."
+                        tableProps={{
+                            withRowBorders: false,
+                            withColumnBorders: true,
+                        }}
+                        keyPlaceholder="key"
+                        valuePlaceholder="value"
+                        fullWidth
+                    />}
+                </Group>
+            }
+            {storage.configMode === ConfigMode.Code &&
+                <ErrorBoundary fallback={<>shucks, looks like the editor is having an issue</>}>
+                    <Editor onSave={onEditorSave} onChange={onEditorChange} />
+                </ErrorBoundary>
+            }
         </Fieldset>
     );
 }

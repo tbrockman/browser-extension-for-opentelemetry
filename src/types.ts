@@ -1,16 +1,30 @@
+import type { LocalStorageType } from "~storage/local"
+import type { ContentScriptConfigurationType } from "~storage/local/configuration"
+
 declare global {
     interface Window {
-        __OTEL_BROWSER_EXT_INSTRUMENTED__: boolean
+        __OTEL_BROWSER_EXT_INSTRUMENTATION__: (() => void) | undefined
     }
 }
 
+/**
+ * Enumerates all messages sent between background, content scripts, and the relay.
+ */
 export enum MessageTypes {
     OTLPTraceMessage = 'trace',
     OTLPLogMessage = 'log',
     OTLPMetricMessage = 'metric',
+    StorageChanged = 'storageChanged',
+    ConfigurationChanged = 'configChanged',
+    Disconnect = 'disconnect'
 }
 
-export type PortMessage = OTLPExportTraceMessage | OTLPExportLogMessage | OTLPMetricMessage
+export type ToBackgroundMessage = OTLPExportTraceMessage | OTLPExportLogMessage | OTLPMetricMessage
+export type ToRelayMessage = StorageChangedMessage
+export type ToContentScriptMessage = ConfigurationChangedMessage | DisconnectMessage
+export type CustomAppEvent = Omit<CustomEvent, 'detail'> & {
+    detail: ToContentScriptMessage
+}
 
 export interface PortMessageBase {
     type: MessageTypes
@@ -38,6 +52,20 @@ export interface OTLPExportLogMessage extends PortMessageBase {
 export interface OTLPMetricMessage extends PortMessageBase {
     type: MessageTypes.OTLPMetricMessage
     bytes: number[],
+}
+
+export interface StorageChangedMessage extends PortMessageBase {
+    type: MessageTypes.StorageChanged
+    data: Partial<LocalStorageType>
+}
+
+export interface ConfigurationChangedMessage extends PortMessageBase {
+    type: MessageTypes.ConfigurationChanged
+    data: Partial<ContentScriptConfigurationType>
+}
+
+export interface DisconnectMessage extends PortMessageBase {
+    type: MessageTypes.Disconnect
 }
 
 export type Primitive = string | number | boolean | null | undefined | object;

@@ -1,21 +1,28 @@
 import { useEffect, useState } from "react"
-import type { Values } from "~types"
-import { deserializer } from "~utils/serde";
-import { defaultLocalStorage, getStorage, LocalStorage } from "~utils/storage"
+import { de } from "~utils/serde";
+import { defaultLocalStorage, getStorage, LocalStorage, type ExtractLocalStorageKeys as ExtractKeysFromLocalStorage } from "~storage/local";
+import { consoleProxy } from "~utils/logging";
+import { pick } from "~utils/generics";
 
-export function useLocalStorage<T extends (keyof LocalStorage)[]>(keys: T): {
-    [K in T[number]]: LocalStorage[K];
-} {
-    const obj = keys.reduce((acc, key) => {
-        return { ...acc, [key]: defaultLocalStorage[key] }
-    }, {} as {
-        [K in T[number]]: LocalStorage[K];
-    });
-    return useStorage(obj, 'local');
+const cache = {
+    'local': {} as Partial<LocalStorage>,
 }
 
-export function useStorage<T extends Record<string, Values>>(keysWithDefaults: T, storageArea: chrome.storage.AreaName = 'sync'): T {
-    const [state, setState] = useState(keysWithDefaults);
+export function useLocalStorage<T extends (keyof LocalStorage)[]>(keys?: T): Partial<ExtractKeysFromLocalStorage<T>> {
+    if (!keys) {
+        return useStorage(defaultLocalStorage, 'local') as Partial<ExtractKeysFromLocalStorage<T>>
+    }
+    const obj = keys.reduce((acc, key) => {
+        if (key in defaultLocalStorage) {
+            acc[key] = defaultLocalStorage[key];
+        }
+        return acc;
+    }, {} as Partial<Pick<LocalStorage, T[number]>>);
+    return useStorage(obj, 'local') as Partial<ExtractKeysFromLocalStorage<T>>;
+}
+
+export function useStorage<T extends object>(keysWithDefaults: T, storageArea: chrome.storage.AreaName = 'local'): Partial<T> {
+    const [state, setState] = useState(pick(cache[storageArea], Object.keys(keysWithDefaults)) as Partial<T>);
 
     const listener = (event: Record<string, chrome.storage.StorageChange>, area: chrome.storage.AreaName) => {
 
@@ -25,17 +32,26 @@ export function useStorage<T extends Record<string, Values>>(keysWithDefaults: T
 
         if (intersection.length == 0) return;
 
-        const newStorage: T = intersection.reduce((acc, [key, { newValue }]) => {
+        const newStorage: Partial<T> = intersection.reduce((acc, [key, { newValue }]) => {
             if (!keysWithDefaults.hasOwnProperty(key)) return acc;
-
-            return { ...acc, [key]: deserializer(newValue) }
+            return { ...acc, [key]: de(newValue) }
         }, state);
 
-        setState(newStorage);
+        setState({ ...newStorage });
     }
 
     useEffect(() => {
+        cache[storageArea] = { ...cache[storageArea], ...state };
+    }, [state])
+
+    useEffect(() => {
         if (!keysWithDefaults || Object.keys(keysWithDefaults).length == 0) return;
+        consoleProxy.debug('looking for', keysWithDefaults, `in cache['${storageArea}']:`);
+        // if we can answer the request from cache, do so
+        if (Object.keys(keysWithDefaults).every((key) => key in cache[storageArea])) {
+            consoleProxy.debug('cache hit for', keysWithDefaults, `in cache['${storageArea}']:`);
+            return;
+        }
 
         getStorage(storageArea, keysWithDefaults).then((response) => {
             setState(response);

@@ -10,6 +10,10 @@ export default {
         })
     ],
     define: {
-        global: 'undefined'
+        global: 'undefined',
+        'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`,
+        // 'process.env.PLASMO_BROWSER': `"${process.env.PLASMO_BROWSER}"`,
+        'process.env.PLASMO_PUBLIC_PACKAGE_VERSION': `"${process.env.PLASMO_PUBLIC_PACKAGE_VERSION}"`,
+        'process.env.PLASMO_PUBLIC_PACKAGE_NAME': `"${process.env.PLASMO_PUBLIC_PACKAGE_NAME}"`,
     }
 }

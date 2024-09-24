@@ -6,7 +6,7 @@ import { useLocalStorage } from "~hooks/storage";
 
 import { events as EventList } from "~utils/constants"
 import { defaultOptions } from "~utils/options";
-import { setLocalStorage } from "~utils/storage";
+import { setLocalStorage } from "~storage/local";
 
 const CheckboxIcon: CheckboxProps['icon'] = ({ ...others }) =>
     <IconAffiliate {...others} />;
@@ -17,25 +17,25 @@ type TraceConfigurationProps = {
 
 export default function TraceConfiguration({ enabled }: TraceConfigurationProps) {
 
-    const { traceCollectorUrl, tracingEnabled, instrumentations, events, propagateTo } = useLocalStorage(["traceCollectorUrl", "tracingEnabled", "instrumentations", "events", "propagateTo"])
-    const [renderedTraceCollectorUrl, setRenderedTraceCollectorUrl] = useState(traceCollectorUrl)
+    const storage = useLocalStorage(["traceCollectorUrl", "tracingEnabled", "instrumentations", "events", "propagateTo"])
+    const [renderedTraceCollectorUrl, setRenderedTraceCollectorUrl] = useState(storage.traceCollectorUrl)
     const [debouncedRenderedUrl] = useDebouncedValue(renderedTraceCollectorUrl, 500);
     const checkboxRef = useRef<HTMLInputElement>(null);
     // If the local storage value changes, update the rendered value
     useEffect(() => {
-        if (traceCollectorUrl !== renderedTraceCollectorUrl) {
-            setRenderedTraceCollectorUrl(traceCollectorUrl)
+        if (storage.traceCollectorUrl !== renderedTraceCollectorUrl) {
+            setRenderedTraceCollectorUrl(storage.traceCollectorUrl)
         }
-    }, [traceCollectorUrl])
+    }, [storage.traceCollectorUrl])
     // If the rendered value changes, update the local storage value
     useEffect(() => {
-        if (debouncedRenderedUrl !== traceCollectorUrl) {
+        if (debouncedRenderedUrl !== storage.traceCollectorUrl) {
             setLocalStorage({ traceCollectorUrl: debouncedRenderedUrl })
         }
     }, [debouncedRenderedUrl])
     const toggleDisabled = useCallback(() => {
-        setLocalStorage({ tracingEnabled: !tracingEnabled })
-    }, [tracingEnabled]);
+        setLocalStorage({ tracingEnabled: !storage.tracingEnabled })
+    }, [storage.tracingEnabled]);
 
     // Hack for Firefox disabled fieldset checkbox event handling
     // see: https://stackoverflow.com/questions/63740106/checkbox-onchange-in-legend-inside-disabled-fieldset-not-firing-in-firefox-w
@@ -51,13 +51,13 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
         <Fieldset aria-label="Traces"
             styles={{
                 root: {
-                    borderColor: (tracingEnabled && enabled) ? 'var(--mantine-primary-color-5)' : 'var(--mantine-color-default-border)'
+                    borderColor: (storage.tracingEnabled && enabled) ? 'var(--mantine-primary-color-5)' : 'var(--mantine-color-default-border)'
                 }
             }}
             legend={
                 <Group gap='xs'>
-                    <Checkbox
-                        checked={tracingEnabled}
+                    {storage.tracingEnabled !== undefined && <Checkbox
+                        checked={storage.tracingEnabled}
                         icon={CheckboxIcon}
                         label={<Text>Tracing</Text>}
                         ref={checkboxRef}
@@ -71,14 +71,14 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
                             }
                         }}
                         aria-label='Enable or disable exporting traces'
-                    />
+                    />}
                 </Group>
             }
-            disabled={!tracingEnabled}>
+            disabled={!storage.tracingEnabled}>
             <Group>
-                <Checkbox.Group
+                {storage.instrumentations !== undefined && <Checkbox.Group
                     label="Instrumentation"
-                    value={instrumentations}
+                    value={storage.instrumentations}
                     onChange={(value) => setLocalStorage({ instrumentations: value as ("load" | "fetch" | "interaction")[] })}
                     description={
                         <>
@@ -89,8 +89,8 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
                         <Checkbox value="fetch" label="Fetch/XHR" variant="outline" />
                         <Checkbox value="load" label="Document load" variant="outline" />
                     </Group>
-                </Checkbox.Group>
-                <TextInput
+                </Checkbox.Group>}
+                {renderedTraceCollectorUrl !== undefined && <TextInput
                     label="Export URL"
                     description={
                         <>
@@ -102,11 +102,11 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
                     onChange={(event) => {
                         setRenderedTraceCollectorUrl(event.currentTarget.value)
                     }}
-                />
-                <TagsInput
-                    value={events}
+                />}
+                {storage.events !== undefined && <TagsInput
+                    value={storage.events}
                     onChange={(value) => setLocalStorage({ events: value as (keyof HTMLElementEventMap)[] })}
-                    disabled={instrumentations.indexOf('interaction') == -1 || !enabled}
+                    disabled={storage.instrumentations?.indexOf('interaction') == -1 || !enabled}
                     label="Event listeners"
                     data={EventList}
                     maxDropdownHeight={200}
@@ -117,19 +117,19 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
                             <Anchor
                                 target="_blank"
                                 size="xs"
-                                href="https://microsoft.github.io/PowerBI-JavaScript/interfaces/_node_modules_typedoc_node_modules_typescript_lib_lib_dom_d_.htmlelementeventmap.html">
+                                href="https://azuresdkdocs.blob.core.windows.net/$web/javascript/azure-app-configuration/1.1.0/interfaces/htmlelementeventmap.html">
                                 HTMLElementEventMap
                             </Anchor>{" "}
                             for a list of valid events.
                         </>
                     }
-                    placeholder={events.length == 0 ? defaultOptions.events.join(', ') : ''}
+                    placeholder={storage.events?.length == 0 ? defaultOptions.events.join(', ') : ''}
                     splitChars={[","]}
-                />
-                <TagsInput
-                    value={propagateTo}
+                />}
+                {storage.propagateTo !== undefined && <TagsInput
+                    value={storage.propagateTo}
                     onChange={(value) => setLocalStorage({ propagateTo: value })}
-                    disabled={instrumentations.indexOf('fetch') == -1 || !enabled}
+                    disabled={storage.instrumentations?.indexOf('fetch') == -1 || !enabled}
                     label="Forward trace context to"
                     maxDropdownHeight={200}
                     comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false }, transitionProps: { transition: 'pop', duration: 200 } }}
@@ -138,9 +138,9 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
                             Choose URLs (as regular expressions) which should receive W3C trace context on fetch/XHR. <Text c='orange.3' component='span' size='xs'>⚠️ May cause request CORS failures.</Text>
                         </>
                     }
-                    placeholder={propagateTo.length == 0 ? ".*" : ''}
+                    placeholder={storage.propagateTo?.length == 0 ? ".*" : ''}
                     splitChars={[","]}
-                />
+                />}
             </Group>
         </Fieldset>
     );

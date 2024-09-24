@@ -1,5 +1,5 @@
 import { match } from "~utils/match-pattern";
-import assert from 'assert';
+import { assert } from 'chai';
 
 describe("match", () => {
     it("returns true if URL matches any pattern", () => {
