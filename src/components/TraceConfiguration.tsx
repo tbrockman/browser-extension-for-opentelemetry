@@ -21,6 +21,7 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
     const [renderedTraceCollectorUrl, setRenderedTraceCollectorUrl] = useState(storage.traceCollectorUrl)
     const [debouncedRenderedUrl] = useDebouncedValue(renderedTraceCollectorUrl, 500);
     const checkboxRef = useRef<HTMLInputElement>(null);
+
     // If the local storage value changes, update the rendered value
     useEffect(() => {
         if (storage.traceCollectorUrl !== renderedTraceCollectorUrl) {
@@ -99,9 +100,7 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
                     }
                     placeholder={defaultOptions.traceCollectorUrl}
                     value={renderedTraceCollectorUrl}
-                    onChange={(event) => {
-                        setRenderedTraceCollectorUrl(event.currentTarget.value)
-                    }}
+                    onChange={(event) => {setRenderedTraceCollectorUrl(event.currentTarget.value)}}
                 />}
                 {storage.events !== undefined && <TagsInput
                     value={storage.events}

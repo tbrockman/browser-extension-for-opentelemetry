@@ -1,12 +1,43 @@
 import { useEffect, useState } from "react"
 import { de } from "~utils/serde";
-import { defaultLocalStorage, getStorage, LocalStorage, type ExtractLocalStorageKeys as ExtractKeysFromLocalStorage } from "~storage/local";
+import { defaultLocalStorage, getStorage, LocalStorage, type ExtractLocalStorageKeys as ExtractKeysFromLocalStorage, type LocalStorageType } from "~storage/local";
 import { consoleProxy } from "~utils/logging";
 import { pick } from "~utils/generics";
 
-const cache = {
-    'local': {} as Partial<LocalStorage>,
+export type ProxyListeners = {
+    [K in chrome.storage.AreaName]: ((data: StorageCache[K]) => void)[];
+};
+
+export type StorageCache = {
+    local: LocalStorageType
+    sync?: any,
+    session?: any,
+    managed?: any,
 }
+
+const cache: StorageCache = {
+    local: {} as LocalStorageType,
+}
+
+const proxyListeners: ProxyListeners = {
+    local: [],
+    sync: [],
+    session: [],
+    managed: [],
+}
+
+const storageListener = (event: Record<string, chrome.storage.StorageChange>, area: chrome.storage.AreaName) => {
+
+    Object.entries(event).forEach(([key, { newValue }]) => {
+        cache[area][key] = de(newValue);
+    })
+
+    proxyListeners[area].forEach((listener) => {
+        listener(cache[area]);
+    })
+}
+
+chrome.storage.onChanged.addListener(storageListener);
 
 export function useLocalStorage<T extends (keyof LocalStorage)[]>(keys?: T): Partial<ExtractKeysFromLocalStorage<T>> {
     if (!keys) {
@@ -24,25 +55,10 @@ export function useLocalStorage<T extends (keyof LocalStorage)[]>(keys?: T): Par
 export function useStorage<T extends object>(keysWithDefaults: T, storageArea: chrome.storage.AreaName = 'local'): Partial<T> {
     const [state, setState] = useState(pick(cache[storageArea], Object.keys(keysWithDefaults)) as Partial<T>);
 
-    const listener = (event: Record<string, chrome.storage.StorageChange>, area: chrome.storage.AreaName) => {
-
-        if (area !== storageArea) return;
-
-        const intersection = Object.entries(event).filter(([key,]) => keysWithDefaults.hasOwnProperty(key));
-
-        if (intersection.length == 0) return;
-
-        const newStorage: Partial<T> = intersection.reduce((acc, [key, { newValue }]) => {
-            if (!keysWithDefaults.hasOwnProperty(key)) return acc;
-            return { ...acc, [key]: de(newValue) }
-        }, state);
-
-        setState({ ...newStorage });
+    const listener = (newState: T) => {
+        const intersection = pick(newState, Object.keys(keysWithDefaults) as (keyof T)[]);
+        setState({ ...intersection });
     }
-
-    useEffect(() => {
-        cache[storageArea] = { ...cache[storageArea], ...state };
-    }, [state])
 
     useEffect(() => {
         if (!keysWithDefaults || Object.keys(keysWithDefaults).length == 0) return;
@@ -54,15 +70,19 @@ export function useStorage<T extends object>(keysWithDefaults: T, storageArea: c
         }
 
         getStorage(storageArea, keysWithDefaults).then((response) => {
+            cache[storageArea] = { ...cache[storageArea], ...response };
             setState(response);
         });
     }, [])
 
     useEffect(() => {
-        chrome.storage.onChanged.addListener(listener);
+        proxyListeners[storageArea].push(listener);
 
         return () => {
-            chrome.storage.onChanged.removeListener(listener);
+            const index = proxyListeners[storageArea].indexOf(listener);
+            if (index !== -1) {
+                proxyListeners[storageArea].splice(index, 1);
+            }
         }
     }, [keysWithDefaults])
     return state;

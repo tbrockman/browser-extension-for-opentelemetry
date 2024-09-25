@@ -36,23 +36,12 @@ export default function GeneralConfiguration({ enabled, onEditorSave, onEditorCh
         'attributes',
         'headers'
     ])
-    const [attributes, setAttributes] = useState<LocalStorageType['attributes']>(new Map())
-    const [headers, setHeaders] = useState<LocalStorageType['headers']>(new Map())
     const pillErrors = patternErrorsToPills(storage.matchPatterns, storage.matchPatternErrors)
 
     const onEnabledUrlsChange = async (values: string[]) => {
         setLocalStorage({ matchPatterns: values })
         syncMatchPatternPermissions({ prev: storage.matchPatterns || [], next: values })
     }
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const { attributes, headers } = await getLocalStorage(['attributes', 'headers'])
-            setAttributes(new Map(attributes || []))
-            setHeaders(new Map(headers || []))
-        }
-        fetchData()
-    }, [storage.configMode, storage.attributes, storage.headers])
 
     return (
         <Fieldset radius="md"
@@ -110,8 +99,8 @@ export default function GeneralConfiguration({ enabled, onEditorSave, onEditorCh
                         placeholder={storage.matchPatterns?.length == 0 ? defaultOptions.matchPatterns.join(', ') : ''}
                         delimiter={","}
                     />
-                    {attributes && <KeyValueInput
-                        defaultValue={attributes}
+                    {storage.attributes && <KeyValueInput
+                        defaultValue={storage.attributes}
                         onChange={async (attributes) => await setLocalStorage({ attributes })}
                         label="Resource attributes"
                         disabled={!enabled}
@@ -124,8 +113,8 @@ export default function GeneralConfiguration({ enabled, onEditorSave, onEditorCh
                         valuePlaceholder="value"
                         fullWidth
                     />}
-                    {headers && <KeyValueInput
-                        defaultValue={headers}
+                    {storage.headers && <KeyValueInput
+                        defaultValue={storage.headers}
                         onChange={async (headers) => await setLocalStorage({ headers })}
                         label="Request headers"
                         disabled={!enabled}
