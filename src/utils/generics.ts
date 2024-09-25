@@ -5,7 +5,7 @@ export const assignPartial = <T extends object>(instance: T, params?: Partial<T>
         return;
     }
 
-    Object.entries(params).forEach(([key, value]) => {
+    Object.entries(params).forEach(([key, value]: [string, any]) => {
         // Check if the key exists on the instance
         if (Reflect.has(instance, key)) {
 
