@@ -114,10 +114,6 @@ export const Editor = ({ show, onSave, onChange, onEditorReady }: EditorProps) =
             onEditorReady && onEditorReady(view, state);
             consoleProxy.debug('editor ready', view, state);
         },
-        // onUpdate(viewUpdate) {
-        //     const state = viewUpdate.state.toJSON(stateFields);
-        //     consoleProxy.debug('editor update', state);
-        // },
         onChange: onEditorChange,
         value: renderedConfig,
         height: '100%',
