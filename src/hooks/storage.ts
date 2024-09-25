@@ -32,6 +32,8 @@ const storageListener = (event: Record<string, chrome.storage.StorageChange>, ar
         cache[area][key] = de(newValue);
     })
 
+    consoleProxy.debug('storage changed in storageListener, cache after:', cache[area])
+
     proxyListeners[area].forEach((listener) => {
         listener(cache[area]);
     })
