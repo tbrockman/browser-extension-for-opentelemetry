@@ -24,14 +24,14 @@ const withEmptyRow = (rows: Row[]): Row[] => {
     const newRows = [...rows];
     const lastRow = rows.length > 0 ? rows[rows.length - 1] : { key: null, value: null };
 
-    if (rows.length == 0 || lastRow.key || lastRow.value) {
+    if (rows.length == 0 || lastRow.key) {
         newRows.push({ id: generateUniqueId(), key: '', value: '' });
     }
     return newRows;
 }
 
-// TODO: consider better way to generate ids than this generated one
-const generateUniqueId = () => '_' + Math.random().toString(36).substr(2, 9);
+// TODO: consider better way to generate ids than this copilot generated one
+const generateUniqueId = () => '_' + Math.random().toString(36).substring(2, 9);
 
 /**
  * A component that allows the user to input key-value pairs.

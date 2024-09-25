@@ -28,14 +28,18 @@ import { syncMatchPatternPermissions } from "~utils/match-pattern"
 import { consoleProxy } from "~utils/logging"
 import { usePlatformInfo } from "~hooks/platform"
 import { toPlatformSpecificKeys } from "~utils/platform"
+import type { EditorView } from "@codemirror/view"
+import type { EditorState } from "@codemirror/state"
 
 // TODO: Consider replacing "Configuration" header with a menu
 export default function Configuration() {
     const { enabled, configMode, matchPatterns, configText, editorState } = useLocalStorage(["enabled", "configMode", "matchPatterns", "configText", "editorState"])
     const [editorText, setEditorText] = useState(editorState?.doc as string | undefined)
-    const editorDirty = editorText && editorState && editorText !== configText
+    const [editorReady, setEditorReady] = useState(false)
+    const editorDirty = editorText && editorState && editorReady && editorText !== configText
     const portalTargetRef = useRef<HTMLElement>()
     const [refsInitialized, setRefsInitialized] = useState(false)
+    const showAffix = refsInitialized && (editorReady || configMode == ConfigMode.Visual)
     const platformInfo = usePlatformInfo()
     const saveKeys = toPlatformSpecificKeys(['Mod', 'S'], platformInfo)
 
@@ -81,6 +85,10 @@ export default function Configuration() {
         }
     }
 
+    const onEditorReady = (view: EditorView, state: EditorState) => {
+        setEditorReady(true);
+    }
+
     return (
         <Box>
             <Group gap='xs' style={{ padding: '1rem 1rem 0' }} justify="space-between">
@@ -124,19 +132,17 @@ export default function Configuration() {
                 // @ts-ignore
                 ref={portalTargetRef}
             >
-                {refsInitialized &&
-                    <Affix
-                        position={{ bottom: 10, right: 10 }}
-                        portalProps={{ target: portalTargetRef.current }} styles={{ root: { position: "absolute" } }}>
-                        <Group>
-                            <Button onClick={configModeToggle} leftSection={configMode === ConfigMode.Visual ? <IconBraces /> : <IconFileCheck />}>
-                                {configMode === ConfigMode.Visual ? 'Edit as JSON' : 'Edit as form'}
-                            </Button>
-                        </Group>
-                    </Affix>
-                }
+                {portalTargetRef?.current && showAffix && <Affix
+                    position={{ bottom: 10, right: 10 }}
+                    portalProps={{ target: portalTargetRef.current }} styles={{ root: { position: "absolute" } }}>
+                    <Group>
+                        <Button onClick={configModeToggle} leftSection={configMode === ConfigMode.Visual ? <IconBraces /> : <IconFileCheck />}>
+                            {configMode === ConfigMode.Visual ? 'Edit as JSON' : 'Edit as form'}
+                        </Button>
+                    </Group>
+                </Affix>}
                 {
-                    refsInitialized && configMode == ConfigMode.Code && editorDirty &&
+                    showAffix && configMode == ConfigMode.Code && editorDirty &&
                     <Affix
                         position={{ bottom: 10, left: 10 }}
                         portalProps={{ target: portalTargetRef.current }} styles={{ root: { position: "absolute" } }}
@@ -155,7 +161,11 @@ export default function Configuration() {
                 <ScrollArea.Autosize mah={400}>
 
                     <Stack pr='lg' pb='lg' pt='lg'>
-                        <GeneralConfiguration enabled={!!enabled} onEditorSave={onEditorSave} onEditorChange={onEditorChange} />
+                        <GeneralConfiguration
+                            enabled={!!enabled}
+                            onEditorSave={onEditorSave}
+                            onEditorChange={onEditorChange}
+                            onEditorReady={onEditorReady} />
                         {configMode === ConfigMode.Visual &&
                             <>
                                 <TraceConfiguration enabled={!!enabled} />

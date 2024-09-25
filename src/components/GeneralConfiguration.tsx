@@ -4,18 +4,13 @@ import ColorModeSwitch from "~components/ColorModeSwitch";
 import { useLocalStorage } from "~hooks/storage";
 import { defaultOptions } from "~utils/options";
 import { syncMatchPatternPermissions } from "~utils/match-pattern";
-import { getLocalStorage, setLocalStorage, type LocalStorageType } from "~storage/local";
+import { setLocalStorage } from "~storage/local";
 import { ConfigMode, type MatchPatternError } from "~storage/local/internal";
 import { Editor } from "~components/Editor";
 import { KeyValueInput } from "~components/KeyValueInput";
 import { ErrorBoundary } from "react-error-boundary";
-import { useEffect, useState } from "react";
-
-type GeneralConfigurationProps = {
-    enabled: boolean
-    onEditorSave: (text: string) => void
-    onEditorChange: (text: string) => void
-}
+import type { EditorView } from "@codemirror/view";
+import type { EditorState } from "@codemirror/state";
 
 const patternErrorsToPills = (patterns?: string[], errors?: MatchPatternError[]): Map<number, string> => {
     const map = new Map<number, string>()
@@ -28,7 +23,14 @@ const patternErrorsToPills = (patterns?: string[], errors?: MatchPatternError[])
     return map
 }
 
-export default function GeneralConfiguration({ enabled, onEditorSave, onEditorChange }: GeneralConfigurationProps) {
+type GeneralConfigurationProps = {
+    enabled: boolean
+    onEditorSave: (text: string) => void
+    onEditorChange: (text: string) => void
+    onEditorReady: (view: EditorView, state: EditorState) => void
+}
+
+export default function GeneralConfiguration({ enabled, onEditorSave, onEditorChange, onEditorReady }: GeneralConfigurationProps) {
     const storage = useLocalStorage([
         'matchPatterns',
         'matchPatternErrors',
@@ -129,11 +131,9 @@ export default function GeneralConfiguration({ enabled, onEditorSave, onEditorCh
                     />}
                 </Group>
             }
-            {storage.configMode === ConfigMode.Code &&
-                <ErrorBoundary fallback={<>shucks, looks like the editor is having an issue</>}>
-                    <Editor onSave={onEditorSave} onChange={onEditorChange} />
-                </ErrorBoundary>
-            }
+            <ErrorBoundary fallback={<>shucks, looks like the editor is having an issue</>}>
+                <Editor show={storage.configMode === ConfigMode.Code} onSave={onEditorSave} onChange={onEditorChange} onEditorReady={onEditorReady} />
+            </ErrorBoundary>
         </Fieldset>
     );
 }

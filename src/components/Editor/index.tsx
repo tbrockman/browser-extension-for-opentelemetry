@@ -1,5 +1,5 @@
 import { Box, useComputedColorScheme } from "@mantine/core";
-import { useCodeMirror } from "@uiw/react-codemirror";
+import { EditorState, useCodeMirror } from "@uiw/react-codemirror";
 import { useEffect, useRef, useState } from "react";
 import { getLocalStorage, setLocalStorage } from "~storage/local";
 import { linter, lintKeymap, lintGutter } from "@codemirror/lint";
@@ -10,7 +10,6 @@ import {
 } from "@codemirror/view";
 import { json, jsonParseLinter, jsonLanguage } from "@codemirror/lang-json";
 import {
-    autocompletion,
     completionKeymap,
     closeBrackets,
     closeBracketsKeymap,
@@ -63,14 +62,15 @@ const constExtensions = [
 ]
 
 export type EditorProps = {
+    show: boolean;
     onSave?: (text: string) => void;
     onChange?: (text: string) => void;
+    onEditorReady?: (view: EditorView, state: EditorState) => void;
 }
 
 // TODO: fix ctrl+f search styling
 // TODO: fix autocomplete typing option background color flicker
-// TODO: fix configText change -> tracing.collectorUrl not being updated
-export const Editor = ({ onSave, onChange }: EditorProps) => {
+export const Editor = ({ show, onSave, onChange, onEditorReady }: EditorProps) => {
     const computedColorScheme = useComputedColorScheme('dark');
     const editor = useRef<HTMLDivElement>(null);
     const [initialEditorState, setInitialEditorState] = useState(null);
@@ -110,6 +110,14 @@ export const Editor = ({ onSave, onChange }: EditorProps) => {
             ]),
         ],
         theme,
+        onCreateEditor(view, state) {
+            onEditorReady && onEditorReady(view, state);
+            consoleProxy.debug('editor ready', view, state);
+        },
+        // onUpdate(viewUpdate) {
+        //     const state = viewUpdate.state.toJSON(stateFields);
+        //     consoleProxy.debug('editor update', state);
+        // },
         onChange: onEditorChange,
         value: renderedConfig,
         height: '100%',
@@ -135,6 +143,6 @@ export const Editor = ({ onSave, onChange }: EditorProps) => {
     }, [editor.current, initialEditorState])
 
     return (
-        <Box ref={editor} />
+        <Box ref={editor} style={{ ...(!show && { visibility: 'hidden', height: 0 }) }} />
     )
 };
