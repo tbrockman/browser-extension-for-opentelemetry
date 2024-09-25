@@ -1,7 +1,6 @@
 import { Checkbox, Fieldset, Group, Text, TextInput, type CheckboxProps } from "@mantine/core";
-import { useDebouncedValue } from "@mantine/hooks";
 import { IconTerminal } from "@tabler/icons-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useLocalStorage } from "~hooks/storage";
 import { defaultOptions } from "~utils/options";
 import { setLocalStorage } from "~storage/local";
