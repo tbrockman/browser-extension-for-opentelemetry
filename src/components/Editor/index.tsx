@@ -62,7 +62,8 @@ const constExtensions = [
 ]
 
 export type EditorProps = {
-    show: boolean;
+    visible: boolean;
+    defaultValue: string;
     onSave?: (text: string) => void;
     onChange?: (text: string) => void;
     onEditorReady?: (view: EditorView, state: EditorState) => void;
@@ -70,11 +71,11 @@ export type EditorProps = {
 
 // TODO: fix ctrl+f search styling
 // TODO: fix autocomplete typing option background color flicker
-export const Editor = ({ show, onSave, onChange, onEditorReady }: EditorProps) => {
+export const Editor = ({ defaultValue, visible, onSave, onChange, onEditorReady }: EditorProps) => {
     const computedColorScheme = useComputedColorScheme('dark');
     const editor = useRef<HTMLDivElement>(null);
     const [initialEditorState, setInitialEditorState] = useState(null);
-    const [renderedConfig, setRenderedConfig] = useState<string>('');
+    const [renderedConfig, setRenderedConfig] = useState<string>(defaultValue);
     const theme = computedColorScheme == 'dark' ? themeDark : themeLight
     // second element returned by createTheme is the syntaxHighlighting extension
     const highlighter = theme[1].find(item => item.value instanceof HighlightStyle)?.value;
@@ -138,7 +139,13 @@ export const Editor = ({ show, onSave, onChange, onEditorReady }: EditorProps) =
         editor.current && codemirror.setContainer(editor.current);
     }, [editor.current, initialEditorState])
 
+    useEffect(() => {
+        if (defaultValue !== renderedConfig) {
+            setRenderedConfig(defaultValue);
+        }
+    }, [defaultValue])
+
     return (
-        <Box ref={editor} style={{ ...(!show && { visibility: 'hidden', height: 0 }) }} />
+        <Box ref={editor} style={{ ...(!visible && { visibility: 'hidden', height: 0 }) }} />
     )
 };

@@ -55,25 +55,29 @@ export function useLocalStorage<T extends (keyof LocalStorage)[]>(keys?: T): Par
 }
 
 export function useStorage<T extends object>(keysWithDefaults: T, storageArea: chrome.storage.AreaName = 'local'): Partial<T> {
-    const [state, setState] = useState(pick(cache[storageArea], Object.keys(keysWithDefaults)) as Partial<T>);
+    const chooseKeys = keysWithDefaults ? Object.keys(keysWithDefaults) as (keyof T)[] : [];
+    const [state, setState] = useState(pick(cache[storageArea], chooseKeys) as Partial<T>);
 
     const listener = (newState: T) => {
-        const intersection = pick(newState, Object.keys(keysWithDefaults) as (keyof T)[]);
+        consoleProxy.debug('storage changed in listener, newState:', newState)
+        const intersection = pick(newState, chooseKeys as (keyof T)[]);
+        consoleProxy.debug('setting intersection:', {...intersection})
         setState({ ...intersection });
     }
 
     useEffect(() => {
-        if (!keysWithDefaults || Object.keys(keysWithDefaults).length == 0) return;
-        consoleProxy.debug('looking for', keysWithDefaults, `in cache['${storageArea}']:`);
+        if (chooseKeys.length == 0) return;
+        consoleProxy.debug('looking for', chooseKeys, `in cache['${storageArea}']:`, cache[storageArea]);
         // if we can answer the request from cache, do so
-        if (Object.keys(keysWithDefaults).every((key) => key in cache[storageArea])) {
-            consoleProxy.debug('cache hit for', keysWithDefaults, `in cache['${storageArea}']:`);
+        if (chooseKeys.every((key) => key in cache[storageArea])) {
+            consoleProxy.debug('cache hit for', chooseKeys, `in cache['${storageArea}']:`, cache[storageArea]);
             return;
         }
 
         getStorage(storageArea, keysWithDefaults).then((response) => {
             cache[storageArea] = { ...cache[storageArea], ...response };
-            setState(response);
+            consoleProxy.debug('setting state from cache:', pick(cache[storageArea], chooseKeys))
+            setState(pick(cache[storageArea], chooseKeys));
         });
     }, [])
 

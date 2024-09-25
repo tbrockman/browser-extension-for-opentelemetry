@@ -4,13 +4,15 @@ import ColorModeSwitch from "~components/ColorModeSwitch";
 import { useLocalStorage } from "~hooks/storage";
 import { defaultOptions } from "~utils/options";
 import { syncMatchPatternPermissions } from "~utils/match-pattern";
-import { setLocalStorage } from "~storage/local";
+import { getLocalStorage, setLocalStorage } from "~storage/local";
 import { ConfigMode, type MatchPatternError } from "~storage/local/internal";
 import { Editor } from "~components/Editor";
 import { KeyValueInput } from "~components/KeyValueInput";
 import { ErrorBoundary } from "react-error-boundary";
 import type { EditorView } from "@codemirror/view";
 import type { EditorState } from "@codemirror/state";
+import { useEffect, useState } from "react";
+import { consoleProxy } from "~utils/logging";
 
 const patternErrorsToPills = (patterns?: string[], errors?: MatchPatternError[]): Map<number, string> => {
     const map = new Map<number, string>()
@@ -32,6 +34,7 @@ type GeneralConfigurationProps = {
 
 export default function GeneralConfiguration({ enabled, onEditorSave, onEditorChange, onEditorReady }: GeneralConfigurationProps) {
     const storage = useLocalStorage([
+        'configText',
         'matchPatterns',
         'matchPatternErrors',
         'configMode',
@@ -133,7 +136,12 @@ export default function GeneralConfiguration({ enabled, onEditorSave, onEditorCh
                 </Group>
             }
             <ErrorBoundary fallback={<>shucks, looks like the editor is having an issue</>}>
-                <Editor show={storage.configMode === ConfigMode.Code} onSave={onEditorSave} onChange={onEditorChange} onEditorReady={onEditorReady} />
+                <Editor 
+                    defaultValue={storage.configText || '{}'}
+                    visible={storage.configMode === ConfigMode.Code} 
+                    onSave={onEditorSave} 
+                    onChange={onEditorChange} 
+                    onEditorReady={onEditorReady} />
             </ErrorBoundary>
         </Fieldset>
     );

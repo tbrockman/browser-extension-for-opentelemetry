@@ -1,7 +1,6 @@
 import { Anchor, Checkbox, Fieldset, Group, TagsInput, Text, TextInput, type CheckboxProps } from "@mantine/core";
-import { useDebouncedValue } from "@mantine/hooks";
 import { IconChartDots3, IconAffiliate } from "@tabler/icons-react";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { useLocalStorage } from "~hooks/storage";
 
 import { events as EventList } from "~utils/constants"
@@ -18,22 +17,8 @@ type TraceConfigurationProps = {
 export default function TraceConfiguration({ enabled }: TraceConfigurationProps) {
 
     const storage = useLocalStorage(["traceCollectorUrl", "tracingEnabled", "instrumentations", "events", "propagateTo"])
-    const [renderedTraceCollectorUrl, setRenderedTraceCollectorUrl] = useState(storage.traceCollectorUrl)
-    const [debouncedRenderedUrl] = useDebouncedValue(renderedTraceCollectorUrl, 500);
     const checkboxRef = useRef<HTMLInputElement>(null);
 
-    // If the local storage value changes, update the rendered value
-    useEffect(() => {
-        if (storage.traceCollectorUrl !== renderedTraceCollectorUrl) {
-            setRenderedTraceCollectorUrl(storage.traceCollectorUrl)
-        }
-    }, [storage.traceCollectorUrl])
-    // If the rendered value changes, update the local storage value
-    useEffect(() => {
-        if (debouncedRenderedUrl !== storage.traceCollectorUrl) {
-            setLocalStorage({ traceCollectorUrl: debouncedRenderedUrl })
-        }
-    }, [debouncedRenderedUrl])
     const toggleDisabled = useCallback(() => {
         setLocalStorage({ tracingEnabled: !storage.tracingEnabled })
     }, [storage.tracingEnabled]);
@@ -91,7 +76,7 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
                         <Checkbox value="load" label="Document load" variant="outline" />
                     </Group>
                 </Checkbox.Group>}
-                {renderedTraceCollectorUrl !== undefined && <TextInput
+                {storage.traceCollectorUrl !== undefined && <TextInput
                     label="Export URL"
                     description={
                         <>
@@ -99,8 +84,8 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
                         </>
                     }
                     placeholder={defaultOptions.traceCollectorUrl}
-                    value={renderedTraceCollectorUrl}
-                    onChange={(event) => {setRenderedTraceCollectorUrl(event.currentTarget.value)}}
+                    value={storage.traceCollectorUrl}
+                    onChange={(event) => setLocalStorage({ traceCollectorUrl: event.currentTarget.value })}
                 />}
                 {storage.events !== undefined && <TagsInput
                     value={storage.events}

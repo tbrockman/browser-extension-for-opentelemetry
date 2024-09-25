@@ -15,21 +15,7 @@ type LogConfigurationProps = {
 
 export default function LogConfiguration({ enabled }: LogConfigurationProps) {
     const { logCollectorUrl, loggingEnabled } = useLocalStorage(["logCollectorUrl", "loggingEnabled"])
-    const [renderedLogCollectorUrl, setRenderedLogCollectorUrl] = useState(logCollectorUrl)
-    const [debouncedRenderedUrl] = useDebouncedValue(renderedLogCollectorUrl, 500);
     const checkboxRef = useRef<HTMLInputElement>(null);
-    // If the local storage value changes, update the rendered value
-    useEffect(() => {
-        if (logCollectorUrl !== renderedLogCollectorUrl) {
-            setRenderedLogCollectorUrl(logCollectorUrl)
-        }
-    }, [logCollectorUrl])
-    // If the rendered value changes, update the local storage value
-    useEffect(() => {
-        if (debouncedRenderedUrl !== logCollectorUrl) {
-            setLocalStorage({ logCollectorUrl: debouncedRenderedUrl })
-        }
-    }, [debouncedRenderedUrl])
 
     const toggleDisabled = useCallback(() => {
         setLocalStorage({ loggingEnabled: !loggingEnabled })
@@ -73,7 +59,7 @@ export default function LogConfiguration({ enabled }: LogConfigurationProps) {
                     />}
                 </Group>
             } disabled={!loggingEnabled}>
-            {renderedLogCollectorUrl !== undefined && <TextInput
+            {logCollectorUrl !== undefined && <TextInput
                 label="Export URL"
                 description={
                     <>
@@ -81,9 +67,9 @@ export default function LogConfiguration({ enabled }: LogConfigurationProps) {
                     </>
                 }
                 placeholder={defaultOptions.logCollectorUrl}
-                value={renderedLogCollectorUrl}
-                onChange={(event) => {
-                    setRenderedLogCollectorUrl(event.currentTarget.value)
+                value={logCollectorUrl}
+                onChange={async (event) => {
+                    await setLocalStorage({logCollectorUrl: event.currentTarget.value})
                 }}
             />}
         </Fieldset>
