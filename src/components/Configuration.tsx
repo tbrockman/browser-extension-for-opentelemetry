@@ -37,7 +37,7 @@ export default function Configuration() {
     const portalTargetRef = useRef<HTMLElement>()
     const [refsInitialized, setRefsInitialized] = useState(false)
     const platformInfo = usePlatformInfo()
-    const saveKeys = toPlatformSpecificKeys(['Ctrl', 'S'], platformInfo)
+    const saveKeys = toPlatformSpecificKeys(['Mod', 'S'], platformInfo)
 
     const configModeToggle = () => {
         // toggle config mode

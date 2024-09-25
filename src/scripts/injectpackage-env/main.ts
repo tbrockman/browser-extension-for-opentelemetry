@@ -15,7 +15,3 @@ cmd.stdout.on('data', (data) => {
 cmd.stderr.on('data', (data) => {
     process.stderr.write(`${data}`);
 });
-
-cmd.on('close', (code) => {
-    process.stdout.write(`child process exited with code ${code}`);
-});
