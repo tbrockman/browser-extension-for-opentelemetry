@@ -11,8 +11,6 @@ import { KeyValueInput } from "~components/KeyValueInput";
 import { ErrorBoundary } from "react-error-boundary";
 import type { EditorView } from "@codemirror/view";
 import type { EditorState } from "@codemirror/state";
-import { useEffect, useState } from "react";
-import { consoleProxy } from "~utils/logging";
 
 const patternErrorsToPills = (patterns?: string[], errors?: MatchPatternError[]): Map<number, string> => {
     const map = new Map<number, string>()
@@ -33,7 +31,14 @@ type GeneralConfigurationProps = {
 }
 
 export default function GeneralConfiguration({ enabled, onEditorSave, onEditorChange, onEditorReady }: GeneralConfigurationProps) {
-    const storage = useLocalStorage([
+    const { 
+        configMode, 
+        configText, 
+        matchPatternErrors, 
+        matchPatterns, 
+        attributes, 
+        headers
+    } = useLocalStorage([
         'configText',
         'matchPatterns',
         'matchPatternErrors',
@@ -41,11 +46,11 @@ export default function GeneralConfiguration({ enabled, onEditorSave, onEditorCh
         'attributes',
         'headers'
     ])
-    const pillErrors = patternErrorsToPills(storage.matchPatterns, storage.matchPatternErrors)
+    const pillErrors = patternErrorsToPills(matchPatterns, matchPatternErrors)
 
     const onEnabledUrlsChange = async (values: string[]) => {
         setLocalStorage({ matchPatterns: values })
-        syncMatchPatternPermissions({ prev: storage.matchPatterns || [], next: values })
+        syncMatchPatternPermissions({ prev: matchPatterns || [], next: values })
     }
 
     return (
@@ -67,21 +72,21 @@ export default function GeneralConfiguration({ enabled, onEditorSave, onEditorCh
                     }} />
                 </Group>
             }>
-            {storage.configMode === ConfigMode.Visual &&
+            {configMode === ConfigMode.Visual &&
                 <Group>
                     <TagsInput
-                        value={storage.matchPatterns || []}
+                        value={matchPatterns || []}
                         errors={pillErrors}
                         onValueRemoved={(index) => {
-                            const newPatterns = [...(storage.matchPatterns || [])]
+                            const newPatterns = [...(matchPatterns || [])]
                             newPatterns.splice(index, 1)
                             onEnabledUrlsChange(newPatterns)
                         }}
                         onValueAdded={(value) => {
 
-                            if (storage.matchPatterns) {
-                                storage.matchPatterns.push(value)
-                                onEnabledUrlsChange(storage.matchPatterns)
+                            if (matchPatterns) {
+                                matchPatterns.push(value)
+                                onEnabledUrlsChange(matchPatterns)
                             }
                         }}
                         label={
@@ -101,11 +106,11 @@ export default function GeneralConfiguration({ enabled, onEditorSave, onEditorCh
                                 </Anchor>. <Text c='orange.3' component='span' size='xs'>⚠️&nbsp;Adding new entries will require reloading targeted pages.</Text>
                             </>
                         }
-                        placeholder={storage.matchPatterns?.length == 0 ? defaultOptions.matchPatterns.join(', ') : ''}
+                        placeholder={matchPatterns?.length == 0 ? defaultOptions.matchPatterns.join(', ') : ''}
                         delimiter={","}
                     />
-                    {storage.attributes && <KeyValueInput
-                        defaultValue={storage.attributes}
+                    {attributes && <KeyValueInput
+                        defaultValue={attributes}
                         onChange={async (attributes) => await setLocalStorage({ attributes })}
                         label="Resource attributes"
                         disabled={!enabled}
@@ -118,8 +123,8 @@ export default function GeneralConfiguration({ enabled, onEditorSave, onEditorCh
                         valuePlaceholder="value"
                         fullWidth
                     />}
-                    {storage.headers && <KeyValueInput
-                        defaultValue={storage.headers}
+                    {headers && <KeyValueInput
+                        defaultValue={headers}
                         onChange={async (headers) => await setLocalStorage({ headers })}
                         label="Request headers"
                         disabled={!enabled}
@@ -136,8 +141,8 @@ export default function GeneralConfiguration({ enabled, onEditorSave, onEditorCh
             }
             <ErrorBoundary fallback={<>shucks, looks like the editor is having an issue</>}>
                 <Editor 
-                    defaultValue={storage.configText || '{}'}
-                    visible={storage.configMode === ConfigMode.Code} 
+                    defaultValue={configText || '{}'}
+                    visible={configMode === ConfigMode.Code} 
                     onSave={onEditorSave} 
                     onChange={onEditorChange} 
                     onEditorReady={onEditorReady} />

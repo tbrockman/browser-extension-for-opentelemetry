@@ -8,7 +8,7 @@ export type KeyShortcutProps = {
 
 export const KeyShortcut = ({ keys }: KeyShortcutProps) => {
     const platformInfo = usePlatformInfo();
-    const platformKeys = platformInfo ? toPlatformSpecificKeys(keys, platformInfo) : keys;
+    const platformKeys = platformInfo ? toPlatformSpecificKeys(keys, platformInfo) ?? keys : keys;
     const elements = platformKeys.map((key, i) =>
         <>
             <Kbd>{key}</Kbd>

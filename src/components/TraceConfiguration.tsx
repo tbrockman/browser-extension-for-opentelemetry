@@ -16,12 +16,18 @@ type TraceConfigurationProps = {
 
 export default function TraceConfiguration({ enabled }: TraceConfigurationProps) {
 
-    const storage = useLocalStorage(["traceCollectorUrl", "tracingEnabled", "instrumentations", "events", "propagateTo"])
+    const { 
+        traceCollectorUrl, 
+        tracingEnabled, 
+        instrumentations, 
+        events, 
+        propagateTo
+    } = useLocalStorage(["traceCollectorUrl", "tracingEnabled", "instrumentations", "events", "propagateTo"])
     const checkboxRef = useRef<HTMLInputElement>(null);
 
     const toggleDisabled = useCallback(() => {
-        setLocalStorage({ tracingEnabled: !storage.tracingEnabled })
-    }, [storage.tracingEnabled]);
+        setLocalStorage({ tracingEnabled: !tracingEnabled })
+    }, [tracingEnabled]);
 
     // Hack for Firefox disabled fieldset checkbox event handling
     // see: https://stackoverflow.com/questions/63740106/checkbox-onchange-in-legend-inside-disabled-fieldset-not-firing-in-firefox-w
@@ -37,13 +43,13 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
         <Fieldset aria-label="Traces"
             styles={{
                 root: {
-                    borderColor: (storage.tracingEnabled && enabled) ? 'var(--mantine-primary-color-5)' : 'var(--mantine-color-default-border)'
+                    borderColor: (tracingEnabled && enabled) ? 'var(--mantine-primary-color-5)' : 'var(--mantine-color-default-border)'
                 }
             }}
             legend={
                 <Group gap='xs'>
-                    {storage.tracingEnabled !== undefined && <Checkbox
-                        checked={storage.tracingEnabled}
+                    {tracingEnabled !== undefined && <Checkbox
+                        checked={tracingEnabled}
                         icon={CheckboxIcon}
                         label={<Text>Tracing</Text>}
                         ref={checkboxRef}
@@ -60,11 +66,11 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
                     />}
                 </Group>
             }
-            disabled={!storage.tracingEnabled}>
+            disabled={!tracingEnabled}>
             <Group>
-                {storage.instrumentations !== undefined && <Checkbox.Group
+                {instrumentations !== undefined && <Checkbox.Group
                     label="Instrumentation"
-                    value={storage.instrumentations}
+                    value={instrumentations}
                     onChange={(value) => setLocalStorage({ instrumentations: value as ("load" | "fetch" | "interaction")[] })}
                     description={
                         <>
@@ -76,7 +82,7 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
                         <Checkbox value="load" label="Document load" variant="outline" />
                     </Group>
                 </Checkbox.Group>}
-                {storage.traceCollectorUrl !== undefined && <TextInput
+                {traceCollectorUrl !== undefined && <TextInput
                     label="Export URL"
                     description={
                         <>
@@ -84,13 +90,13 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
                         </>
                     }
                     placeholder={defaultOptions.traceCollectorUrl}
-                    value={storage.traceCollectorUrl}
+                    value={traceCollectorUrl}
                     onChange={(event) => setLocalStorage({ traceCollectorUrl: event.currentTarget.value })}
                 />}
-                {storage.events !== undefined && <TagsInput
-                    value={storage.events}
+                {events !== undefined && <TagsInput
+                    value={events}
                     onChange={(value) => setLocalStorage({ events: value as (keyof HTMLElementEventMap)[] })}
-                    disabled={storage.instrumentations?.indexOf('interaction') == -1 || !enabled}
+                    disabled={instrumentations?.indexOf('interaction') == -1 || !enabled}
                     label="Event listeners"
                     data={EventList}
                     maxDropdownHeight={200}
@@ -107,13 +113,13 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
                             for a list of valid events.
                         </>
                     }
-                    placeholder={storage.events?.length == 0 ? defaultOptions.events.join(', ') : ''}
+                    placeholder={events?.length == 0 ? defaultOptions.events.join(', ') : ''}
                     splitChars={[","]}
                 />}
-                {storage.propagateTo !== undefined && <TagsInput
-                    value={storage.propagateTo}
+                {propagateTo !== undefined && <TagsInput
+                    value={propagateTo}
                     onChange={(value) => setLocalStorage({ propagateTo: value })}
-                    disabled={storage.instrumentations?.indexOf('fetch') == -1 || !enabled}
+                    disabled={instrumentations?.indexOf('fetch') == -1 || !enabled}
                     label="Forward trace context to"
                     maxDropdownHeight={200}
                     comboboxProps={{ position: 'bottom', middlewares: { flip: false, shift: false }, transitionProps: { transition: 'pop', duration: 200 } }}
@@ -122,7 +128,7 @@ export default function TraceConfiguration({ enabled }: TraceConfigurationProps)
                             Choose URLs (as regular expressions) which should receive W3C trace context on fetch/XHR. <Text c='orange.3' component='span' size='xs'>⚠️ May cause request CORS failures.</Text>
                         </>
                     }
-                    placeholder={storage.propagateTo?.length == 0 ? ".*" : ''}
+                    placeholder={propagateTo?.length == 0 ? ".*" : ''}
                     splitChars={[","]}
                 />}
             </Group>
