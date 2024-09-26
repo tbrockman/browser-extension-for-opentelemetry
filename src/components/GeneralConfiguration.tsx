@@ -44,9 +44,8 @@ export default function GeneralConfiguration({ enabled, onEditorSave, onEditorCh
     const pillErrors = patternErrorsToPills(storage.matchPatterns, storage.matchPatternErrors)
 
     const onEnabledUrlsChange = async (values: string[]) => {
-        console.log('syncing permissions', values, storage.matchPatterns)
-        await syncMatchPatternPermissions({ prev: storage.matchPatterns || [], next: values })
-        await setLocalStorage({ matchPatterns: values })
+        setLocalStorage({ matchPatterns: values })
+        syncMatchPatternPermissions({ prev: storage.matchPatterns || [], next: values })
     }
 
     return (
