@@ -11,14 +11,11 @@
     <p>...or <a href='#making-a-production-build'>build it yourself!</a></p>
 </div>
 
-
 ## About
 
-> [!NOTE] 
+> [!NOTE]
 > This project is in early development. Please forgive (or feel free to contribute) any missing documentation.
 > The extension is largely similar to the archived [opentelemetry-browser-extension](https://github.com/open-telemetry/opentelemetry-js-contrib/tree/main/archive/opentelemetry-browser-extension-autoinjection) (by [@svrnm](https://github.com/svrnm/opentelemetry-browser-extension/)), but avoids CSP issues with a different content script injection method, offers more configuration, and was developed independently.
-
-
 
 [Download it](https://chromewebstore.google.com/detail/opentelemetry-browser-ext/bgjeoaohfhbfabbfhbafjihbobjgniag), choose where you want it to run, and automatically start emitting OTLP logs and traces.
 
@@ -28,30 +25,28 @@
 
 ## Features
 
-* Automatically instrument webpages to collect traces and logs, sent to an OTLP-compatible collector
-* No content-security policy errors! Works around typical CSP limitations by making `fetch` requests from the background script instead of the webpage and using `chrome.scripting.executeScript({ ... , world: 'MAIN' })` to inject the content script.
-* Choose where and how you want it to run! Don't worry about the extension tracking every single webpage, use [match patterns](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns) (ex. `https://<your-org-here>.com/*`) to specify the pages it should run on and have access to.
-* Propagate b3 and w3c trace context to websites of your choosing (matched by regular expressions)
-
+- Automatically instrument webpages to collect traces and logs, sent to an OTLP-compatible collector
+- No content-security policy errors! Works around typical CSP limitations by making `fetch` requests from the background script instead of the webpage and using `chrome.scripting.executeScript({ ... , world: 'MAIN' })` to inject the content script.
+- Choose where and how you want it to run! Don't worry about the extension tracking every single webpage, use [match patterns](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns) (ex. `https://<your-org-here>.com/*`) to specify the pages it should run on and have access to.
+- Propagate b3 and w3c trace context to websites of your choosing (matched by regular expressions)
 
 ## Browser compatibility
 
 This extension is compatible with [all major browsers](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/scripting/executeScript#browser_compatibility) as of Firefox 128! 🎉
 
-## Architecture
-
-`TODO`
+<!-- ## Architecture TODO: -->
+<!-- ## Performance impact TODO: -->
 
 ## Security considerations
 
-> [!CAUTION]
-> Don't run this extension on webpages you don't trust (even though it likely won't be an issue)
+> [!WARNING]
+> Don't run this extension on webpages you don't trust (though it likely won't be an issue)
 
 ### Why?
 
-The extension background script exports any Protobuf-encoded OTLP data that it receives from the injected content script that it's able to parse. 
+The extension background script exports any Protobuf-encoded OTLP data that it receives from the injected content script that it's able to parse.
 
-While some mitigations are implemented, the data can always be tampered with by any malicious Javascript running in the same context as the content script, and as such the integrity of the data cannot be guaranteed. This may result in minor frustrations like storing garbage or worse depending on how your backend decodes Protobuf data. 
+While some mitigations are implemented, the data can always be tampered with by any malicious Javascript running in the same context as the content script, and as such the integrity of the data cannot be guaranteed. This may result in minor frustrations like storing garbage or worse depending on how your backend decodes Protobuf data.
 
 So, just as a general safety measure, it's probably best if you don't allow the extension to run in untrusted pages.
 
@@ -74,6 +69,7 @@ pnpm install
 ```
 
 Start the OpenTelemetry stack (Grafana + Quickwit + `opentelemetry-collector-contrib`):<sup> (optional if you have your own)</sup>
+
 ```bash
 docker compose up -d
 ```
@@ -95,6 +91,7 @@ Run the following:
 ```bash
 pnpm build
 ```
+
 or, for targeting a specific browser:
 
 ```bash
