@@ -1,6 +1,7 @@
 <div align="center">
-    <h1>Browser Extension for OpenTelemetry™</h1>
-    <p>automatically instrument webpages to emit <a href="https://opentelemetry.io/docs/what-is-opentelemetry/">OpenTelemetry</a>.</p>
+    <img width='400px' src='assets/logo.svg'></img>
+    <p>Automatically instrument webpages to emit <a href="https://opentelemetry.io/docs/what-is-opentelemetry/">OpenTelemetry</a>.</p>
+    <p>downloads available for:</p>
     <a href="https://chromewebstore.google.com/detail/opentelemetry-browser-ext/bgjeoaohfhbfabbfhbafjihbobjgniag"><img src='./assets/chrome.svg' height=50 alt='chrome download'></img></a>
     /
     <a href="https://apps.apple.com/us/app/opentelemetry-browser-ext/id6503631744"><img src='./assets/safari.svg' height=50 alt='safari download'></img></a>
