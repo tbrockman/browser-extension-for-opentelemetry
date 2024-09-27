@@ -1,7 +1,7 @@
-<div align="center">
-    <img width='400px' src='assets/logo.svg'></img>
+<div align='center'>
+    <img src='assets/logo.svg'></img>
     <p>Automatically instrument webpages to emit <a href="https://opentelemetry.io/docs/what-is-opentelemetry/">OpenTelemetry</a>.</p>
-    <p>downloads available for:</p>
+    <p>Available on:</p>
     <a href="https://chromewebstore.google.com/detail/opentelemetry-browser-ext/bgjeoaohfhbfabbfhbafjihbobjgniag"><img src='./assets/chrome.svg' height=50 alt='chrome download'></img></a>
     /
     <a href="https://apps.apple.com/us/app/opentelemetry-browser-ext/id6503631744"><img src='./assets/safari.svg' height=50 alt='safari download'></img></a>
@@ -18,7 +18,7 @@
 > This project is in early development. Please forgive (or feel free to contribute) any missing documentation.
 > The extension is largely similar to the archived [opentelemetry-browser-extension](https://github.com/open-telemetry/opentelemetry-js-contrib/tree/main/archive/opentelemetry-browser-extension-autoinjection) (by [@svrnm](https://github.com/svrnm/opentelemetry-browser-extension/)), but avoids CSP issues with a different content script injection method, offers more configuration, and was developed independently.
 
-[Download it](https://chromewebstore.google.com/detail/opentelemetry-browser-ext/bgjeoaohfhbfabbfhbafjihbobjgniag), choose where you want it to run, and automatically start emitting OTLP logs and traces.
+Download it, choose where you want it to run, and refresh your webpages to start emitting OTLP logs and traces.
 
 ## Preview
 
