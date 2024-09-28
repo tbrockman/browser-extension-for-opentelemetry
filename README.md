@@ -1,7 +1,8 @@
 <div align='center'>
     <img src='assets/logo.svg'></img>
+    <p></p>
     <p>Automatically instrument webpages to emit <a href="https://opentelemetry.io/docs/what-is-opentelemetry/">OpenTelemetry</a>.</p>
-    <p>Available on:</p>
+    <p></p>
     <a href="https://chromewebstore.google.com/detail/opentelemetry-browser-ext/bgjeoaohfhbfabbfhbafjihbobjgniag"><img src='./assets/chrome.svg' height=50 alt='chrome download'></img></a>
     /
     <a href="https://apps.apple.com/us/app/opentelemetry-browser-ext/id6503631744"><img src='./assets/safari.svg' height=50 alt='safari download'></img></a>
