@@ -48,6 +48,8 @@ export default function Configuration() {
         setLocalStorage({ configMode: configMode === ConfigMode.Visual ? ConfigMode.Code : ConfigMode.Visual })
     }
 
+    consoleProxy.info('test4')
+
     useEffect(() => {
         if (portalTargetRef.current) {
             setRefsInitialized(true)
