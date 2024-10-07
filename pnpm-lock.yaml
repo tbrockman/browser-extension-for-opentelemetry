@@ -171,8 +171,8 @@ importers:
         specifier: ^0.41.1
         version: 0.41.1(@swc/core@1.7.28(@swc/helpers@0.5.13))(@swc/helpers@0.5.13)(lodash@4.17.21)(postcss@8.4.47)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.2)
       '@types/chrome':
-        specifier: 0.0.273
-        version: 0.0.273
+        specifier: 0.0.277
+        version: 0.0.277
       '@types/jest':
         specifier: ^29.5.13
         version: 29.5.13
@@ -2467,8 +2467,8 @@ packages:
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
     engines: {node: '>=10.13.0'}
 
-  '@types/chrome@0.0.273':
-    resolution: {integrity: sha512-6Wp4GO07GLvti13Rf/RpYG+0COSJDOLE4iq3g1+whn1SNGUVnv6vbXqSa/WFbuVpvN1lcBLiZ40+gSeWmKb+eA==}
+  '@types/chrome@0.0.277':
+    resolution: {integrity: sha512-qoTgBcDWblSsX+jvFnpUlLUE3LAuOhZfBh9MyMWMQHDsQiYVgBvdZWu9COrdB9+aNnInEyXcFgfc2HE16sdSYQ==}
 
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
@@ -8246,7 +8246,7 @@ snapshots:
 
   '@trysound/sax@0.2.0': {}
 
-  '@types/chrome@0.0.273':
+  '@types/chrome@0.0.277':
     dependencies:
       '@types/filesystem': 0.0.36
       '@types/har-format': 1.2.15
