@@ -42,7 +42,7 @@ This extension is compatible with [all major browsers](https://developer.mozilla
 ## Security considerations
 
 > [!WARNING]
-> Don't run this extension on webpages you don't trust (though it likely won't be an issue)
+> You probably shouldn't run this extension on webpages you don't trust
 
 ### Why?
 
