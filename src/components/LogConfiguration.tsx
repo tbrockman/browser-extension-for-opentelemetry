@@ -3,7 +3,6 @@ import { IconTerminal } from "@tabler/icons-react";
 import { useCallback, useEffect, useRef } from "react";
 import { useLocalStorage } from "~hooks/storage";
 import { defaultOptions } from "~utils/options";
-import { setLocalStorage } from "~storage/local";
 
 const LogsIcon: CheckboxProps['icon'] = ({ ...others }) =>
     <IconTerminal {...others} />;
@@ -13,7 +12,7 @@ type LogConfigurationProps = {
 }
 
 export default function LogConfiguration({ enabled }: LogConfigurationProps) {
-    const { logCollectorUrl, loggingEnabled } = useLocalStorage(["logCollectorUrl", "loggingEnabled"])
+    const [{ logCollectorUrl, loggingEnabled }, setLocalStorage] = useLocalStorage(["logCollectorUrl", "loggingEnabled"])
     const checkboxRef = useRef<HTMLInputElement>(null);
 
     const toggleDisabled = useCallback(() => {

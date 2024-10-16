@@ -19,7 +19,6 @@ import TraceConfiguration from "~components/TraceConfiguration"
 import LogConfiguration from "~components/LogConfiguration"
 import GeneralConfiguration from "~components/GeneralConfiguration"
 import { useLocalStorage } from "~hooks/storage"
-import { setLocalStorage } from "~storage/local"
 import { useEffect, useRef, useState } from "react"
 import { ConfigMode } from "~storage/local/internal"
 import { de } from "~utils/serde"
@@ -33,7 +32,7 @@ import type { EditorState } from "@codemirror/state"
 
 // TODO: Consider replacing "Configuration" header with a menu
 export default function Configuration() {
-    const { enabled, configMode, matchPatterns, configText, editorState } = useLocalStorage(["enabled", "configMode", "matchPatterns", "configText", "editorState"])
+    const [{ enabled, configMode, matchPatterns, configText, editorState }, setLocalStorage] = useLocalStorage(["enabled", "configMode", "matchPatterns", "configText", "editorState"])
     const [editorText, setEditorText] = useState(editorState?.doc as string | undefined)
     const [editorReady, setEditorReady] = useState(false)
     const editorDirty = editorText && editorState && editorReady && editorText !== configText

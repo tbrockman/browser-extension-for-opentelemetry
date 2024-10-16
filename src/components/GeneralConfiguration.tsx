@@ -4,7 +4,6 @@ import ColorModeSwitch from "~components/ColorModeSwitch";
 import { useLocalStorage } from "~hooks/storage";
 import { defaultOptions } from "~utils/options";
 import { syncMatchPatternPermissions } from "~utils/match-pattern";
-import { getLocalStorage, setLocalStorage } from "~storage/local";
 import { ConfigMode, type MatchPatternError } from "~storage/local/internal";
 import { Editor } from "~components/Editor";
 import { KeyValueInput } from "~components/KeyValueInput";
@@ -31,14 +30,14 @@ type GeneralConfigurationProps = {
 }
 
 export default function GeneralConfiguration({ enabled, onEditorSave, onEditorChange, onEditorReady }: GeneralConfigurationProps) {
-    const { 
+    const [{ 
         configMode, 
         configText, 
         matchPatternErrors, 
         matchPatterns, 
         attributes, 
         headers
-    } = useLocalStorage([
+    }, setLocalStorage] = useLocalStorage([
         'configText',
         'matchPatterns',
         'matchPatternErrors',

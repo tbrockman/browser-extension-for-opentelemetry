@@ -5,7 +5,6 @@ import { useLocalStorage } from "~hooks/storage";
 
 import { events as EventList } from "~utils/constants"
 import { defaultOptions } from "~utils/options";
-import { setLocalStorage } from "~storage/local";
 
 const CheckboxIcon: CheckboxProps['icon'] = ({ ...others }) =>
     <IconAffiliate {...others} />;
@@ -15,14 +14,14 @@ type TraceConfigurationProps = {
 }
 
 export default function TraceConfiguration({ enabled }: TraceConfigurationProps) {
-
-    const { 
+    const [{
         traceCollectorUrl, 
         tracingEnabled, 
         instrumentations, 
         events, 
         propagateTo
-    } = useLocalStorage(["traceCollectorUrl", "tracingEnabled", "instrumentations", "events", "propagateTo"])
+    }, setLocalStorage] = useLocalStorage(["traceCollectorUrl", "tracingEnabled", "instrumentations", "events", "propagateTo"])
+
     const checkboxRef = useRef<HTMLInputElement>(null);
 
     const toggleDisabled = useCallback(() => {
