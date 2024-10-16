@@ -11,6 +11,7 @@
     /
     <a href="https://addons.mozilla.org/en-US/firefox/addon/opentelemetry-browserextension/"><img src='./assets/firefox.svg' height=50 alt='firefox nightly download'></img></a>
     <p>...or <a href='#making-a-production-build'>build it yourself!</a></p>
+    <video src='./assets/popup-preview.mp4' width=640></video>
 </div>
 
 ## About
@@ -20,10 +21,6 @@
 > The extension is largely similar to the archived [opentelemetry-browser-extension](https://github.com/open-telemetry/opentelemetry-js-contrib/tree/main/archive/opentelemetry-browser-extension-autoinjection) (by [@svrnm](https://github.com/svrnm/opentelemetry-browser-extension/)), but avoids CSP issues with a different content script injection method, offers more configuration, and was developed independently.
 
 Download it, choose where you want it to run, and refresh your webpages to start emitting OTLP logs and traces.
-
-## Preview
-
-<img src='./assets/store/popup.png' width='524' alt='An example view of the popup UI'/>
 
 ## Features
 
