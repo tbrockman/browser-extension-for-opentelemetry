@@ -68,7 +68,7 @@ const instrument = (sessionId: string, options: ContentScriptConfigurationType) 
         [ATTR_TELEMETRY_SDK_LANGUAGE]: 'webjs',
         [ATTR_TELEMETRY_SDK_NAME]: 'opentelemetry',
         [ATTR_TELEMETRY_SDK_VERSION]: '1.22.0', // TODO: replace with resolved version
-        // 'browser.name': process.env.PLASMO_BROWSER, // TODO: fix why this is undefined
+        'browser.name': process.env.PLASMO_BROWSER, // TODO: fix why this is undefined
         'extension.session.id': sessionId,
         ...Object.fromEntries(options.attributes.entries())
     })
