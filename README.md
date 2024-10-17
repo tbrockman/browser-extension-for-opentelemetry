@@ -11,7 +11,7 @@
     /
     <a href="https://addons.mozilla.org/en-US/firefox/addon/opentelemetry-browserextension/"><img src='./assets/firefox.svg' height=50 alt='firefox nightly download'></img></a>
     <p>...or <a href='#making-a-production-build'>build it yourself!</a></p>
-    <video src='./assets/popup-preview.mp4' width=640></video>
+    <video src='https://github.com/user-attachments/assets/8bc930b5-021d-4e79-bc05-2f0c6a138806' width=640/></video>
 </div>
 
 ## About
