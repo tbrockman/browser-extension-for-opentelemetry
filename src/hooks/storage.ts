@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 import { de } from "~utils/serde";
-import { defaultLocalStorage, getStorage, LocalStorage, setLocalStorage, type ExtractLocalStorageKeys as ExtractKeysFromLocalStorage, type LocalStorageType } from "~storage/local";
+import { defaultLocalStorage, getStorage, LocalStorage, setStorage, type ExtractLocalStorageKeys as ExtractKeysFromLocalStorage, type LocalStorageType } from "~storage/local";
 import { consoleProxy } from "~utils/logging";
 import { pick } from "~utils/generics";
 import { shallowEqual } from "@mantine/hooks";
@@ -119,7 +119,7 @@ export function useStorage<T extends object>(keysWithDefaults: T, storageArea: c
             setState((prevState) => ({ ...prevState, ...updates }))
 
             consoleProxy.debug('setting local storage state with updates:', updates, 'from state:', state, 'previously cached', cache[storageArea])
-            await setLocalStorage(updates);
+            await setStorage(storageArea, updates);
         }
     }
 
