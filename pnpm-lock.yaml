@@ -163,13 +163,13 @@ importers:
         version: 4.1.1(@vue/compiler-sfc@3.3.4)(prettier@3.2.5)
       '@parcel/config-default':
         specifier: ^2.12.0
-        version: 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.13)(postcss@8.4.47)(typescript@5.6.2)
+        version: 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.13)(postcss@8.4.47)(typescript@5.6.3)
       '@parcel/packager-ts':
         specifier: 2.12.0
         version: 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.13)
       '@plasmohq/parcel-config':
         specifier: ^0.41.1
-        version: 0.41.1(@swc/core@1.7.28(@swc/helpers@0.5.13))(@swc/helpers@0.5.13)(lodash@4.17.21)(postcss@8.4.47)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.2)
+        version: 0.41.1(@swc/core@1.7.28(@swc/helpers@0.5.13))(@swc/helpers@0.5.13)(lodash@4.17.21)(postcss@8.4.47)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)
       '@types/chrome':
         specifier: 0.0.277
         version: 0.0.277
@@ -234,8 +234,8 @@ importers:
         specifier: ^4.19.1
         version: 4.19.1
       typescript:
-        specifier: 5.6.2
-        version: 5.6.2
+        specifier: 5.6.3
+        version: 5.6.3
 
 packages:
 
@@ -5050,8 +5050,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  typescript@5.6.2:
-    resolution: {integrity: sha512-NW8ByodCSNCwZeghjN3o+JX5OFH0Ojg6sadjEKY4huZ52TqbJTJnDo5+Tw98lSy63NZvi4n+ez5m2u5d4PkZyw==}
+  typescript@5.6.3:
+    resolution: {integrity: sha512-hjcS1mhfuyi4WW8IWtjP7brDrG2cuDZukyrYrSauoXGNgx0S7zceP07adYkJycEr56BOUTNPzbInooiN3fn1qw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -6228,14 +6228,14 @@ snapshots:
     transitivePeerDependencies:
       - '@parcel/core'
 
-  '@parcel/config-default@2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.13)(postcss@8.4.47)(typescript@5.6.2)':
+  '@parcel/config-default@2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.13)(postcss@8.4.47)(typescript@5.6.3)':
     dependencies:
       '@parcel/bundler-default': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.13)
       '@parcel/compressor-raw': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.13)
       '@parcel/core': 2.9.3
       '@parcel/namer-default': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.13)
       '@parcel/optimizer-css': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.13)
-      '@parcel/optimizer-htmlnano': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.13)(postcss@8.4.47)(typescript@5.6.2)
+      '@parcel/optimizer-htmlnano': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.13)(postcss@8.4.47)(typescript@5.6.3)
       '@parcel/optimizer-image': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.13)
       '@parcel/optimizer-svgo': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.13)
       '@parcel/optimizer-swc': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.13)
@@ -6317,14 +6317,14 @@ snapshots:
       - typescript
       - uncss
 
-  '@parcel/config-default@2.9.3(@parcel/core@2.9.3)(@swc/helpers@0.5.13)(postcss@8.4.47)(typescript@5.6.2)':
+  '@parcel/config-default@2.9.3(@parcel/core@2.9.3)(@swc/helpers@0.5.13)(postcss@8.4.47)(typescript@5.6.3)':
     dependencies:
       '@parcel/bundler-default': 2.9.3(@parcel/core@2.9.3)
       '@parcel/compressor-raw': 2.9.3(@parcel/core@2.9.3)
       '@parcel/core': 2.9.3
       '@parcel/namer-default': 2.9.3(@parcel/core@2.9.3)
       '@parcel/optimizer-css': 2.9.3(@parcel/core@2.9.3)
-      '@parcel/optimizer-htmlnano': 2.9.3(@parcel/core@2.9.3)(postcss@8.4.47)(typescript@5.6.2)
+      '@parcel/optimizer-htmlnano': 2.9.3(@parcel/core@2.9.3)(postcss@8.4.47)(typescript@5.6.3)
       '@parcel/optimizer-image': 2.9.3(@parcel/core@2.9.3)
       '@parcel/optimizer-svgo': 2.9.3(@parcel/core@2.9.3)
       '@parcel/optimizer-swc': 2.9.3(@parcel/core@2.9.3)(@swc/helpers@0.5.13)
@@ -6600,10 +6600,10 @@ snapshots:
     transitivePeerDependencies:
       - '@parcel/core'
 
-  '@parcel/optimizer-htmlnano@2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.13)(postcss@8.4.47)(typescript@5.6.2)':
+  '@parcel/optimizer-htmlnano@2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.13)(postcss@8.4.47)(typescript@5.6.3)':
     dependencies:
       '@parcel/plugin': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.13)
-      htmlnano: 2.1.1(postcss@8.4.47)(svgo@2.8.0)(typescript@5.6.2)
+      htmlnano: 2.1.1(postcss@8.4.47)(svgo@2.8.0)(typescript@5.6.3)
       nullthrows: 1.1.1
       posthtml: 0.16.6
       svgo: 2.8.0
@@ -6637,10 +6637,10 @@ snapshots:
       - typescript
       - uncss
 
-  '@parcel/optimizer-htmlnano@2.9.3(@parcel/core@2.9.3)(postcss@8.4.47)(typescript@5.6.2)':
+  '@parcel/optimizer-htmlnano@2.9.3(@parcel/core@2.9.3)(postcss@8.4.47)(typescript@5.6.3)':
     dependencies:
       '@parcel/plugin': 2.9.3(@parcel/core@2.9.3)
-      htmlnano: 2.1.1(postcss@8.4.47)(svgo@2.8.0)(typescript@5.6.2)
+      htmlnano: 2.1.1(postcss@8.4.47)(svgo@2.8.0)(typescript@5.6.3)
       nullthrows: 1.1.1
       posthtml: 0.16.6
       svgo: 2.8.0
@@ -7703,10 +7703,10 @@ snapshots:
       - walrus
       - whiskers
 
-  '@plasmohq/parcel-config@0.41.1(@swc/core@1.7.28(@swc/helpers@0.5.13))(@swc/helpers@0.5.13)(lodash@4.17.21)(postcss@8.4.47)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.2)':
+  '@plasmohq/parcel-config@0.41.1(@swc/core@1.7.28(@swc/helpers@0.5.13))(@swc/helpers@0.5.13)(lodash@4.17.21)(postcss@8.4.47)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.6.3)':
     dependencies:
       '@parcel/compressor-raw': 2.9.3(@parcel/core@2.9.3)
-      '@parcel/config-default': 2.9.3(@parcel/core@2.9.3)(@swc/helpers@0.5.13)(postcss@8.4.47)(typescript@5.6.2)
+      '@parcel/config-default': 2.9.3(@parcel/core@2.9.3)(@swc/helpers@0.5.13)(postcss@8.4.47)(typescript@5.6.3)
       '@parcel/core': 2.9.3
       '@parcel/optimizer-data-url': 2.9.3(@parcel/core@2.9.3)
       '@parcel/reporter-bundle-buddy': 2.9.3(@parcel/core@2.9.3)
@@ -8828,14 +8828,14 @@ snapshots:
     optionalDependencies:
       typescript: 5.2.2
 
-  cosmiconfig@9.0.0(typescript@5.6.2):
+  cosmiconfig@9.0.0(typescript@5.6.3):
     dependencies:
       env-paths: 2.2.1
       import-fresh: 3.3.0
       js-yaml: 4.1.0
       parse-json: 5.2.0
     optionalDependencies:
-      typescript: 5.6.2
+      typescript: 5.6.3
 
   crelt@1.0.6: {}
 
@@ -9469,9 +9469,9 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  htmlnano@2.1.1(postcss@8.4.47)(svgo@2.8.0)(typescript@5.6.2):
+  htmlnano@2.1.1(postcss@8.4.47)(svgo@2.8.0)(typescript@5.6.3):
     dependencies:
-      cosmiconfig: 9.0.0(typescript@5.6.2)
+      cosmiconfig: 9.0.0(typescript@5.6.3)
       posthtml: 0.16.6
       timsort: 0.3.0
     optionalDependencies:
@@ -11098,7 +11098,7 @@ snapshots:
       normalize-path: 3.0.0
       safe-stable-stringify: 2.5.0
       tslib: 2.7.0
-      typescript: 5.6.2
+      typescript: 5.6.3
 
   ts-mixer@6.0.4: {}
 
@@ -11183,7 +11183,7 @@ snapshots:
 
   typescript@5.2.2: {}
 
-  typescript@5.6.2: {}
+  typescript@5.6.3: {}
 
   uc.micro@2.1.0: {}
 
