@@ -125,8 +125,8 @@ importers:
         specifier: ^4.23.5
         version: 4.23.5(@codemirror/language@6.10.3)(@codemirror/state@6.4.1)(@codemirror/view@6.34.1)
       '@uiw/codemirror-themes':
-        specifier: ^4.23.2
-        version: 4.23.3(@codemirror/language@6.10.3)(@codemirror/state@6.4.1)(@codemirror/view@6.34.1)
+        specifier: ^4.23.5
+        version: 4.23.5(@codemirror/language@6.10.3)(@codemirror/state@6.4.1)(@codemirror/view@6.34.1)
       '@uiw/react-codemirror':
         specifier: ^4.23.5
         version: 4.23.5(@babel/runtime@7.25.6)(@codemirror/autocomplete@6.18.1(@codemirror/language@6.10.3)(@codemirror/state@6.4.1)(@codemirror/view@6.34.1)(@lezer/common@1.2.2))(@codemirror/language@6.10.3)(@codemirror/lint@6.8.2)(@codemirror/search@6.5.6)(@codemirror/state@6.4.1)(@codemirror/theme-one-dark@6.1.2)(@codemirror/view@6.34.1)(codemirror@6.0.1(@lezer/common@1.2.2))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -2558,13 +2558,6 @@ packages:
 
   '@uiw/codemirror-theme-vscode@4.23.5':
     resolution: {integrity: sha512-tNMROZhVHPFAnx+e/SAVctU/aJyLXisI7jekmyVH3Gcl2wYIcAMgrDGfwY5xhHbDu18lP9w2kLIg3i9IzZsDeQ==}
-
-  '@uiw/codemirror-themes@4.23.3':
-    resolution: {integrity: sha512-oUq2qoj+hMrR34Xhbp7S1P2elPtySWyzij97IwsZAdGZD/yS+c9+2yRSMYqtaWh7D9M4sJmwgU1lZibmwLZOfQ==}
-    peerDependencies:
-      '@codemirror/language': '>=6.0.0'
-      '@codemirror/state': '>=6.0.0'
-      '@codemirror/view': '>=6.0.0'
 
   '@uiw/codemirror-themes@4.23.5':
     resolution: {integrity: sha512-yWUTpaVroxIxjKASQAmKaYy+ZYtF+YB6d8sVmSRK2TVD13M+EWvVT2jBGFLqR1UVg7G0W/McAy8xdeTg+a3slg==}
@@ -8348,12 +8341,6 @@ snapshots:
       - '@codemirror/language'
       - '@codemirror/state'
       - '@codemirror/view'
-
-  '@uiw/codemirror-themes@4.23.3(@codemirror/language@6.10.3)(@codemirror/state@6.4.1)(@codemirror/view@6.34.1)':
-    dependencies:
-      '@codemirror/language': 6.10.3
-      '@codemirror/state': 6.4.1
-      '@codemirror/view': 6.34.1
 
   '@uiw/codemirror-themes@4.23.5(@codemirror/language@6.10.3)(@codemirror/state@6.4.1)(@codemirror/view@6.34.1)':
     dependencies:
