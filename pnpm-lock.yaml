@@ -189,8 +189,8 @@ importers:
         specifier: 18.2.19
         version: 18.2.19
       chai:
-        specifier: ^5.1.1
-        version: 5.1.1
+        specifier: ^5.1.2
+        version: 5.1.2
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
@@ -2811,8 +2811,8 @@ packages:
   ccount@2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
 
-  chai@5.1.1:
-    resolution: {integrity: sha512-pT1ZgP8rPNqUgieVaEY+ryQr6Q4HXNg8Ei9UnLUrjN4IA7dvQC5JB+/kxVcPNDHyBcc/26CXPkbNzq3qwrOEKA==}
+  chai@5.1.2:
+    resolution: {integrity: sha512-aGtmf24DW6MLHHG5gCx4zaI3uBq3KRtxeVs0DjFH6Z0rDNbsvTxFASFvdj79pxjxZ8/5u3PIiN3IwEIQkiiuPw==}
     engines: {node: '>=12'}
 
   chalk@2.4.2:
@@ -6166,13 +6166,15 @@ snapshots:
       '@parcel/utils': 2.11.0
       lmdb: 2.8.5
 
-  '@parcel/cache@2.12.0(@parcel/core@2.9.3)':
+  '@parcel/cache@2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.13)':
     dependencies:
       '@parcel/core': 2.9.3
       '@parcel/fs': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.13)
       '@parcel/logger': 2.12.0
       '@parcel/utils': 2.12.0
       lmdb: 2.8.5
+    transitivePeerDependencies:
+      - '@swc/helpers'
 
   '@parcel/cache@2.8.3(@parcel/core@2.9.3)':
     dependencies:
@@ -7313,7 +7315,7 @@ snapshots:
 
   '@parcel/types@2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.13)':
     dependencies:
-      '@parcel/cache': 2.12.0(@parcel/core@2.9.3)
+      '@parcel/cache': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.13)
       '@parcel/diagnostic': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.13)
       '@parcel/package-manager': 2.12.0(@parcel/core@2.9.3)(@swc/helpers@0.5.13)
@@ -8590,7 +8592,7 @@ snapshots:
 
   ccount@2.0.1: {}
 
-  chai@5.1.1:
+  chai@5.1.2:
     dependencies:
       assertion-error: 2.0.1
       check-error: 2.1.1
