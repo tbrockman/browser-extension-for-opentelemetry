@@ -1,32 +1,33 @@
-<div align='center'>
+<div>
     <img src='assets/logo.svg'></img>
+    <h2>🔭 Automatically instrument webpages to emit <a href="https://opentelemetry.io/docs/what-is-opentelemetry/">OpenTelemetry</a>.</h2>
+    <p>
+        <a href="https://chromewebstore.google.com/detail/opentelemetry-browser-ext/bgjeoaohfhbfabbfhbafjihbobjgniag"><img src='./assets/chrome.svg' height=32 alt='chrome download'></img></a>
+        |
+        <a href="https://apps.apple.com/us/app/opentelemetry-browser-ext/id6503631744"><img src='./assets/safari.svg' height=32 alt='safari download'></img></a>
+        |
+        <a href="https://microsoftedge.microsoft.com/addons/detail/opentelemetry-browser-ext/agbimhpapcebokbphphbfcimebibcoga"><img src='./assets/edge.svg' height=32 alt='edge download'></img></a>
+        |
+        <a href="https://addons.mozilla.org/en-US/firefox/addon/opentelemetry-browserextension/"><img src='./assets/firefox.svg' height=32 alt='firefox nightly download'></img></a>
+        |
+        ...or <a href='#making-a-production-build'>build it yourself!</a>
+    </p>
     <p></p>
-    <p>Automatically instrument webpages to emit <a href="https://opentelemetry.io/docs/what-is-opentelemetry/">OpenTelemetry</a>.</p>
-    <p></p>
-    <a href="https://chromewebstore.google.com/detail/opentelemetry-browser-ext/bgjeoaohfhbfabbfhbafjihbobjgniag"><img src='./assets/chrome.svg' height=50 alt='chrome download'></img></a>
-    /
-    <a href="https://apps.apple.com/us/app/opentelemetry-browser-ext/id6503631744"><img src='./assets/safari.svg' height=50 alt='safari download'></img></a>
-    /
-    <a href="https://microsoftedge.microsoft.com/addons/detail/opentelemetry-browser-ext/agbimhpapcebokbphphbfcimebibcoga"><img src='./assets/edge.svg' height=50 alt='edge download'></img></a>
-    /
-    <a href="https://addons.mozilla.org/en-US/firefox/addon/opentelemetry-browserextension/"><img src='./assets/firefox.svg' height=50 alt='firefox nightly download'></img></a>
-    <p>...or <a href='#making-a-production-build'>build it yourself!</a></p>
-    <video src='https://github.com/user-attachments/assets/8bc930b5-021d-4e79-bc05-2f0c6a138806' width=640/></video>
+    <h4>made with 🧪 by <a href="https://theo.lol">🧑‍🔬 theo</a></h4>
+    <p>&nbsp;</p>
 </div>
-
-## About
-
-> [!NOTE]
-> This project is in early development. Please forgive (or feel free to contribute) any missing documentation.
-> The extension is largely similar to the archived [opentelemetry-browser-extension](https://github.com/open-telemetry/opentelemetry-js-contrib/tree/main/archive/opentelemetry-browser-extension-autoinjection) (by [@svrnm](https://github.com/svrnm/opentelemetry-browser-extension/)), but avoids CSP issues with a different content script injection method, offers more configuration, and was developed independently.
-
-Download it, choose where you want it to run, and refresh your webpages to start emitting OTLP logs and traces.
 
 ## Features
 
-- Automatically instrument webpages to collect traces and logs, sent to an OTLP-compatible collector
+- Instruments selected webpages to **generate logs and traces**, sent to an OTLP-compatible  of _your_ choosing
+- Choose from the available automatic instrumentations (or [contribute your own](contributing.md))
+  <br></br>
+  <img width='480px' src='https://github.com/user-attachments/assets/d814fb07-c029-4278-8336-f73264156f41'></img>
+  <br></br>
+- Choose where and how you want it to run! Don't worry about the extension tracking every single webpage, use [match patterns](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns) (ex. `https://<your-domain-here>.com/*`) to specify the pages it should run on and have access to.
+  <br></br>
+  <img width='480px' src='https://github.com/user-attachments/assets/af17a340-641a-406b-9997-9ab7bc6b3160'></img>
 - No content-security policy errors! Works around typical CSP limitations by making `fetch` requests from the background script instead of the webpage
-- Choose where and how you want it to run! Don't worry about the extension tracking every single webpage, use [match patterns](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns) (ex. `https://<your-org-here>.com/*`) to specify the pages it should run on and have access to.
 - Propagate b3 and w3c trace context to websites of your choosing (matched by regular expressions)
 
 ## Browser compatibility
@@ -45,9 +46,9 @@ This extension is compatible with [all major browsers](https://developer.mozilla
 
 The extension background script exports any Protobuf-encoded OTLP data that it receives from the injected content script that it's able to parse.
 
-While some mitigations are implemented, the data can always be tampered with by any malicious Javascript running in the same context as the content script, and as such the integrity of the data cannot be guaranteed. This may result in minor frustrations like storing garbage or worse depending on how your backend decodes Protobuf data.
+While some mitigations are implemented, the data can always be tampered with by any malicious Javascript running in the same context as the content script, and as such the integrity of the data cannot be guaranteed. This may result in minor frustrations like storing a bunch of garbage or worse depending on how your backend decodes Protobuf data.
 
-So, just as a general safety measure, it's probably best if you don't allow the extension to run in untrusted pages.
+So, just as a general safety measure, it's probably best if you don't allow the extension to run in untrusted pages (and you should kinda generally avoid running code in untrusted webpages if aren't already, anyhow).
 
 ### Can it be fixed?
 
@@ -67,7 +68,7 @@ Install dependencies:
 pnpm install
 ```
 
-Start the OpenTelemetry stack (Grafana + Quickwit + `opentelemetry-collector-contrib`):<sup> (optional if you have your own)</sup>
+Start the OpenTelemetry stack (Grafana + Quickwit + `opentelemetry--contrib`):<sup> (optional if you have your own)</sup>
 
 ```bash
 docker compose up -d
