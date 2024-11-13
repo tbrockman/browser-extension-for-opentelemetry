@@ -1,6 +1,7 @@
+![logo](assets/logo.svg)
+
+## 🔭 Automatically instrument webpages to emit [OpenTelemetry](https://opentelemetry.io/docs/what-is-opentelemetry/).
 <div>
-    <img src='assets/logo.svg'></img>
-    <h2>🔭 Automatically instrument webpages to emit <a href="https://opentelemetry.io/docs/what-is-opentelemetry/">OpenTelemetry</a>.</h2>
     <p>
         <a href="https://chromewebstore.google.com/detail/opentelemetry-browser-ext/bgjeoaohfhbfabbfhbafjihbobjgniag"><img src='./assets/chrome.svg' height=32 alt='chrome download'></img></a>
         |
@@ -12,8 +13,7 @@
         |
         ...or <a href='#making-a-production-build'>build it yourself!</a>
     </p>
-    <p></p>
-    <h4>made with 🧪 by <a href="https://theo.lol">🧑‍🔬 theo</a></h4>
+    <h4>made with 🧪 by <a href="https://theo.lol">🧑‍🔬 theo</a>.</h4>
     <p>&nbsp;</p>
 </div>
 
