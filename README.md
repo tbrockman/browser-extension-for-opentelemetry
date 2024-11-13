@@ -1,7 +1,7 @@
 ![logo](assets/logo.svg)
 
-## 🔭 Automatically instrument webpages to emit [OpenTelemetry](https://opentelemetry.io/docs/what-is-opentelemetry/).
 <div>
+    <p>Available on:</p>
     <p>
         <a href="https://chromewebstore.google.com/detail/opentelemetry-browser-ext/bgjeoaohfhbfabbfhbafjihbobjgniag"><img src='./assets/chrome.svg' height=32 alt='chrome download'></img></a>
         |
