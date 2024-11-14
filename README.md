@@ -13,8 +13,8 @@
         |
         ...or <a href='#making-a-production-build'>build it yourself!</a>
     </p>
-    <h4>made with 🧪 by <a href="https://theo.lol">🧑‍🔬 theo</a>.</h4>
-    <p>&nbsp;</p>
+    <h4>made with 🧪 by <a href="https://theo.lol">theo</a>.</h4>
+    <br></br>
 </div>
 
 ## Features
@@ -27,6 +27,7 @@
 - Choose where and how you want it to run! Don't worry about the extension tracking every single webpage, use [match patterns](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns) (ex. `https://<your-domain-here>.com/*`) to specify the pages it should run on and have access to.
   <br></br>
   <img width='480px' src='https://github.com/user-attachments/assets/af17a340-641a-406b-9997-9ab7bc6b3160'></img>
+  <br></br>
 - No content-security policy errors! Works around typical CSP limitations by making `fetch` requests from the background script instead of the webpage
 - Propagate b3 and w3c trace context to websites of your choosing (matched by regular expressions)
 
@@ -48,7 +49,7 @@ The extension background script exports any Protobuf-encoded OTLP data that it r
 
 While some mitigations are implemented, the data can always be tampered with by any malicious Javascript running in the same context as the content script, and as such the integrity of the data cannot be guaranteed. This may result in minor frustrations like storing a bunch of garbage or worse depending on how your backend decodes Protobuf data.
 
-So, just as a general safety measure, it's probably best if you don't allow the extension to run in untrusted pages (and you should kinda generally avoid running code in untrusted webpages if aren't already, anyhow).
+So, just as a general safety measure, it's probably best if you don't allow the extension to run in untrusted pages (and you should kinda generally avoid running code in untrusted webpages if you aren't already, anyhow).
 
 ### Can it be fixed?
 
