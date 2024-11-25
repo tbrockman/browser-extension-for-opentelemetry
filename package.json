@@ -70,7 +70,7 @@
     "@parcel/config-default": "^2.13.0",
     "@parcel/packager-ts": "2.13.0",
     "@plasmohq/parcel-config": "^0.41.1",
-    "@types/chrome": "0.0.280",
+    "@types/chrome": "0.0.284",
     "@types/jest": "^29.5.14",
     "@types/mocha": "^10.0.9",
     "@types/node": "22.9.0",
