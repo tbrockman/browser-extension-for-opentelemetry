@@ -54,7 +54,7 @@
     "@tabler/icons-react": "^3.24.0",
     "@uiw/codemirror-theme-vscode": "^4.23.6",
     "@uiw/codemirror-themes": "^4.23.6",
-    "@uiw/react-codemirror": "^4.23.6",
+    "@uiw/react-codemirror": "^4.23.7",
     "browser-extension-url-match": "^1.2.0",
     "codemirror-json-schema": "https://github.com/tbrockman/codemirror-json-schema/releases/download/otel-v1.0.1/codemirror-json-schema-0.7.11.tgz",
     "deepmerge-ts": "^7.1.3",
