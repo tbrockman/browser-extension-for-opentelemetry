@@ -51,7 +51,7 @@
     "@opentelemetry/sdk-trace-base": "^1.22.0",
     "@opentelemetry/sdk-trace-web": "^1.22.0",
     "@opentelemetry/semantic-conventions": "^1.22.0",
-    "@tabler/icons-react": "^3.24.0",
+    "@tabler/icons-react": "^3.26.0",
     "@uiw/codemirror-theme-vscode": "^4.23.6",
     "@uiw/codemirror-themes": "^4.23.6",
     "@uiw/react-codemirror": "^4.23.6",
