@@ -8,6 +8,9 @@ patchedDependencies:
   '@opentelemetry/otlp-proto-exporter-base':
     hash: mif3gyfydfs4r7enkb5hkxvfsq
     path: patches/@opentelemetry__otlp-proto-exporter-base.patch
+  '@protobufjs/inquire@1.1.0':
+    hash: eo4p6hw36ofhihemhysfxmamv4
+    path: patches/@protobufjs__inquire@1.1.0.patch
 
 importers:
 
@@ -224,6 +227,9 @@ importers:
       typescript:
         specifier: 5.7.3
         version: 5.7.3
+      yaml:
+        specifier: ^2.8.1
+        version: 2.8.1
 
 packages:
 
@@ -5283,9 +5289,9 @@ packages:
     resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
     engines: {node: '>= 6'}
 
-  yaml@2.5.1:
-    resolution: {integrity: sha512-bLQOjaX/ADgQ20isPJRvF0iRUHIxVhYvr53Of7wGcWlO2jvtUlH5m87DsmulFVxRpNLOnI4tB6p/oh8D7kpn9Q==}
-    engines: {node: '>= 14'}
+  yaml@2.8.1:
+    resolution: {integrity: sha512-lcYcMxX2PO9XMGvAJkJ3OsNMw+/7FKes7/hgerGUYWIoWu5j/+YQqcZr5JnPZWzOsEBgMbSbiSTn/dv/69Mkpw==}
+    engines: {node: '>= 14.6'}
     hasBin: true
 
   yargs-parser@21.1.1:
@@ -8138,11 +8144,11 @@ snapshots:
   '@protobufjs/fetch@1.1.0':
     dependencies:
       '@protobufjs/aspromise': 1.1.2
-      '@protobufjs/inquire': 1.1.0
+      '@protobufjs/inquire': 1.1.0(patch_hash=eo4p6hw36ofhihemhysfxmamv4)
 
   '@protobufjs/float@1.0.2': {}
 
-  '@protobufjs/inquire@1.1.0': {}
+  '@protobufjs/inquire@1.1.0(patch_hash=eo4p6hw36ofhihemhysfxmamv4)': {}
 
   '@protobufjs/path@1.1.2': {}
 
@@ -8813,7 +8819,7 @@ snapshots:
       json-schema-library: 9.3.5
       loglevel: 1.9.2
       markdown-it: 14.1.0
-      yaml: 2.5.1
+      yaml: 2.8.1
     optionalDependencies:
       '@codemirror/autocomplete': 6.18.4
       '@codemirror/lang-json': 6.0.1
@@ -10465,7 +10471,7 @@ snapshots:
   postcss-load-config@4.0.2(postcss@8.5.1):
     dependencies:
       lilconfig: 3.1.2
-      yaml: 2.5.1
+      yaml: 2.8.1
     optionalDependencies:
       postcss: 8.5.1
 
@@ -10548,7 +10554,7 @@ snapshots:
       '@protobufjs/eventemitter': 1.1.0
       '@protobufjs/fetch': 1.1.0
       '@protobufjs/float': 1.0.2
-      '@protobufjs/inquire': 1.1.0
+      '@protobufjs/inquire': 1.1.0(patch_hash=eo4p6hw36ofhihemhysfxmamv4)
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
@@ -11319,7 +11325,7 @@ snapshots:
 
   yaml@1.10.2: {}
 
-  yaml@2.5.1: {}
+  yaml@2.8.1: {}
 
   yargs-parser@21.1.1: {}
 

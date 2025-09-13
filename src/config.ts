@@ -1,15 +1,16 @@
 import { deepmerge } from "deepmerge-ts";
-import { consoleProxy } from "~utils/logging";
 
 interface Config {
     version: string | undefined
     name: string | undefined
+    otelSdkVersion: string | undefined
 }
 
 const configs = {
     default: {
         version: process.env.PLASMO_PUBLIC_PACKAGE_VERSION,
         name: process.env.PLASMO_PUBLIC_PACKAGE_NAME,
+        otelSdkVersion: process.env.PLASMO_PUBLIC_OTEL_SDK_VERSION
     },
     production: {},
     development: {}

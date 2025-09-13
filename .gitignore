@@ -34,3 +34,9 @@ dist/
 
 # docker compose volumes
 qwdata
+
+# xcode
+xcuserdata
+*.swp
+*~.u
+*.pbxuser

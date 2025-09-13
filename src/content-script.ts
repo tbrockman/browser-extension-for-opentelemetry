@@ -23,6 +23,7 @@ import { de } from '~utils/serde';
 import type { ContentScriptConfigurationType } from '~storage/local/configuration';
 import { config } from '~config';
 
+// TODO: otel API changed and this no longer works, need to figure out how to replace
 function createSendOverride<ExportItem, ServiceRequest>(sessionId: string, exporter: OTLPProtoExporterBrowserBase<ExportItem, ServiceRequest>, type: MessageTypes) {
 
     return (objects: ExportItem[], onSuccess: () => void, onError: (error: OTLPExporterError) => void) => {
@@ -64,10 +65,10 @@ const instrument = (sessionId: string, options: ContentScriptConfigurationType) 
 
     const resource = resourceFromAttributes({
         [ATTR_SERVICE_NAME]: config.name,
-        [ATTR_SERVICE_VERSION]: config.version, // TODO: probably want to inject this
+        [ATTR_SERVICE_VERSION]: config.version,
         [ATTR_TELEMETRY_SDK_LANGUAGE]: 'webjs',
         [ATTR_TELEMETRY_SDK_NAME]: 'opentelemetry',
-        [ATTR_TELEMETRY_SDK_VERSION]: '1.22.0', // TODO: replace with resolved version
+        [ATTR_TELEMETRY_SDK_VERSION]: config.otelSdkVersion,
         'browser.name': process.env.PLASMO_BROWSER, // TODO: fix why this is undefined
         'extension.session.id': sessionId,
         ...Object.fromEntries(options.attributes.entries())
