@@ -70,7 +70,6 @@ const instrument = (sessionId: string, options: ContentScriptConfigurationType) 
         loggerProvider = new LoggerProvider({
             resource,
             // TODO: make batching configurable, choosing simple for now to avoid losing data on page navigations
-
             processors: [new SimpleLogRecordProcessor(logExporter)]
         })
         wrapConsoleWithLoggerProvider(loggerProvider)

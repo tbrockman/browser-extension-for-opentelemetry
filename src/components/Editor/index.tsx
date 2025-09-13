@@ -102,9 +102,9 @@ export const Editor = ({ defaultValue, visible, onSave, onChange, onEditorReady 
         } : undefined,
         extensions: [
             constExtensions,
-            // @ts-ignore
+            // @ts-expect-error
             hoverTooltip(jsonSchemaHover({ getHoverTexts, formatHover: formatHover(highlighter) })),
-            // @ts-ignore
+            // @ts-expect-error
             stateExtensions(schema),
             keymap.of([
                 { key: "Mod-s", run: onEditorSave },
