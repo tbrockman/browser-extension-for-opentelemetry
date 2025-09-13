@@ -1,5 +1,5 @@
 import { de, ser } from "~utils/serde";
-import { getStorage, removeLocalStorage, setLocalStorage } from "~storage/local";
+import { getStorage, setLocalStorage } from "~storage/local";
 import { LocalStorage } from "~storage/local";
 import { Configuration, defaultConfiguration, UserFacingConfiguration } from "~storage/local/configuration";
 import { consoleProxy } from "~utils/logging";
@@ -14,7 +14,6 @@ chrome.storage.onChanged.addListener(async (event: Record<keyof LocalStorage, ch
     // Serialize config text as storage, persist changes 
     if (event.configText) {
         try {
-
             if (configText.newValue === configText.oldValue) {
                 consoleProxy.debug('config text same, skipping')
                 return

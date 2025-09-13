@@ -12,7 +12,13 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
         changeInfo.status === "complete") {
 
         // get user-specified match patterns or defaults
-        const { matchPatterns } = await getLocalStorage(['matchPatterns'])
+        const { matchPatterns, enabled } = await getLocalStorage(['matchPatterns', 'enabled'])
+
+        if (!enabled) {
+            consoleProxy.debug("extension disabled, not injecting content script")
+            return
+        }
+
         // check whether current URL matches any patterns
         const matches = match(tab.url, matchPatterns)
 

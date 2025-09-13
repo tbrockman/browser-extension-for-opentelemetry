@@ -12,7 +12,7 @@ import { OTLPExporterError } from '@opentelemetry/otlp-exporter-base';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { ZoneContextManager } from '@opentelemetry/context-zone';
 import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION, ATTR_TELEMETRY_SDK_LANGUAGE, ATTR_TELEMETRY_SDK_NAME, ATTR_TELEMETRY_SDK_VERSION, SEMRESATTRS_SERVICE_NAME, SEMRESATTRS_SERVICE_VERSION, SEMRESATTRS_TELEMETRY_SDK_LANGUAGE, SEMRESATTRS_TELEMETRY_SDK_NAME, SEMRESATTRS_TELEMETRY_SDK_VERSION } from '@opentelemetry/semantic-conventions';
-import { Resource } from '@opentelemetry/resources';
+import { resourceFromAttributes } from '@opentelemetry/resources';
 import { B3Propagator } from '@opentelemetry/propagator-b3';
 import { CompositePropagator, W3CTraceContextPropagator } from '@opentelemetry/core';
 
@@ -62,7 +62,7 @@ const instrument = (sessionId: string, options: ContentScriptConfigurationType) 
     window.__OTEL_BROWSER_EXT_INSTRUMENTATION__ = () => { }
     consoleProxy.debug(`instrumenting`, { sessionId, options })
 
-    const resource = new Resource({
+    const resource = resourceFromAttributes({
         [ATTR_SERVICE_NAME]: config.name,
         [ATTR_SERVICE_VERSION]: config.version, // TODO: probably want to inject this
         [ATTR_TELEMETRY_SDK_LANGUAGE]: 'webjs',
@@ -76,9 +76,6 @@ const instrument = (sessionId: string, options: ContentScriptConfigurationType) 
     let tracerProvider: WebTracerProvider | undefined
 
     if (options.tracingEnabled) {
-        tracerProvider = new WebTracerProvider({
-            resource,
-        })
         const traceExporter = new OTLPTraceExporter({
             concurrencyLimit: options.concurrencyLimit,
         })
@@ -86,7 +83,10 @@ const instrument = (sessionId: string, options: ContentScriptConfigurationType) 
         traceExporter.send = createSendOverride(sessionId, traceExporter, MessageTypes.OTLPTraceMessage)
         // TODO: make batching configurable, choosing simple for now to avoid losing data on page navigations
         const traceProcessor = new SimpleSpanProcessor(traceExporter);
-        tracerProvider.addSpanProcessor(traceProcessor);
+        tracerProvider = new WebTracerProvider({
+            resource,
+            spanProcessors: [traceProcessor]
+        })
         tracerProvider.register({
             contextManager: new ZoneContextManager(),
             propagator: new CompositePropagator({
@@ -107,10 +107,11 @@ const instrument = (sessionId: string, options: ContentScriptConfigurationType) 
         // @ts-ignore
         logExporter.send = createSendOverride(sessionId, logExporter, MessageTypes.OTLPLogMessage)
         loggerProvider = new LoggerProvider({
-            resource
+            resource,
+            // TODO: make batching configurable, choosing simple for now to avoid losing data on page navigations
+
+            processors: [new SimpleLogRecordProcessor(logExporter)]
         })
-        // TODO: make batching configurable, choosing simple for now to avoid losing data on page navigations
-        loggerProvider.addLogRecordProcessor(new SimpleLogRecordProcessor(logExporter))
         wrapConsoleWithLoggerProvider(loggerProvider)
     }
     const propagateTraceHeaderCorsUrls = options.propagateTo.map((url) => new RegExp(url))
