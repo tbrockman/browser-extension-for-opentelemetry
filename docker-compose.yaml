@@ -23,7 +23,7 @@ services:
     depends_on:
       - quickwit
       - prometheus
-    attach: false
+    # attach: false
   grafana:
     image: grafana/grafana-oss
     volumes:
