@@ -6,25 +6,25 @@ import { consoleProxy } from "~utils/logging";
 export class LogExporter implements LogRecordExporter {
 
     constructor(private sessionId: string) {
-        consoleProxy.log('LogExporter created with sessionId:', sessionId);
+        consoleProxy.debug('LogExporter created with sessionId:', sessionId);
     }
 
     async shutdown(): Promise<void> {
         // No resources to clean up in this log exporter
-        consoleProxy.log('LogExporter shutdown called.');
+        consoleProxy.debug('LogExporter shutdown called.');
         return Promise.resolve();
     }
 
     async forceFlush(): Promise<void> {
         // No buffering, so nothing to flush
-        consoleProxy.log('LogExporter forceFlush called.');
+        consoleProxy.debug('LogExporter forceFlush called.');
         return Promise.resolve();
     }
 
     async export(logs: ReadableLogRecord[], resultCallback: (result: { code: number; error?: Error }) => void
     ): Promise<void> {
         // Log the spans for testing purposes
-        consoleProxy.log('Exporting spans:', logs);
+        consoleProxy.debug('Exporting logs:', logs);
 
         const bytes = ProtobufLogsSerializer.serializeRequest(logs);
 

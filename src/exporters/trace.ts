@@ -6,25 +6,25 @@ import { consoleProxy } from "~utils/logging";
 export class TraceExporter implements SpanExporter {
 
     constructor(private sessionId: string) {
-        consoleProxy.log('TraceExporter created with sessionId:', sessionId);
+        consoleProxy.debug('TraceExporter created with sessionId:', sessionId);
     }
 
     async shutdown(): Promise<void> {
         // No resources to clean up in this test exporter
-        consoleProxy.log('TraceExporter shutdown called.');
+        consoleProxy.debug('TraceExporter shutdown called.');
         return Promise.resolve();
     }
 
     async forceFlush(): Promise<void> {
         // No buffering, so nothing to flush
-        consoleProxy.log('TraceExporter forceFlush called.');
+        consoleProxy.debug('TraceExporter forceFlush called.');
         return Promise.resolve();
     }
 
     async export(spans: ReadableSpan[], resultCallback: (result: { code: number; error?: Error }) => void
     ): Promise<void> {
         // Log the spans for testing purposes
-        consoleProxy.log('Exporting spans:', spans);
+        consoleProxy.debug('Exporting spans:', spans);
 
         const bytes = ProtobufTraceSerializer.serializeRequest(spans);
 
