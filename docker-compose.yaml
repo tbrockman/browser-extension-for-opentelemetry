@@ -9,7 +9,7 @@ services:
       - 7280:7280
       - 7281:7281
     command: [ "run" ]
-    attach: false # comment this line if you'd like to view quickwit log output
+    # attach: false # comment this line if you'd like to view quickwit log output
 
   otel-collector:
     image: otel/opentelemetry-collector:latest
@@ -23,6 +23,7 @@ services:
     depends_on:
       - quickwit
       - prometheus
+    attach: false
   grafana:
     image: grafana/grafana-oss
     volumes:
@@ -30,7 +31,7 @@ services:
       - ./config/dashboard.yaml:/etc/grafana/provisioning/dashboards/main.yaml
       - ./config/dashboards:/var/lib/grafana/dashboards
     environment:
-      - GF_INSTALL_PLUGINS=https://github.com/quickwit-oss/quickwit-datasource/releases/download/v0.4.1/quickwit-quickwit-datasource-0.4.1.zip;quickwit-quickwit-datasource
+      - GF_INSTALL_PLUGINS=https://github.com/quickwit-oss/quickwit-datasource/releases/download/v0.5.0/quickwit-quickwit-datasource-0.5.0.zip;quickwit-quickwit-datasource
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
       - GF_AUTH_DISABLE_LOGIN_FORM=true

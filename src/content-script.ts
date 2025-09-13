@@ -1,14 +1,10 @@
 import { WebTracerProvider } from '@opentelemetry/sdk-trace-web';
 import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations-web';
-import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-proto";
 import {
     LoggerProvider,
     SimpleLogRecordProcessor
 } from '@opentelemetry/sdk-logs';
-import { OTLPLogExporter } from '@opentelemetry/exporter-logs-otlp-proto';
 import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
-import { OTLPProtoExporterBrowserBase, getExportRequestProto } from '@opentelemetry/otlp-proto-exporter-base';
-import { OTLPExporterError } from '@opentelemetry/otlp-exporter-base';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
 import { ZoneContextManager } from '@opentelemetry/context-zone';
 import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION, ATTR_TELEMETRY_SDK_LANGUAGE, ATTR_TELEMETRY_SDK_NAME, ATTR_TELEMETRY_SDK_VERSION, SEMRESATTRS_SERVICE_NAME, SEMRESATTRS_SERVICE_VERSION, SEMRESATTRS_TELEMETRY_SDK_LANGUAGE, SEMRESATTRS_TELEMETRY_SDK_NAME, SEMRESATTRS_TELEMETRY_SDK_VERSION } from '@opentelemetry/semantic-conventions';
@@ -22,36 +18,8 @@ import { wrapConsoleWithLoggerProvider } from '~telemetry/logs';
 import { de } from '~utils/serde';
 import type { ContentScriptConfigurationType } from '~storage/local/configuration';
 import { config } from '~config';
-
-// TODO: otel API changed and this no longer works, need to figure out how to replace
-function createSendOverride<ExportItem, ServiceRequest>(sessionId: string, exporter: OTLPProtoExporterBrowserBase<ExportItem, ServiceRequest>, type: MessageTypes) {
-
-    return (objects: ExportItem[], onSuccess: () => void, onError: (error: OTLPExporterError) => void) => {
-
-        if (objects.length === 0) {
-            return onSuccess()
-        }
-        const serviceRequest = exporter.convert(objects)
-        const clientType = exporter.getServiceClientType()
-        const exportRequestType = getExportRequestProto(clientType)
-        const otlp = exportRequestType.create(serviceRequest)
-
-        if (otlp) {
-            const bytes = exportRequestType.encode(otlp).finish();
-            // Because messages are JSON serialized and deserialized, we can't send a Uint8Array directly
-            // So we send an array of numbers and convert it back to a Uint8Array on the other side
-            const message = { bytes: Array.from(bytes), timeout: exporter.timeoutMillis, type }
-            const key = `${sessionId}:relay-to-background`
-            const event = new CustomEvent(key, { detail: message })
-            // Our `ISOLATED` content script will forward this event to the background script
-            window.dispatchEvent(event)
-            consoleProxy.debug(`message sent to relay using session id: ${sessionId}`, message)
-            onSuccess()
-        } else {
-            onError(new OTLPExporterError('failed to create OTLP proto service request message'))
-        }
-    }
-}
+import { TraceExporter } from '~exporters/trace';
+import { LogExporter } from '~exporters/log';
 
 // TODO: investigate why reinstrumenting isn't working (or whether it can)
 const instrument = (sessionId: string, options: ContentScriptConfigurationType) => {
@@ -77,11 +45,7 @@ const instrument = (sessionId: string, options: ContentScriptConfigurationType) 
     let tracerProvider: WebTracerProvider | undefined
 
     if (options.tracingEnabled) {
-        const traceExporter = new OTLPTraceExporter({
-            concurrencyLimit: options.concurrencyLimit,
-        })
-        // @ts-ignore
-        traceExporter.send = createSendOverride(sessionId, traceExporter, MessageTypes.OTLPTraceMessage)
+        const traceExporter = new TraceExporter(sessionId);
         // TODO: make batching configurable, choosing simple for now to avoid losing data on page navigations
         const traceProcessor = new SimpleSpanProcessor(traceExporter);
         tracerProvider = new WebTracerProvider({
@@ -102,11 +66,7 @@ const instrument = (sessionId: string, options: ContentScriptConfigurationType) 
     let loggerProvider: LoggerProvider | undefined
 
     if (options.loggingEnabled) {
-        const logExporter = new OTLPLogExporter({
-            concurrencyLimit: options.concurrencyLimit,
-        })
-        // @ts-ignore
-        logExporter.send = createSendOverride(sessionId, logExporter, MessageTypes.OTLPLogMessage)
+        const logExporter = new LogExporter(sessionId);
         loggerProvider = new LoggerProvider({
             resource,
             // TODO: make batching configurable, choosing simple for now to avoid losing data on page navigations

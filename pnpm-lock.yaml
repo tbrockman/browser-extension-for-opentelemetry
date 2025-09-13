@@ -91,6 +91,9 @@ importers:
       '@opentelemetry/otlp-proto-exporter-base':
         specifier: ^0.51.1
         version: 0.51.1(patch_hash=mif3gyfydfs4r7enkb5hkxvfsq)
+      '@opentelemetry/otlp-transformer':
+        specifier: ^0.205.0
+        version: 0.205.0
       '@opentelemetry/propagator-b3':
         specifier: ^2.1.0
         version: 2.1.0
