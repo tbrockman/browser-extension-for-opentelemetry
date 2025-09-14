@@ -23,14 +23,15 @@ chrome.runtime.onConnect.addListener(async (p: TypedPort<ToContentScriptMessage,
 
     const { matchPatterns } = await getLocalStorage(['matchPatterns'])
 
-    if (!match(p.sender.url, matchPatterns)) {
-        consoleProxy.debug('no pattern match, ignoring connection attempt', p.sender.url, matchPatterns)
+    if (!match(p.sender?.url, matchPatterns)) {
+        consoleProxy.debug('no pattern match, ignoring connection attempt', p.sender?.url, matchPatterns)
         return
     }
 
+    // @ts-expect-error
     addPort(p)
 
-    consoleProxy.debug('pattern match', p.sender.url, matchPatterns)
+    consoleProxy.debug('pattern match', p.sender?.url, matchPatterns)
     p.onMessage.addListener(async (message) => {
         consoleProxy.debug('received message', message)
 

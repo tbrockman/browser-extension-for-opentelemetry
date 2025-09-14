@@ -13,8 +13,6 @@
         |
         ...or <a href='#making-a-production-build'>build it yourself!</a>
     </p>
-    <h4>made with 🧪 by <a href="https://theo.lol">theo</a>.</h4>
-    <br></br>
 </div>
 
 ## Features

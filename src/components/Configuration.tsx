@@ -36,7 +36,7 @@ export default function Configuration() {
     const [editorText, setEditorText] = useState(editorState?.doc as string | undefined)
     const [editorReady, setEditorReady] = useState(false)
     const editorDirty = editorText && editorState && editorReady && editorText !== configText
-    const portalTargetRef = useRef<HTMLElement>()
+    const portalTargetRef = useRef<HTMLElement>(undefined)
     const [refsInitialized, setRefsInitialized] = useState(false)
     const showAffix = refsInitialized && (editorReady || configMode == ConfigMode.Visual)
     const platformInfo = usePlatformInfo()
