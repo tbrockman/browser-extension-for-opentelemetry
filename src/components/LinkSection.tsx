@@ -7,10 +7,10 @@ import { config } from "~config";
 type LinkSectionIconProps = {
     label: string,
     href: string,
-    icon: JSX.Element
+    icon: React.ReactNode
     tooltip: string,
     variant?: string,
-    endElement?: JSX.Element
+    endElement?: React.ReactNode
 }
 
 function LinkSectionIcon({ label, icon, href, tooltip, variant, endElement }: LinkSectionIconProps) {

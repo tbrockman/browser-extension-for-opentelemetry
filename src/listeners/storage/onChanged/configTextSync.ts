@@ -18,7 +18,7 @@ chrome.storage.onChanged.addListener(async (event: Record<keyof LocalStorage, ch
                 consoleProxy.debug('config text same, skipping')
                 return
             }
-            const config = de<UserFacingConfiguration>(de(configText.newValue), UserFacingConfiguration)
+            const config = de<UserFacingConfiguration>(de(configText.newValue as string), UserFacingConfiguration)
             consoleProxy.debug('deserialized config', config)
             await setLocalStorage(config.serializable())
         } catch (e) {

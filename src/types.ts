@@ -35,8 +35,7 @@ export interface TypedPort<Send, Receive> extends chrome.runtime.Port {
     onMessage: TypedMessageHandler<Receive>
 }
 
-export interface TypedMessageHandler<T> extends chrome.runtime.PortMessageEvent {
-    addListener: (callback: (message: T, port: any) => void) => void
+export interface TypedMessageHandler<T> extends chrome.events.Event<(message: T, port: any) => void> {
 }
 
 export interface OTLPExportTraceMessage extends PortMessageBase {

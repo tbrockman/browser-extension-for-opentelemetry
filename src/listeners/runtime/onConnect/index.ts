@@ -28,7 +28,6 @@ chrome.runtime.onConnect.addListener(async (p: TypedPort<ToContentScriptMessage,
         return
     }
 
-    // @ts-expect-error
     addPort(p)
 
     consoleProxy.debug('pattern match', p.sender?.url, matchPatterns)

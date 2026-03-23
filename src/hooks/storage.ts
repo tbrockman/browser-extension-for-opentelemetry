@@ -32,7 +32,7 @@ const storageListener = (event: Record<string, chrome.storage.StorageChange>, ar
     const updates = {}
 
     Object.entries(event).forEach(([key, { newValue }]) => {
-        cache[area][key] = de(newValue);
+        cache[area][key] = de(newValue as string);
         updates[key] = cache[area][key];
     })
 

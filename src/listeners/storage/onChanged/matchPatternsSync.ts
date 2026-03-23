@@ -12,7 +12,7 @@ chrome.storage.onChanged.addListener(async (event: Record<keyof LocalStorage, ch
 
     if (matchPatterns) {
         consoleProxy.debug('matchPatterns changed', { matchPatterns })
-        const deseralized = de<string[]>(matchPatterns.newValue) // TODO: should be possible to infer type of .newValue
+        const deseralized = de<string[]>(matchPatterns.newValue as string) // TODO: should be possible to infer type of .newValue
 
         let [validPatterns, patternErrors] = validatePatterns(deseralized)
         patternErrors = patternErrors.concat(await validatePatternPermissions(validPatterns))
