@@ -23,8 +23,8 @@ importers:
         specifier: ^6.8.0
         version: 6.8.0
       '@codemirror/lang-json':
-        specifier: ^6.0.1
-        version: 6.0.1
+        specifier: ^6.0.2
+        version: 6.0.2
       '@codemirror/language':
         specifier: ^6.10.8
         version: 6.10.8
@@ -331,8 +331,8 @@ packages:
   '@codemirror/commands@6.8.0':
     resolution: {integrity: sha512-q8VPEFaEP4ikSlt6ZxjB3zW72+7osfAYW9i8Zu943uqbKuz6utc1+F170hyLUCUltXORjQXRyYQNfkckzA/bPQ==}
 
-  '@codemirror/lang-json@6.0.1':
-    resolution: {integrity: sha512-+T1flHdgpqDDlJZ2Lkil/rLiRy684WMLc74xUnjJH48GQdfJo/pudlTRreZmKwzP8/tGdKf83wlbAdOCzlJOGQ==}
+  '@codemirror/lang-json@6.0.2':
+    resolution: {integrity: sha512-x2OtO+AvwEHrEwR0FyyPtfDUiloG3rnVTSZV1W8UteaLL8/MajQd8DpvUb2YVzC+/T18aSDv0H9mu+xw0EStoQ==}
 
   '@codemirror/lang-yaml@6.1.1':
     resolution: {integrity: sha512-HV2NzbK9bbVnjWxwObuZh5FuPCowx51mEfoFT9y3y+M37fA3+pbxx4I7uePuygFzDsAmCTwQSc/kXh/flab4uw==}
@@ -5487,15 +5487,15 @@ snapshots:
       '@codemirror/view': 6.36.2
       '@lezer/common': 1.2.3
 
-  '@codemirror/lang-json@6.0.1':
+  '@codemirror/lang-json@6.0.2':
     dependencies:
-      '@codemirror/language': 6.10.8
+      '@codemirror/language': 6.12.3
       '@lezer/json': 1.0.3
 
   '@codemirror/lang-yaml@6.1.1':
     dependencies:
       '@codemirror/autocomplete': 6.18.4
-      '@codemirror/language': 6.10.8
+      '@codemirror/language': 6.12.3
       '@codemirror/state': 6.5.2
       '@lezer/common': 1.2.3
       '@lezer/highlight': 1.2.1
@@ -6106,9 +6106,9 @@ snapshots:
 
   '@lezer/yaml@1.0.3':
     dependencies:
-      '@lezer/common': 1.2.3
-      '@lezer/highlight': 1.2.1
-      '@lezer/lr': 1.4.2
+      '@lezer/common': 1.5.2
+      '@lezer/highlight': 1.2.3
+      '@lezer/lr': 1.4.10
     optional: true
 
   '@lmdb/lmdb-darwin-arm64@2.5.2':
@@ -8885,14 +8885,14 @@ snapshots:
       yaml: 2.8.1
     optionalDependencies:
       '@codemirror/autocomplete': 6.18.4
-      '@codemirror/lang-json': 6.0.1
+      '@codemirror/lang-json': 6.0.2
       '@codemirror/lang-yaml': 6.1.1
       codemirror-json5: 1.0.3
       json5: 2.2.3
 
   codemirror-json5@1.0.3:
     dependencies:
-      '@codemirror/language': 6.10.8
+      '@codemirror/language': 6.12.3
       '@codemirror/state': 6.5.2
       '@codemirror/view': 6.36.2
       '@lezer/common': 1.2.3
@@ -9910,7 +9910,7 @@ snapshots:
 
   lezer-json5@2.0.2:
     dependencies:
-      '@lezer/lr': 1.4.2
+      '@lezer/lr': 1.4.10
     optional: true
 
   lightningcss-darwin-arm64@1.21.8:
