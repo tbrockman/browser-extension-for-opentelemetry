@@ -38,8 +38,8 @@ importers:
         specifier: ^6.36.2
         version: 6.36.2
       '@lezer/common':
-        specifier: ^1.2.3
-        version: 1.2.3
+        specifier: ^1.5.2
+        version: 1.5.2
       '@lezer/highlight':
         specifier: ^1.2.1
         version: 1.2.1
@@ -129,7 +129,7 @@ importers:
         version: 1.2.0
       codemirror-json-schema:
         specifier: https://github.com/tbrockman/codemirror-json-schema/releases/download/otel-v1.0.1/codemirror-json-schema-0.7.11.tgz
-        version: https://github.com/tbrockman/codemirror-json-schema/releases/download/otel-v1.0.1/codemirror-json-schema-0.7.11.tgz(@codemirror/language@6.10.8)(@codemirror/lint@6.9.5)(@codemirror/state@6.5.2)(@codemirror/view@6.36.2)(@lezer/common@1.2.3)
+        version: https://github.com/tbrockman/codemirror-json-schema/releases/download/otel-v1.0.1/codemirror-json-schema-0.7.11.tgz(@codemirror/language@6.10.8)(@codemirror/lint@6.9.5)(@codemirror/state@6.5.2)(@codemirror/view@6.36.2)(@lezer/common@1.5.2)
       deepmerge-ts:
         specifier: ^7.1.4
         version: 7.1.4
@@ -1098,9 +1098,6 @@ packages:
 
   '@lezer/common@0.15.12':
     resolution: {integrity: sha512-edfwCxNLnzq5pBA/yaIhwJ3U3Kz8VAUOTRg0hhxaizaI1N+qxV7EXDv/kLCkLeq2RzSFvxexlaj5Mzfn2kY0Ig==}
-
-  '@lezer/common@1.2.3':
-    resolution: {integrity: sha512-w7ojc8ejBqr2REPsWxJjrMFsA/ysDCFICn8zEOR9mrqzOu2amhITYuLD8ag6XZf0CFXDrhKqw7+tW8cX66NaDA==}
 
   '@lezer/common@1.5.2':
     resolution: {integrity: sha512-sxQE460fPZyU3sdc8lafxiPwJHBzZRy/udNFynGQky1SePYBdhkBl1kOagA9uT3pxR8K09bOrmTUqA9wb/PjSQ==}
@@ -5461,7 +5458,7 @@ snapshots:
       '@codemirror/language': 6.10.8
       '@codemirror/state': 6.5.2
       '@codemirror/view': 6.36.2
-      '@lezer/common': 1.2.3
+      '@lezer/common': 1.5.2
 
   '@codemirror/autocomplete@6.20.1':
     dependencies:
@@ -5482,7 +5479,7 @@ snapshots:
       '@codemirror/language': 6.10.8
       '@codemirror/state': 6.5.2
       '@codemirror/view': 6.36.2
-      '@lezer/common': 1.2.3
+      '@lezer/common': 1.5.2
 
   '@codemirror/lang-json@6.0.2':
     dependencies:
@@ -5494,7 +5491,7 @@ snapshots:
       '@codemirror/autocomplete': 6.18.4
       '@codemirror/language': 6.12.3
       '@codemirror/state': 6.6.0
-      '@lezer/common': 1.2.3
+      '@lezer/common': 1.5.2
       '@lezer/highlight': 1.2.1
       '@lezer/yaml': 1.0.3
     optional: true
@@ -5503,7 +5500,7 @@ snapshots:
     dependencies:
       '@codemirror/state': 6.5.2
       '@codemirror/view': 6.36.2
-      '@lezer/common': 1.2.3
+      '@lezer/common': 1.5.2
       '@lezer/highlight': 1.2.1
       '@lezer/lr': 1.4.2
       style-mod: 4.1.2
@@ -6065,13 +6062,11 @@ snapshots:
 
   '@lezer/common@0.15.12': {}
 
-  '@lezer/common@1.2.3': {}
-
   '@lezer/common@1.5.2': {}
 
   '@lezer/highlight@1.2.1':
     dependencies:
-      '@lezer/common': 1.2.3
+      '@lezer/common': 1.5.2
 
   '@lezer/highlight@1.2.3':
     dependencies:
@@ -6079,7 +6074,7 @@ snapshots:
 
   '@lezer/json@1.0.3':
     dependencies:
-      '@lezer/common': 1.2.3
+      '@lezer/common': 1.5.2
       '@lezer/highlight': 1.2.1
       '@lezer/lr': 1.4.2
 
@@ -6093,7 +6088,7 @@ snapshots:
 
   '@lezer/lr@1.4.2':
     dependencies:
-      '@lezer/common': 1.2.3
+      '@lezer/common': 1.5.2
 
   '@lezer/yaml@1.0.3':
     dependencies:
@@ -6183,7 +6178,7 @@ snapshots:
 
   '@mischnic/json-sourcemap@0.1.1':
     dependencies:
-      '@lezer/common': 1.2.3
+      '@lezer/common': 1.5.2
       '@lezer/lr': 1.4.2
       json5: 2.2.3
 
@@ -8859,13 +8854,13 @@ snapshots:
       estree-walker: 3.0.3
       periscopic: 3.1.0
 
-  codemirror-json-schema@https://github.com/tbrockman/codemirror-json-schema/releases/download/otel-v1.0.1/codemirror-json-schema-0.7.11.tgz(@codemirror/language@6.10.8)(@codemirror/lint@6.9.5)(@codemirror/state@6.5.2)(@codemirror/view@6.36.2)(@lezer/common@1.2.3):
+  codemirror-json-schema@https://github.com/tbrockman/codemirror-json-schema/releases/download/otel-v1.0.1/codemirror-json-schema-0.7.11.tgz(@codemirror/language@6.10.8)(@codemirror/lint@6.9.5)(@codemirror/state@6.5.2)(@codemirror/view@6.36.2)(@lezer/common@1.5.2):
     dependencies:
       '@codemirror/language': 6.10.8
       '@codemirror/lint': 6.9.5
       '@codemirror/state': 6.5.2
       '@codemirror/view': 6.36.2
-      '@lezer/common': 1.2.3
+      '@lezer/common': 1.5.2
       '@sagold/json-pointer': 5.1.2
       '@shikijs/markdown-it': 1.18.0
       best-effort-json-parser: 1.1.2
@@ -8886,7 +8881,7 @@ snapshots:
       '@codemirror/language': 6.12.3
       '@codemirror/state': 6.6.0
       '@codemirror/view': 6.41.1
-      '@lezer/common': 1.2.3
+      '@lezer/common': 1.5.2
       '@lezer/highlight': 1.2.1
       json5: 2.2.3
       lezer-json5: 2.0.2
