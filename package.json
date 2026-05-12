@@ -71,7 +71,7 @@
     "@parcel/config-default": "^2.13.3",
     "@parcel/packager-ts": "2.13.3",
     "@plasmohq/parcel-config": "^0.42.0",
-    "@types/chrome": "0.1.11",
+    "@types/chrome": "0.1.42",
     "@types/jest": "^30.0.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "24.3.3",

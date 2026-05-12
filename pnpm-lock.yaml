@@ -165,8 +165,8 @@ importers:
         specifier: ^0.42.0
         version: 0.42.0(@swc/core@1.7.28(@swc/helpers@0.5.13))(@swc/helpers@0.5.13)(lodash@4.17.21)(postcss@8.5.14)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.7.3)
       '@types/chrome':
-        specifier: 0.1.11
-        version: 0.1.11
+        specifier: 0.1.42
+        version: 0.1.42
       '@types/jest':
         specifier: ^30.0.0
         version: 30.0.0
@@ -2702,8 +2702,8 @@ packages:
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
     engines: {node: '>=10.13.0'}
 
-  '@types/chrome@0.1.11':
-    resolution: {integrity: sha512-8KFchpiY51tZaOpojRM9WPkJzr3ZLei1blsR8nkr42XXMKav4GXQgDK/lP1JTP2wsljXhpDDqAsGw9eOgm8G9Q==}
+  '@types/chrome@0.1.42':
+    resolution: {integrity: sha512-tdT2roFqGecZZDjA9fUEAINb2STxSPifHMDvY6EfRjNRCjdrs/0FwKt5RCIA9MKMd1arAYZZL3nwEkp6ZLZu2w==}
 
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
@@ -2714,8 +2714,8 @@ packages:
   '@types/filewriter@0.0.33':
     resolution: {integrity: sha512-xFU8ZXTw4gd358lb2jw25nxY9QAgqn2+bKKjKOYfNCzN4DKCFetK7sPtrlpg66Ywe3vWY9FNxprZawAh9wfJ3g==}
 
-  '@types/har-format@1.2.15':
-    resolution: {integrity: sha512-RpQH4rXLuvTXKR0zqHq3go0RVXYv/YVqv4TnPH95VbwUxZdQlK1EtcMvQvMpDngHbt13Csh9Z4qT9AbkiQH5BA==}
+  '@types/har-format@1.2.16':
+    resolution: {integrity: sha512-fluxdy7ryD3MV6h8pTfTYpy/xQzCFC7m89nOH9y94cNqJ1mDIDPut7MnRHI3F6qRmh/cT2fUjG1MLdCNb4hE9A==}
 
   '@types/hast@3.0.4':
     resolution: {integrity: sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ==}
@@ -8442,10 +8442,10 @@ snapshots:
 
   '@trysound/sax@0.2.0': {}
 
-  '@types/chrome@0.1.11':
+  '@types/chrome@0.1.42':
     dependencies:
       '@types/filesystem': 0.0.36
-      '@types/har-format': 1.2.15
+      '@types/har-format': 1.2.16
 
   '@types/estree@1.0.6': {}
 
@@ -8455,7 +8455,7 @@ snapshots:
 
   '@types/filewriter@0.0.33': {}
 
-  '@types/har-format@1.2.15': {}
+  '@types/har-format@1.2.16': {}
 
   '@types/hast@3.0.4':
     dependencies:
