@@ -28,7 +28,7 @@
     "@codemirror/state": "^6.5.2",
     "@codemirror/view": "^6.41.1",
     "@lezer/common": "^1.5.2",
-    "@lezer/highlight": "^1.2.1",
+    "@lezer/highlight": "^1.2.3",
     "@lezer/json": "^1.0.3",
     "@mantine/core": "^9.1.1",
     "@mantine/hooks": "^8.3.1",
