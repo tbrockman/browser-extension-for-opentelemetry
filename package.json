@@ -20,7 +20,7 @@
     "generate:jsonschema": "tsx src/scripts/generate-jsonschema/main.ts"
   },
   "dependencies": {
-    "@codemirror/autocomplete": "^6.18.4",
+    "@codemirror/autocomplete": "^6.20.2",
     "@codemirror/commands": "^6.10.3",
     "@codemirror/lang-json": "^6.0.2",
     "@codemirror/language": "^6.10.8",

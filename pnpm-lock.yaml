@@ -17,8 +17,8 @@ importers:
   .:
     dependencies:
       '@codemirror/autocomplete':
-        specifier: ^6.18.4
-        version: 6.18.4
+        specifier: ^6.20.2
+        version: 6.20.2
       '@codemirror/commands':
         specifier: ^6.10.3
         version: 6.10.3
@@ -123,7 +123,7 @@ importers:
         version: 4.25.1(@codemirror/language@6.10.8)(@codemirror/state@6.5.2)(@codemirror/view@6.41.1)
       '@uiw/react-codemirror':
         specifier: ^4.25.9
-        version: 4.25.9(@babel/runtime@7.25.6)(@codemirror/autocomplete@6.18.4)(@codemirror/language@6.10.8)(@codemirror/lint@6.9.5)(@codemirror/search@6.5.6)(@codemirror/state@6.5.2)(@codemirror/theme-one-dark@6.1.2)(@codemirror/view@6.41.1)(codemirror@6.0.1)(react-dom@19.2.6(react@19.1.1))(react@19.1.1)
+        version: 4.25.9(@babel/runtime@7.25.6)(@codemirror/autocomplete@6.20.2)(@codemirror/language@6.10.8)(@codemirror/lint@6.9.5)(@codemirror/search@6.5.6)(@codemirror/state@6.5.2)(@codemirror/theme-one-dark@6.1.2)(@codemirror/view@6.41.1)(codemirror@6.0.1)(react-dom@19.2.6(react@19.1.1))(react@19.1.1)
       browser-extension-url-match:
         specifier: ^1.2.0
         version: 1.2.0
@@ -318,9 +318,6 @@ packages:
   '@babel/types@7.26.7':
     resolution: {integrity: sha512-t8kDRGrKXyp6+tjUh7hw2RLyclsW4TRoRvRHtSyAX9Bb5ldlFh+90YAYY6awRXrlB4G5G2izNeGySpATlFzmOg==}
     engines: {node: '>=6.9.0'}
-
-  '@codemirror/autocomplete@6.18.4':
-    resolution: {integrity: sha512-sFAphGQIqyQZfP2ZBsSHV7xQvo9Py0rV0dW7W3IMRdS+zDuNb2l3no78CvUaWKGfzFjI4FTrLdUSj86IGb2hRA==}
 
   '@codemirror/autocomplete@6.20.2':
     resolution: {integrity: sha512-G5FPkgIiLjOgZMjqVjvuKQ1rGPtHogLldJr33eFJdVLtmwY+giGrlv/ewljLz6b9BSQLkjxuwBc6g6omDM+YxQ==}
@@ -5576,13 +5573,6 @@ snapshots:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
 
-  '@codemirror/autocomplete@6.18.4':
-    dependencies:
-      '@codemirror/language': 6.10.8
-      '@codemirror/state': 6.5.2
-      '@codemirror/view': 6.41.1
-      '@lezer/common': 1.5.2
-
   '@codemirror/autocomplete@6.20.2':
     dependencies:
       '@codemirror/language': 6.12.3
@@ -5604,7 +5594,7 @@ snapshots:
 
   '@codemirror/lang-yaml@6.1.1':
     dependencies:
-      '@codemirror/autocomplete': 6.18.4
+      '@codemirror/autocomplete': 6.20.2
       '@codemirror/language': 6.12.3
       '@codemirror/state': 6.6.0
       '@lezer/common': 1.5.2
@@ -8752,9 +8742,9 @@ snapshots:
     dependencies:
       '@types/yargs-parser': 21.0.3
 
-  '@uiw/codemirror-extensions-basic-setup@4.25.9(@codemirror/autocomplete@6.18.4)(@codemirror/commands@6.10.3)(@codemirror/language@6.10.8)(@codemirror/lint@6.9.5)(@codemirror/search@6.5.6)(@codemirror/state@6.5.2)(@codemirror/view@6.41.1)':
+  '@uiw/codemirror-extensions-basic-setup@4.25.9(@codemirror/autocomplete@6.20.2)(@codemirror/commands@6.10.3)(@codemirror/language@6.10.8)(@codemirror/lint@6.9.5)(@codemirror/search@6.5.6)(@codemirror/state@6.5.2)(@codemirror/view@6.41.1)':
     dependencies:
-      '@codemirror/autocomplete': 6.18.4
+      '@codemirror/autocomplete': 6.20.2
       '@codemirror/commands': 6.10.3
       '@codemirror/language': 6.10.8
       '@codemirror/lint': 6.9.5
@@ -8776,14 +8766,14 @@ snapshots:
       '@codemirror/state': 6.5.2
       '@codemirror/view': 6.41.1
 
-  '@uiw/react-codemirror@4.25.9(@babel/runtime@7.25.6)(@codemirror/autocomplete@6.18.4)(@codemirror/language@6.10.8)(@codemirror/lint@6.9.5)(@codemirror/search@6.5.6)(@codemirror/state@6.5.2)(@codemirror/theme-one-dark@6.1.2)(@codemirror/view@6.41.1)(codemirror@6.0.1)(react-dom@19.2.6(react@19.1.1))(react@19.1.1)':
+  '@uiw/react-codemirror@4.25.9(@babel/runtime@7.25.6)(@codemirror/autocomplete@6.20.2)(@codemirror/language@6.10.8)(@codemirror/lint@6.9.5)(@codemirror/search@6.5.6)(@codemirror/state@6.5.2)(@codemirror/theme-one-dark@6.1.2)(@codemirror/view@6.41.1)(codemirror@6.0.1)(react-dom@19.2.6(react@19.1.1))(react@19.1.1)':
     dependencies:
       '@babel/runtime': 7.25.6
       '@codemirror/commands': 6.10.3
       '@codemirror/state': 6.5.2
       '@codemirror/theme-one-dark': 6.1.2
       '@codemirror/view': 6.41.1
-      '@uiw/codemirror-extensions-basic-setup': 4.25.9(@codemirror/autocomplete@6.18.4)(@codemirror/commands@6.10.3)(@codemirror/language@6.10.8)(@codemirror/lint@6.9.5)(@codemirror/search@6.5.6)(@codemirror/state@6.5.2)(@codemirror/view@6.41.1)
+      '@uiw/codemirror-extensions-basic-setup': 4.25.9(@codemirror/autocomplete@6.20.2)(@codemirror/commands@6.10.3)(@codemirror/language@6.10.8)(@codemirror/lint@6.9.5)(@codemirror/search@6.5.6)(@codemirror/state@6.5.2)(@codemirror/view@6.41.1)
       codemirror: 6.0.1
       react: 19.1.1
       react-dom: 19.2.6(react@19.1.1)
@@ -9105,7 +9095,7 @@ snapshots:
       markdown-it: 14.1.0
       yaml: 2.8.1
     optionalDependencies:
-      '@codemirror/autocomplete': 6.18.4
+      '@codemirror/autocomplete': 6.20.2
       '@codemirror/lang-json': 6.0.2
       '@codemirror/lang-yaml': 6.1.1
       codemirror-json5: 1.0.3
@@ -9115,7 +9105,7 @@ snapshots:
     dependencies:
       '@codemirror/language': 6.12.3
       '@codemirror/state': 6.6.0
-      '@codemirror/view': 6.41.1
+      '@codemirror/view': 6.42.1
       '@lezer/common': 1.5.2
       '@lezer/highlight': 1.2.3
       json5: 2.2.3
