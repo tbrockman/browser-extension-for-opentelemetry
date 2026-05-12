@@ -61,7 +61,7 @@
     "deepmerge-ts": "^7.1.4",
     "markdown-it": "^14.1.0",
     "react": "19.1.1",
-    "react-dom": "19.1.1",
+    "react-dom": "19.2.6",
     "react-error-boundary": "^6.0.0",
     "ts-mixer": "^6.0.4",
     "uuidv7": "^1.2.1"
@@ -76,7 +76,7 @@
     "@types/mocha": "^10.0.10",
     "@types/node": "24.3.3",
     "@types/react": "19.1.13",
-    "@types/react-dom": "19.1.9",
+    "@types/react-dom": "19.2.3",
     "chai": "^6.0.1",
     "cross-env": "^10.1.0",
     "esbuild-plugin-polyfill-node": "^0.3.0",
