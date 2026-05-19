@@ -183,8 +183,8 @@ importers:
         specifier: 19.2.3
         version: 19.2.3(@types/react@19.1.13)
       chai:
-        specifier: ^6.0.1
-        version: 6.0.1
+        specifier: ^6.2.2
+        version: 6.2.2
       cross-env:
         specifier: ^10.1.0
         version: 10.1.0
@@ -3202,8 +3202,8 @@ packages:
   ccount@2.0.1:
     resolution: {integrity: sha512-eyrF0jiFpY+3drT6383f1qhkbGsLSifNAjA61IUjZjmLCWjItY6LB9ft9YhoDgwfmclB2zhu51Lc7+95b8NRAg==}
 
-  chai@6.0.1:
-    resolution: {integrity: sha512-/JOoU2//6p5vCXh00FpNgtlw0LjvhGttaWc+y7wpW9yjBm3ys0dI8tSKZxIOgNruz5J0RleccatSIC3uxEZP0g==}
+  chai@6.2.2:
+    resolution: {integrity: sha512-NUPRluOfOiTKBKvWPtSD4PhFvWCqOi0BGStNWs57X9js7XGTprSmFoz5F0tWhR4WPjNeR9jXqdC7/UpSJTnlRg==}
     engines: {node: '>=18'}
 
   chalk@2.4.2:
@@ -9184,7 +9184,7 @@ snapshots:
 
   ccount@2.0.1: {}
 
-  chai@6.0.1: {}
+  chai@6.2.2: {}
 
   chalk@2.4.2:
     dependencies:
