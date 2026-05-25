@@ -116,8 +116,8 @@ importers:
         specifier: ^3.29.0
         version: 3.29.0(react@19.2.6)
       '@uiw/codemirror-theme-vscode':
-        specifier: ^4.25.1
-        version: 4.25.1(@codemirror/language@6.12.3)(@codemirror/state@6.6.0)(@codemirror/view@6.41.1)
+        specifier: ^4.25.10
+        version: 4.25.10(@codemirror/language@6.12.3)(@codemirror/state@6.6.0)(@codemirror/view@6.41.1)
       '@uiw/codemirror-themes':
         specifier: ^4.25.9
         version: 4.25.9(@codemirror/language@6.12.3)(@codemirror/state@6.6.0)(@codemirror/view@6.41.1)
@@ -2948,11 +2948,11 @@ packages:
       '@codemirror/state': '>=6.0.0'
       '@codemirror/view': '>=6.0.0'
 
-  '@uiw/codemirror-theme-vscode@4.25.1':
-    resolution: {integrity: sha512-vZXvErVDvHLFWCo78Y22R2grisGkWJFFKkdOu9+tcRjWfOVb7K3fDu/H4fDr6JujLTaL+LY/vP/LZYAGJXVqgA==}
+  '@uiw/codemirror-theme-vscode@4.25.10':
+    resolution: {integrity: sha512-5wyYu4/WBsdDVeHStWHnvgkaSQ4X97tdwXETsJQAt/ZSjHY4Gs+mzwMj9azJQnr9uA19yjFtU2PkAcXFQIFOsA==}
 
-  '@uiw/codemirror-themes@4.25.1':
-    resolution: {integrity: sha512-6o8tQ8bdq14RuVFpZ7l9u8KnuPq824uG3U1VV933Uhv8mfaxaoaOQSjv6T2bQUPhjH6ZlEu5+tAMkOfIL21eIQ==}
+  '@uiw/codemirror-themes@4.25.10':
+    resolution: {integrity: sha512-Fqiz1HIuDlDftcL+/O53V333UOH6MqQ84VbiQB5egn6u+uDwAqACp1FrdAoi4wgpR3b3TGW4Gr0wIYcrJSSz1A==}
     peerDependencies:
       '@codemirror/language': '>=6.0.0'
       '@codemirror/state': '>=6.0.0'
@@ -3589,6 +3589,7 @@ packages:
 
   esbuild-plugin-polyfill-node@0.3.0:
     resolution: {integrity: sha512-SHG6CKUfWfYyYXGpW143NEZtcVVn8S/WHcEOxk62LuDXnY4Zpmc+WmxJKN6GMTgTClXJXhEM5KQlxKY6YjbucQ==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
     peerDependencies:
       esbuild: '*'
 
@@ -8903,15 +8904,15 @@ snapshots:
       '@codemirror/state': 6.6.0
       '@codemirror/view': 6.41.1
 
-  '@uiw/codemirror-theme-vscode@4.25.1(@codemirror/language@6.12.3)(@codemirror/state@6.6.0)(@codemirror/view@6.41.1)':
+  '@uiw/codemirror-theme-vscode@4.25.10(@codemirror/language@6.12.3)(@codemirror/state@6.6.0)(@codemirror/view@6.41.1)':
     dependencies:
-      '@uiw/codemirror-themes': 4.25.1(@codemirror/language@6.12.3)(@codemirror/state@6.6.0)(@codemirror/view@6.41.1)
+      '@uiw/codemirror-themes': 4.25.10(@codemirror/language@6.12.3)(@codemirror/state@6.6.0)(@codemirror/view@6.41.1)
     transitivePeerDependencies:
       - '@codemirror/language'
       - '@codemirror/state'
       - '@codemirror/view'
 
-  '@uiw/codemirror-themes@4.25.1(@codemirror/language@6.12.3)(@codemirror/state@6.6.0)(@codemirror/view@6.41.1)':
+  '@uiw/codemirror-themes@4.25.10(@codemirror/language@6.12.3)(@codemirror/state@6.6.0)(@codemirror/view@6.41.1)':
     dependencies:
       '@codemirror/language': 6.12.3
       '@codemirror/state': 6.6.0
