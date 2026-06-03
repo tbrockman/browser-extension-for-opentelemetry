@@ -58,7 +58,7 @@
     "@uiw/react-codemirror": "^4.25.10",
     "browser-extension-url-match": "^1.2.0",
     "codemirror-json-schema": "https://github.com/tbrockman/codemirror-json-schema/releases/download/otel-v1.0.1/codemirror-json-schema-0.7.11.tgz",
-    "deepmerge-ts": "^7.1.4",
+    "deepmerge-ts": "^7.1.5",
     "markdown-it": "^14.2.0",
     "react": "19.2.6",
     "react-dom": "19.2.6",

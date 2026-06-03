@@ -131,8 +131,8 @@ importers:
         specifier: https://github.com/tbrockman/codemirror-json-schema/releases/download/otel-v1.0.1/codemirror-json-schema-0.7.11.tgz
         version: https://github.com/tbrockman/codemirror-json-schema/releases/download/otel-v1.0.1/codemirror-json-schema-0.7.11.tgz(@codemirror/language@6.12.3)(@codemirror/lint@6.9.6)(@codemirror/state@6.6.0)(@codemirror/view@6.43.0)(@lezer/common@1.5.2)
       deepmerge-ts:
-        specifier: ^7.1.4
-        version: 7.1.4
+        specifier: ^7.1.5
+        version: 7.1.5
       markdown-it:
         specifier: ^14.2.0
         version: 14.2.0
@@ -3427,8 +3427,8 @@ packages:
     resolution: {integrity: sha512-LOHxIOaPYdHlJRtCQfDIVZtfw/ufM8+rVj649RIHzcm/vGwQRXFt6OPqIFWsm2XEMrNIEtWR64sY1LEKD2vAOA==}
     engines: {node: '>=4.0.0'}
 
-  deepmerge-ts@7.1.4:
-    resolution: {integrity: sha512-fxqo6nHGQ9zOVgI4KXqtWXJR/yCLtC7aXIVq+6jc8tHPFUxlFmuUcm2kC4vztQ+LJxQ3gER/XAWearGYQ8niGA==}
+  deepmerge-ts@7.1.5:
+    resolution: {integrity: sha512-HOJkrhaYsweh+W+e74Yn7YStZOilkoPb6fycpwNLKzSPtruFs48nYis0zy5yJz1+ktUhHxoRDJ27RQAWLIJVJw==}
     engines: {node: '>=16.0.0'}
 
   deepmerge@4.3.1:
@@ -9434,7 +9434,7 @@ snapshots:
 
   deep-extend@0.6.0: {}
 
-  deepmerge-ts@7.1.4: {}
+  deepmerge-ts@7.1.5: {}
 
   deepmerge@4.3.1: {}
 
