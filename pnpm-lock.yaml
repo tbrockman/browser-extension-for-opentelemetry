@@ -48,10 +48,10 @@ importers:
         version: 1.0.3
       '@mantine/core':
         specifier: ^9.3.0
-        version: 9.3.0(@mantine/hooks@8.3.1(react@19.2.6))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+        version: 9.3.0(@mantine/hooks@9.3.0(react@19.2.6))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
       '@mantine/hooks':
-        specifier: ^8.3.1
-        version: 8.3.1(react@19.2.6)
+        specifier: ^9.3.0
+        version: 9.3.0(react@19.2.6)
       '@opentelemetry/api-logs':
         specifier: ^0.205.0
         version: 0.205.0
@@ -1217,10 +1217,10 @@ packages:
       react: ^19.2.0
       react-dom: ^19.2.0
 
-  '@mantine/hooks@8.3.1':
-    resolution: {integrity: sha512-lQutBS+Q0iz/cNFvdrsYassPWo3RtWcmDGJeOtKfHigLzFOhxUuLOkQgepDbMf3WcVMB/tist6Px1PQOv57JTw==}
+  '@mantine/hooks@9.3.0':
+    resolution: {integrity: sha512-QoSr9WI4WsKWrM3qFYYizHUn3+n+CVcFMYe4sdlnmFPStvs6BacPODKJSbFlYl73Z20t82JIy0eKqt4noHQI2g==}
     peerDependencies:
-      react: ^18.x || ^19.x
+      react: ^19.2.0
 
   '@marijn/find-cluster-break@1.0.2':
     resolution: {integrity: sha512-l0h88YhZFyKdXIFNfSWpyjStDjGHwZ/U7iobcK1cQQD8sejsONdQtTVU+1wVN1PBw40PiiHB1vA5S7VTfQiP9g==}
@@ -6385,10 +6385,10 @@ snapshots:
   '@lmdb/lmdb-win32-x64@2.8.5':
     optional: true
 
-  '@mantine/core@9.3.0(@mantine/hooks@8.3.1(react@19.2.6))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
+  '@mantine/core@9.3.0(@mantine/hooks@9.3.0(react@19.2.6))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)':
     dependencies:
       '@floating-ui/react': 0.27.19(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@mantine/hooks': 8.3.1(react@19.2.6)
+      '@mantine/hooks': 9.3.0(react@19.2.6)
       clsx: 2.1.1
       react: 19.2.6
       react-dom: 19.2.6(react@19.2.6)
@@ -6398,7 +6398,7 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-  '@mantine/hooks@8.3.1(react@19.2.6)':
+  '@mantine/hooks@9.3.0(react@19.2.6)':
     dependencies:
       react: 19.2.6
 
