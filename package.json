@@ -61,7 +61,7 @@
     "deepmerge-ts": "^7.1.5",
     "markdown-it": "^14.2.0",
     "react": "19.2.6",
-    "react-dom": "19.2.6",
+    "react-dom": "19.2.7",
     "react-error-boundary": "^6.1.2",
     "ts-mixer": "^6.0.4",
     "uuidv7": "^1.2.1"
